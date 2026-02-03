@@ -17,7 +17,6 @@ __pycache__/
 .Rproj.user
 
 # Log files
-*.log
 nohup.out
 
 # Temporary files
