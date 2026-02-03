@@ -1,61 +1,140 @@
-# Model-Free Analysis Project
+# Coffee Model-Free Analysis
 
-Welcome to the reorganized model-free analysis folder! This project analyzes customer purchase behavior, push notification effects, and coupon impacts.
+A comprehensive analysis of customer purchase behavior, push notification effects, and coupon impacts in a coffee retail business.
 
 **🔗 GitHub Repository:** https://github.com/TaoLiRun/Coffee.git
 
-## 📚 Documentation
-
-**Start here:**
-- 📖 [ORGANIZATION_GUIDE.md](ORGANIZATION_GUIDE.md) - Complete guide to the folder structure
-- ⚡ [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - Quick lookup for common tasks
-- 🔄 [BEFORE_AFTER.md](BEFORE_AFTER.md) - Visual comparison of old vs new structure
-- ✅ [REORGANIZATION_SUMMARY.md](REORGANIZATION_SUMMARY.md) - What was changed and why
-- 📊 [DEDUPLICATION_SUMMARY.md](DEDUPLICATION_SUMMARY.md) - Data consolidation details
-- 🔗 [GITHUB_INTEGRATION_SUMMARY.md](GITHUB_INTEGRATION_SUMMARY.md) - GitHub setup and integration
-
-## 🗂️ Folder Structure
+## 📁 Project Structure
 
 ```
 model-free/
-├── data/              # All data files (raw, processed, intermediate)
-├── scripts/           # All analysis code, organized by task
-│   ├── push_analysis/
-│   ├── coupon_analysis/
-│   ├── regression_analysis/
-│   └── exploratory_notebooks/
-└── outputs/           # All results (plots, tables, logs)
+├── data/                    # All data files (excluded from git)
+│   ├── processed/           # Cleaned/processed data (10 files)
+│   ├── analysis_outputs/    # Analysis results (28 files)
+│   │   ├── weekly_regression/
+│   │   ├── push_sensitivity/
+│   │   └── basic_distribution/
+│   ├── raw/
+│   └── intermediate/
+├── scripts/                 # All analysis code
+│   ├── push_analysis/       # Push notification analysis
+│   ├── coupon_analysis/     # Coupon and discount effects
+│   ├── regression_analysis/ # Statistical models
+│   ├── exploratory_notebooks/ # Jupyter notebooks
+│   └── archive_*/           # Old folder structures (preserved)
+└── plots/                   # Visualization outputs
 ```
 
 ## 🎯 Research Questions
 
-1. **Push Notification Effects**: How do push notifications affect customer behavior?
-2. **Privacy Preferences**: Do privacy-conscious customers respond differently?
+1. **Push Notification Effects**: How do push notifications affect customer purchase behavior?
+2. **Privacy Preferences**: Do privacy-conscious customers (push=0) respond differently to marketing?
 3. **Coupon Effects**: Do coupons reduce future non-discounted purchases?
-4. **Product Assortment**: How does product removal affect demand?
+4. **Product Assortment**: How does product removal affect store demand?
 
 ## 🚀 Quick Start
 
-See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for commands to run specific analyses.
+### Push Sensitivity Analysis
+```bash
+cd scripts/push_analysis/sensitivity_analysis/push_sensitivity_analysis/scripts
+python 01_preprocess_data.py
+python 02_intrinsic_preferences.py
+python 03_push_sensitivity.py
+python 04_survival_analysis.py
+Rscript 05_regression_analysis.R
+```
 
-## ✨ Recent Changes
+### Coupon Analysis
+```bash
+cd scripts/coupon_analysis
+python process_order_commodity.py
+Rscript wait.r
+```
 
-**February 3, 2026 - Major Organization Update:**
-- ✅ Data centralized in `data/` folder with clear hierarchy
-- ✅ Scripts organized hierarchically in `scripts/`
-- ✅ All code files now have descriptions
-- ✅ File paths updated for new structure
-- ✅ Comprehensive documentation added
-- ✅ **Duplicates removed** - `processed_data/` folder eliminated
-- ✅ **Redundant outputs/ folder removed**
-- ✅ **Archive folders** - Old structures moved to `scripts/archive_*`
-- ✅ **GitHub integration** - Repository pushed to https://github.com/TaoLiRun/Coffee.git
-- ✅ **Data excluded** - .gitignore configured to exclude `data/` folder
+### Weekly Regression Models
+```bash
+cd scripts/regression_analysis/weekly_models
+Rscript regression_with_two_groups.R
+```
 
-See documentation files
+## 📊 Key Scripts
 
-See [REORGANIZATION_SUMMARY.md](REORGANIZATION_SUMMARY.md) and [DEDUPLICATION_SUMMARY.md](DEDUPLICATION_SUMMARY.md) for details.
+### Push Analysis (`scripts/push_analysis/`)
+- `combine_push_order.r` - Combines push and order data for analysis
+- `policy.r` - Processes push notification policy data
+- `read_combined.r` - Analyzes push timing patterns
+- `basic_distribution/*.py` - Basic push-purchase distribution analysis
+- `sensitivity_analysis/` - Complete DiD and survival analysis pipeline
+
+### Coupon Analysis (`scripts/coupon_analysis/`)
+- `process_order_commodity.py` - Processes order commodity data
+- `analyze_consumer.py` - Analyzes consumer exploration behavior
+- `wait.r` - Studies coupon effects on future purchases
+- `visualize.py` - Visualization functions
+
+### Regression Analysis (`scripts/regression_analysis/weekly_models/`)
+- `regression_no_push_customers.R` - Analysis for push=0 customers
+- `regression_with_two_groups.R` - Compares push=0 vs push=1 groups
+- `regression_with_two_groups_customer_removed.R` - Customer-specific removed products
+
+## 📝 Data Organization
+
+### Processed Data (`data/processed/`)
+- `combined_push_purchase_analysis.parquet` - Main analysis dataset
+- `order_commodity_result_processed.csv` - Processed order data
+- `no_push_members.csv` - Customers who opted out of push notifications
+- `product_mapping.csv` - Product ID mappings
+- And more...
+
+### Analysis Outputs (`data/analysis_outputs/`)
+- `weekly_regression/` - Panel regression results (11 files)
+- `push_sensitivity/` - DiD and survival analysis results (17 files)
+
+## 🔧 Setup
+
+### Prerequisites
+- Python 3.x with: pandas, numpy, scipy, statsmodels, matplotlib, seaborn, lifelines
+- R with: data.table, lubridate, lfe, ggplot2
+
+### Data Note
+The `data/` folder is excluded from git (see `.gitignore`). Obtain data files separately and place in appropriate subfolders.
+
+## 📋 Project History
+
+**February 3, 2026 - Complete Reorganization:**
+- ✅ Hierarchical folder structure created
+- ✅ Data consolidated in `data/` with subfolders by type
+- ✅ Scripts organized by research task
+- ✅ All code files documented with descriptions
+- ✅ Duplicates removed and cleaned up
+- ✅ Pushed to GitHub with proper .gitignore
+- ✅ Archive folders preserved for reference
+
+## �� Key Findings
+
+### H1: Heterogeneous Intrinsic Preferences
+Counter-intuitively, push=0 members (privacy-conscious) are MORE active purchasers than push=1 members, even before receiving any pushes.
+
+### H2: Differential Push Sensitivity
+Push notifications have differential effects on wake-up probability between the two groups, with nuanced patterns in timing and intensity.
+
+## 🤝 Contributing
+
+This is a research project. To contribute:
+1. Clone the repository
+2. Create a feature branch
+3. Make your changes with clear commit messages
+4. Submit a pull request
+
+## 📄 License
+
+Research project - please contact the authors for usage permissions.
+
+## 📧 Contact
+
+For questions about this analysis, please open an issue on GitHub.
 
 ---
 
-**Need help?** Check the documentation files above or explore the organized structure!
+**Repository:** https://github.com/TaoLiRun/Coffee.git  
+**Last Updated:** February 3, 2026
