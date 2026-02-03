@@ -1,0 +1,280 @@
+Starting R Regression Analysis
+================================
+
+Step 1: Loading data...
+Loaded 722200 observations
+Columns: member_id, first_dormant_id, push_group, pre_orders, pre_order_freq, pre_avg_value, days_to_wakeup, wakeup_order_value, wakeup, total_pushes, first_push_timing, push_intensity_first_7d, avg_push_discount, discount_push_share, trigger_diversity, const, has_discount_push, high_trigger_diversity, has_early_pushes 
+Renamed push_intensity_first_7d to pushes_first_7d
+
+--- Summary Statistics ---
+ push_group     wakeup        total_pushes   pre_order_freq  days_to_wakeup 
+ 0:1        Min.   :0.5226   Min.   :34.66   Min.   :1.177   Min.   :105.8  
+ 1:1        1st Qu.:0.5638   1st Qu.:35.81   1st Qu.:1.184   1st Qu.:107.1  
+            Median :0.6050   Median :36.96   Median :1.190   Median :108.4  
+            Mean   :0.6050   Mean   :36.96   Mean   :1.190   Mean   :108.4  
+            3rd Qu.:0.6461   3rd Qu.:38.11   3rd Qu.:1.197   3rd Qu.:109.7  
+            Max.   :0.6873   Max.   :39.27   Max.   :1.203   Max.   :111.0  
+ avg_push_discount
+ Min.   :0        
+ 1st Qu.:0        
+ Median :0        
+ Mean   :0        
+ 3rd Qu.:0        
+ Max.   :0        
+
+========================================
+Step 2: Model 1 - Basic DiD (OLS)
+========================================
+
+Model specification:
+  wakeup ~ push_group
+  (Simple comparison of wake-up rates by group)
+
+
+Call:
+lm(formula = wakeup ~ push_group, data = did_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.6873 -0.5226  0.3127  0.4774  0.4774 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.687288   0.001461   470.5   <2e-16 ***
+push_group1 -0.164660   0.001592  -103.4   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.494 on 722198 degrees of freedom
+Multiple R-squared:  0.01459,	Adjusted R-squared:  0.01459 
+F-statistic: 1.069e+04 on 1 and 722198 DF,  p-value: < 2.2e-16
+
+
+Key coefficient (push_group=1 effect):
+  Estimate: -0.1647
+  Std. Error: 0.0016
+  t-value: -103.4151
+  p-value: 0.000000
+
+========================================
+Step 3: Model 2 - DiD with Pre-period Controls
+========================================
+
+Model specification:
+  wakeup ~ push_group + pre_order_freq + pre_avg_value
+
+
+Call:
+lm(formula = wakeup ~ push_group + pre_order_freq + pre_avg_value, 
+    data = model2_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.0323 -0.5216  0.3139  0.4767  1.4302 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     6.519e-01  2.051e-03  317.83   <2e-16 ***
+push_group1    -1.628e-01  1.588e-03 -102.53   <2e-16 ***
+pre_order_freq  5.004e-02  1.022e-03   48.97   <2e-16 ***
+pre_avg_value  -5.661e-04  1.598e-05  -35.41   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4927 on 722196 degrees of freedom
+Multiple R-squared:  0.01979,	Adjusted R-squared:  0.01978 
+F-statistic:  4859 on 3 and 722196 DF,  p-value: < 2.2e-16
+
+
+With Robust Standard Errors:
+                    Estimate   Std. Error    t value      Pr(>|t|)
+(Intercept)     0.6519068690 2.021170e-03  322.53941  0.000000e+00
+push_group1    -0.1628440731 1.513234e-03 -107.61331  0.000000e+00
+pre_order_freq  0.0500436477 1.008018e-03   49.64561  0.000000e+00
+pre_avg_value  -0.0005660651 1.836412e-05  -30.82451 1.682617e-208
+
+========================================
+Step 4: Model 3 - DiD with Push Intensity
+========================================
+
+Model specification:
+  wakeup ~ push_group + total_pushes + push_group:total_pushes
+  (Tests for heterogeneous effects of push intensity)
+
+
+Call:
+lm(formula = wakeup ~ push_group * total_pushes, data = model3_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.8847 -0.4555  0.1394  0.3305  1.2312 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(>|t|)    
+(Intercept)               8.907e-01  1.828e-03  487.33   <2e-16 ***
+push_group1              -1.677e-01  2.005e-03  -83.64   <2e-16 ***
+total_pushes             -6.032e-03  3.377e-05 -178.59   <2e-16 ***
+push_group1:total_pushes  6.807e-04  3.672e-05   18.54   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4441 on 694928 degrees of freedom
+Multiple R-squared:  0.2079,	Adjusted R-squared:  0.2079 
+F-statistic: 6.08e+04 on 3 and 694928 DF,  p-value: < 2.2e-16
+
+
+Marginal Effects:
+  Effect of push for push_group=0: -0.006032 per additional push
+  Effect of push for push_group=1: -0.005351 per additional push
+  Difference (interaction): 0.000681 (p<0.05)
+
+========================================
+Step 5: Model 4 - DiD with Push Characteristics
+========================================
+
+Model specification:
+  wakeup ~ push_group + pushes_first_7d + avg_push_discount
+
+
+Call:
+lm(formula = wakeup ~ push_group + pushes_first_7d + avg_push_discount, 
+    data = model4_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.7312 -0.5380  0.2986  0.4620  0.7599 
+
+Coefficients: (1 not defined because of singularities)
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        0.7311711  0.0016638  439.45   <2e-16 ***
+push_group1       -0.1634213  0.0015891 -102.84   <2e-16 ***
+pushes_first_7d   -0.0297858  0.0005444  -54.71   <2e-16 ***
+avg_push_discount         NA         NA      NA       NA    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.493 on 722197 degrees of freedom
+Multiple R-squared:  0.01866,	Adjusted R-squared:  0.01866 
+F-statistic:  6866 on 2 and 722197 DF,  p-value: < 2.2e-16
+
+
+========================================
+Step 6: Model 5 - Logistic Regression
+========================================
+
+Model specification:
+  logit(wakeup) ~ push_group + pre_order_freq + pre_avg_value
+
+
+Call:
+glm(formula = wakeup ~ push_group + pre_order_freq + pre_avg_value, 
+    family = binomial, data = model2_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.1746  -1.2147   0.8659   1.1375   2.8619  
+
+Coefficients:
+                 Estimate Std. Error z value Pr(>|z|)    
+(Intercept)     6.431e-01  8.896e-03   72.29   <2e-16 ***
+push_group1    -6.930e-01  6.894e-03 -100.53   <2e-16 ***
+pre_order_freq  2.137e-01  4.411e-03   48.45   <2e-16 ***
+pre_avg_value  -2.468e-03  7.126e-05  -34.63   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 994319  on 722199  degrees of freedom
+Residual deviance: 979582  on 722196  degrees of freedom
+AIC: 979590
+
+Number of Fisher Scoring iterations: 4
+
+
+Odds Ratios:
+                      OR  Lower.CI  Upper.CI
+(Intercept)    1.9023337 1.8694535 1.9357922
+push_group1    0.5000564 0.4933451 0.5068591
+pre_order_freq 1.2382644 1.2276057 1.2490156
+pre_avg_value  0.9975354 0.9973960 0.9976747
+
+========================================
+Step 7: Heterogeneous Effects by Discount Depth
+========================================
+
+Wake-up rate by push_group and discount_push:
+   push_group has_discount_push wakeup_rate      n
+       <fctr>             <int>       <num>  <int>
+1:          1                 0   0.5226285 607839
+2:          0                 0   0.6872885 114361
+
+Model: wakeup ~ push_group * has_discount_push
+
+Call:
+lm(formula = wakeup ~ push_group * has_discount_push, data = model6_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.6873 -0.5226  0.3127  0.4774  0.4774 
+
+Coefficients: (2 not defined because of singularities)
+                               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                    0.687288   0.001461   470.5   <2e-16 ***
+push_group1                   -0.164660   0.001592  -103.4   <2e-16 ***
+has_discount_push                    NA         NA      NA       NA    
+push_group1:has_discount_push        NA         NA      NA       NA    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.494 on 722198 degrees of freedom
+Multiple R-squared:  0.01459,	Adjusted R-squared:  0.01459 
+F-statistic: 1.069e+04 on 1 and 722198 DF,  p-value: < 2.2e-16
+
+
+========================================
+Step 8: Creating Coefficient Comparison Table
+========================================
+
+                               Model                         Specification
+1                Model 1: Unadjusted                   wakeup ~ push_group
+2             Model 2: With Controls        wakeup ~ push_group + controls
+3       Model 3: With Push Intensity    wakeup ~ push_group * total_pushes
+4 Model 4: With Push Characteristics      wakeup ~ push_group + push_chars
+5                  Model 5: Logistic logit(wakeup) ~ push_group + controls
+  push_group_coef push_group_se push_group_pval      N sig
+1      -0.1646600   0.001592223               0 722200 ***
+2      -0.1628441   0.001513234               0 722200 ***
+3      -0.1677139   0.002005270               0 694932 ***
+4      -0.1634213   0.001589096               0 722200 ***
+5      -0.6930343   0.006893912               0 722200 ***
+
+========================================
+Step 9: Saving Model Results
+========================================
+
+All model summaries saved to outputs/tables/
+
+========================================
+Step 10: Creating Visualizations
+========================================
+
+null device 
+          1 
+Coefficient plot saved to outputs/figures/
+
+========================================
+Analysis Complete!
+========================================
+
+Summary of Key Findings:
+  - push=0 group wake-up rate: 68.73%
+  - push=1 group wake-up rate: 52.26%
+  - Difference (Model 1): -16.47 percentage points (p=0.0000)
+  - Controls-adjusted difference (Model 2): -16.28 percentage points (p=0.0000)
+
+Files saved:
+  - outputs/tables/regression_comparison_table.csv
+  - outputs/tables/model*_summary.txt
+  - outputs/figures/coefficient_plot.png
+  - outputs/logs/05_regression_analysis.log

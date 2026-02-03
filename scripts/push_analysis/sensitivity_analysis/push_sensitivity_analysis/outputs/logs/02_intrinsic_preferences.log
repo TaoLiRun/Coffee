@@ -1,0 +1,122 @@
+2026-02-03 14:58:04,397 - INFO - ================================================================================
+2026-02-03 14:58:04,397 - INFO - Starting Intrinsic Preferences Analysis
+2026-02-03 14:58:04,397 - INFO - ================================================================================
+2026-02-03 14:58:04,397 - INFO - Loading preprocessed data...
+2026-02-03 14:58:05,752 - INFO - Loaded 51,847,472 records
+2026-02-03 14:58:05,752 - INFO - Filtering to pre-period purchase records...
+2026-02-03 14:58:06,424 - INFO - Pre-period purchase records: 2,729,026
+2026-02-03 14:58:06,493 - INFO - Unique members in pre-period: 779,744
+2026-02-03 14:58:06,493 - INFO - Calculating customer-level metrics...
+2026-02-03 14:58:37,526 - INFO - ================================================================================
+2026-02-03 14:58:37,526 - INFO - Starting Intrinsic Preferences Analysis
+2026-02-03 14:58:37,526 - INFO - ================================================================================
+2026-02-03 14:58:37,526 - INFO - Loading preprocessed data...
+2026-02-03 14:58:38,843 - INFO - Loaded 51,847,472 records
+2026-02-03 14:58:38,843 - INFO - Filtering to pre-period purchase records...
+2026-02-03 14:58:39,515 - INFO - Pre-period purchase records: 2,729,026
+2026-02-03 14:58:39,577 - INFO - Unique members in pre-period: 779,744
+2026-02-03 14:58:39,578 - INFO - Calculating customer-level metrics...
+2026-02-03 15:01:23,339 - INFO - ================================================================================
+2026-02-03 15:01:23,339 - INFO - Starting Intrinsic Preferences Analysis
+2026-02-03 15:01:23,339 - INFO - ================================================================================
+2026-02-03 15:01:23,339 - INFO - Loading preprocessed data...
+2026-02-03 15:01:25,245 - INFO - Loaded 51,847,472 records
+2026-02-03 15:01:25,245 - INFO - Filtering to pre-period purchase records...
+2026-02-03 15:01:26,160 - INFO - Pre-period purchase records: 2,729,026
+2026-02-03 15:01:26,229 - INFO - Unique members in pre-period: 779,744
+2026-02-03 15:01:26,229 - INFO - Calculating customer-level metrics...
+2026-02-03 15:13:13,871 - INFO - ================================================================================
+2026-02-03 15:13:13,871 - INFO - Starting Intrinsic Preferences Analysis
+2026-02-03 15:13:13,871 - INFO - ================================================================================
+2026-02-03 15:13:13,871 - INFO - Loading preprocessed data...
+2026-02-03 15:13:15,636 - INFO - Loaded 51,847,472 records
+2026-02-03 15:13:15,637 - INFO - Filtering to pre-period purchase records...
+2026-02-03 15:13:16,523 - INFO - Pre-period purchase records: 2,729,026
+2026-02-03 15:13:16,593 - INFO - Unique members in pre-period: 779,744
+2026-02-03 15:13:16,593 - INFO - Calculating customer-level metrics using vectorized operations...
+2026-02-03 15:13:17,504 - INFO - Aggregating metrics by customer...
+2026-02-03 15:17:49,137 - INFO - Calculating derived metrics...
+2026-02-03 15:18:16,101 - INFO - ================================================================================
+2026-02-03 15:18:16,101 - INFO - Starting Intrinsic Preferences Analysis
+2026-02-03 15:18:16,101 - INFO - ================================================================================
+2026-02-03 15:18:16,101 - INFO - Loading preprocessed data...
+2026-02-03 15:18:17,785 - INFO - Loaded 51,847,472 records
+2026-02-03 15:18:17,785 - INFO - Filtering to pre-period purchase records...
+2026-02-03 15:18:18,652 - INFO - Pre-period purchase records: 2,729,026
+2026-02-03 15:18:18,721 - INFO - Unique members in pre-period: 779,744
+2026-02-03 15:18:18,721 - INFO - Calculating customer-level metrics using vectorized operations...
+2026-02-03 15:18:19,612 - INFO - Aggregating metrics by customer...
+2026-02-03 15:22:35,678 - INFO - Calculating derived metrics...
+2026-02-03 15:22:35,776 - INFO - Calculated metrics for 779,744 customers
+2026-02-03 15:22:35,777 - INFO - ================================================================================
+2026-02-03 15:22:35,777 - INFO - Comparing groups (push=0 vs push=1)...
+2026-02-03 15:22:35,777 - INFO - ================================================================================
+2026-02-03 15:22:51,679 - INFO - 
+Group Comparison Results:
+2026-02-03 15:22:51,691 - INFO -                      metric    n_0    n_1     mean_0     mean_1  median_0  median_1      std_0      std_1       diff   pct_diff    t_stat      t_pvalue       u_stat      u_pvalue  cohens_d  t_pvalue_fdr  significant_fdr  u_pvalue_fdr u_significant_fdr
+             initial_orders 119978 659766   5.037699   3.220252  1.000000  1.000000  14.643653   9.644031  -1.817446 -36.076915 41.388314  0.000000e+00 4.393218e+10  0.000000e+00 -0.171970  0.000000e+00             True  0.000000e+00              True
+         initial_order_freq 119978 659766   1.208719   1.182264  1.000000  1.000000   0.614801   0.569209  -0.026455  -2.188666 13.863252  1.121343e-43 3.984049e+10  2.514494e-05 -0.045892  2.055795e-43             True  2.765943e-05              True
+ initial_interpurchase_days  55166 241862   9.027492   9.025632  7.500000  7.333333   6.420648   6.620647  -0.001860  -0.020603  0.061039  9.513283e-01 6.739761e+09  1.636329e-04 -0.000282  9.513283e-01            False  1.636329e-04              True
+       initial_weeks_active 119978 659766   3.963759   2.665831  1.000000  1.000000   8.135366   5.543918  -1.297928 -32.744883 53.066438  0.000000e+00 4.355311e+10  0.000000e+00 -0.215754  0.000000e+00             True  0.000000e+00              True
+    initial_avg_order_value 119978 659766  44.068047  45.078629 31.666667 32.000000  36.978485  36.506947   1.010582   2.293230 -8.724496  2.697831e-18 3.808204e+10  3.924138e-97  0.027627  4.239448e-18             True  7.194254e-97              True
+    initial_avg_basket_size 119978 659766   1.544307   1.549735  1.000000  1.000000   1.297673   1.249627   0.005427   0.351446 -1.340105  1.802130e-01 4.013534e+10  7.717444e-18  0.004317  2.202604e-01            False  9.432432e-18              True
+        initial_total_spend 119978 659766 199.570675 131.300488 59.000000 56.000000 995.788865 382.653185 -68.270188 -34.208527 23.434763 3.433095e-121 4.259950e+10  0.000000e+00 -0.129840 7.552809e-121             True  0.000000e+00              True
+      initial_unique_stores 119978 659766   1.513869   1.295668  1.000000  1.000000   1.396992   1.002329  -0.218201 -14.413448 51.734591  0.000000e+00 4.294641e+10  0.000000e+00 -0.203441  0.000000e+00             True  0.000000e+00              True
+  initial_coupon_usage_rate 119978 659766   0.753673   0.721221  1.000000  1.000000   0.387997   0.417817  -0.032452  -4.305902 26.328109 1.820189e-152 4.018280e+10  8.471956e-23 -0.078507 5.005519e-152             True  1.164894e-22              True
+       initial_avg_discount 119978 659766   0.260885   0.261151  0.250000  0.250000   0.098583   0.106342   0.000266   0.102005 -0.849458  3.956274e-01 4.035604e+10  6.429603e-28  0.002530  4.351902e-01            False  1.010366e-27              True
+initial_discount_depth_pref 119978 659766   0.054226   0.049616  0.000000  0.000000   0.197085   0.195716  -0.004609  -8.500334  7.459677  8.715505e-14 4.063359e+10 1.359365e-187 -0.023526  1.198382e-13             True 2.990603e-187              True
+2026-02-03 15:22:51,691 - INFO - 
+Significant differences (FDR < 0.05): 8/11 metrics
+2026-02-03 15:22:51,692 - INFO - Creating visualizations...
+2026-02-03 15:22:55,941 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/pre_period_metrics_boxplot.png
+2026-02-03 15:22:57,138 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/effect_sizes_plot.png
+2026-02-03 15:22:57,138 - INFO - Visualizations complete!
+2026-02-03 15:22:57,139 - INFO - Saving results...
+2026-02-03 15:23:05,958 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/customer_pre_period_metrics.csv
+2026-02-03 15:23:05,961 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/group_comparison_results.csv
+2026-02-03 15:23:05,964 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/summary_table.csv
+2026-02-03 15:23:05,965 - INFO - ================================================================================
+2026-02-03 15:23:05,965 - INFO - Intrinsic preferences analysis complete!
+2026-02-03 15:23:05,965 - INFO - ================================================================================
+2026-02-03 15:25:26,461 - INFO - ================================================================================
+2026-02-03 15:25:26,462 - INFO - Starting Intrinsic Preferences Analysis
+2026-02-03 15:25:26,462 - INFO - ================================================================================
+2026-02-03 15:25:26,462 - INFO - Loading preprocessed data...
+2026-02-03 15:25:28,212 - INFO - Loaded 51,847,472 records
+2026-02-03 15:25:28,213 - INFO - Filtering to pre-period purchase records...
+2026-02-03 15:25:29,074 - INFO - Pre-period purchase records: 2,729,026
+2026-02-03 15:25:29,142 - INFO - Unique members in pre-period: 779,744
+2026-02-03 15:25:29,143 - INFO - Calculating customer-level metrics using vectorized operations...
+2026-02-03 15:25:30,072 - INFO - Aggregating metrics by customer...
+2026-02-03 15:29:51,795 - INFO - Calculating derived metrics...
+2026-02-03 15:29:51,905 - INFO - Calculated metrics for 779,744 customers
+2026-02-03 15:29:51,906 - INFO - ================================================================================
+2026-02-03 15:29:51,906 - INFO - Comparing groups (push=0 vs push=1)...
+2026-02-03 15:29:51,907 - INFO - ================================================================================
+2026-02-03 15:30:07,167 - INFO - 
+Group Comparison Results:
+2026-02-03 15:30:07,178 - INFO -                      metric    n_0    n_1     mean_0     mean_1  median_0  median_1      std_0      std_1       diff   pct_diff    t_stat      t_pvalue       u_stat      u_pvalue  cohens_d  t_pvalue_fdr  significant_fdr  u_pvalue_fdr u_significant_fdr
+             initial_orders 119978 659766   5.037699   3.220252  1.000000  1.000000  14.643653   9.644031  -1.817446 -36.076915 41.388314  0.000000e+00 4.393218e+10  0.000000e+00 -0.171970  0.000000e+00             True  0.000000e+00              True
+         initial_order_freq 119978 659766   1.208719   1.182264  1.000000  1.000000   0.614801   0.569209  -0.026455  -2.188666 13.863252  1.121343e-43 3.984049e+10  2.514494e-05 -0.045892  2.055795e-43             True  2.765943e-05              True
+ initial_interpurchase_days  55166 241862   9.027492   9.025632  7.500000  7.333333   6.420648   6.620647  -0.001860  -0.020603  0.061039  9.513283e-01 6.739761e+09  1.636329e-04 -0.000282  9.513283e-01            False  1.636329e-04              True
+       initial_weeks_active 119978 659766   3.963759   2.665831  1.000000  1.000000   8.135366   5.543918  -1.297928 -32.744883 53.066438  0.000000e+00 4.355311e+10  0.000000e+00 -0.215754  0.000000e+00             True  0.000000e+00              True
+    initial_avg_order_value 119978 659766  44.068047  45.078629 31.666667 32.000000  36.978485  36.506947   1.010582   2.293230 -8.724496  2.697831e-18 3.808204e+10  3.924138e-97  0.027627  4.239448e-18             True  7.194254e-97              True
+    initial_avg_basket_size 119978 659766   1.544307   1.549735  1.000000  1.000000   1.297673   1.249627   0.005427   0.351446 -1.340105  1.802130e-01 4.013534e+10  7.717444e-18  0.004317  2.202604e-01            False  9.432432e-18              True
+        initial_total_spend 119978 659766 199.570675 131.300488 59.000000 56.000000 995.788865 382.653185 -68.270188 -34.208527 23.434763 3.433095e-121 4.259950e+10  0.000000e+00 -0.129840 7.552809e-121             True  0.000000e+00              True
+      initial_unique_stores 119978 659766   1.513869   1.295668  1.000000  1.000000   1.396992   1.002329  -0.218201 -14.413448 51.734591  0.000000e+00 4.294641e+10  0.000000e+00 -0.203441  0.000000e+00             True  0.000000e+00              True
+  initial_coupon_usage_rate 119978 659766   0.753673   0.721221  1.000000  1.000000   0.387997   0.417817  -0.032452  -4.305902 26.328109 1.820189e-152 4.018280e+10  8.471956e-23 -0.078507 5.005519e-152             True  1.164894e-22              True
+       initial_avg_discount 119978 659766   0.260885   0.261151  0.250000  0.250000   0.098583   0.106342   0.000266   0.102005 -0.849458  3.956274e-01 4.035604e+10  6.429603e-28  0.002530  4.351902e-01            False  1.010366e-27              True
+initial_discount_depth_pref 119978 659766   0.054226   0.049616  0.000000  0.000000   0.197085   0.195716  -0.004609  -8.500334  7.459677  8.715505e-14 4.063359e+10 1.359365e-187 -0.023526  1.198382e-13             True 2.990603e-187              True
+2026-02-03 15:30:07,179 - INFO - 
+Significant differences (FDR < 0.05): 8/11 metrics
+2026-02-03 15:30:07,179 - INFO - Creating visualizations...
+2026-02-03 15:30:11,305 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/pre_period_metrics_boxplot.png
+2026-02-03 15:30:12,462 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/effect_sizes_plot.png
+2026-02-03 15:30:12,462 - INFO - Visualizations complete!
+2026-02-03 15:30:12,465 - INFO - Saving results...
+2026-02-03 15:30:20,645 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/customer_pre_period_metrics.csv
+2026-02-03 15:30:20,648 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/group_comparison_results.csv
+2026-02-03 15:30:20,652 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/summary_table.csv
+2026-02-03 15:30:20,652 - INFO - ================================================================================
+2026-02-03 15:30:20,652 - INFO - Intrinsic preferences analysis complete!
+2026-02-03 15:30:20,652 - INFO - ================================================================================

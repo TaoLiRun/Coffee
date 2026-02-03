@@ -1,0 +1,149 @@
+2026-02-03 15:45:06,746 - INFO - ================================================================================
+2026-02-03 15:45:06,746 - INFO - Starting Survival Analysis with Competing Risks
+2026-02-03 15:45:06,746 - INFO - ================================================================================
+2026-02-03 15:45:06,746 - INFO - Loading preprocessed data...
+2026-02-03 15:45:09,272 - INFO - Loaded 51,847,472 records
+2026-02-03 15:45:09,272 - INFO - Preparing survival data with competing risks using vectorized operations...
+2026-02-03 15:45:20,033 - INFO - Identifying first dormant period per member...
+2026-02-03 15:46:23,362 - INFO - Processing 722,200 members with dormant periods...
+2026-02-03 15:46:37,154 - INFO - Calculating time to wake-up events...
+2026-02-03 15:47:00,221 - INFO - Calculating censoring times...
+2026-02-03 15:47:30,792 - INFO - Calculating push intensity metrics...
+2026-02-03 15:48:00,707 - INFO - ================================================================================
+2026-02-03 15:48:00,707 - INFO - Starting Survival Analysis with Competing Risks
+2026-02-03 15:48:00,707 - INFO - ================================================================================
+2026-02-03 15:48:00,707 - INFO - Loading preprocessed data...
+2026-02-03 15:48:02,953 - INFO - Loaded 51,847,472 records
+2026-02-03 15:48:02,954 - INFO - Preparing survival data with competing risks using vectorized operations...
+2026-02-03 15:48:21,707 - INFO - Identifying first dormant period per member...
+2026-02-03 15:48:46,032 - INFO - Processing 722,200 members with dormant periods...
+2026-02-03 15:48:54,587 - INFO - Calculating time to wake-up events...
+2026-02-03 15:49:16,709 - INFO - Calculating censoring times...
+2026-02-03 15:49:45,887 - INFO - Calculating push intensity metrics...
+2026-02-03 15:49:50,600 - INFO - Created survival dataset with 722,200 customers
+2026-02-03 15:49:50,601 - INFO - Events: 396273 wake-ups
+2026-02-03 15:49:50,603 - INFO - Censored: 325927
+2026-02-03 15:49:50,624 - INFO - ================================================================================
+2026-02-03 15:49:50,624 - INFO - Calculating Cumulative Incidence Functions
+2026-02-03 15:49:50,624 - INFO - ================================================================================
+2026-02-03 15:49:53,055 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/cumulative_incidence_curves.png
+2026-02-03 15:49:53,123 - INFO - 
+Summary Statistics by Group:
+2026-02-03 15:49:53,127 - INFO -                   time                 event          
+                  mean median    max     sum      mean
+push_group                                            
+0           138.170932   69.0  548.0   78599  0.687288
+1           154.465286  100.0  548.0  317674  0.522629
+2026-02-03 15:49:53,129 - INFO - ================================================================================
+2026-02-03 15:49:53,129 - INFO - Running Cox Proportional Hazards Model
+2026-02-03 15:49:53,129 - INFO - ================================================================================
+2026-02-03 15:49:53,164 - INFO - 
+Model 1: Unadjusted (push_group only)
+2026-02-03 15:50:25,877 - INFO - 
+Model 2: Adjusted for push intensity
+2026-02-03 15:51:19,498 - INFO - 
+Model 3: Adjusted for push intensity and discount
+2026-02-03 15:52:03,158 - INFO - ================================================================================
+2026-02-03 15:52:03,158 - INFO - Starting Survival Analysis with Competing Risks
+2026-02-03 15:52:03,158 - INFO - ================================================================================
+2026-02-03 15:52:03,159 - INFO - Loading preprocessed data...
+2026-02-03 15:52:05,222 - INFO - Loaded 51,847,472 records
+2026-02-03 15:52:05,222 - INFO - Preparing survival data with competing risks using vectorized operations...
+2026-02-03 15:52:22,798 - INFO - Identifying first dormant period per member...
+2026-02-03 15:52:47,077 - INFO - Processing 722,200 members with dormant periods...
+2026-02-03 15:52:54,106 - INFO - Calculating time to wake-up events...
+2026-02-03 15:53:16,369 - INFO - Calculating censoring times...
+2026-02-03 15:53:46,780 - INFO - Calculating push intensity metrics...
+2026-02-03 15:53:51,878 - INFO - Created survival dataset with 722,200 customers
+2026-02-03 15:53:51,879 - INFO - Events: 396273 wake-ups
+2026-02-03 15:53:51,881 - INFO - Censored: 325927
+2026-02-03 15:53:51,907 - INFO - ================================================================================
+2026-02-03 15:53:51,907 - INFO - Calculating Cumulative Incidence Functions
+2026-02-03 15:53:51,907 - INFO - ================================================================================
+2026-02-03 15:53:54,428 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/cumulative_incidence_curves.png
+2026-02-03 15:53:54,498 - INFO - 
+Summary Statistics by Group:
+2026-02-03 15:53:54,503 - INFO -                   time                 event          
+                  mean median    max     sum      mean
+push_group                                            
+0           138.170932   69.0  548.0   78599  0.687288
+1           154.465286  100.0  548.0  317674  0.522629
+2026-02-03 15:53:54,505 - INFO - ================================================================================
+2026-02-03 15:53:54,505 - INFO - Running Cox Proportional Hazards Model
+2026-02-03 15:53:54,505 - INFO - ================================================================================
+2026-02-03 15:53:54,556 - INFO - 
+Model 1: Unadjusted (push_group only)
+2026-02-03 15:54:28,161 - INFO - 
+Model 2: Adjusted for push intensity
+2026-02-03 15:55:27,077 - INFO - 
+Model 3: Adjusted for push intensity and discount
+2026-02-03 15:55:35,540 - WARNING - Model 3 failed to converge: Convergence halted due to matrix inversion problems. Suspicion is high collinearity. Please see the following tips in the lifelines documentation: https://lifelines.readthedocs.io/en/latest/Examples.html#problems-with-convergence-in-the-cox-proportional-hazard-modelMatrix is singular.
+2026-02-03 15:55:35,541 - INFO - Skipping Model 3 due to convergence issues (likely collinearity)
+2026-02-03 15:55:35,541 - INFO - 
+Model 4: Interaction model (push_group × total_pushes)
+2026-02-03 15:56:36,641 - INFO - 
+Proportional Hazards Test:
+2026-02-03 15:56:36,856 - WARNING - PH test failed: shapes (722200,5) and (2,) not aligned: 5 (dim 1) != 2 (dim 0)
+2026-02-03 15:56:36,856 - INFO - Creating hazard ratio forest plot...
+2026-02-03 15:56:38,208 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/hazard_ratio_forest_plot.png
+2026-02-03 15:56:38,208 - INFO - Saving results...
+2026-02-03 15:56:42,792 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/survival_dataset.csv
+2026-02-03 15:56:42,795 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/survival_summary_statistics.csv
+2026-02-03 15:56:42,809 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/cox_model1_summary.csv
+2026-02-03 15:56:42,964 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/cox_model2_summary.csv
+2026-02-03 15:56:42,978 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/cox_model4_summary.csv
+2026-02-03 15:56:42,978 - INFO - ================================================================================
+2026-02-03 15:56:42,978 - INFO - Survival analysis complete!
+2026-02-03 15:56:42,978 - INFO - ================================================================================
+2026-02-03 15:57:53,219 - INFO - ================================================================================
+2026-02-03 15:57:53,219 - INFO - Starting Survival Analysis with Competing Risks
+2026-02-03 15:57:53,219 - INFO - ================================================================================
+2026-02-03 15:57:53,219 - INFO - Loading preprocessed data...
+2026-02-03 15:57:55,314 - INFO - Loaded 51,847,472 records
+2026-02-03 15:57:55,314 - INFO - Preparing survival data with competing risks using vectorized operations...
+2026-02-03 15:58:10,797 - INFO - Identifying first dormant period per member...
+2026-02-03 15:58:40,011 - INFO - Processing 722,200 members with dormant periods...
+2026-02-03 15:58:49,440 - INFO - Calculating time to wake-up events...
+2026-02-03 15:59:11,636 - INFO - Calculating censoring times...
+2026-02-03 15:59:42,150 - INFO - Calculating push intensity metrics...
+2026-02-03 15:59:47,075 - INFO - Created survival dataset with 722,200 customers
+2026-02-03 15:59:47,076 - INFO - Events: 396273 wake-ups
+2026-02-03 15:59:47,078 - INFO - Censored: 325927
+2026-02-03 15:59:47,105 - INFO - ================================================================================
+2026-02-03 15:59:47,105 - INFO - Calculating Cumulative Incidence Functions
+2026-02-03 15:59:47,105 - INFO - ================================================================================
+2026-02-03 15:59:49,653 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/cumulative_incidence_curves.png
+2026-02-03 15:59:49,716 - INFO - 
+Summary Statistics by Group:
+2026-02-03 15:59:49,721 - INFO -                   time                 event          
+                  mean median    max     sum      mean
+push_group                                            
+0           138.170932   69.0  548.0   78599  0.687288
+1           154.465286  100.0  548.0  317674  0.522629
+2026-02-03 15:59:49,723 - INFO - ================================================================================
+2026-02-03 15:59:49,723 - INFO - Running Cox Proportional Hazards Model
+2026-02-03 15:59:49,723 - INFO - ================================================================================
+2026-02-03 15:59:49,761 - INFO - 
+Model 1: Unadjusted (push_group only)
+2026-02-03 16:00:23,647 - INFO - 
+Model 2: Adjusted for push intensity
+2026-02-03 16:01:19,773 - INFO - 
+Model 3: Adjusted for push intensity and discount
+2026-02-03 16:01:27,899 - WARNING - Model 3 failed to converge: Convergence halted due to matrix inversion problems. Suspicion is high collinearity. Please see the following tips in the lifelines documentation: https://lifelines.readthedocs.io/en/latest/Examples.html#problems-with-convergence-in-the-cox-proportional-hazard-modelMatrix is singular.
+2026-02-03 16:01:27,900 - INFO - Skipping Model 3 due to convergence issues (likely collinearity)
+2026-02-03 16:01:27,900 - INFO - 
+Model 4: Interaction model (push_group × total_pushes)
+2026-02-03 16:02:26,735 - INFO - 
+Proportional Hazards Test:
+2026-02-03 16:02:27,013 - WARNING - PH test failed: shapes (722200,5) and (2,) not aligned: 5 (dim 1) != 2 (dim 0)
+2026-02-03 16:02:27,014 - INFO - Creating hazard ratio forest plot...
+2026-02-03 16:02:28,266 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/figures/hazard_ratio_forest_plot.png
+2026-02-03 16:02:28,267 - INFO - Saving results...
+2026-02-03 16:02:32,582 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/survival_dataset.csv
+2026-02-03 16:02:32,584 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/survival_summary_statistics.csv
+2026-02-03 16:02:32,597 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/cox_model1_summary.csv
+2026-02-03 16:02:32,741 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/cox_model2_summary.csv
+2026-02-03 16:02:32,754 - INFO - Saved: /home/litao/Coffee/model-free/Basic_dist/push_sensitivity_analysis/outputs/tables/cox_model4_summary.csv
+2026-02-03 16:02:32,754 - INFO - ================================================================================
+2026-02-03 16:02:32,755 - INFO - Survival analysis complete!
+2026-02-03 16:02:32,755 - INFO - ================================================================================
