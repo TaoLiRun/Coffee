@@ -1,0 +1,26 @@
+
+Call:
+glm(formula = wakeup ~ push_group + pre_order_freq + pre_avg_value, 
+    family = binomial, data = model2_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.1746  -1.2147   0.8659   1.1375   2.8619  
+
+Coefficients:
+                 Estimate Std. Error z value Pr(>|z|)    
+(Intercept)     6.431e-01  8.896e-03   72.29   <2e-16 ***
+push_group1    -6.930e-01  6.894e-03 -100.53   <2e-16 ***
+pre_order_freq  2.137e-01  4.411e-03   48.45   <2e-16 ***
+pre_avg_value  -2.468e-03  7.126e-05  -34.63   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 994319  on 722199  degrees of freedom
+Residual deviance: 979582  on 722196  degrees of freedom
+AIC: 979590
+
+Number of Fisher Scoring iterations: 4
+

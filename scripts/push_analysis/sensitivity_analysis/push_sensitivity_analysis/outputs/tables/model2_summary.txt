@@ -1,0 +1,22 @@
+
+Call:
+lm(formula = wakeup ~ push_group + pre_order_freq + pre_avg_value, 
+    data = model2_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.0323 -0.5216  0.3139  0.4767  1.4302 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     6.519e-01  2.051e-03  317.83   <2e-16 ***
+push_group1    -1.628e-01  1.588e-03 -102.53   <2e-16 ***
+pre_order_freq  5.004e-02  1.022e-03   48.97   <2e-16 ***
+pre_avg_value  -5.661e-04  1.598e-05  -35.41   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.4927 on 722196 degrees of freedom
+Multiple R-squared:  0.01979,	Adjusted R-squared:  0.01978 
+F-statistic:  4859 on 3 and 722196 DF,  p-value: < 2.2e-16
+

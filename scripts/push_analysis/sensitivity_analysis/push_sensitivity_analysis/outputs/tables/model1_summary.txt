@@ -1,0 +1,19 @@
+
+Call:
+lm(formula = wakeup ~ push_group, data = did_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.6873 -0.5226  0.3127  0.4774  0.4774 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.687288   0.001461   470.5   <2e-16 ***
+push_group1 -0.164660   0.001592  -103.4   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.494 on 722198 degrees of freedom
+Multiple R-squared:  0.01459,	Adjusted R-squared:  0.01459 
+F-statistic: 1.069e+04 on 1 and 722198 DF,  p-value: < 2.2e-16
+

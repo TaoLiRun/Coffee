@@ -1,0 +1,22 @@
+
+Call:
+lm(formula = wakeup ~ push_group + pushes_first_7d + avg_push_discount, 
+    data = model4_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.7312 -0.5380  0.2986  0.4620  0.7599 
+
+Coefficients: (1 not defined because of singularities)
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        0.7311711  0.0016638  439.45   <2e-16 ***
+push_group1       -0.1634213  0.0015891 -102.84   <2e-16 ***
+pushes_first_7d   -0.0297858  0.0005444  -54.71   <2e-16 ***
+avg_push_discount         NA         NA      NA       NA    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.493 on 722197 degrees of freedom
+Multiple R-squared:  0.01866,	Adjusted R-squared:  0.01866 
+F-statistic:  6866 on 2 and 722197 DF,  p-value: < 2.2e-16
+

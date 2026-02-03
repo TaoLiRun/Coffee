@@ -1,0 +1,6 @@
+Model,Specification,push_group_coef,push_group_se,push_group_pval,N,sig
+Model 1: Unadjusted,wakeup ~ push_group,-0.164659973714453,0.00159222325733746,0,722200,***
+Model 2: With Controls,wakeup ~ push_group + controls,-0.162844073081281,0.00151323354588819,0,722200,***
+Model 3: With Push Intensity,wakeup ~ push_group * total_pushes,-0.167713890726959,0.00200526971804505,0,694932,***
+Model 4: With Push Characteristics,wakeup ~ push_group + push_chars,-0.163421328398002,0.00158909635288938,0,722200,***
+Model 5: Logistic,logit(wakeup) ~ push_group + controls,-0.693034337389948,0.00689391214680564,0,722200,***
