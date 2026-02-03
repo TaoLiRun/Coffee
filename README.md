@@ -2,6 +2,8 @@
 
 Welcome to the reorganized model-free analysis folder! This project analyzes customer purchase behavior, push notification effects, and coupon impacts.
 
+**🔗 GitHub Repository:** https://github.com/TaoLiRun/Coffee.git
+
 ## 📚 Documentation
 
 **Start here:**
@@ -9,6 +11,8 @@ Welcome to the reorganized model-free analysis folder! This project analyzes cus
 - ⚡ [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - Quick lookup for common tasks
 - 🔄 [BEFORE_AFTER.md](BEFORE_AFTER.md) - Visual comparison of old vs new structure
 - ✅ [REORGANIZATION_SUMMARY.md](REORGANIZATION_SUMMARY.md) - What was changed and why
+- 📊 [DEDUPLICATION_SUMMARY.md](DEDUPLICATION_SUMMARY.md) - Data consolidation details
+- 🔗 [GITHUB_INTEGRATION_SUMMARY.md](GITHUB_INTEGRATION_SUMMARY.md) - GitHub setup and integration
 
 ## 🗂️ Folder Structure
 
@@ -43,8 +47,12 @@ See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for commands to run specific analys
 - ✅ File paths updated for new structure
 - ✅ Comprehensive documentation added
 - ✅ **Duplicates removed** - `processed_data/` folder eliminated
-- ✅ **Analysis outputs organized** - All in `data/analysis_outputs/`
-- ✅ **28 analysis output files** moved and organized by type
+- ✅ **Redundant outputs/ folder removed**
+- ✅ **Archive folders** - Old structures moved to `scripts/archive_*`
+- ✅ **GitHub integration** - Repository pushed to https://github.com/TaoLiRun/Coffee.git
+- ✅ **Data excluded** - .gitignore configured to exclude `data/` folder
+
+See documentation files
 
 See [REORGANIZATION_SUMMARY.md](REORGANIZATION_SUMMARY.md) and [DEDUPLICATION_SUMMARY.md](DEDUPLICATION_SUMMARY.md) for details.
 
