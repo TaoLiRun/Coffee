@@ -1,9 +1,0 @@
-term,estimate_push_0,estimate_push_1,std_error_push_0,std_error_push_1,p_value_push_0,p_value_push_1,difference,pct_difference
-new_products_lag1,4,4,4,4,4,4,0,0
-new_products_lag2,1,1,1,1,1,1,0,0
-new_products_lag3,1,1,1,1,1,1,0,0
-removed_lag1,4,4,4,4,4,4,0,0
-removed_lag2,1,1,1,1,1,1,0,0
-removed_lag3,1,1,1,1,1,1,0,0
-sleep_gt_4,1,1,1,1,1,1,0,0
-total_pushes,3,3,3,3,3,3,0,0
