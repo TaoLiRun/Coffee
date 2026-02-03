@@ -49,7 +49,7 @@ def load_preprocessed_data():
     """Load the preprocessed data"""
     logger.info("Loading preprocessed data...")
 
-    data_path = Path(__file__).parent.parent / "data" / "analysis_data.parquet"
+    data_path = Path(__file__).parent.parent.parent.parent.parent.parent / "data" / "intermediate" / "analysis_data.parquet"
     df = pd.read_parquet(data_path)
     logger.info(f"Loaded {len(df):,} records")
 

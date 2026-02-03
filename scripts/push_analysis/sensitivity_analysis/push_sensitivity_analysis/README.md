@@ -25,8 +25,6 @@ Does the effect of pushes on wake-up probability differ between push=0 and push=
 
 ```
 push_sensitivity_analysis/
-├── data/                           # Processed data files
-│   └── analysis_data.parquet       # Main analysis dataset
 ├── scripts/                        # Analysis scripts
 │   ├── 01_preprocess_data.py       # Data preprocessing
 │   ├── 02_intrinsic_preferences.py # Pre-dormant behavior comparison
@@ -38,6 +36,10 @@ push_sensitivity_analysis/
 │   ├── figures/                    # Visualization plots
 │   └── logs/                       # Execution logs
 └── README.md                       # This file
+
+Data files:
+├── ../../../../../../data/processed/combined_push_purchase_analysis.parquet  # Source data
+└── ../../../../../../data/intermediate/analysis_data.parquet                 # Preprocessed output
 ```
 
 ---
@@ -63,7 +65,11 @@ install.packages(c("data.table", "lfe", "glmnet", "sandwich", "lmtest"))
 cd scripts
 python 01_preprocess_data.py
 ```
-**Output**: `../data/analysis_data.parquet`
+**Input**: 
+- `../../../../../../data/processed/combined_push_purchase_analysis.parquet`
+- `../../../../../../data/processed/no_push_members.csv`
+
+**Output**: `../../../../../../data/intermediate/analysis_data.parquet`
 
 ### Step 2: Intrinsic Preferences Analysis
 ```bash

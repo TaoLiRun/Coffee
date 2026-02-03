@@ -11,7 +11,7 @@ Key steps:
     5. Calculate summary statistics
     6. Save processed data
 
-Output: ../data/analysis_data.parquet
+Output: ../../../../../../data/intermediate/analysis_data.parquet
 """
 
 import pandas as pd
@@ -41,7 +41,7 @@ def load_data():
     logger.info("Loading data...")
 
     # Load combined push-purchase data using pyarrow directly with columns selection
-    parquet_path = Path(__file__).parent.parent.parent / "combined_push_purchase_analysis.parquet"
+    parquet_path = Path(__file__).parent.parent.parent.parent.parent.parent / "data" / "processed" / "combined_push_purchase_analysis.parquet"
     logger.info(f"Loading parquet file from: {parquet_path}")
 
     # Use pyarrow to read with column selection
@@ -211,7 +211,7 @@ def main():
     logger.info("=" * 80)
 
     # Define paths
-    output_path = Path(__file__).parent.parent / "data" / "analysis_data.parquet"
+    output_path = Path(__file__).parent.parent.parent.parent.parent.parent / "data" / "intermediate" / "analysis_data.parquet"
 
     # Step 1: Load data
     df, no_push_member_ids = load_data()

@@ -10,18 +10,14 @@ A comprehensive analysis of customer purchase behavior, push notification effect
 model-free/
 ├── data/                    # All data files (excluded from git)
 │   ├── processed/           # Cleaned/processed data (10 files)
-│   ├── analysis_outputs/    # Analysis results (28 files)
-│   │   ├── weekly_regression/
-│   │   ├── push_sensitivity/
-│   │   └── basic_distribution/
-│   ├── raw/
-│   └── intermediate/
+│   └── intermediate/        # Intermediate analysis datasets
+│       └── analysis_data.parquet  # Preprocessed push sensitivity data
 ├── scripts/                 # All analysis code
 │   ├── push_analysis/       # Push notification analysis
 │   ├── coupon_analysis/     # Coupon and discount effects
 │   ├── regression_analysis/ # Statistical models
 │   ├── exploratory_notebooks/ # Jupyter notebooks
-│   └── archive_*/           # Old folder structures (preserved)
+│   └── archive_neglect_coupon/ # Archived coupon analysis
 └── plots/                   # Visualization outputs
 ```
 
@@ -86,9 +82,8 @@ Rscript regression_with_two_groups.R
 - `product_mapping.csv` - Product ID mappings
 - And more...
 
-### Analysis Outputs (`data/analysis_outputs/`)
-- `weekly_regression/` - Panel regression results (11 files)
-- `push_sensitivity/` - DiD and survival analysis results (17 files)
+### Intermediate Data (`data/intermediate/`)
+- `analysis_data.parquet` - Preprocessed dataset for push sensitivity analysis with dormant period indicators
 
 ## 🔧 Setup
 
