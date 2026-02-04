@@ -213,17 +213,17 @@ def calculate_active_period_metrics(df, max_periods=10):
 
 def calculate_dormant_period_metrics(df, max_periods=10):
     """
-    Calculate metrics for each dormant period.
+    Calculate metrics for each dormant period, separately for push=0 and push=1 groups.
 
     Metrics:
     - Length: dormant_length (days from entry to exit or censoring)
     - Push count: total_pushes, pushes_per_day
-    - Push types: discount_push_count, discount_push_share, trigger_diversity
-    - Last push: last_push_type, last_push_discount, days_from_last_push_to_wakeup
+    - Push types: discount_push_count, discount_push_share, dept_diversity
+    - Last push: last_push_dept, last_push_discount, days_from_last_push_to_wakeup
     - Wakeup: wakeup (binary), days_to_wakeup, wakeup_order_value
     """
     logger.info("=" * 80)
-    logger.info("Calculating Dormant Period Metrics")
+    logger.info("Calculating Dormant Period Metrics (Separately by push_group)")
     logger.info("=" * 80)
 
     # Filter to dormant periods only
@@ -235,148 +235,201 @@ def calculate_dormant_period_metrics(df, max_periods=10):
 
     metrics_list = []
 
-    for period_num in range(1, max_periods + 1):
-        period_pushes = dormant_pushes[dormant_pushes['dormant_period_num'] == period_num]
-        period_purchases = dormant_purchases[dormant_purchases['dormant_period_num'] == period_num]
-
-        if len(period_pushes) == 0 and len(period_purchases) == 0:
-            logger.info(f"Dormant Period {period_num}: No data")
-            continue
-
-        # Get all unique members in this period (VECTORIZED)
-        all_member_ids = pd.concat([
-            period_pushes['member_id'] if len(period_pushes) > 0 else pd.Series(dtype='int64'),
-            period_purchases['member_id'] if len(period_purchases) > 0 else pd.Series(dtype='int64')
-        ]).unique()
-
-        # Calculate push metrics per member
-        if len(period_pushes) > 0:
-            push_metrics = period_pushes.groupby('member_id').agg({
-                'dt': ['min', 'max', 'count'],
-                'use_discount': ['sum', 'mean', lambda x: (x > 0).mean()],
-                'coupon': ['sum', lambda x: (x > 0).mean()],
-                'trigger_tag': 'nunique',
-                'data_source': 'count'  # This counts pushes
-            })
-
-            push_metrics.columns = [
-                'first_push_date', 'last_push_date', 'push_days',
-                'total_discount', 'avg_push_discount', 'discount_push_count',
-                'total_coupon', 'coupon_push_count',
-                'trigger_diversity',
-                'total_pushes'
+    # Iterate over push groups and periods
+    for push_group in [0, 1]:
+        for period_num in range(1, max_periods + 1):
+            # Filter by push_group and period_num
+            period_pushes = dormant_pushes[
+                (dormant_pushes['dormant_period_num'] == period_num) &
+                (dormant_pushes['push_group'] == push_group)
+            ]
+            period_purchases = dormant_purchases[
+                (dormant_purchases['dormant_period_num'] == period_num) &
+                (dormant_purchases['push_group'] == push_group)
             ]
 
-            # Calculate pushes per day
-            push_metrics['pushes_per_day'] = push_metrics['total_pushes'] / push_metrics['push_days']
-            push_metrics['discount_push_share'] = push_metrics['discount_push_count']
-        else:
-            push_metrics = pd.DataFrame()
+            if len(period_pushes) == 0 and len(period_purchases) == 0:
+                logger.info(f"push={push_group}, Dormant Period {period_num}: No data")
+                continue
 
-        # Calculate purchase (wake-up) metrics per member
-        if len(period_purchases) > 0:
-            purchase_metrics = period_purchases.groupby('member_id').agg({
-                'days_since_purchase': 'min',
-                'origin_money': 'first'
-            }).rename(columns={
-                'days_since_purchase': 'days_to_wakeup',
-                'origin_money': 'wakeup_order_value'
-            })
-            purchase_metrics['wakeup'] = 1
-        else:
-            purchase_metrics = pd.DataFrame()
+            # Get all unique members in this period (VECTORIZED)
+            all_member_ids = pd.concat([
+                period_pushes['member_id'] if len(period_pushes) > 0 else pd.Series(dtype='int64'),
+                period_purchases['member_id'] if len(period_purchases) > 0 else pd.Series(dtype='int64')
+            ]).unique()
 
-        # Get last push info before wake-up (VECTORIZED)
-        # Get last push for each member
-        if len(period_pushes) > 0:
-            # Sort by dt and get last push per member
-            period_pushes_sorted = period_pushes.sort_values(['member_id', 'dt'])
-            last_push_df = period_pushes_sorted.groupby('member_id').agg({
-                'dt': 'last',  # Last push date
-                'trigger_tag': 'last',  # Last push type
-                'use_discount': 'last',  # Last push discount
-                'coupon': 'last'  # Last push coupon
-            }).rename(columns={
-                'dt': 'last_push_date',
-                'trigger_tag': 'last_push_type',
-                'use_discount': 'last_push_discount',
-                'coupon': 'last_push_has_coupon'
-            })
+            # Calculate push metrics per member (FIXED: use correct column names)
+            if len(period_pushes) > 0:
+                # Build aggregation dict dynamically based on available columns
+                agg_dict = {'dt': ['min', 'max', 'count']}
 
-            # Convert coupon to binary
-            last_push_df['last_push_has_coupon'] = (last_push_df['last_push_has_coupon'] > 0).astype(int)
+                # Add use_discount if available
+                if 'use_discount' in period_pushes.columns:
+                    agg_dict['use_discount'] = ['sum', 'mean', lambda x: (x > 0).mean()]
 
-            # Get wakeup date for those who woke up
-            if len(period_purchases) > 0:
-                wakeup_dates = period_purchases.groupby('member_id')['dt'].min().rename('wakeup_date')
-                last_push_df = last_push_df.join(wakeup_dates, how='left')
+                # Add use_coupon_num if available (not 'coupon')
+                if 'use_coupon_num' in period_pushes.columns:
+                    agg_dict['use_coupon_num'] = ['sum', lambda x: (x > 0).mean()]
 
-                # Calculate days from last push to wakeup
-                last_push_df['days_from_last_push_to_wakeup'] = (
-                    last_push_df['wakeup_date'] - last_push_df['last_push_date']
-                ).dt.days
+                # Add dept_id for diversity (not 'trigger_tag')
+                if 'dept_id' in period_pushes.columns:
+                    agg_dict['dept_id'] = 'nunique'
 
-                # Drop wakeup_date column
-                last_push_df = last_push_df.drop(columns=['wakeup_date'])
+                push_metrics = period_pushes.groupby('member_id').agg(agg_dict)
+
+                # Flatten column names
+                push_metrics.columns = [
+                    'first_push_date', 'last_push_date', 'push_days'
+                ]
+
+                # Add discount columns if present
+                if 'use_discount' in period_pushes.columns:
+                    push_metrics.columns = list(push_metrics.columns[:-3]) + [
+                        'total_discount', 'avg_push_discount', 'discount_push_count'
+                    ]
+
+                # Add coupon columns if present
+                if 'use_coupon_num' in period_pushes.columns:
+                    push_metrics.columns = list(push_metrics.columns[:-2]) + [
+                        'total_coupon', 'coupon_push_count'
+                    ]
+
+                # Add dept diversity if present
+                if 'dept_id' in period_pushes.columns:
+                    push_metrics.columns = list(push_metrics.columns) + ['dept_diversity']
+
+                # total_pushes is the count of data_source (all pushes)
+                push_metrics['total_pushes'] = push_metrics['push_days']
+
+                # Calculate pushes per day
+                push_metrics['pushes_per_day'] = push_metrics['total_pushes'] / push_metrics['push_days']
+                if 'discount_push_count' in push_metrics.columns:
+                    push_metrics['discount_push_share'] = push_metrics['discount_push_count']
             else:
-                last_push_df['days_from_last_push_to_wakeup'] = np.nan
-        else:
-            last_push_df = pd.DataFrame()
+                push_metrics = pd.DataFrame()
 
-        # Combine all metrics
-        member_metrics = pd.DataFrame({'member_id': all_member_ids})
+            # Calculate purchase (wake-up) metrics per member
+            if len(period_purchases) > 0:
+                purchase_metrics = period_purchases.groupby('member_id').agg({
+                    'days_since_purchase': 'min',
+                    'origin_money': 'first'
+                }).rename(columns={
+                    'days_since_purchase': 'days_to_wakeup',
+                    'origin_money': 'wakeup_order_value'
+                })
+                purchase_metrics['wakeup'] = 1
+            else:
+                purchase_metrics = pd.DataFrame()
 
-        # Merge push metrics
-        if len(push_metrics) > 0:
-            member_metrics = member_metrics.merge(
-                push_metrics.reset_index(),
-                on='member_id',
-                how='left'
+            # Get last push info before wake-up (VECTORIZED, FIXED column names)
+            if len(period_pushes) > 0:
+                # Sort by dt and get last push per member
+                period_pushes_sorted = period_pushes.sort_values(['member_id', 'dt'])
+
+                # Build aggregation dict for last push
+                last_push_agg = {'dt': 'last'}
+                if 'dept_id' in period_pushes.columns:
+                    last_push_agg['dept_id'] = 'last'
+                if 'use_discount' in period_pushes.columns:
+                    last_push_agg['use_discount'] = 'last'
+                if 'use_coupon_num' in period_pushes.columns:
+                    last_push_agg['use_coupon_num'] = 'last'
+
+                last_push_df = period_pushes_sorted.groupby('member_id').agg(last_push_agg)
+
+                # Rename columns
+                rename_dict = {'dt': 'last_push_date'}
+                if 'dept_id' in last_push_df.columns:
+                    rename_dict['dept_id'] = 'last_push_dept'
+                if 'use_discount' in last_push_df.columns:
+                    rename_dict['use_discount'] = 'last_push_discount'
+                if 'use_coupon_num' in last_push_df.columns:
+                    rename_dict['use_coupon_num'] = 'last_push_has_coupon'
+
+                last_push_df = last_push_df.rename(columns=rename_dict)
+
+                # Convert coupon to binary if present
+                if 'last_push_has_coupon' in last_push_df.columns:
+                    last_push_df['last_push_has_coupon'] = (last_push_df['last_push_has_coupon'] > 0).astype(int)
+
+                # Get wakeup date for those who woke up
+                if len(period_purchases) > 0:
+                    wakeup_dates = period_purchases.groupby('member_id')['dt'].min().rename('wakeup_date')
+                    last_push_df = last_push_df.join(wakeup_dates, how='left')
+
+                    # Calculate days from last push to wakeup
+                    last_push_df['days_from_last_push_to_wakeup'] = (
+                        last_push_df['wakeup_date'] - last_push_df['last_push_date']
+                    ).dt.days
+
+                    # Drop wakeup_date column
+                    last_push_df = last_push_df.drop(columns=['wakeup_date'])
+                else:
+                    last_push_df['days_from_last_push_to_wakeup'] = np.nan
+            else:
+                last_push_df = pd.DataFrame()
+
+            # Combine all metrics
+            member_metrics = pd.DataFrame({'member_id': all_member_ids})
+
+            # Add push_group
+            member_metrics['push_group'] = push_group
+
+            # Merge push metrics
+            if len(push_metrics) > 0:
+                member_metrics = member_metrics.merge(
+                    push_metrics.reset_index(),
+                    on='member_id',
+                    how='left'
+                )
+
+            # Merge purchase metrics
+            if len(purchase_metrics) > 0:
+                member_metrics = member_metrics.merge(
+                    purchase_metrics.reset_index(),
+                    on='member_id',
+                    how='left'
+                )
+
+            # Merge last push info
+            if len(last_push_df) > 0:
+                member_metrics = member_metrics.merge(
+                    last_push_df.reset_index(),
+                    on='member_id',
+                    how='left'
+                )
+
+            # Calculate dormant length (VECTORIZED)
+            # If woke up: dormant_length = days_to_wakeup
+            # If didn't wake up: dormant_length = last push date - first push date
+            member_metrics['dormant_length'] = np.where(
+                member_metrics['days_to_wakeup'].notna(),
+                member_metrics['days_to_wakeup'],
+                np.where(
+                    member_metrics['last_push_date'].notna() & member_metrics['first_push_date'].notna(),
+                    (member_metrics['last_push_date'] - member_metrics['first_push_date']).dt.days,
+                    np.nan
+                )
             )
 
-        # Merge purchase metrics
-        if len(purchase_metrics) > 0:
-            member_metrics = member_metrics.merge(
-                purchase_metrics.reset_index(),
-                on='member_id',
-                how='left'
-            )
+            # Fill NaN values
+            member_metrics['wakeup'] = member_metrics['wakeup'].fillna(0).astype(int)
+            for col in ['total_pushes', 'pushes_per_day']:
+                if col in member_metrics.columns:
+                    member_metrics[col] = member_metrics[col].fillna(0)
+            if 'discount_push_count' in member_metrics.columns:
+                member_metrics['discount_push_count'] = member_metrics['discount_push_count'].fillna(0)
+            if 'dept_diversity' in member_metrics.columns:
+                member_metrics['dept_diversity'] = member_metrics['dept_diversity'].fillna(0)
 
-        # Merge last push info
-        if len(last_push_df) > 0:
-            member_metrics = member_metrics.merge(
-                last_push_df.reset_index(),
-                on='member_id',
-                how='left'
-            )
+            # Add period identifier
+            member_metrics['dormant_period_num'] = period_num
 
-        # Calculate dormant length (VECTORIZED)
-        # If woke up: dormant_length = days_to_wakeup
-        # If didn't wake up: dormant_length = last push date - first push date
-        member_metrics['dormant_length'] = np.where(
-            member_metrics['days_to_wakeup'].notna(),
-            member_metrics['days_to_wakeup'],
-            np.where(
-                member_metrics['last_push_date'].notna() & member_metrics['first_push_date'].notna(),
-                (member_metrics['last_push_date'] - member_metrics['first_push_date']).dt.days,
-                np.nan
-            )
-        )
+            logger.info(f"push={push_group}, Dormant Period {period_num}: {len(member_metrics):,} customers, "
+                       f"{member_metrics['wakeup'].mean():.2%} wakeup rate, "
+                       f"{member_metrics['total_pushes'].mean():.2f} avg pushes")
 
-        # Fill NaN values
-        member_metrics['wakeup'] = member_metrics['wakeup'].fillna(0).astype(int)
-        for col in ['total_pushes', 'pushes_per_day', 'discount_push_count', 'trigger_diversity']:
-            if col in member_metrics.columns:
-                member_metrics[col] = member_metrics[col].fillna(0)
-
-        # Add period identifier
-        member_metrics['dormant_period_num'] = period_num
-
-        logger.info(f"Dormant Period {period_num}: {len(member_metrics):,} customers, "
-                   f"{member_metrics['wakeup'].mean():.2%} wakeup rate, "
-                   f"{member_metrics['total_pushes'].mean():.2f} avg pushes")
-
-        metrics_list.append(member_metrics)
+            metrics_list.append(member_metrics)
 
     # Combine all periods
     all_dormant_metrics = pd.concat(metrics_list, ignore_index=True)
