@@ -49,7 +49,7 @@ def load_preprocessed_data():
 
 def identify_periods(df):
     """
-    Identify all active and dormant periods for each customer.
+    Identify all active and dormant periods for each customer (VECTORIZED).
 
     Period Structure:
     - Active Period 1: Before first dormant entry (dormant_period = 0)
@@ -59,86 +59,83 @@ def identify_periods(df):
     - ...
 
     Returns:
-        periods_df: DataFrame with (member_id, date) → (period_type, period_number)
+        df_with_periods: DataFrame with period_type, active_period_num, dormant_period_num
     """
     logger.info("=" * 80)
-    logger.info("Identifying All Active and Dormant Periods")
+    logger.info("Identifying All Active and Dormant Periods (Vectorized)")
     logger.info("=" * 80)
-
-    # Get push_group for each member
-    push_groups = df.groupby('member_id')['push_group'].first()
 
     # Sort by member_id and date
     df_sorted = df.sort_values(['member_id', 'dt']).copy()
 
-    # Initialize period tracking
-    period_data = []
+    # Identify state transitions using shift within groups
+    # is_dormant: True if dormant_period > 0
+    df_sorted['is_dormant'] = (df_sorted['dormant_period'] > 0).astype(int)
 
-    # Process each member separately
-    for member_id in df_sorted['member_id'].unique():
-        member_df = df_sorted[df_sorted['member_id'] == member_id].copy()
+    # Find transitions using groupby and shift
+    # dormant_change: 1 when entering dormant, -1 when exiting, 0 otherwise
+    df_sorted['prev_dormant_state'] = df_sorted.groupby('member_id')['is_dormant'].shift(1).fillna(0)
+    df_sorted['dormant_change'] = df_sorted['is_dormant'] - df_sorted['prev_dormant_state']
 
-        # Track current state
-        current_dormant_id = 0  # 0 = active, >0 = dormant period number
-        active_period_num = 0
-        dormant_period_num = 0
-
-        for idx, row in member_df.iterrows():
-            dormant_id = row.get('dormant_period', 0)
-
-            # Determine if in dormant period
-            is_dormant = (dormant_id > 0)
-
-            # Check for state transition
-            if is_dormant and dormant_id != current_dormant_id:
-                # Entering a new dormant period
-                dormant_period_num = dormant_id
-                active_period_num = active_period_num  # Keep current active period number
-                current_dormant_id = dormant_id
-                period_type = 'dormant'
-            elif not is_dormant and current_dormant_id > 0:
-                # Woke up - entering new active period
-                active_period_num += 1
-                dormant_period_num = dormant_period_num  # Keep current dormant period number
-                current_dormant_id = 0
-                period_type = 'active'
-            elif not is_dormant and current_dormant_id == 0:
-                # Still in active period
-                if active_period_num == 0:
-                    active_period_num = 1  # Initialize first active period
-                period_type = 'active'
-            else:
-                # Still in dormant period
-                period_type = 'dormant'
-
-            period_data.append({
-                'member_id': member_id,
-                'dt': row['dt'],
-                'period_type': period_type,
-                'active_period_num': active_period_num if period_type == 'active' else np.nan,
-                'dormant_period_num': dormant_period_num if period_type == 'dormant' else np.nan,
-                'dormant_id': dormant_id
-            })
-
-    periods_df = pd.DataFrame(period_data)
-
-    # Merge back with original data
-    df_with_periods = df_sorted.merge(
-        periods_df[['member_id', 'dt', 'period_type', 'active_period_num', 'dormant_period_num']],
-        on=['member_id', 'dt'],
-        how='left'
+    # Assign period numbers using cumulative sum
+    # Each transition from active to dormant or vice versa increments a counter
+    df_sorted['transition_counter'] = df_sorted.groupby('member_id')['dormant_change'].transform(
+        lambda x: (x != 0).cumsum()
     )
 
+    # For each customer, identify periods
+    # First, create a unique identifier for each state (active/dormant episode)
+    df_sorted['state_id'] = (
+        df_sorted['member_id'].astype(str) + '_' +
+        df_sorted['transition_counter'].astype(str)
+    )
+
+    # For each state_id, determine if it's active or dormant
+    state_types = df_sorted.groupby('state_id')['is_dormant'].first().reset_index()
+    state_types['period_type'] = state_types['is_dormant'].map({0: 'active', 1: 'dormant'})
+
+    # Count active periods and dormant periods within each state_id
+    # For each member, count how many active and dormant states they've had
+    member_state_counts = state_types.copy()
+    member_state_counts['member_id'] = member_state_counts['state_id'].str.split('_').str[0].astype(int)
+
+    # Create period numbers
+    member_state_counts['period_num'] = (
+        member_state_counts.groupby('member_id').cumsum() + 1
+    )
+
+    # Map period_type to separate counters
+    member_state_counts['active_period_num'] = np.where(
+        member_state_counts['period_type'] == 'active',
+        member_state_counts.groupby(['member_id', 'period_type']).cumcount() + 1,
+        np.nan
+    )
+    member_state_counts['dormant_period_num'] = np.where(
+        member_state_counts['period_type'] == 'dormant',
+        member_state_counts.groupby(['member_id', 'period_type']).cumcount() + 1,
+        np.nan
+    )
+
+    # Create mapping: state_id -> (period_type, active_period_num, dormant_period_num)
+    period_mapping = member_state_counts[['state_id', 'period_type', 'active_period_num', 'dormant_period_num']]
+
+    # Merge back to main dataframe
+    df_sorted = df_sorted.merge(period_mapping, on='state_id', how='left')
+
+    # Clean up temporary columns
+    df_sorted = df_sorted.drop(columns=['is_dormant', 'prev_dormant_state', 'dormant_change',
+                                         'transition_counter', 'state_id'])
+
     # Summary statistics
-    n_members = df_with_periods['member_id'].nunique()
-    n_active_periods = df_with_periods[df_with_periods['period_type'] == 'active']['active_period_num'].max()
-    n_dormant_periods = df_with_periods[df_with_periods['period_type'] == 'dormant']['dormant_period_num'].max()
+    n_members = df_sorted['member_id'].nunique()
+    n_active_periods = df_sorted[df_sorted['period_type'] == 'active']['active_period_num'].max()
+    n_dormant_periods = df_sorted[df_sorted['period_type'] == 'dormant']['dormant_period_num'].max()
 
     logger.info(f"Identified periods for {n_members:,} customers")
     logger.info(f"Maximum active periods: {n_active_periods}")
     logger.info(f"Maximum dormant periods: {n_dormant_periods}")
 
-    return df_with_periods
+    return df_sorted
 
 
 def calculate_active_period_metrics(df, max_periods=10):
@@ -251,8 +248,11 @@ def calculate_dormant_period_metrics(df, max_periods=10):
             logger.info(f"Dormant Period {period_num}: No data")
             continue
 
-        # Get unique members in this period
-        period_members = set(period_pushes['member_id']) | set(period_purchases['member_id'])
+        # Get all unique members in this period (VECTORIZED)
+        all_member_ids = pd.concat([
+            period_pushes['member_id'] if len(period_pushes) > 0 else pd.Series(dtype='int64'),
+            period_purchases['member_id'] if len(period_purchases) > 0 else pd.Series(dtype='int64')
+        ]).unique()
 
         # Calculate push metrics per member
         if len(period_pushes) > 0:
@@ -291,41 +291,45 @@ def calculate_dormant_period_metrics(df, max_periods=10):
         else:
             purchase_metrics = pd.DataFrame()
 
-        # Get last push info before wake-up
-        last_push_info = []
-        for member_id in period_members:
-            member_pushes = period_pushes[period_pushes['member_id'] == member_id]
+        # Get last push info before wake-up (VECTORIZED)
+        # Get last push for each member
+        if len(period_pushes) > 0:
+            # Sort by dt and get last push per member
+            period_pushes_sorted = period_pushes.sort_values(['member_id', 'dt'])
+            last_push_df = period_pushes_sorted.groupby('member_id').agg({
+                'dt': 'last',  # Last push date
+                'trigger_tag': 'last',  # Last push type
+                'use_discount': 'last',  # Last push discount
+                'coupon': 'last'  # Last push coupon
+            }).rename(columns={
+                'dt': 'last_push_date',
+                'trigger_tag': 'last_push_type',
+                'use_discount': 'last_push_discount',
+                'coupon': 'last_push_has_coupon'
+            })
 
-            if len(member_pushes) > 0:
-                # Get last push
-                last_push = member_pushes.sort_values('dt').iloc[-1]
+            # Convert coupon to binary
+            last_push_df['last_push_has_coupon'] = (last_push_df['last_push_has_coupon'] > 0).astype(int)
 
-                # Check if member woke up
-                if member_id in purchase_metrics.index:
-                    wakeup_date = period_purchases[
-                        period_purchases['member_id'] == member_id
-                    ]['dt'].min()
-                    days_from_last_push = (wakeup_date - last_push['dt']).days
-                else:
-                    days_from_last_push = np.nan
+            # Get wakeup date for those who woke up
+            if len(period_purchases) > 0:
+                wakeup_dates = period_purchases.groupby('member_id')['dt'].min().rename('wakeup_date')
+                last_push_df = last_push_df.join(wakeup_dates, how='left')
 
-                last_push_info.append({
-                    'member_id': member_id,
-                    'last_push_date': last_push['dt'],
-                    'last_push_type': last_push.get('trigger_tag', np.nan),
-                    'last_push_discount': last_push.get('use_discount', 0),
-                    'last_push_has_coupon': 1 if last_push.get('coupon', 0) > 0 else 0,
-                    'days_from_last_push_to_wakeup': days_from_last_push
-                })
+                # Calculate days from last push to wakeup
+                last_push_df['days_from_last_push_to_wakeup'] = (
+                    last_push_df['wakeup_date'] - last_push_df['last_push_date']
+                ).dt.days
 
-        if last_push_info:
-            last_push_df = pd.DataFrame(last_push_info).set_index('member_id')
+                # Drop wakeup_date column
+                last_push_df = last_push_df.drop(columns=['wakeup_date'])
+            else:
+                last_push_df['days_from_last_push_to_wakeup'] = np.nan
         else:
             last_push_df = pd.DataFrame()
 
         # Combine all metrics
-        member_list = list(period_members)
-        member_metrics = pd.DataFrame({'member_id': member_list})
+        member_metrics = pd.DataFrame({'member_id': all_member_ids})
 
         # Merge push metrics
         if len(push_metrics) > 0:
@@ -351,14 +355,17 @@ def calculate_dormant_period_metrics(df, max_periods=10):
                 how='left'
             )
 
-        # Calculate dormant length
+        # Calculate dormant length (VECTORIZED)
         # If woke up: dormant_length = days_to_wakeup
-        # If didn't wake up: dormant_length = last observation date - first push date
-        member_metrics['dormant_length'] = member_metrics.apply(
-            lambda row: row['days_to_wakeup'] if pd.notna(row['days_to_wakeup'])
-            else (row.get('last_push_date', pd.NaT) - row.get('first_push_date', pd.NaT)).days
-            if pd.notna(row.get('first_push_date', pd.NaT)) else np.nan,
-            axis=1
+        # If didn't wake up: dormant_length = last push date - first push date
+        member_metrics['dormant_length'] = np.where(
+            member_metrics['days_to_wakeup'].notna(),
+            member_metrics['days_to_wakeup'],
+            np.where(
+                member_metrics['last_push_date'].notna() & member_metrics['first_push_date'].notna(),
+                (member_metrics['last_push_date'] - member_metrics['first_push_date']).dt.days,
+                np.nan
+            )
         )
 
         # Fill NaN values
