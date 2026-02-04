@@ -403,16 +403,23 @@ def calculate_dormant_period_metrics(df, max_periods=10):
 
             # Calculate dormant length (VECTORIZED)
             # If woke up: dormant_length = days_to_wakeup
-            # If didn't wake up: dormant_length = last push date - first push date
-            member_metrics['dormant_length'] = np.where(
-                member_metrics['days_to_wakeup'].notna(),
-                member_metrics['days_to_wakeup'],
-                np.where(
-                    member_metrics['last_push_date'].notna() & member_metrics['first_push_date'].notna(),
-                    (member_metrics['last_push_date'] - member_metrics['first_push_date']).dt.days,
-                    np.nan
-                )
-            )
+            # If didn't wake up: dormant_length = last push date - first push date (if available)
+            if 'days_to_wakeup' in member_metrics.columns:
+                if 'last_push_date' in member_metrics.columns and 'first_push_date' in member_metrics.columns:
+                    member_metrics['dormant_length'] = np.where(
+                        member_metrics['days_to_wakeup'].notna(),
+                        member_metrics['days_to_wakeup'],
+                        np.where(
+                            member_metrics['last_push_date'].notna() & member_metrics['first_push_date'].notna(),
+                            (member_metrics['last_push_date'] - member_metrics['first_push_date']).dt.days,
+                            np.nan
+                        )
+                    )
+                else:
+                    # No push dates available, dormant_length = days_to_wakeup if woke up, else NaN
+                    member_metrics['dormant_length'] = member_metrics['days_to_wakeup']
+            else:
+                member_metrics['dormant_length'] = np.nan
 
             # Fill NaN values
             member_metrics['wakeup'] = member_metrics['wakeup'].fillna(0).astype(int)
