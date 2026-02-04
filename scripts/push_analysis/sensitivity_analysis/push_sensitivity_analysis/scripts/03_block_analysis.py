@@ -99,12 +99,7 @@ def identify_periods(df):
     member_state_counts = state_types.copy()
     member_state_counts['member_id'] = member_state_counts['state_id'].str.split('_').str[0].astype(int)
 
-    # Create period numbers
-    member_state_counts['period_num'] = (
-        member_state_counts.groupby('member_id').cumsum() + 1
-    )
-
-    # Map period_type to separate counters
+    # Map period_type to separate counters using cumcount
     member_state_counts['active_period_num'] = np.where(
         member_state_counts['period_type'] == 'active',
         member_state_counts.groupby(['member_id', 'period_type']).cumcount() + 1,
