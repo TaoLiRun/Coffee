@@ -135,7 +135,7 @@ def identify_periods(df):
 
 def calculate_active_period_metrics(df, max_periods=10):
     """
-    Calculate metrics for each active period.
+    Calculate metrics for each active period, separately for push=0 and push=1 groups.
 
     Metrics (same as original "pre" period):
     - Frequency: orders, order_freq, interpurchase_days, weeks_active
@@ -144,7 +144,7 @@ def calculate_active_period_metrics(df, max_periods=10):
     - Discount: coupon_usage_rate, avg_discount, deep_discount_pref
     """
     logger.info("=" * 80)
-    logger.info("Calculating Active Period Metrics")
+    logger.info("Calculating Active Period Metrics (Separately by push_group)")
     logger.info("=" * 80)
 
     # Filter to active periods only
@@ -155,53 +155,59 @@ def calculate_active_period_metrics(df, max_periods=10):
 
     metrics_list = []
 
-    for period_num in range(1, max_periods + 1):
-        period_data = active_purchases[active_purchases['active_period_num'] == period_num]
+    # Iterate over push groups and periods
+    for push_group in [0, 1]:
+        for period_num in range(1, max_periods + 1):
+            period_data = active_purchases[
+                (active_purchases['active_period_num'] == period_num) &
+                (active_purchases['push_group'] == push_group)
+            ]
 
-        if len(period_data) == 0:
-            logger.info(f"Active Period {period_num}: No data")
-            continue
+            if len(period_data) == 0:
+                logger.info(f"push={push_group}, Active Period {period_num}: No data")
+                continue
 
-        # Calculate metrics per member
-        member_metrics = period_data.groupby('member_id').agg({
-            'origin_money': ['mean', 'sum', 'count'],
-            'total_items': 'mean',
-            'dept_id': 'nunique',
-            'use_coupon_num': lambda x: (x > 0).mean(),
-            'use_discount': 'mean',
-            'dt': ['min', 'max']
-        })
+            # Calculate metrics per member
+            member_metrics = period_data.groupby('member_id').agg({
+                'origin_money': ['mean', 'sum', 'count'],
+                'total_items': 'mean',
+                'dept_id': 'nunique',
+                'use_coupon_num': lambda x: (x > 0).mean(),
+                'use_discount': 'mean',
+                'dt': ['min', 'max']
+            })
 
-        # Flatten column names
-        member_metrics.columns = [
-            'avg_order_value', 'total_spend', 'n_orders',
-            'avg_basket_size',
-            'unique_stores',
-            'coupon_usage_rate',
-            'avg_discount',
-            'dt_min', 'dt_max'
-        ]
+            # Flatten column names
+            member_metrics.columns = [
+                'avg_order_value', 'total_spend', 'n_orders',
+                'avg_basket_size',
+                'unique_stores',
+                'coupon_usage_rate',
+                'avg_discount',
+                'dt_min', 'dt_max'
+            ]
 
-        # Calculate additional metrics
-        member_metrics['weeks_active'] = (member_metrics['dt_max'] - member_metrics['dt_min']).dt.days / 7
-        member_metrics['weeks_active'] = member_metrics['weeks_active'].clip(lower=1)
-        member_metrics.loc[member_metrics['n_orders'] == 1, 'weeks_active'] = 1
-        member_metrics['order_freq'] = member_metrics['n_orders'] / member_metrics['weeks_active']
+            # Calculate additional metrics
+            member_metrics['weeks_active'] = (member_metrics['dt_max'] - member_metrics['dt_min']).dt.days / 7
+            member_metrics['weeks_active'] = member_metrics['weeks_active'].clip(lower=1)
+            member_metrics.loc[member_metrics['n_orders'] == 1, 'weeks_active'] = 1
+            member_metrics['order_freq'] = member_metrics['n_orders'] / member_metrics['weeks_active']
 
-        # Deep discount preference
-        period_data_copy = period_data.copy()
-        period_data_copy['has_deep_discount'] = (period_data_copy['use_discount'] > 0.5).astype(int)
-        deep_discount_pref = period_data_copy.groupby('member_id')['has_deep_discount'].mean()
-        member_metrics = member_metrics.join(deep_discount_pref.rename('deep_discount_pref'))
+            # Deep discount preference
+            period_data_copy = period_data.copy()
+            period_data_copy['has_deep_discount'] = (period_data_copy['use_discount'] > 0.5).astype(int)
+            deep_discount_pref = period_data_copy.groupby('member_id')['has_deep_discount'].mean()
+            member_metrics = member_metrics.join(deep_discount_pref.rename('deep_discount_pref'))
 
-        # Add period identifiers
-        member_metrics['active_period_num'] = period_num
-        member_metrics = member_metrics.reset_index()
+            # Add period identifiers
+            member_metrics['push_group'] = push_group
+            member_metrics['active_period_num'] = period_num
+            member_metrics = member_metrics.reset_index()
 
-        logger.info(f"Active Period {period_num}: {len(member_metrics):,} customers, "
-                   f"{member_metrics['n_orders'].mean():.2f} avg orders")
+            logger.info(f"push={push_group}, Active Period {period_num}: {len(member_metrics):,} customers, "
+                       f"{member_metrics['n_orders'].mean():.2f} avg orders")
 
-        metrics_list.append(member_metrics)
+            metrics_list.append(member_metrics)
 
     # Combine all periods
     all_active_metrics = pd.concat(metrics_list, ignore_index=True)
@@ -261,44 +267,40 @@ def calculate_dormant_period_metrics(df, max_periods=10):
             # Calculate push metrics per member (FIXED: use correct column names)
             if len(period_pushes) > 0:
                 # Build aggregation dict dynamically based on available columns
-                agg_dict = {'dt': ['min', 'max', 'count']}
+                agg_funcs = {'dt': ['min', 'max', 'count']}
 
                 # Add use_discount if available
                 if 'use_discount' in period_pushes.columns:
-                    agg_dict['use_discount'] = ['sum', 'mean', lambda x: (x > 0).mean()]
+                    agg_funcs['use_discount'] = ['sum', 'mean', lambda x: (x > 0).mean()]
 
                 # Add use_coupon_num if available (not 'coupon')
                 if 'use_coupon_num' in period_pushes.columns:
-                    agg_dict['use_coupon_num'] = ['sum', lambda x: (x > 0).mean()]
+                    agg_funcs['use_coupon_num'] = ['sum', lambda x: (x > 0).mean()]
 
                 # Add dept_id for diversity (not 'trigger_tag')
                 if 'dept_id' in period_pushes.columns:
-                    agg_dict['dept_id'] = 'nunique'
+                    agg_funcs['dept_id'] = ['nunique']
 
-                push_metrics = period_pushes.groupby('member_id').agg(agg_dict)
+                push_metrics = period_pushes.groupby('member_id').agg(agg_funcs)
 
-                # Flatten column names
-                push_metrics.columns = [
-                    'first_push_date', 'last_push_date', 'push_days'
-                ]
+                # Flatten MultiIndex columns properly
+                push_metrics.columns = ['_'.join(col).strip('_') for col in push_metrics.columns.values]
 
-                # Add discount columns if present
-                if 'use_discount' in period_pushes.columns:
-                    push_metrics.columns = list(push_metrics.columns[:-3]) + [
-                        'total_discount', 'avg_push_discount', 'discount_push_count'
-                    ]
+                # Rename columns to standardized names
+                rename_map = {
+                    'dt_min': 'first_push_date',
+                    'dt_max': 'last_push_date',
+                    'dt_count': 'push_days',
+                    'use_discount_sum': 'total_discount',
+                    'use_discount_mean': 'avg_push_discount',
+                    'use_discount_<lambda_0>': 'discount_push_count',
+                    'use_coupon_num_sum': 'total_coupon',
+                    'use_coupon_num_<lambda_0>': 'coupon_push_count',
+                    'dept_id_nunique': 'dept_diversity'
+                }
+                push_metrics = push_metrics.rename(columns=rename_map)
 
-                # Add coupon columns if present
-                if 'use_coupon_num' in period_pushes.columns:
-                    push_metrics.columns = list(push_metrics.columns[:-2]) + [
-                        'total_coupon', 'coupon_push_count'
-                    ]
-
-                # Add dept diversity if present
-                if 'dept_id' in period_pushes.columns:
-                    push_metrics.columns = list(push_metrics.columns) + ['dept_diversity']
-
-                # total_pushes is the count of data_source (all pushes)
+                # total_pushes is the count of dt (all pushes)
                 push_metrics['total_pushes'] = push_metrics['push_days']
 
                 # Calculate pushes per day
