@@ -1,0 +1,3038 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_30b37949fb3540e400ddd1395a04b0ca {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_30b37949fb3540e400ddd1395a04b0ca" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_30b37949fb3540e400ddd1395a04b0ca = L.map(
+                "map_30b37949fb3540e400ddd1395a04b0ca",
+                {
+                    center: [32.01609242474638, 118.84006745637724],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_539287af633696e896ecb22d38fff726 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_539287af633696e896ecb22d38fff726.addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+            var circle_marker_04271cb08ece02815104f678a2e6da1f = L.circleMarker(
+                [31.939133554341296, 118.89433822746835],
+                {"bubblingMouseEvents": true, "color": "#a50026", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a50026", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 20.639175257731956, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_5d139144d43ae6288741593e9d875b08 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_138d15ee953ab4c8f031575cc35b479b = $(`<div id="html_138d15ee953ab4c8f031575cc35b479b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 251</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-06-20</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-08</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 81 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区经贸学院路8号保利樾广场1栋102室商场外一层店铺...</p>     </div>     </div>`)[0];
+                popup_5d139144d43ae6288741593e9d875b08.setContent(html_138d15ee953ab4c8f031575cc35b479b);
+            
+        
+
+        circle_marker_04271cb08ece02815104f678a2e6da1f.bindPopup(popup_5d139144d43ae6288741593e9d875b08)
+        ;
+
+        
+    
+    
+            circle_marker_04271cb08ece02815104f678a2e6da1f.bindTooltip(
+                `<div>
+                     Store 251: 81 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a85dcda79e985f7bd8d4edc795576348 = L.circleMarker(
+                [31.904467592401147, 118.90545898019025],
+                {"bubblingMouseEvents": true, "color": "#ad0826", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ad0826", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 18.577319587628864, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_81a413f79d3f2dcc0f8e8c41b34c6bc0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6ffcbaf98f6ef7c63830f9d60d3f4355 = $(`<div id="html_6ffcbaf98f6ef7c63830f9d60d3f4355" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 164</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-06-28</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-06</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 71 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道99号金陵科技学院北区第一食堂二层...</p>     </div>     </div>`)[0];
+                popup_81a413f79d3f2dcc0f8e8c41b34c6bc0.setContent(html_6ffcbaf98f6ef7c63830f9d60d3f4355);
+            
+        
+
+        circle_marker_a85dcda79e985f7bd8d4edc795576348.bindPopup(popup_81a413f79d3f2dcc0f8e8c41b34c6bc0)
+        ;
+
+        
+    
+    
+            circle_marker_a85dcda79e985f7bd8d4edc795576348.bindTooltip(
+                `<div>
+                     Store 164: 71 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2f21d8218be324343340a24a179294e7 = L.circleMarker(
+                [31.89171411801545, 118.89763824258982],
+                {"bubblingMouseEvents": true, "color": "#ad0826", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ad0826", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.546391752577318, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_a53cdddfaca31ccb2d0ce8afbb64fb92 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_94c320c3b1b62d5518406342c07c151d = $(`<div id="html_94c320c3b1b62d5518406342c07c151d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 111</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-06-29</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-02</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 66 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道3666号中国传媒大学南广学院三食堂一层中超华城超市...</p>     </div>     </div>`)[0];
+                popup_a53cdddfaca31ccb2d0ce8afbb64fb92.setContent(html_94c320c3b1b62d5518406342c07c151d);
+            
+        
+
+        circle_marker_2f21d8218be324343340a24a179294e7.bindPopup(popup_a53cdddfaca31ccb2d0ce8afbb64fb92)
+        ;
+
+        
+    
+    
+            circle_marker_2f21d8218be324343340a24a179294e7.bindTooltip(
+                `<div>
+                     Store 111: 66 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d39c5d9481581d91b2c55391b3ee7c89 = L.circleMarker(
+                [32.12675700212732, 118.94568599923257],
+                {"bubblingMouseEvents": true, "color": "#af0926", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#af0926", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.75257731958763, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_5941272a45ed28cf955c12e46cd7cdba = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_41b90818152b02949fe00f27d1acf73c = $(`<div id="html_41b90818152b02949fe00f27d1acf73c" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 93</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-06-30</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-04</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 67 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大学城羊山北路1号南京工业职业技术学院五号食堂二层...</p>     </div>     </div>`)[0];
+                popup_5941272a45ed28cf955c12e46cd7cdba.setContent(html_41b90818152b02949fe00f27d1acf73c);
+            
+        
+
+        circle_marker_d39c5d9481581d91b2c55391b3ee7c89.bindPopup(popup_5941272a45ed28cf955c12e46cd7cdba)
+        ;
+
+        
+    
+    
+            circle_marker_d39c5d9481581d91b2c55391b3ee7c89.bindTooltip(
+                `<div>
+                     Store 93: 67 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8b08adfad2e23593313fa50c0903fa85 = L.circleMarker(
+                [31.91817538805172, 118.9228358918058],
+                {"bubblingMouseEvents": true, "color": "#b10b26", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b10b26", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.1340206185567, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_80f69da127c01c8e1bef8b2a77b238eb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1182d56d1d8bccd136eff5c96b4dafb9 = $(`<div id="html_1182d56d1d8bccd136eff5c96b4dafb9" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 179</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-04</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 64 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区江宁大学城龙眠大道629号交通职业技术学院第一食堂一层...</p>     </div>     </div>`)[0];
+                popup_80f69da127c01c8e1bef8b2a77b238eb.setContent(html_1182d56d1d8bccd136eff5c96b4dafb9);
+            
+        
+
+        circle_marker_8b08adfad2e23593313fa50c0903fa85.bindPopup(popup_80f69da127c01c8e1bef8b2a77b238eb)
+        ;
+
+        
+    
+    
+            circle_marker_8b08adfad2e23593313fa50c0903fa85.bindTooltip(
+                `<div>
+                     Store 179: 64 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7abe8116100e1159930c3be85af4c03e = L.circleMarker(
+                [32.118202107101666, 118.93818416008818],
+                {"bubblingMouseEvents": true, "color": "#b30d26", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b30d26", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 16.103092783505154, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_3c13665521e33c13d2d083daeef47530 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_448a762778377d3dfc60fc563b783400 = $(`<div id="html_448a762778377d3dfc60fc563b783400" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 146</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-07-04</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-08-31</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 59 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文苑路9号南京邮电大学仙林校区图书馆一层G01室...</p>     </div>     </div>`)[0];
+                popup_3c13665521e33c13d2d083daeef47530.setContent(html_448a762778377d3dfc60fc563b783400);
+            
+        
+
+        circle_marker_7abe8116100e1159930c3be85af4c03e.bindPopup(popup_3c13665521e33c13d2d083daeef47530)
+        ;
+
+        
+    
+    
+            circle_marker_7abe8116100e1159930c3be85af4c03e.bindTooltip(
+                `<div>
+                     Store 146: 59 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9c45c546ef5327fd446e59f627288cb3 = L.circleMarker(
+                [31.889269794719745, 118.81960828192386],
+                {"bubblingMouseEvents": true, "color": "#b50f26", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b50f26", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.154639175257731, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_5b17e610084f6a64900b160b9d8717c3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f06ec5459fb2c4589778bdcb4827ab10 = $(`<div id="html_f06ec5459fb2c4589778bdcb4827ab10" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 170</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-07-06</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-08-09</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 35 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区东南大学路2号东南大学九龙湖校区橘园餐厅一层...</p>     </div>     </div>`)[0];
+                popup_5b17e610084f6a64900b160b9d8717c3.setContent(html_f06ec5459fb2c4589778bdcb4827ab10);
+            
+        
+
+        circle_marker_9c45c546ef5327fd446e59f627288cb3.bindPopup(popup_5b17e610084f6a64900b160b9d8717c3)
+        ;
+
+        
+    
+    
+            circle_marker_9c45c546ef5327fd446e59f627288cb3.bindTooltip(
+                `<div>
+                     Store 170: 35 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_505c60de18cfc6a932914fe01afd1300 = L.circleMarker(
+                [32.240742982713336, 118.75814882401714],
+                {"bubblingMouseEvents": true, "color": "#b50f26", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b50f26", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.34020618556701, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_a377ca5f576949820908a3ad77e6c19d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_30cd3105b3df8ccc53109774107fbcac = $(`<div id="html_30cd3105b3df8ccc53109774107fbcac" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 148</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-07-07</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-09</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 65 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">葛关路625号南京科技职业学院第一食堂二层...</p>     </div>     </div>`)[0];
+                popup_a377ca5f576949820908a3ad77e6c19d.setContent(html_30cd3105b3df8ccc53109774107fbcac);
+            
+        
+
+        circle_marker_505c60de18cfc6a932914fe01afd1300.bindPopup(popup_a377ca5f576949820908a3ad77e6c19d)
+        ;
+
+        
+    
+    
+            circle_marker_505c60de18cfc6a932914fe01afd1300.bindTooltip(
+                `<div>
+                     Store 148: 65 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_685ff00c88d5d95c931a19c37fd7c4af = L.circleMarker(
+                [32.09816208518045, 118.66287112806792],
+                {"bubblingMouseEvents": true, "color": "#be1827", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#be1827", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.690721649484535, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_04e161a7aa5fb9114d63191f094fb5c4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_15e5f5fed96ff3e4d783938c1a3c2835 = $(`<div id="html_15e5f5fed96ff3e4d783938c1a3c2835" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 162</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-07-16</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-10</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 57 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区佛寺三宫48号江苏警官学院训练中心一层...</p>     </div>     </div>`)[0];
+                popup_04e161a7aa5fb9114d63191f094fb5c4.setContent(html_15e5f5fed96ff3e4d783938c1a3c2835);
+            
+        
+
+        circle_marker_685ff00c88d5d95c931a19c37fd7c4af.bindPopup(popup_04e161a7aa5fb9114d63191f094fb5c4)
+        ;
+
+        
+    
+    
+            circle_marker_685ff00c88d5d95c931a19c37fd7c4af.bindTooltip(
+                `<div>
+                     Store 162: 57 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e023544b54bcf426363f41a01751b0c8 = L.circleMarker(
+                [32.11107232016998, 118.92144576402912],
+                {"bubblingMouseEvents": true, "color": "#c01a27", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#c01a27", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.010309278350515, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_516b9c34960dcf1bd0d7c681f8ade955 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_37b70f19f3b3eecfa49316fe2e29f666 = $(`<div id="html_37b70f19f3b3eecfa49316fe2e29f666" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 159</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-07-18</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-08-30</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 44 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区笃学路南京师范大学仙林校区西区大众书店二层...</p>     </div>     </div>`)[0];
+                popup_516b9c34960dcf1bd0d7c681f8ade955.setContent(html_37b70f19f3b3eecfa49316fe2e29f666);
+            
+        
+
+        circle_marker_e023544b54bcf426363f41a01751b0c8.bindPopup(popup_516b9c34960dcf1bd0d7c681f8ade955)
+        ;
+
+        
+    
+    
+            circle_marker_e023544b54bcf426363f41a01751b0c8.bindTooltip(
+                `<div>
+                     Store 159: 44 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d22377be582d89848f35cba32c7980a6 = L.circleMarker(
+                [32.05209669717989, 118.79981708441966],
+                {"bubblingMouseEvents": true, "color": "#e54e35", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e54e35", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.855670103092784, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_0b1f5a51fd4dc349dbe0e154351b9396 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d7eb7c17e5a54a62e33546d5f41d3b92 = $(`<div id="html_d7eb7c17e5a54a62e33546d5f41d3b92" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 239</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-09-05</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-09-23</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 19 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">玄武区石婆婆庵杨将军巷9号曼度文化广场一层南13-13A...</p>     </div>     </div>`)[0];
+                popup_0b1f5a51fd4dc349dbe0e154351b9396.setContent(html_d7eb7c17e5a54a62e33546d5f41d3b92);
+            
+        
+
+        circle_marker_d22377be582d89848f35cba32c7980a6.bindPopup(popup_0b1f5a51fd4dc349dbe0e154351b9396)
+        ;
+
+        
+    
+    
+            circle_marker_d22377be582d89848f35cba32c7980a6.bindTooltip(
+                `<div>
+                     Store 239: 19 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a5ff0679b92e20891b13aca17ad3a318 = L.circleMarker(
+                [31.99668091023233, 118.72611776478676],
+                {"bubblingMouseEvents": true, "color": "#ea5739", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#ea5739", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.505154639175258, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_185c02ad267e466d5fa65c9c39f86cf6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5f80c67b1df130ad673231aefb6e7570 = $(`<div id="html_5f80c67b1df130ad673231aefb6e7570" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 101</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-09-12</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2020-10-08</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 27 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">建邺区江东中路369号新华传媒广场1号楼一层...</p>     </div>     </div>`)[0];
+                popup_185c02ad267e466d5fa65c9c39f86cf6.setContent(html_5f80c67b1df130ad673231aefb6e7570);
+            
+        
+
+        circle_marker_a5ff0679b92e20891b13aca17ad3a318.bindPopup(popup_185c02ad267e466d5fa65c9c39f86cf6)
+        ;
+
+        
+    
+    
+            circle_marker_a5ff0679b92e20891b13aca17ad3a318.bindTooltip(
+                `<div>
+                     Store 101: 27 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_83de697640af12e1fcc8412bbbb252f9 = L.circleMarker(
+                [32.093733992419935, 118.92329995643226],
+                {"bubblingMouseEvents": true, "color": "#fed481", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fed481", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.95876288659794, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_f8a278139754cec6b37988f5891f692a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8ee3c687975d9a1ed139fa7edcb13c55 = $(`<div id="html_8ee3c687975d9a1ed139fa7edcb13c55" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 171</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2020-12-28</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-05</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 68 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大学城仙林大道100号南京审计大学金审学院学生第四食堂一层...</p>     </div>     </div>`)[0];
+                popup_f8a278139754cec6b37988f5891f692a.setContent(html_8ee3c687975d9a1ed139fa7edcb13c55);
+            
+        
+
+        circle_marker_83de697640af12e1fcc8412bbbb252f9.bindPopup(popup_f8a278139754cec6b37988f5891f692a)
+        ;
+
+        
+    
+    
+            circle_marker_83de697640af12e1fcc8412bbbb252f9.bindTooltip(
+                `<div>
+                     Store 171: 68 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_13d01f9a3f19182f742f8596a18f7c8a = L.circleMarker(
+                [31.89171411801545, 118.89763824258982],
+                {"bubblingMouseEvents": true, "color": "#fee08b", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee08b", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.896907216494846, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_546aeff7f708352d4ae9cf332170a528 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f5c89755b055e89ba7ae7766a69e80ad = $(`<div id="html_f5c89755b055e89ba7ae7766a69e80ad" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 111</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-09</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 58 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道3666号中国传媒大学南广学院三食堂一层中超华城超市...</p>     </div>     </div>`)[0];
+                popup_546aeff7f708352d4ae9cf332170a528.setContent(html_f5c89755b055e89ba7ae7766a69e80ad);
+            
+        
+
+        circle_marker_13d01f9a3f19182f742f8596a18f7c8a.bindPopup(popup_546aeff7f708352d4ae9cf332170a528)
+        ;
+
+        
+    
+    
+            circle_marker_13d01f9a3f19182f742f8596a18f7c8a.bindTooltip(
+                `<div>
+                     Store 111: 58 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_41442b9dd0f90531bf864b5795b0687d = L.circleMarker(
+                [32.05198131995538, 118.8944056003816],
+                {"bubblingMouseEvents": true, "color": "#fee18d", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee18d", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.072164948453608, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_a961e1446b73e03a083e95189b18f585 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0cfcb4f39ea25eaf44dfb002a0862d5b = $(`<div id="html_0cfcb4f39ea25eaf44dfb002a0862d5b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 166</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-12</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-06</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 54 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区马群街道马群街169号二层E1E2号...</p>     </div>     </div>`)[0];
+                popup_a961e1446b73e03a083e95189b18f585.setContent(html_0cfcb4f39ea25eaf44dfb002a0862d5b);
+            
+        
+
+        circle_marker_41442b9dd0f90531bf864b5795b0687d.bindPopup(popup_a961e1446b73e03a083e95189b18f585)
+        ;
+
+        
+    
+    
+            circle_marker_41442b9dd0f90531bf864b5795b0687d.bindTooltip(
+                `<div>
+                     Store 166: 54 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3cbfd495559d58b4a6f219fcdeacb1b7 = L.circleMarker(
+                [31.96380239227237, 118.7598607248275],
+                {"bubblingMouseEvents": true, "color": "#fee18d", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee18d", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.278350515463918, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_86dbbcfe453f3de58d3f0e6454b1aec1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4c3780d0aa18a0c1923c52f2ea40a03d = $(`<div id="html_4c3780d0aa18a0c1923c52f2ea40a03d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 187</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-12</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 55 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">雨花台区铁心桥街道龙西路310号三江学院主校区5号食堂二层...</p>     </div>     </div>`)[0];
+                popup_86dbbcfe453f3de58d3f0e6454b1aec1.setContent(html_4c3780d0aa18a0c1923c52f2ea40a03d);
+            
+        
+
+        circle_marker_3cbfd495559d58b4a6f219fcdeacb1b7.bindPopup(popup_86dbbcfe453f3de58d3f0e6454b1aec1)
+        ;
+
+        
+    
+    
+            circle_marker_3cbfd495559d58b4a6f219fcdeacb1b7.bindTooltip(
+                `<div>
+                     Store 187: 55 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_00ca57f03bebe0095e0ffa3f39144bc7 = L.circleMarker(
+                [32.240742982713336, 118.75814882401714],
+                {"bubblingMouseEvents": true, "color": "#fee28f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee28f", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.835051546391753, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_74ee518c532f2a288512b64837827ef1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6cb1803d6688bb0094fdb1050576c0b1 = $(`<div id="html_6cb1803d6688bb0094fdb1050576c0b1" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 148</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-14</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-02</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 48 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">葛关路625号南京科技职业学院第一食堂二层...</p>     </div>     </div>`)[0];
+                popup_74ee518c532f2a288512b64837827ef1.setContent(html_6cb1803d6688bb0094fdb1050576c0b1);
+            
+        
+
+        circle_marker_00ca57f03bebe0095e0ffa3f39144bc7.bindPopup(popup_74ee518c532f2a288512b64837827ef1)
+        ;
+
+        
+    
+    
+            circle_marker_00ca57f03bebe0095e0ffa3f39144bc7.bindTooltip(
+                `<div>
+                     Store 148: 48 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6bbbc157a465f44c082c6841add6afed = L.circleMarker(
+                [32.1804263792797, 118.71550015298102],
+                {"bubblingMouseEvents": true, "color": "#fee28f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee28f", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.422680412371134, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_1fa7520d3204b4acf15fd8b91904a406 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6df1a6f7f3dc6b8581a93206294d92ec = $(`<div id="html_6df1a6f7f3dc6b8581a93206294d92ec" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 90</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-14</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 46 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区学府路8号南京大学金陵学院第一学生餐厅三层教工食堂...</p>     </div>     </div>`)[0];
+                popup_1fa7520d3204b4acf15fd8b91904a406.setContent(html_6df1a6f7f3dc6b8581a93206294d92ec);
+            
+        
+
+        circle_marker_6bbbc157a465f44c082c6841add6afed.bindPopup(popup_1fa7520d3204b4acf15fd8b91904a406)
+        ;
+
+        
+    
+    
+            circle_marker_6bbbc157a465f44c082c6841add6afed.bindTooltip(
+                `<div>
+                     Store 90: 46 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c24a3ad5a4ef2b60d38ab2ddef6d994e = L.circleMarker(
+                [32.21228598545819, 118.72652074463852],
+                {"bubblingMouseEvents": true, "color": "#fee28f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee28f", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.391752577319586, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_62520645b6ddf9a6d00d37683a1f79d4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bb143c84b23f75517ae612f13a4e6e77 = $(`<div id="html_bb143c84b23f75517ae612f13a4e6e77" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 172</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-14</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-23</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 41 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区宁六路219号南京信息工程大学东苑食堂三层...</p>     </div>     </div>`)[0];
+                popup_62520645b6ddf9a6d00d37683a1f79d4.setContent(html_bb143c84b23f75517ae612f13a4e6e77);
+            
+        
+
+        circle_marker_c24a3ad5a4ef2b60d38ab2ddef6d994e.bindPopup(popup_62520645b6ddf9a6d00d37683a1f79d4)
+        ;
+
+        
+    
+    
+            circle_marker_c24a3ad5a4ef2b60d38ab2ddef6d994e.bindTooltip(
+                `<div>
+                     Store 172: 41 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_56b8a506c3d050785e4bef82c2748eec = L.circleMarker(
+                [32.09816208518045, 118.66287112806792],
+                {"bubblingMouseEvents": true, "color": "#fee28f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee28f", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.422680412371134, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_1aae1987092beb9ba031108fb42a2603 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6a3b12b532b271fac7a38579aa24fcbe = $(`<div id="html_6a3b12b532b271fac7a38579aa24fcbe" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 162</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-14</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 46 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区佛寺三宫48号江苏警官学院训练中心一层...</p>     </div>     </div>`)[0];
+                popup_1aae1987092beb9ba031108fb42a2603.setContent(html_6a3b12b532b271fac7a38579aa24fcbe);
+            
+        
+
+        circle_marker_56b8a506c3d050785e4bef82c2748eec.bindPopup(popup_1aae1987092beb9ba031108fb42a2603)
+        ;
+
+        
+    
+    
+            circle_marker_56b8a506c3d050785e4bef82c2748eec.bindTooltip(
+                `<div>
+                     Store 162: 46 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f34903f73cae81c7ac73e70296d938ed = L.circleMarker(
+                [31.91817538805172, 118.9228358918058],
+                {"bubblingMouseEvents": true, "color": "#fee491", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee491", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.804123711340207, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_704602538850ab272e7f50ae47e09e21 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c90d43e53a680dc091787de406d611e5 = $(`<div id="html_c90d43e53a680dc091787de406d611e5" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 179</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-16</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-27</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 43 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区江宁大学城龙眠大道629号交通职业技术学院第一食堂一层...</p>     </div>     </div>`)[0];
+                popup_704602538850ab272e7f50ae47e09e21.setContent(html_c90d43e53a680dc091787de406d611e5);
+            
+        
+
+        circle_marker_f34903f73cae81c7ac73e70296d938ed.bindPopup(popup_704602538850ab272e7f50ae47e09e21)
+        ;
+
+        
+    
+    
+            circle_marker_f34903f73cae81c7ac73e70296d938ed.bindTooltip(
+                `<div>
+                     Store 179: 43 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_585e6a0cae7bfc7e7b865ebb87f3e152 = L.circleMarker(
+                [31.928509009302022, 118.88784374812288],
+                {"bubblingMouseEvents": true, "color": "#fee491", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee491", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.010309278350515, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_18464c291632564aa03d88068221b0bb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_736a0a9d29b3da6b555488b972b7d7f9 = $(`<div id="html_736a0a9d29b3da6b555488b972b7d7f9" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 163</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-16</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 44 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道1号工程学院生活服务中心一层...</p>     </div>     </div>`)[0];
+                popup_18464c291632564aa03d88068221b0bb.setContent(html_736a0a9d29b3da6b555488b972b7d7f9);
+            
+        
+
+        circle_marker_585e6a0cae7bfc7e7b865ebb87f3e152.bindPopup(popup_18464c291632564aa03d88068221b0bb)
+        ;
+
+        
+    
+    
+            circle_marker_585e6a0cae7bfc7e7b865ebb87f3e152.bindTooltip(
+                `<div>
+                     Store 163: 44 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_215fea19f23a63ac1b230c5c389fe696 = L.circleMarker(
+                [31.904467592401147, 118.90545898019025],
+                {"bubblingMouseEvents": true, "color": "#fee491", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee491", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.010309278350515, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_723949448f837313c0928a41b1024b38 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3b56f77db9b733d3b95177398b78ee18 = $(`<div id="html_3b56f77db9b733d3b95177398b78ee18" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 164</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-16</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 44 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道99号金陵科技学院北区第一食堂二层...</p>     </div>     </div>`)[0];
+                popup_723949448f837313c0928a41b1024b38.setContent(html_3b56f77db9b733d3b95177398b78ee18);
+            
+        
+
+        circle_marker_215fea19f23a63ac1b230c5c389fe696.bindPopup(popup_723949448f837313c0928a41b1024b38)
+        ;
+
+        
+    
+    
+            circle_marker_215fea19f23a63ac1b230c5c389fe696.bindTooltip(
+                `<div>
+                     Store 164: 44 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_67b20faf71aaf9af9584b6061be15c34 = L.circleMarker(
+                [32.118202107101666, 118.93818416008818],
+                {"bubblingMouseEvents": true, "color": "#fee491", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee491", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.45360824742268, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_4b0ef17c584bf5851886c3760c0d9932 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b26c50d60559a1c2314658a5e77fda9a = $(`<div id="html_b26c50d60559a1c2314658a5e77fda9a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 146</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-16</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 51 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文苑路9号南京邮电大学仙林校区图书馆一层G01室...</p>     </div>     </div>`)[0];
+                popup_4b0ef17c584bf5851886c3760c0d9932.setContent(html_b26c50d60559a1c2314658a5e77fda9a);
+            
+        
+
+        circle_marker_67b20faf71aaf9af9584b6061be15c34.bindPopup(popup_4b0ef17c584bf5851886c3760c0d9932)
+        ;
+
+        
+    
+    
+            circle_marker_67b20faf71aaf9af9584b6061be15c34.bindTooltip(
+                `<div>
+                     Store 146: 51 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d8a7ae4940f71a1e2f72209697a0f6fe = L.circleMarker(
+                [32.12025541386233, 118.96053400117644],
+                {"bubblingMouseEvents": true, "color": "#fee593", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee593", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.010309278350515, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_c38fe355082759e3445fbbdac93ae409 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0fc9f18249ac321f05af09fcf917e5f8 = $(`<div id="html_0fc9f18249ac321f05af09fcf917e5f8" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 100</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-18</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-02</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 44 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大道163号南京大学仙林校区诚园5幢底商...</p>     </div>     </div>`)[0];
+                popup_c38fe355082759e3445fbbdac93ae409.setContent(html_0fc9f18249ac321f05af09fcf917e5f8);
+            
+        
+
+        circle_marker_d8a7ae4940f71a1e2f72209697a0f6fe.bindPopup(popup_c38fe355082759e3445fbbdac93ae409)
+        ;
+
+        
+    
+    
+            circle_marker_d8a7ae4940f71a1e2f72209697a0f6fe.bindTooltip(
+                `<div>
+                     Store 100: 44 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3c0a6bda666b2571a256a5dd4c434409 = L.circleMarker(
+                [32.12675700212732, 118.94568599923257],
+                {"bubblingMouseEvents": true, "color": "#fee593", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee593", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.422680412371134, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_c5e416d9556cd1906be2822fabbfe842 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_28bef590b1fb3998ef2fba97ad2934ac = $(`<div id="html_28bef590b1fb3998ef2fba97ad2934ac" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 93</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-18</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-04</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 46 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大学城羊山北路1号南京工业职业技术学院五号食堂二层...</p>     </div>     </div>`)[0];
+                popup_c5e416d9556cd1906be2822fabbfe842.setContent(html_28bef590b1fb3998ef2fba97ad2934ac);
+            
+        
+
+        circle_marker_3c0a6bda666b2571a256a5dd4c434409.bindPopup(popup_c5e416d9556cd1906be2822fabbfe842)
+        ;
+
+        
+    
+    
+            circle_marker_3c0a6bda666b2571a256a5dd4c434409.bindTooltip(
+                `<div>
+                     Store 93: 46 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3a139eeb7b63827a4d26a26eecc8ab01 = L.circleMarker(
+                [31.924348379627663, 118.91368727900054],
+                {"bubblingMouseEvents": true, "color": "#fee593", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee593", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.597938144329897, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_b5f2f9393620dcf6b72a2896eef85f25 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_57c8a8260f1ddfe88dafd01dcc627661 = $(`<div id="html_57c8a8260f1ddfe88dafd01dcc627661" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 186</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-18</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 42 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区淳化街道江苏海事职业技术学院念稼餐厅二层...</p>     </div>     </div>`)[0];
+                popup_b5f2f9393620dcf6b72a2896eef85f25.setContent(html_57c8a8260f1ddfe88dafd01dcc627661);
+            
+        
+
+        circle_marker_3a139eeb7b63827a4d26a26eecc8ab01.bindPopup(popup_b5f2f9393620dcf6b72a2896eef85f25)
+        ;
+
+        
+    
+    
+            circle_marker_3a139eeb7b63827a4d26a26eecc8ab01.bindTooltip(
+                `<div>
+                     Store 186: 42 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_47fcbff792a4402d013a71f182b77872 = L.circleMarker(
+                [31.70727797309676, 118.88820001608816],
+                {"bubblingMouseEvents": true, "color": "#fee695", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee695", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.185567010309278, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_05cd6b3209433132e134f37be22c2621 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_aba67b423f2ba6f3beff75f535f2ea6f = $(`<div id="html_aba67b423f2ba6f3beff75f535f2ea6f" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 253</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-20</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 40 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区禄口街道航金大道金城商业街5-013号底商...</p>     </div>     </div>`)[0];
+                popup_05cd6b3209433132e134f37be22c2621.setContent(html_aba67b423f2ba6f3beff75f535f2ea6f);
+            
+        
+
+        circle_marker_47fcbff792a4402d013a71f182b77872.bindPopup(popup_05cd6b3209433132e134f37be22c2621)
+        ;
+
+        
+    
+    
+            circle_marker_47fcbff792a4402d013a71f182b77872.bindTooltip(
+                `<div>
+                     Store 253: 40 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3153726760719ea4c6c99a66facaca84 = L.circleMarker(
+                [32.1147999846995, 118.93058970564572],
+                {"bubblingMouseEvents": true, "color": "#fee695", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee695", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.628865979381443, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_21b17250304ac7e18b51001b6168dc53 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6d88f6a4afdd09ca677b2aade12016ef = $(`<div id="html_6d88f6a4afdd09ca677b2aade12016ef" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 144</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-20</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-03-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 47 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文苑路3号南京财经大学仙林校区图书馆一层...</p>     </div>     </div>`)[0];
+                popup_21b17250304ac7e18b51001b6168dc53.setContent(html_6d88f6a4afdd09ca677b2aade12016ef);
+            
+        
+
+        circle_marker_3153726760719ea4c6c99a66facaca84.bindPopup(popup_21b17250304ac7e18b51001b6168dc53)
+        ;
+
+        
+    
+    
+            circle_marker_3153726760719ea4c6c99a66facaca84.bindTooltip(
+                `<div>
+                     Store 144: 47 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_714d08b84c7324ffd3ad5b5b8fd01227 = L.circleMarker(
+                [32.13227286342762, 118.94076400368228],
+                {"bubblingMouseEvents": true, "color": "#fee695", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee695", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.97938144329897, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_c5028097b48a622a161c941d1aced56f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_edd59e08a3812f93296393ba94ef7191 = $(`<div id="html_edd59e08a3812f93296393ba94ef7191" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 89</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-20</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-27</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 39 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文澜路89号南京理工大学紫金学院五食堂一层...</p>     </div>     </div>`)[0];
+                popup_c5028097b48a622a161c941d1aced56f.setContent(html_edd59e08a3812f93296393ba94ef7191);
+            
+        
+
+        circle_marker_714d08b84c7324ffd3ad5b5b8fd01227.bindPopup(popup_c5028097b48a622a161c941d1aced56f)
+        ;
+
+        
+    
+    
+            circle_marker_714d08b84c7324ffd3ad5b5b8fd01227.bindTooltip(
+                `<div>
+                     Store 89: 39 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_71e67404a168e093035ef167e4efe131 = L.circleMarker(
+                [31.889269794719745, 118.81960828192386],
+                {"bubblingMouseEvents": true, "color": "#fee999", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee999", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.56701030927835, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_8edb3cee718ea18cdf3034d325c2fa6b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8f2a0cf18b4d4447496b15117327c062 = $(`<div id="html_8f2a0cf18b4d4447496b15117327c062" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 170</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-23</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 37 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区东南大学路2号东南大学九龙湖校区橘园餐厅一层...</p>     </div>     </div>`)[0];
+                popup_8edb3cee718ea18cdf3034d325c2fa6b.setContent(html_8f2a0cf18b4d4447496b15117327c062);
+            
+        
+
+        circle_marker_71e67404a168e093035ef167e4efe131.bindPopup(popup_8edb3cee718ea18cdf3034d325c2fa6b)
+        ;
+
+        
+    
+    
+            circle_marker_71e67404a168e093035ef167e4efe131.bindTooltip(
+                `<div>
+                     Store 170: 37 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_73f8225f1e115fb93464f5740e3067c8 = L.circleMarker(
+                [32.11107232016998, 118.92144576402912],
+                {"bubblingMouseEvents": true, "color": "#fee999", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee999", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.56701030927835, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_7fdfe844f330206d6d4d7ba6820d0e22 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e84ed3be30f506d79d943da93ed0f000 = $(`<div id="html_e84ed3be30f506d79d943da93ed0f000" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 159</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-23</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 37 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区笃学路南京师范大学仙林校区西区大众书店二层...</p>     </div>     </div>`)[0];
+                popup_7fdfe844f330206d6d4d7ba6820d0e22.setContent(html_e84ed3be30f506d79d943da93ed0f000);
+            
+        
+
+        circle_marker_73f8225f1e115fb93464f5740e3067c8.bindPopup(popup_7fdfe844f330206d6d4d7ba6820d0e22)
+        ;
+
+        
+    
+    
+            circle_marker_73f8225f1e115fb93464f5740e3067c8.bindTooltip(
+                `<div>
+                     Store 159: 37 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1968849f3ddd3b72f246e92e77dda57a = L.circleMarker(
+                [31.923603575827148, 118.7948822431006],
+                {"bubblingMouseEvents": true, "color": "#fee999", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee999", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.56701030927835, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_7f52070b8e488af411dd285feae52c32 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c3e56a0a41aa65568986385551fd15d4 = $(`<div id="html_c3e56a0a41aa65568986385551fd15d4" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 185</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-23</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-28</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 37 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区佛城东路8号河海大学江宁校区生活组团二三期食堂四层...</p>     </div>     </div>`)[0];
+                popup_7f52070b8e488af411dd285feae52c32.setContent(html_c3e56a0a41aa65568986385551fd15d4);
+            
+        
+
+        circle_marker_1968849f3ddd3b72f246e92e77dda57a.bindPopup(popup_7f52070b8e488af411dd285feae52c32)
+        ;
+
+        
+    
+    
+            circle_marker_1968849f3ddd3b72f246e92e77dda57a.bindTooltip(
+                `<div>
+                     Store 185: 37 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ce3136df1d8d21cbcade47abd80a9350 = L.circleMarker(
+                [31.90772304149415, 118.92223088304485],
+                {"bubblingMouseEvents": true, "color": "#fee999", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fee999", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.36082474226804, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_b72fc698b4b785362384ef38e43f245a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c67334aee346d7fb0234e2b7a0729d15 = $(`<div id="html_c67334aee346d7fb0234e2b7a0729d15" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 183</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-23</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-27</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 36 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区淳化街道中国药科大学江宁校区图书馆二层...</p>     </div>     </div>`)[0];
+                popup_b72fc698b4b785362384ef38e43f245a.setContent(html_c67334aee346d7fb0234e2b7a0729d15);
+            
+        
+
+        circle_marker_ce3136df1d8d21cbcade47abd80a9350.bindPopup(popup_b72fc698b4b785362384ef38e43f245a)
+        ;
+
+        
+    
+    
+            circle_marker_ce3136df1d8d21cbcade47abd80a9350.bindTooltip(
+                `<div>
+                     Store 183: 36 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_55868cdb0d7ccd3f40805d64a28e3cd8 = L.circleMarker(
+                [32.0785968193686, 118.67312726173644],
+                {"bubblingMouseEvents": true, "color": "#feec9f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#feec9f", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8.68041237113402, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_cdd930992320441ed78fad2d2128b43d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8a79928f0931d43456aefe01868bcacd = $(`<div id="html_8a79928f0931d43456aefe01868bcacd" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 254</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-01-30</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-21</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 23 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江北新区浦滨路150号中科创新广场5栋一层大堂...</p>     </div>     </div>`)[0];
+                popup_cdd930992320441ed78fad2d2128b43d.setContent(html_8a79928f0931d43456aefe01868bcacd);
+            
+        
+
+        circle_marker_55868cdb0d7ccd3f40805d64a28e3cd8.bindPopup(popup_cdd930992320441ed78fad2d2128b43d)
+        ;
+
+        
+    
+    
+            circle_marker_55868cdb0d7ccd3f40805d64a28e3cd8.bindTooltip(
+                `<div>
+                     Store 254: 23 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_03613239be20797e41214441542143d6 = L.circleMarker(
+                [32.02617176916821, 118.85912941249644],
+                {"bubblingMouseEvents": true, "color": "#fff0a6", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff0a6", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.443298969072165, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_3f1a76281af9abd107d14130de715fa6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_391c12fd58941d3c48938ec9d77c890b = $(`<div id="html_391c12fd58941d3c48938ec9d77c890b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 228</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-02-04</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-20</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 17 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">玄武区友谊河路100号品硕广场一层S05号...</p>     </div>     </div>`)[0];
+                popup_3f1a76281af9abd107d14130de715fa6.setContent(html_391c12fd58941d3c48938ec9d77c890b);
+            
+        
+
+        circle_marker_03613239be20797e41214441542143d6.bindPopup(popup_3f1a76281af9abd107d14130de715fa6)
+        ;
+
+        
+    
+    
+            circle_marker_03613239be20797e41214441542143d6.bindTooltip(
+                `<div>
+                     Store 228: 17 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ea9f4515fcba382ceced7b8f0d58afbc = L.circleMarker(
+                [32.04439517466815, 118.64925227755336],
+                {"bubblingMouseEvents": true, "color": "#fff2aa", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff2aa", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.0, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_921277847eca9e4126b6bb83bbb2dc4d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7e82df99192f8ec3e5ecbf100ff9ecd2 = $(`<div id="html_7e82df99192f8ec3e5ecbf100ff9ecd2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 225</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-02-09</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-18</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 10 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区华创路南京软件园腾飞大厦4号楼一层103号...</p>     </div>     </div>`)[0];
+                popup_921277847eca9e4126b6bb83bbb2dc4d.setContent(html_7e82df99192f8ec3e5ecbf100ff9ecd2);
+            
+        
+
+        circle_marker_ea9f4515fcba382ceced7b8f0d58afbc.bindPopup(popup_921277847eca9e4126b6bb83bbb2dc4d)
+        ;
+
+        
+    
+    
+            circle_marker_ea9f4515fcba382ceced7b8f0d58afbc.bindTooltip(
+                `<div>
+                     Store 225: 10 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3ea55e64efdf0ef560238997c8c1787d = L.circleMarker(
+                [32.099473020287284, 118.92293596303962],
+                {"bubblingMouseEvents": true, "color": "#fff3ac", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff3ac", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.030927835051546, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_0441b8b6fce49dbea93092b5eb0ce0bf = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1ce6c569f7a84133509ed8d0fbc5f48b = $(`<div id="html_1ce6c569f7a84133509ed8d0fbc5f48b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 181</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-02-11</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-02-25</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 15 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林街道学衡路5号水平方美食广场二层S-29商铺...</p>     </div>     </div>`)[0];
+                popup_0441b8b6fce49dbea93092b5eb0ce0bf.setContent(html_1ce6c569f7a84133509ed8d0fbc5f48b);
+            
+        
+
+        circle_marker_3ea55e64efdf0ef560238997c8c1787d.bindPopup(popup_0441b8b6fce49dbea93092b5eb0ce0bf)
+        ;
+
+        
+    
+    
+            circle_marker_3ea55e64efdf0ef560238997c8c1787d.bindTooltip(
+                `<div>
+                     Store 181: 15 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_29818730be9bd92208e75f4fdf0855cd = L.circleMarker(
+                [32.006744049751106, 118.7338200158904],
+                {"bubblingMouseEvents": true, "color": "#e2f397", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#e2f397", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.206185567010309, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_b8467b53064a36e9160e82dd65040a09 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1d83420b1cbd626b26a855b8e317808b = $(`<div id="html_1d83420b1cbd626b26a855b8e317808b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 21</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-04-09</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-04-19</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 11 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">建邺区江东中路305号中泰国际大厦一层1-60、61号...</p>     </div>     </div>`)[0];
+                popup_b8467b53064a36e9160e82dd65040a09.setContent(html_1d83420b1cbd626b26a855b8e317808b);
+            
+        
+
+        circle_marker_29818730be9bd92208e75f4fdf0855cd.bindPopup(popup_b8467b53064a36e9160e82dd65040a09)
+        ;
+
+        
+    
+    
+            circle_marker_29818730be9bd92208e75f4fdf0855cd.bindTooltip(
+                `<div>
+                     Store 21: 11 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_44da4ef0bc0a81372ef4789c70ab74b2 = L.circleMarker(
+                [32.05444453058177, 118.93409345645684],
+                {"bubblingMouseEvents": true, "color": "#b5df74", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#b5df74", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.030927835051546, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_c22fffe1a7dc02c310ddb956754b0d31 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6ed243e350d85222973a85c37175e81c = $(`<div id="html_6ed243e350d85222973a85c37175e81c" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 8</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-05-27</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-06-10</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 15 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区麒麟街道悦民路128号天赋广场22幢116室...</p>     </div>     </div>`)[0];
+                popup_c22fffe1a7dc02c310ddb956754b0d31.setContent(html_6ed243e350d85222973a85c37175e81c);
+            
+        
+
+        circle_marker_44da4ef0bc0a81372ef4789c70ab74b2.bindPopup(popup_c22fffe1a7dc02c310ddb956754b0d31)
+        ;
+
+        
+    
+    
+            circle_marker_44da4ef0bc0a81372ef4789c70ab74b2.bindTooltip(
+                `<div>
+                     Store 8: 15 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7097c3b39e4748326791a7d9695ff821 = L.circleMarker(
+                [32.13227286342762, 118.94076400368228],
+                {"bubblingMouseEvents": true, "color": "#96d268", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#96d268", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.0, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_d2906df92210b2cbe6e68b95872f7a5d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_38f3fd4dd744fa1b86d0710d78a5b383 = $(`<div id="html_38f3fd4dd744fa1b86d0710d78a5b383" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 89</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-06-23</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 107 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文澜路89号南京理工大学紫金学院五食堂一层...</p>     </div>     </div>`)[0];
+                popup_d2906df92210b2cbe6e68b95872f7a5d.setContent(html_38f3fd4dd744fa1b86d0710d78a5b383);
+            
+        
+
+        circle_marker_7097c3b39e4748326791a7d9695ff821.bindPopup(popup_d2906df92210b2cbe6e68b95872f7a5d)
+        ;
+
+        
+    
+    
+            circle_marker_7097c3b39e4748326791a7d9695ff821.bindTooltip(
+                `<div>
+                     Store 89: 107 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b6314e32d04cd1df972cf9f9f9f4ad87 = L.circleMarker(
+                [32.1804263792797, 118.71550015298102],
+                {"bubblingMouseEvents": true, "color": "#93d168", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#93d168", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 26.0, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_ca8514af81c2353c6a356c245e6e51a6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_aec376ffead958dccc56430d37386691 = $(`<div id="html_aec376ffead958dccc56430d37386691" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 90</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-06-26</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-10</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 107 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区学府路8号南京大学金陵学院第一学生餐厅三层教工食堂...</p>     </div>     </div>`)[0];
+                popup_ca8514af81c2353c6a356c245e6e51a6.setContent(html_aec376ffead958dccc56430d37386691);
+            
+        
+
+        circle_marker_b6314e32d04cd1df972cf9f9f9f4ad87.bindPopup(popup_ca8514af81c2353c6a356c245e6e51a6)
+        ;
+
+        
+    
+    
+            circle_marker_b6314e32d04cd1df972cf9f9f9f4ad87.bindTooltip(
+                `<div>
+                     Store 90: 107 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_49a5bb1494a6e30683c54dd504912329 = L.circleMarker(
+                [32.05198131995538, 118.8944056003816],
+                {"bubblingMouseEvents": true, "color": "#8ecf67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8ecf67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.762886597938145, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_3db4bd209fa66905441f6962e6147abb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7db5140894b3b7d099a5f0fb3c499c77 = $(`<div id="html_7db5140894b3b7d099a5f0fb3c499c77" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 166</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-06-29</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 101 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区马群街道马群街169号二层E1E2号...</p>     </div>     </div>`)[0];
+                popup_3db4bd209fa66905441f6962e6147abb.setContent(html_7db5140894b3b7d099a5f0fb3c499c77);
+            
+        
+
+        circle_marker_49a5bb1494a6e30683c54dd504912329.bindPopup(popup_3db4bd209fa66905441f6962e6147abb)
+        ;
+
+        
+    
+    
+            circle_marker_49a5bb1494a6e30683c54dd504912329.bindTooltip(
+                `<div>
+                     Store 166: 101 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0f98488d515f1aace208dfdbe01361b3 = L.circleMarker(
+                [32.09816208518045, 118.66287112806792],
+                {"bubblingMouseEvents": true, "color": "#8ecf67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8ecf67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.175257731958762, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_e594044d29cb895e992afa96fcccaf5c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9a82fb27e07af107b190d3e71c7b80a0 = $(`<div id="html_9a82fb27e07af107b190d3e71c7b80a0" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 162</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-06-29</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-09</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 103 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区佛寺三宫48号江苏警官学院训练中心一层...</p>     </div>     </div>`)[0];
+                popup_e594044d29cb895e992afa96fcccaf5c.setContent(html_9a82fb27e07af107b190d3e71c7b80a0);
+            
+        
+
+        circle_marker_0f98488d515f1aace208dfdbe01361b3.bindPopup(popup_e594044d29cb895e992afa96fcccaf5c)
+        ;
+
+        
+    
+    
+            circle_marker_0f98488d515f1aace208dfdbe01361b3.bindTooltip(
+                `<div>
+                     Store 162: 103 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_01fda1241d49fcbdec0c7a9c37216265 = L.circleMarker(
+                [32.21228598545819, 118.72652074463852],
+                {"bubblingMouseEvents": true, "color": "#8ccd67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8ccd67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 21.670103092783506, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_b5809c460554ccb4d0b3f27e1ffc1b69 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_acd4c943a8144d7c568391b56bcee388 = $(`<div id="html_acd4c943a8144d7c568391b56bcee388" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 172</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-01</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-24</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 86 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区宁六路219号南京信息工程大学东苑食堂三层...</p>     </div>     </div>`)[0];
+                popup_b5809c460554ccb4d0b3f27e1ffc1b69.setContent(html_acd4c943a8144d7c568391b56bcee388);
+            
+        
+
+        circle_marker_01fda1241d49fcbdec0c7a9c37216265.bindPopup(popup_b5809c460554ccb4d0b3f27e1ffc1b69)
+        ;
+
+        
+    
+    
+            circle_marker_01fda1241d49fcbdec0c7a9c37216265.bindTooltip(
+                `<div>
+                     Store 172: 86 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c1d7031572c1d817dd9e83799c6294aa = L.circleMarker(
+                [31.98974881055588, 118.74154355683464],
+                {"bubblingMouseEvents": true, "color": "#8ccd67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#8ccd67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.824742268041237, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_29673943ef93cc77b9aea6b1420dd52b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5e9ad69122cd939a0e05ab251c5ae330 = $(`<div id="html_5e9ad69122cd939a0e05ab251c5ae330" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 57</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-01</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-07-14</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 14 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">建邺区白龙江东街22号艺树家工场一层大堂...</p>     </div>     </div>`)[0];
+                popup_29673943ef93cc77b9aea6b1420dd52b.setContent(html_5e9ad69122cd939a0e05ab251c5ae330);
+            
+        
+
+        circle_marker_c1d7031572c1d817dd9e83799c6294aa.bindPopup(popup_29673943ef93cc77b9aea6b1420dd52b)
+        ;
+
+        
+    
+    
+            circle_marker_c1d7031572c1d817dd9e83799c6294aa.bindTooltip(
+                `<div>
+                     Store 57: 14 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_300ce6f8c039aed07b3164ac8d09303b = L.circleMarker(
+                [31.89902899116753, 118.9082108492895],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.938144329896907, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_37b06ba916e8c360b22adb81360341e1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_87df03048d5fa2cdd43c68b79281baf9 = $(`<div id="html_87df03048d5fa2cdd43c68b79281baf9" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 198</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 97 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道3601号晓庄学院方山校区大学生服务中心二层...</p>     </div>     </div>`)[0];
+                popup_37b06ba916e8c360b22adb81360341e1.setContent(html_87df03048d5fa2cdd43c68b79281baf9);
+            
+        
+
+        circle_marker_300ce6f8c039aed07b3164ac8d09303b.bindPopup(popup_37b06ba916e8c360b22adb81360341e1)
+        ;
+
+        
+    
+    
+            circle_marker_300ce6f8c039aed07b3164ac8d09303b.bindTooltip(
+                `<div>
+                     Store 198: 97 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4860422e0fd3612043b2becb70b45e39 = L.circleMarker(
+                [32.12025541386233, 118.96053400117644],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.75257731958763, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_9fb859a8b86dbe191bdc2b737031ab3b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0d1427272eb8ff0d631abf3eed9275bd = $(`<div id="html_0d1427272eb8ff0d631abf3eed9275bd" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 100</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 67 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大道163号南京大学仙林校区诚园5幢底商...</p>     </div>     </div>`)[0];
+                popup_9fb859a8b86dbe191bdc2b737031ab3b.setContent(html_0d1427272eb8ff0d631abf3eed9275bd);
+            
+        
+
+        circle_marker_4860422e0fd3612043b2becb70b45e39.bindPopup(popup_9fb859a8b86dbe191bdc2b737031ab3b)
+        ;
+
+        
+    
+    
+            circle_marker_4860422e0fd3612043b2becb70b45e39.bindTooltip(
+                `<div>
+                     Store 100: 67 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4a1ce4842d5bce0662a8b51880b50017 = L.circleMarker(
+                [32.12675700212732, 118.94568599923257],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.144329896907216, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_44bb44303a0af5282a6223216f0e6602 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4572a6a8c3005c6dd67d848ab1d69d3a = $(`<div id="html_4572a6a8c3005c6dd67d848ab1d69d3a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 93</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-08</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 98 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大学城羊山北路1号南京工业职业技术学院五号食堂二层...</p>     </div>     </div>`)[0];
+                popup_44bb44303a0af5282a6223216f0e6602.setContent(html_4572a6a8c3005c6dd67d848ab1d69d3a);
+            
+        
+
+        circle_marker_4a1ce4842d5bce0662a8b51880b50017.bindPopup(popup_44bb44303a0af5282a6223216f0e6602)
+        ;
+
+        
+    
+    
+            circle_marker_4a1ce4842d5bce0662a8b51880b50017.bindTooltip(
+                `<div>
+                     Store 93: 98 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_76e6af2a24d2b671345f984361e607f1 = L.circleMarker(
+                [31.928509009302022, 118.88784374812288],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 20.639175257731956, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_9f4eb1afd50aee494522f58345d86e48 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a3ae5c81599cbdedab3c8c818ce0586f = $(`<div id="html_a3ae5c81599cbdedab3c8c818ce0586f" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 163</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-21</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 81 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道1号工程学院生活服务中心一层...</p>     </div>     </div>`)[0];
+                popup_9f4eb1afd50aee494522f58345d86e48.setContent(html_a3ae5c81599cbdedab3c8c818ce0586f);
+            
+        
+
+        circle_marker_76e6af2a24d2b671345f984361e607f1.bindPopup(popup_9f4eb1afd50aee494522f58345d86e48)
+        ;
+
+        
+    
+    
+            circle_marker_76e6af2a24d2b671345f984361e607f1.bindTooltip(
+                `<div>
+                     Store 163: 81 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0e030f28c98de2e7b8b56799f977303c = L.circleMarker(
+                [32.15188177310466, 118.94824877502198],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.75257731958763, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_d4d551b0273af681f641d3a206f391bb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_617eb83ebb8e53fab762f9a41e639833 = $(`<div id="html_617eb83ebb8e53fab762f9a41e639833" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 199</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 67 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区栖霞大道163号南京大学仙林校区四组团门面房南京大学小移人家营业厅一层...</p>     </div>     </div>`)[0];
+                popup_d4d551b0273af681f641d3a206f391bb.setContent(html_617eb83ebb8e53fab762f9a41e639833);
+            
+        
+
+        circle_marker_0e030f28c98de2e7b8b56799f977303c.bindPopup(popup_d4d551b0273af681f641d3a206f391bb)
+        ;
+
+        
+    
+    
+            circle_marker_0e030f28c98de2e7b8b56799f977303c.bindTooltip(
+                `<div>
+                     Store 199: 67 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a6dd98ff10e1705dddbc5a3465ae35f2 = L.circleMarker(
+                [32.240742982713336, 118.75814882401714],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 24.556701030927837, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_95f9dea40e8b331410a701459164c00b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1fd981ff7f4c9f43c4ee43d2bcf55ddc = $(`<div id="html_1fd981ff7f4c9f43c4ee43d2bcf55ddc" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 148</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-10</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 100 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">葛关路625号南京科技职业学院第一食堂二层...</p>     </div>     </div>`)[0];
+                popup_95f9dea40e8b331410a701459164c00b.setContent(html_1fd981ff7f4c9f43c4ee43d2bcf55ddc);
+            
+        
+
+        circle_marker_a6dd98ff10e1705dddbc5a3465ae35f2.bindPopup(popup_95f9dea40e8b331410a701459164c00b)
+        ;
+
+        
+    
+    
+            circle_marker_a6dd98ff10e1705dddbc5a3465ae35f2.bindTooltip(
+                `<div>
+                     Store 148: 100 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_49f6cbd1e68cc0f6a58bb6a0a6730241 = L.circleMarker(
+                [31.89171411801545, 118.89763824258982],
+                {"bubblingMouseEvents": true, "color": "#89cc67", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#89cc67", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.938144329896907, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_e586376837f51fae6a7b13e9974fae6f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_204ae193bf92792cc26841f4ad036bfa = $(`<div id="html_204ae193bf92792cc26841f4ad036bfa" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 111</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-04</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-08</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 97 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道3666号中国传媒大学南广学院三食堂一层中超华城超市...</p>     </div>     </div>`)[0];
+                popup_e586376837f51fae6a7b13e9974fae6f.setContent(html_204ae193bf92792cc26841f4ad036bfa);
+            
+        
+
+        circle_marker_49f6cbd1e68cc0f6a58bb6a0a6730241.bindPopup(popup_e586376837f51fae6a7b13e9974fae6f)
+        ;
+
+        
+    
+    
+            circle_marker_49f6cbd1e68cc0f6a58bb6a0a6730241.bindTooltip(
+                `<div>
+                     Store 111: 97 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4a2377b1374660de67c7b217df049b97 = L.circleMarker(
+                [32.118202107101666, 118.93818416008818],
+                {"bubblingMouseEvents": true, "color": "#84ca66", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#84ca66", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.49484536082474, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_b70c896ec663b4eae8a478535cfe0b94 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_69cef35c6aee431da056ccec0951e78d = $(`<div id="html_69cef35c6aee431da056ccec0951e78d" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 146</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-06</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-03</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 90 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文苑路9号南京邮电大学仙林校区图书馆一层G01室...</p>     </div>     </div>`)[0];
+                popup_b70c896ec663b4eae8a478535cfe0b94.setContent(html_69cef35c6aee431da056ccec0951e78d);
+            
+        
+
+        circle_marker_4a2377b1374660de67c7b217df049b97.bindPopup(popup_b70c896ec663b4eae8a478535cfe0b94)
+        ;
+
+        
+    
+    
+            circle_marker_4a2377b1374660de67c7b217df049b97.bindTooltip(
+                `<div>
+                     Store 146: 90 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_445ca4ddea39835229b34bc55900bcab = L.circleMarker(
+                [31.889269794719745, 118.81960828192386],
+                {"bubblingMouseEvents": true, "color": "#84ca66", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#84ca66", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.804123711340207, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_cc715dee43cd940e8f593785b0e9172d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_00c38d881a86ba22cce52f22833dda30 = $(`<div id="html_00c38d881a86ba22cce52f22833dda30" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 170</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-06</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-17</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 43 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区东南大学路2号东南大学九龙湖校区橘园餐厅一层...</p>     </div>     </div>`)[0];
+                popup_cc715dee43cd940e8f593785b0e9172d.setContent(html_00c38d881a86ba22cce52f22833dda30);
+            
+        
+
+        circle_marker_445ca4ddea39835229b34bc55900bcab.bindPopup(popup_cc715dee43cd940e8f593785b0e9172d)
+        ;
+
+        
+    
+    
+            circle_marker_445ca4ddea39835229b34bc55900bcab.bindTooltip(
+                `<div>
+                     Store 170: 43 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0b407ad443917ba23fcd6b625b241ac2 = L.circleMarker(
+                [31.91817538805172, 118.9228358918058],
+                {"bubblingMouseEvents": true, "color": "#84ca66", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#84ca66", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.11340206185567, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_41cae08167f3cd2bd983dbeff582d7f6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6c81d67b69fe25157b355ab1eceb7618 = $(`<div id="html_6c81d67b69fe25157b355ab1eceb7618" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 179</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-07</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-07</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 93 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区江宁大学城龙眠大道629号交通职业技术学院第一食堂一层...</p>     </div>     </div>`)[0];
+                popup_41cae08167f3cd2bd983dbeff582d7f6.setContent(html_6c81d67b69fe25157b355ab1eceb7618);
+            
+        
+
+        circle_marker_0b407ad443917ba23fcd6b625b241ac2.bindPopup(popup_41cae08167f3cd2bd983dbeff582d7f6)
+        ;
+
+        
+    
+    
+            circle_marker_0b407ad443917ba23fcd6b625b241ac2.bindTooltip(
+                `<div>
+                     Store 179: 93 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_284533965f037c59a91473ee75d23772 = L.circleMarker(
+                [31.96380239227237, 118.7598607248275],
+                {"bubblingMouseEvents": true, "color": "#82c966", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#82c966", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 23.7319587628866, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_a6cbff8f7d2355e170bdc9bd1d6ea19e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f3815c8d8dd4f1c90f92f97b214fddf8 = $(`<div id="html_f3815c8d8dd4f1c90f92f97b214fddf8" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 187</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-08</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-11</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 96 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">雨花台区铁心桥街道龙西路310号三江学院主校区5号食堂二层...</p>     </div>     </div>`)[0];
+                popup_a6cbff8f7d2355e170bdc9bd1d6ea19e.setContent(html_f3815c8d8dd4f1c90f92f97b214fddf8);
+            
+        
+
+        circle_marker_284533965f037c59a91473ee75d23772.bindPopup(popup_a6cbff8f7d2355e170bdc9bd1d6ea19e)
+        ;
+
+        
+    
+    
+            circle_marker_284533965f037c59a91473ee75d23772.bindTooltip(
+                `<div>
+                     Store 187: 96 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_13140ff7bfdddf15ff822420e2c3e1d6 = L.circleMarker(
+                [32.11209015283739, 118.9195002139556],
+                {"bubblingMouseEvents": true, "color": "#82c966", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#82c966", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.278350515463918, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_0ddc42ed22b83ad010c8bfa8f459b922 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c409c515a3d4fe374b0477dc4e82e4f1 = $(`<div id="html_c409c515a3d4fe374b0477dc4e82e4f1" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 192</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-08</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-31</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 55 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文苑路1号南京师范大学仙林校区北区学生餐厅三层...</p>     </div>     </div>`)[0];
+                popup_0ddc42ed22b83ad010c8bfa8f459b922.setContent(html_c409c515a3d4fe374b0477dc4e82e4f1);
+            
+        
+
+        circle_marker_13140ff7bfdddf15ff822420e2c3e1d6.bindPopup(popup_0ddc42ed22b83ad010c8bfa8f459b922)
+        ;
+
+        
+    
+    
+            circle_marker_13140ff7bfdddf15ff822420e2c3e1d6.bindTooltip(
+                `<div>
+                     Store 192: 55 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2c37bd460f09b72874490b7707be7317 = L.circleMarker(
+                [31.90772304149415, 118.92223088304485],
+                {"bubblingMouseEvents": true, "color": "#82c966", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#82c966", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.814432989690722, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_a5c55e9d38a2d658dc41fca93fc91c00 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f3e5200ec76a46590022f87a8317eb9a = $(`<div id="html_f3e5200ec76a46590022f87a8317eb9a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 183</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-09</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-23</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 77 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区淳化街道中国药科大学江宁校区图书馆二层...</p>     </div>     </div>`)[0];
+                popup_a5c55e9d38a2d658dc41fca93fc91c00.setContent(html_f3e5200ec76a46590022f87a8317eb9a);
+            
+        
+
+        circle_marker_2c37bd460f09b72874490b7707be7317.bindPopup(popup_a5c55e9d38a2d658dc41fca93fc91c00)
+        ;
+
+        
+    
+    
+            circle_marker_2c37bd460f09b72874490b7707be7317.bindTooltip(
+                `<div>
+                     Store 183: 77 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e1494f5413771fcc22e02520ca91306c = L.circleMarker(
+                [31.838273429148256, 118.59499157051198],
+                {"bubblingMouseEvents": true, "color": "#7fc866", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7fc866", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.95876288659794, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_468d345103bc8cadd0693bdd4921f532 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5c6929b7809fc1742fc1db660e823163 = $(`<div id="html_5c6929b7809fc1742fc1db660e823163" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 191</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-15</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 68 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区南京医科大学江宁校区青教公寓南侧一层...</p>     </div>     </div>`)[0];
+                popup_468d345103bc8cadd0693bdd4921f532.setContent(html_5c6929b7809fc1742fc1db660e823163);
+            
+        
+
+        circle_marker_e1494f5413771fcc22e02520ca91306c.bindPopup(popup_468d345103bc8cadd0693bdd4921f532)
+        ;
+
+        
+    
+    
+            circle_marker_e1494f5413771fcc22e02520ca91306c.bindTooltip(
+                `<div>
+                     Store 191: 68 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_34d8bc770b2685c3b667b4d9a91fb3b8 = L.circleMarker(
+                [31.924348379627663, 118.91368727900054],
+                {"bubblingMouseEvents": true, "color": "#7fc866", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7fc866", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 22.288659793814432, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_20615ee204106cbbacfa342d80eea77f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_322925ea510b0b7fcc7030cbd348b3a2 = $(`<div id="html_322925ea510b0b7fcc7030cbd348b3a2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 186</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-06</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 89 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区淳化街道江苏海事职业技术学院念稼餐厅二层...</p>     </div>     </div>`)[0];
+                popup_20615ee204106cbbacfa342d80eea77f.setContent(html_322925ea510b0b7fcc7030cbd348b3a2);
+            
+        
+
+        circle_marker_34d8bc770b2685c3b667b4d9a91fb3b8.bindPopup(popup_20615ee204106cbbacfa342d80eea77f)
+        ;
+
+        
+    
+    
+            circle_marker_34d8bc770b2685c3b667b4d9a91fb3b8.bindTooltip(
+                `<div>
+                     Store 186: 89 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ee5b95b21666056ed35e5bb9b77e914e = L.circleMarker(
+                [32.11107232016998, 118.92144576402912],
+                {"bubblingMouseEvents": true, "color": "#7fc866", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7fc866", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.896907216494846, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_a43eb382f9d97076930e9cd62e1d96bb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a0c7b12a2d9abdfd92d576d715b691c3 = $(`<div id="html_a0c7b12a2d9abdfd92d576d715b691c3" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 159</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-05</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 58 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区笃学路南京师范大学仙林校区西区大众书店二层...</p>     </div>     </div>`)[0];
+                popup_a43eb382f9d97076930e9cd62e1d96bb.setContent(html_a0c7b12a2d9abdfd92d576d715b691c3);
+            
+        
+
+        circle_marker_ee5b95b21666056ed35e5bb9b77e914e.bindPopup(popup_a43eb382f9d97076930e9cd62e1d96bb)
+        ;
+
+        
+    
+    
+            circle_marker_ee5b95b21666056ed35e5bb9b77e914e.bindTooltip(
+                `<div>
+                     Store 159: 58 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_16914a5444deb9fa351f17d29bf7e93e = L.circleMarker(
+                [32.1147999846995, 118.93058970564572],
+                {"bubblingMouseEvents": true, "color": "#7fc866", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7fc866", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.4020618556701, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_46651be660a5492a2e533034c6e7db14 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_06d6b39faeacaff218a35512ae23b8ba = $(`<div id="html_06d6b39faeacaff218a35512ae23b8ba" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 144</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-22</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 75 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区文苑路3号南京财经大学仙林校区图书馆一层...</p>     </div>     </div>`)[0];
+                popup_46651be660a5492a2e533034c6e7db14.setContent(html_06d6b39faeacaff218a35512ae23b8ba);
+            
+        
+
+        circle_marker_16914a5444deb9fa351f17d29bf7e93e.bindPopup(popup_46651be660a5492a2e533034c6e7db14)
+        ;
+
+        
+    
+    
+            circle_marker_16914a5444deb9fa351f17d29bf7e93e.bindTooltip(
+                `<div>
+                     Store 144: 75 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3c4d6617b6fef7efe8d10bbba482d1e9 = L.circleMarker(
+                [31.904467592401147, 118.90545898019025],
+                {"bubblingMouseEvents": true, "color": "#7fc866", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7fc866", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 20.22680412371134, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_af20247ab4fda2db8997c796cec37712 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_10bbd54710c7b7023084036b8a12cee8 = $(`<div id="html_10bbd54710c7b7023084036b8a12cee8" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 164</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-26</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 79 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区弘景大道99号金陵科技学院北区第一食堂二层...</p>     </div>     </div>`)[0];
+                popup_af20247ab4fda2db8997c796cec37712.setContent(html_10bbd54710c7b7023084036b8a12cee8);
+            
+        
+
+        circle_marker_3c4d6617b6fef7efe8d10bbba482d1e9.bindPopup(popup_af20247ab4fda2db8997c796cec37712)
+        ;
+
+        
+    
+    
+            circle_marker_3c4d6617b6fef7efe8d10bbba482d1e9.bindTooltip(
+                `<div>
+                     Store 164: 79 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_35877b0129d2d9741363874855b76407 = L.circleMarker(
+                [32.093733992419935, 118.92329995643226],
+                {"bubblingMouseEvents": true, "color": "#7fc866", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7fc866", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 19.4020618556701, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_dd549f09fcbb23402ccba0b4b20a22ec = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1a0584e9b96f230eb38175e80a30507c = $(`<div id="html_1a0584e9b96f230eb38175e80a30507c" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 171</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-22</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 75 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">栖霞区仙林大学城仙林大道100号南京审计大学金审学院学生第四食堂一层...</p>     </div>     </div>`)[0];
+                popup_dd549f09fcbb23402ccba0b4b20a22ec.setContent(html_1a0584e9b96f230eb38175e80a30507c);
+            
+        
+
+        circle_marker_35877b0129d2d9741363874855b76407.bindPopup(popup_dd549f09fcbb23402ccba0b4b20a22ec)
+        ;
+
+        
+    
+    
+            circle_marker_35877b0129d2d9741363874855b76407.bindTooltip(
+                `<div>
+                     Store 171: 75 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4079b9084efbc4fbc9e598102976022b = L.circleMarker(
+                [31.923603575827148, 118.7948822431006],
+                {"bubblingMouseEvents": true, "color": "#7dc765", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#7dc765", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 25.79381443298969, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_d72333699788f01c1e278b9ec2736186 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3cc96b3cb4390782f684fb28579c7abc = $(`<div id="html_3cc96b3cb4390782f684fb28579c7abc" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 185</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-12</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-10-25</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 106 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区佛城东路8号河海大学江宁校区生活组团二三期食堂四层...</p>     </div>     </div>`)[0];
+                popup_d72333699788f01c1e278b9ec2736186.setContent(html_3cc96b3cb4390782f684fb28579c7abc);
+            
+        
+
+        circle_marker_4079b9084efbc4fbc9e598102976022b.bindPopup(popup_d72333699788f01c1e278b9ec2736186)
+        ;
+
+        
+    
+    
+            circle_marker_4079b9084efbc4fbc9e598102976022b.bindTooltip(
+                `<div>
+                     Store 185: 106 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d4eb3e7359e35e3553e3b6524fee32ce = L.circleMarker(
+                [32.062502996213254, 118.78957855753914],
+                {"bubblingMouseEvents": true, "color": "#70c164", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#70c164", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.711340206185568, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_d6e48ef85de33c067967e8351421f402 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_77af284f5a441db6e021a57a8e051dd1 = $(`<div id="html_77af284f5a441db6e021a57a8e051dd1" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 124</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-22</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-18</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 28 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">鼓楼区中山路321号南京鼓楼医院新大楼急诊部三层CD区...</p>     </div>     </div>`)[0];
+                popup_d6e48ef85de33c067967e8351421f402.setContent(html_77af284f5a441db6e021a57a8e051dd1);
+            
+        
+
+        circle_marker_d4eb3e7359e35e3553e3b6524fee32ce.bindPopup(popup_d6e48ef85de33c067967e8351421f402)
+        ;
+
+        
+    
+    
+            circle_marker_d4eb3e7359e35e3553e3b6524fee32ce.bindTooltip(
+                `<div>
+                     Store 124: 28 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_deba90998d7faed2d4c459c782fcf37f = L.circleMarker(
+                [31.874597726297733, 118.83411780235156],
+                {"bubblingMouseEvents": true, "color": "#6ec064", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6ec064", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.917525773195877, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_5c0164d17860a3671c8026476849490d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4ce206d979bc411fc0fb82a980ad0349 = $(`<div id="html_4ce206d979bc411fc0fb82a980ad0349" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 238</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-24</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-21</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 29 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区秣周东路12号悠谷1期3号楼协同大楼未来网络小镇一层大堂...</p>     </div>     </div>`)[0];
+                popup_5c0164d17860a3671c8026476849490d.setContent(html_4ce206d979bc411fc0fb82a980ad0349);
+            
+        
+
+        circle_marker_deba90998d7faed2d4c459c782fcf37f.bindPopup(popup_5c0164d17860a3671c8026476849490d)
+        ;
+
+        
+    
+    
+            circle_marker_deba90998d7faed2d4c459c782fcf37f.bindTooltip(
+                `<div>
+                     Store 238: 29 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c66c6fa7624412e93a58acd5118e03ac = L.circleMarker(
+                [32.09675064649749, 118.89754490864732],
+                {"bubblingMouseEvents": true, "color": "#6ec064", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6ec064", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.618556701030927, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_b7afa5faad943a1b6d17e1fffc29cb81 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_52fbed3de294517a836710c18ad5bf06 = $(`<div id="html_52fbed3de294517a836710c18ad5bf06" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 44</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-24</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-05</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 13 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">玄武区湖景路9号苏宁青创园D栋一层大堂...</p>     </div>     </div>`)[0];
+                popup_b7afa5faad943a1b6d17e1fffc29cb81.setContent(html_52fbed3de294517a836710c18ad5bf06);
+            
+        
+
+        circle_marker_c66c6fa7624412e93a58acd5118e03ac.bindPopup(popup_b7afa5faad943a1b6d17e1fffc29cb81)
+        ;
+
+        
+    
+    
+            circle_marker_c66c6fa7624412e93a58acd5118e03ac.bindTooltip(
+                `<div>
+                     Store 44: 13 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1329678030b81d36d5cf5ac53d893eef = L.circleMarker(
+                [32.02198047792086, 118.77645341573286],
+                {"bubblingMouseEvents": true, "color": "#6ec064", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6ec064", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.298969072164947, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_12ecfd91e9f88b4fb4aa3c06cf31d316 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6768535380d269697a6b3023139e7e95 = $(`<div id="html_6768535380d269697a6b3023139e7e95" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 39</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-25</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-19</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 26 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">秦淮区凤游寺52号悦动新门西体育文化产业园15号楼一层106号...</p>     </div>     </div>`)[0];
+                popup_12ecfd91e9f88b4fb4aa3c06cf31d316.setContent(html_6768535380d269697a6b3023139e7e95);
+            
+        
+
+        circle_marker_1329678030b81d36d5cf5ac53d893eef.bindPopup(popup_12ecfd91e9f88b4fb4aa3c06cf31d316)
+        ;
+
+        
+    
+    
+            circle_marker_1329678030b81d36d5cf5ac53d893eef.bindTooltip(
+                `<div>
+                     Store 39: 26 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8d679821a39dc8988ff5f4edadede735 = L.circleMarker(
+                [32.06664934612214, 118.74528212470608],
+                {"bubblingMouseEvents": true, "color": "#6bbf64", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6bbf64", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.835051546391753, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_0e26f4250b06f498bc99ae2e23c438b2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8093b6964ea6d9e3499eefac882cf58b = $(`<div id="html_8093b6964ea6d9e3499eefac882cf58b" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 147</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-27</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-12</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 48 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">鼓楼区江东街道江东北路319号华彩荟南京店一层...</p>     </div>     </div>`)[0];
+                popup_0e26f4250b06f498bc99ae2e23c438b2.setContent(html_8093b6964ea6d9e3499eefac882cf58b);
+            
+        
+
+        circle_marker_8d679821a39dc8988ff5f4edadede735.bindPopup(popup_0e26f4250b06f498bc99ae2e23c438b2)
+        ;
+
+        
+    
+    
+            circle_marker_8d679821a39dc8988ff5f4edadede735.bindTooltip(
+                `<div>
+                     Store 147: 48 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_52b541c0a94ae98d9e8b4b69e84d75a0 = L.circleMarker(
+                [31.72205029718557, 118.9863601049272],
+                {"bubblingMouseEvents": true, "color": "#6bbf64", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#6bbf64", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.618556701030927, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_ec3ea42f31bad3c04ce7713c92226bd0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_669f564b62c46ad5ec74bb59622c4bb2 = $(`<div id="html_669f564b62c46ad5ec74bb59622c4bb2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 246</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-27</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-08</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 13 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">溧水区经济开发区创业路89号...</p>     </div>     </div>`)[0];
+                popup_ec3ea42f31bad3c04ce7713c92226bd0.setContent(html_669f564b62c46ad5ec74bb59622c4bb2);
+            
+        
+
+        circle_marker_52b541c0a94ae98d9e8b4b69e84d75a0.bindPopup(popup_ec3ea42f31bad3c04ce7713c92226bd0)
+        ;
+
+        
+    
+    
+            circle_marker_52b541c0a94ae98d9e8b4b69e84d75a0.bindTooltip(
+                `<div>
+                     Store 246: 13 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_76cbf90c45a2a03d48d494335a740a67 = L.circleMarker(
+                [31.834399119751986, 118.77957718331324],
+                {"bubblingMouseEvents": true, "color": "#69be63", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#69be63", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.298969072164947, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_d301c8cbe5cfca888e94ab1d6a04034f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_865ee2c09745890b599a5a5114ef9f03 = $(`<div id="html_865ee2c09745890b599a5a5114ef9f03" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 133</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-28</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-22</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 26 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区东吉大道1号13号楼一层...</p>     </div>     </div>`)[0];
+                popup_d301c8cbe5cfca888e94ab1d6a04034f.setContent(html_865ee2c09745890b599a5a5114ef9f03);
+            
+        
+
+        circle_marker_76cbf90c45a2a03d48d494335a740a67.bindPopup(popup_d301c8cbe5cfca888e94ab1d6a04034f)
+        ;
+
+        
+    
+    
+            circle_marker_76cbf90c45a2a03d48d494335a740a67.bindTooltip(
+                `<div>
+                     Store 133: 26 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ff9c14fad54dbde8994a3ac11e0a8a2a = L.circleMarker(
+                [31.84522197244716, 118.78465701114165],
+                {"bubblingMouseEvents": true, "color": "#69be63", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#69be63", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 12.185567010309278, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_7fa4c12ff627e435484f47c257fd282e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e30a0608fa5b5c38537ee57859dcdb4a = $(`<div id="html_e30a0608fa5b5c38537ee57859dcdb4a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 110</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-28</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-05</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 40 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区正方中路888号浩鲸科技综合楼一层...</p>     </div>     </div>`)[0];
+                popup_7fa4c12ff627e435484f47c257fd282e.setContent(html_e30a0608fa5b5c38537ee57859dcdb4a);
+            
+        
+
+        circle_marker_ff9c14fad54dbde8994a3ac11e0a8a2a.bindPopup(popup_7fa4c12ff627e435484f47c257fd282e)
+        ;
+
+        
+    
+    
+            circle_marker_ff9c14fad54dbde8994a3ac11e0a8a2a.bindTooltip(
+                `<div>
+                     Store 110: 40 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e27c3dfa3d440958e57f610034828e3d = L.circleMarker(
+                [31.945351238389, 118.75083212563835],
+                {"bubblingMouseEvents": true, "color": "#69be63", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#69be63", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11.154639175257731, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_bdeae09756f8e0fed1e8df56da03429f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ba541920317f244bdec26ccca167fed0 = $(`<div id="html_ba541920317f244bdec26ccca167fed0" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 160</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-28</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-31</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 35 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">雨花台区英才路2号菁英体育中心一层大堂...</p>     </div>     </div>`)[0];
+                popup_bdeae09756f8e0fed1e8df56da03429f.setContent(html_ba541920317f244bdec26ccca167fed0);
+            
+        
+
+        circle_marker_e27c3dfa3d440958e57f610034828e3d.bindPopup(popup_bdeae09756f8e0fed1e8df56da03429f)
+        ;
+
+        
+    
+    
+            circle_marker_e27c3dfa3d440958e57f610034828e3d.bindTooltip(
+                `<div>
+                     Store 160: 35 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_125e000632b424c851bbe853e4da65aa = L.circleMarker(
+                [32.051475127425455, 118.76833965087508],
+                {"bubblingMouseEvents": true, "color": "#69be63", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#69be63", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.298969072164947, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_997ee5c9c8836314b1c80033780abc81 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_644f829034d84da7f62a4c0ad0cc63d0 = $(`<div id="html_644f829034d84da7f62a4c0ad0cc63d0" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 68</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-29</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-23</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 26 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">鼓楼区虎踞路51号中国移动营业一层大堂...</p>     </div>     </div>`)[0];
+                popup_997ee5c9c8836314b1c80033780abc81.setContent(html_644f829034d84da7f62a4c0ad0cc63d0);
+            
+        
+
+        circle_marker_125e000632b424c851bbe853e4da65aa.bindPopup(popup_997ee5c9c8836314b1c80033780abc81)
+        ;
+
+        
+    
+    
+            circle_marker_125e000632b424c851bbe853e4da65aa.bindTooltip(
+                `<div>
+                     Store 68: 26 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_029260e70e21e16855195fc3af6bd35b = L.circleMarker(
+                [32.0550423626287, 118.79413116986372],
+                {"bubblingMouseEvents": true, "color": "#66bd63", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#66bd63", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.412371134020619, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_83656707844361fb2f0ad94f10a9b09d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_cc9d01db5a958c68c8ba39c7db00eb79 = $(`<div id="html_cc9d01db5a958c68c8ba39c7db00eb79" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 47</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-30</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-10</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 12 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">玄武区大钟亭路6号电信营业厅一层大堂...</p>     </div>     </div>`)[0];
+                popup_83656707844361fb2f0ad94f10a9b09d.setContent(html_cc9d01db5a958c68c8ba39c7db00eb79);
+            
+        
+
+        circle_marker_029260e70e21e16855195fc3af6bd35b.bindPopup(popup_83656707844361fb2f0ad94f10a9b09d)
+        ;
+
+        
+    
+    
+            circle_marker_029260e70e21e16855195fc3af6bd35b.bindTooltip(
+                `<div>
+                     Store 47: 12 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_63d8ecf1382358e74f317ec3664bd9d3 = L.circleMarker(
+                [31.9902365132606, 118.77019267548108],
+                {"bubblingMouseEvents": true, "color": "#66bd63", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#66bd63", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 13.010309278350515, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_1c9da2fc0f2fb335d3e04b2aa28b602e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bdc1efc8f8b7a69f4ac20f4c95aa33bc = $(`<div id="html_bdc1efc8f8b7a69f4ac20f4c95aa33bc" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 75</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-07-31</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-12</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 44 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">雨花台区安德门大街21号江苏科技金融大厦一层...</p>     </div>     </div>`)[0];
+                popup_1c9da2fc0f2fb335d3e04b2aa28b602e.setContent(html_bdc1efc8f8b7a69f4ac20f4c95aa33bc);
+            
+        
+
+        circle_marker_63d8ecf1382358e74f317ec3664bd9d3.bindPopup(popup_1c9da2fc0f2fb335d3e04b2aa28b602e)
+        ;
+
+        
+    
+    
+            circle_marker_63d8ecf1382358e74f317ec3664bd9d3.bindTooltip(
+                `<div>
+                     Store 75: 44 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e518da8ef7c04da26cd00ba1723d4d0b = L.circleMarker(
+                [31.958318700193743, 118.84480386503716],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.0, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_046754b11101dab781c2421f0cdcc3f1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_769aad977bfda57be00313c935fa122a = $(`<div id="html_769aad977bfda57be00313c935fa122a" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 220</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-12</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 10 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区上元大街327号凤凰创客空间大厦一层105室...</p>     </div>     </div>`)[0];
+                popup_046754b11101dab781c2421f0cdcc3f1.setContent(html_769aad977bfda57be00313c935fa122a);
+            
+        
+
+        circle_marker_e518da8ef7c04da26cd00ba1723d4d0b.bindPopup(popup_046754b11101dab781c2421f0cdcc3f1)
+        ;
+
+        
+    
+    
+            circle_marker_e518da8ef7c04da26cd00ba1723d4d0b.bindTooltip(
+                `<div>
+                     Store 220: 10 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_78e69f1400ec0b5a262f33f0eed614d8 = L.circleMarker(
+                [31.944076987883264, 118.85011698280648],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.649484536082474, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_d84a48d69d405eef3188e2f03322cdb5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d7af8f4154b743f171abc8345e7d2135 = $(`<div id="html_d7af8f4154b743f171abc8345e7d2135" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 182</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-20</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 18 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区东山街道潭园西路199号二层A-2F-C04...</p>     </div>     </div>`)[0];
+                popup_d84a48d69d405eef3188e2f03322cdb5.setContent(html_d7af8f4154b743f171abc8345e7d2135);
+            
+        
+
+        circle_marker_78e69f1400ec0b5a262f33f0eed614d8.bindPopup(popup_d84a48d69d405eef3188e2f03322cdb5)
+        ;
+
+        
+    
+    
+            circle_marker_78e69f1400ec0b5a262f33f0eed614d8.bindTooltip(
+                `<div>
+                     Store 182: 18 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e606c54e60885297e0c82c8de7e59188 = L.circleMarker(
+                [31.97236804164075, 118.86505643225128],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.0, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_0dab8406b4f1afc62c7ed5faaace8bdf = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1953e3aa00a0f97685b8e05ad530a8bb = $(`<div id="html_1953e3aa00a0f97685b8e05ad530a8bb" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 189</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-12</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 10 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区宏运大道4597号景祥大厦底商...</p>     </div>     </div>`)[0];
+                popup_0dab8406b4f1afc62c7ed5faaace8bdf.setContent(html_1953e3aa00a0f97685b8e05ad530a8bb);
+            
+        
+
+        circle_marker_e606c54e60885297e0c82c8de7e59188.bindPopup(popup_0dab8406b4f1afc62c7ed5faaace8bdf)
+        ;
+
+        
+    
+    
+            circle_marker_e606c54e60885297e0c82c8de7e59188.bindTooltip(
+                `<div>
+                     Store 189: 10 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1fc4f40344fadede60ad037f81c9d116 = L.circleMarker(
+                [31.9364043741298, 118.82563600172637],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.443298969072165, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_61898d9122d9f55158d3518f18c31569 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f4331595713dedc593bcb733c2ec6157 = $(`<div id="html_f4331595713dedc593bcb733c2ec6157" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 59</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-19</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 17 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区双龙大道1698号南京景枫L1层10号...</p>     </div>     </div>`)[0];
+                popup_61898d9122d9f55158d3518f18c31569.setContent(html_f4331595713dedc593bcb733c2ec6157);
+            
+        
+
+        circle_marker_1fc4f40344fadede60ad037f81c9d116.bindPopup(popup_61898d9122d9f55158d3518f18c31569)
+        ;
+
+        
+    
+    
+            circle_marker_1fc4f40344fadede60ad037f81c9d116.bindTooltip(
+                `<div>
+                     Store 59: 17 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2c519a945fa46c961133ee08c36ca650 = L.circleMarker(
+                [31.95711371562584, 118.84986716404416],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.649484536082474, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_e19e04568c05e90017389bf7a43b548a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e7a6f4dec41b47d0a1359bb523e3facf = $(`<div id="html_e7a6f4dec41b47d0a1359bb523e3facf" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 121</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-20</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 18 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区竹山路68号江宁万达百货商场一层...</p>     </div>     </div>`)[0];
+                popup_e19e04568c05e90017389bf7a43b548a.setContent(html_e7a6f4dec41b47d0a1359bb523e3facf);
+            
+        
+
+        circle_marker_2c519a945fa46c961133ee08c36ca650.bindPopup(popup_e19e04568c05e90017389bf7a43b548a)
+        ;
+
+        
+    
+    
+            circle_marker_2c519a945fa46c961133ee08c36ca650.bindTooltip(
+                `<div>
+                     Store 121: 18 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b0bc76e1fff2a8a98f1b1d8e6d9d23b2 = L.circleMarker(
+                [31.933377175850584, 118.83080655841124],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.443298969072165, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_fb648e955e333286489c2723a6fad956 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f1197e9f2a0dbfcfb9594da64843eb24 = $(`<div id="html_f1197e9f2a0dbfcfb9594da64843eb24" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 197</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-03</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-19</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 17 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区双龙大道1539号21世纪太阳城购物中心负一层...</p>     </div>     </div>`)[0];
+                popup_fb648e955e333286489c2723a6fad956.setContent(html_f1197e9f2a0dbfcfb9594da64843eb24);
+            
+        
+
+        circle_marker_b0bc76e1fff2a8a98f1b1d8e6d9d23b2.bindPopup(popup_fb648e955e333286489c2723a6fad956)
+        ;
+
+        
+    
+    
+            circle_marker_b0bc76e1fff2a8a98f1b1d8e6d9d23b2.bindTooltip(
+                `<div>
+                     Store 197: 17 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8c7fcf8f62d72450b3138929fa3d190a = L.circleMarker(
+                [31.93814419192112, 118.82717731432038],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.237113402061856, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_799982fcf089cc7d9a7bfaa9a67cd9ae = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f3fa9c1b8cd717a0de0d92f84f7628f2 = $(`<div id="html_f3fa9c1b8cd717a0de0d92f84f7628f2" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 46</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-04</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-19</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 16 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区双龙大道1688号江宁金鹰购物中心负一层AB1-00378室...</p>     </div>     </div>`)[0];
+                popup_799982fcf089cc7d9a7bfaa9a67cd9ae.setContent(html_f3fa9c1b8cd717a0de0d92f84f7628f2);
+            
+        
+
+        circle_marker_8c7fcf8f62d72450b3138929fa3d190a.bindPopup(popup_799982fcf089cc7d9a7bfaa9a67cd9ae)
+        ;
+
+        
+    
+    
+            circle_marker_8c7fcf8f62d72450b3138929fa3d190a.bindTooltip(
+                `<div>
+                     Store 46: 16 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_22b867c27224e3094f53ae07866bf5d0 = L.circleMarker(
+                [31.950244163877503, 118.80796669166727],
+                {"bubblingMouseEvents": true, "color": "#60ba62", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#60ba62", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.824742268041237, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_8015b796163f37fc6aef0053348ba3eb = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_845edc4eeee2a253d919758049585d49 = $(`<div id="html_845edc4eeee2a253d919758049585d49" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 62</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-04</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-17</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 14 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">江宁区胜太西路62号纳科汽车生活广场B楼一层...</p>     </div>     </div>`)[0];
+                popup_8015b796163f37fc6aef0053348ba3eb.setContent(html_845edc4eeee2a253d919758049585d49);
+            
+        
+
+        circle_marker_22b867c27224e3094f53ae07866bf5d0.bindPopup(popup_8015b796163f37fc6aef0053348ba3eb)
+        ;
+
+        
+    
+    
+            circle_marker_22b867c27224e3094f53ae07866bf5d0.bindTooltip(
+                `<div>
+                     Store 62: 14 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1c8f4acd8f6f15150099770c5a13c54f = L.circleMarker(
+                [32.075200167867, 118.64618097101476],
+                {"bubblingMouseEvents": true, "color": "#4bb05c", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#4bb05c", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.824742268041237, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_22c57b71c5785a2c830d66977923a066 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_125d3184f5ad35e6cd821cb61f7cc7a6 = $(`<div id="html_125d3184f5ad35e6cd821cb61f7cc7a6" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 5</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-18</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-08-31</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 14 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">浦口区江浦街道龙华路8号金盛田广场二层...</p>     </div>     </div>`)[0];
+                popup_22c57b71c5785a2c830d66977923a066.setContent(html_125d3184f5ad35e6cd821cb61f7cc7a6);
+            
+        
+
+        circle_marker_1c8f4acd8f6f15150099770c5a13c54f.bindPopup(popup_22c57b71c5785a2c830d66977923a066)
+        ;
+
+        
+    
+    
+            circle_marker_1c8f4acd8f6f15150099770c5a13c54f.bindTooltip(
+                `<div>
+                     Store 5: 14 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b326c4a235cd86835277e12767d3077d = L.circleMarker(
+                [31.994035145362467, 118.73714635136332],
+                {"bubblingMouseEvents": true, "color": "#39a758", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#39a758", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.206185567010309, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_2a50cbc445ed249128200abaa05381cd = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a6055d2c86ad5a49760d215236253164 = $(`<div id="html_a6055d2c86ad5a49760d215236253164" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 131</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-08-29</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-09-08</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 11 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">建邺区河西大街71号明基医院门诊楼一层大堂左侧...</p>     </div>     </div>`)[0];
+                popup_2a50cbc445ed249128200abaa05381cd.setContent(html_a6055d2c86ad5a49760d215236253164);
+            
+        
+
+        circle_marker_b326c4a235cd86835277e12767d3077d.bindPopup(popup_2a50cbc445ed249128200abaa05381cd)
+        ;
+
+        
+    
+    
+            circle_marker_b326c4a235cd86835277e12767d3077d.bindTooltip(
+                `<div>
+                     Store 131: 11 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1eb050ba5f2ab703d594890239509631 = L.circleMarker(
+                [32.20747281175262, 118.75498220726392],
+                {"bubblingMouseEvents": true, "color": "#006837", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#006837", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.412371134020619, "stroke": true, "weight": 3}
+            ).addTo(map_30b37949fb3540e400ddd1395a04b0ca);
+        
+    
+        var popup_78a8d194dd1874b29062a8714a9fa077 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7f3522f53b388a9adcd911e065d36f60 = $(`<div id="html_7f3522f53b388a9adcd911e065d36f60" style="width: 100.0%; height: 100.0%;">     <div style="font-family: Arial, sans-serif; width: 250px;">         <h4 style="margin: 0 0 8px 0; color: #333;">Store 165</h4>         <p style="margin: 4px 0;"><strong>Closure Start:</strong> 2021-11-10</p>         <p style="margin: 4px 0;"><strong>Closure End:</strong> 2021-11-21</p>         <p style="margin: 4px 0;"><strong>Duration:</strong> 12 days</p>         <p style="margin: 4px 0; font-size: 11px; color: #666;">六合区大厂卸甲甸幸福路8号新办公大楼一层大堂...</p>     </div>     </div>`)[0];
+                popup_78a8d194dd1874b29062a8714a9fa077.setContent(html_7f3522f53b388a9adcd911e065d36f60);
+            
+        
+
+        circle_marker_1eb050ba5f2ab703d594890239509631.bindPopup(popup_78a8d194dd1874b29062a8714a9fa077)
+        ;
+
+        
+    
+    
+            circle_marker_1eb050ba5f2ab703d594890239509631.bindTooltip(
+                `<div>
+                     Store 165: 12 days
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
