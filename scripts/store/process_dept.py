@@ -1,6 +1,9 @@
 import pandas as pd
 from datetime import datetime, timedelta
 from visualize import visualize_dept_week_order_daily
+import matplotlib.pyplot as plt
+import numpy as np
+import os
 
 def dept_weekly_demand(dept_week_order_path='data1031/dept_result_week_order.csv', output_folder='plots'):
     """
@@ -130,9 +133,166 @@ def compare_week_demand(dept_id, monday_date, df,
         'difference': abs(aggregated_total - calculated_total) if not total_match else 0
     }
 
+def visualize_zero_demand_days(data_path='processed_data/order_commodity_result_processed.csv', 
+                                output_folder='plots', max_stores=None, max_dates=None):
+    """
+    Visualize days where each store has zero demand (no records in the data).
+    
+    Parameters:
+    -----------
+    data_path : str
+        Path to the processed order_commodity_result_processed.csv file
+    output_folder : str
+        Folder path to save the plot (default: 'plots')
+    max_stores : int, optional
+        Maximum number of stores to visualize (for performance). If None, visualize all stores.
+    max_dates : int, optional
+        Maximum number of dates to visualize (for performance). If None, visualize all dates.
+    
+    Returns:
+    --------
+    str : Path to the saved plot
+    """
+    # Create output folder if it doesn't exist
+    os.makedirs(output_folder, exist_ok=True)
+    
+    print("\n" + "="*60)
+    print("Visualizing zero demand days for each store...")
+    print("="*60)
+    
+    # Load the processed data
+    print(f"\nLoading data from: {data_path}")
+    df = pd.read_csv(data_path)
+    df['dt'] = pd.to_datetime(df['dt'])
+    
+    print(f"Total rows in data: {len(df)}")
+    
+    # Get all unique dates and dept_ids from the data
+    all_dates = sorted(df['dt'].unique())
+    all_dept_ids = sorted(df['dept_id'].unique())
+    
+    print(f"Total unique dates: {len(all_dates)}")
+    print(f"Total unique stores: {len(all_dept_ids)}")
+    print(f"Date range: {all_dates[0].date()} to {all_dates[-1].date()}")
+    
+    # Optionally limit the number of stores/dates for visualization
+    if max_stores is not None and len(all_dept_ids) > max_stores:
+        print(f"\nLimiting visualization to {max_stores} stores (out of {len(all_dept_ids)})")
+        all_dept_ids = all_dept_ids[:max_stores]
+    
+    if max_dates is not None and len(all_dates) > max_dates:
+        print(f"\nLimiting visualization to {max_dates} dates (out of {len(all_dates)})")
+        # Sample dates evenly
+        step = len(all_dates) // max_dates
+        all_dates = all_dates[::step][:max_dates]
+    
+    # Create a complete grid of all date × dept_id combinations
+    complete_grid = pd.MultiIndex.from_product(
+        [all_dates, all_dept_ids], 
+        names=['dt', 'dept_id']
+    ).to_frame(index=False)
+    
+    # Get actual records (store-date combinations that have demand)
+    actual_records = df.groupby(['dt', 'dept_id']).size().reset_index(name='count')
+    actual_records = actual_records[['dt', 'dept_id']]
+    
+    # Merge to identify which combinations have no records (zero demand)
+    merged = complete_grid.merge(
+        actual_records, 
+        on=['dt', 'dept_id'], 
+        how='left', 
+        indicator=True
+    )
+    
+    # Mark zero demand: 1 if no record (zero demand), 0 if record exists (has demand)
+    merged['zero_demand'] = (merged['_merge'] == 'left_only').astype(int)
+    
+    # Create a pivot table for visualization: dates as columns, stores as rows
+    # Ensure the order is preserved by using reindex
+    pivot_table = merged.pivot(index='dept_id', columns='dt', values='zero_demand')
+    # Reindex to ensure correct order
+    pivot_table = pivot_table.reindex(index=all_dept_ids, columns=all_dates)
+    
+    # Calculate statistics
+    total_cells = len(complete_grid)
+    zero_demand_cells = merged['zero_demand'].sum()
+    zero_demand_pct = (zero_demand_cells / total_cells) * 100
+    
+    print(f"\nStatistics:")
+    print(f"  Total store-date combinations: {total_cells}")
+    print(f"  Zero demand days: {zero_demand_cells} ({zero_demand_pct:.2f}%)")
+    print(f"  Days with demand: {total_cells - zero_demand_cells} ({100 - zero_demand_pct:.2f}%)")
+    
+    # Create the visualization
+    print(f"\nCreating heatmap visualization...")
+    fig, ax = plt.subplots(figsize=(max(12, len(all_dates) * 0.1), max(8, len(all_dept_ids) * 0.15)))
+    
+    # Create the heatmap using imshow
+    im = ax.imshow(pivot_table.values, aspect='auto', cmap='Reds', interpolation='nearest', vmin=0, vmax=1)
+    
+    # Set labels
+    ax.set_xlabel('Date', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Store ID (dept_id)', fontsize=12, fontweight='bold')
+    ax.set_title('Zero Demand Days by Store\n(Red = Zero Demand, White = Has Demand)', 
+                 fontsize=14, fontweight='bold')
+    
+    # Set x-axis ticks (dates)
+    # Show a subset of dates to avoid overcrowding
+    n_ticks = min(20, len(all_dates))
+    date_indices = np.linspace(0, len(all_dates) - 1, n_ticks, dtype=int)
+    ax.set_xticks(date_indices)
+    ax.set_xticklabels([all_dates[i].strftime('%Y-%m-%d') for i in date_indices], 
+                       rotation=45, ha='right', fontsize=8)
+    
+    # Set y-axis ticks (store IDs)
+    # Show a subset of store IDs
+    n_store_ticks = min(30, len(all_dept_ids))
+    store_indices = np.linspace(0, len(all_dept_ids) - 1, n_store_ticks, dtype=int)
+    ax.set_yticks(store_indices)
+    ax.set_yticklabels([all_dept_ids[i] for i in store_indices], fontsize=8)
+    
+    # Add colorbar
+    cbar = plt.colorbar(im, ax=ax, fraction=0.02, pad=0.04)
+    cbar.set_label('Zero Demand (1=No Demand, 0=Has Demand)', fontsize=10)
+    cbar.set_ticks([0, 1])
+    cbar.set_ticklabels(['Has Demand', 'Zero Demand'])
+    
+    plt.tight_layout()
+    
+    # Save the plot
+    output_path = os.path.join(output_folder, 'zero_demand_days_heatmap.pdf')
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"\nPlot saved to: {output_path}")
+    plt.close()
+    
+    # Also create a summary plot showing zero demand days per store
+    zero_demand_by_store = merged.groupby('dept_id')['zero_demand'].sum().reset_index(name='zero_demand_days')
+    zero_demand_by_store = zero_demand_by_store.sort_values('zero_demand_days', ascending=False)
+    
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.bar(range(len(zero_demand_by_store)), zero_demand_by_store['zero_demand_days'], 
+           color='coral', alpha=0.7)
+    ax.set_xlabel('Store ID (sorted by zero demand days)', fontsize=12)
+    ax.set_ylabel('Number of Zero Demand Days', fontsize=12)
+    ax.set_title('Zero Demand Days per Store', fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3, axis='y')
+    
+    plt.tight_layout()
+    summary_output_path = os.path.join(output_folder, 'zero_demand_days_by_store.pdf')
+    plt.savefig(summary_output_path, dpi=300, bbox_inches='tight')
+    print(f"Summary plot saved to: {summary_output_path}")
+    plt.close()
+    
+    print(f"\nZero demand visualization complete!")
+    print(f"  - Heatmap: {output_path}")
+    print(f"  - Summary: {summary_output_path}")
+    
+    return output_path
+
 '''
 {'dept_id': 24, 'monday_date': datetime.date(2020, 6, 1), 'aggregated_total': 201, 'calculated_total': 81, 'match': False, 'difference': 120}
 '''
 
 if __name__ == "__main__":
-    dept_weekly_demand()
+    #dept_weekly_demand()
+    visualize_zero_demand_days()
