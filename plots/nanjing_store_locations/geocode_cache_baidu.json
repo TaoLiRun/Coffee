@@ -1,0 +1,32 @@
+{
+  "南京市六合区雄州西路8号欢乐港二期": {
+    "latitude": 32.34181073008831,
+    "longitude": 118.84126660743053,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市玄武区中山门大街301号森林摩尔商业街负一层37号": {
+    "latitude": 32.044370153753334,
+    "longitude": 118.87306123265068,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市高淳区淳溪街道镇北路27-2号": {
+    "latitude": 31.32987258116175,
+    "longitude": 118.87437051293148,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  }
+}

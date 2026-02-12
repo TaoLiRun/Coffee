@@ -1,0 +1,2519 @@
+{
+  "南京市六合区雄州西路8号欢乐港二期": {
+    "latitude": 32.34181073008831,
+    "longitude": 118.84126660743053,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市玄武区中山门大街301号森林摩尔商业街负一层37号": {
+    "latitude": 32.044370153753334,
+    "longitude": 118.87306123265068,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市高淳区淳溪街道镇北路27-2号": {
+    "latitude": 31.32987258116175,
+    "longitude": 118.87437051293148,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市浦口区公园北路3-8号": {
+    "latitude": 32.0698976121905,
+    "longitude": 118.63959881705149,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市浦口区江浦街道龙华路8号金盛田广场二层": {
+    "latitude": 32.075200167866996,
+    "longitude": 118.64618097101476,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区雨花街道雨花东路158号紫荆广场·花漫里负一层111、115号铺": {
+    "latitude": 31.99871921206662,
+    "longitude": 118.80051111525668,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市溧水区通济街12号": {
+    "latitude": 31.661134683910117,
+    "longitude": 119.03654645749755,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区麒麟街道悦民路128号天赋广场22幢116室": {
+    "latitude": 32.05444453058177,
+    "longitude": 118.93409345645685,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区古雄街道古雄大道211号吾悦广场负一层B1040号": {
+    "latitude": 31.916795169255135,
+    "longitude": 118.65914675342357,
+    "meta": {
+      "status": "ok",
+      "level": "休闲娱乐",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "鼓楼区挹江门街道南京财经大学科技楼A座102-2": {
+    "latitude": 32.09159442956325,
+    "longitude": 118.76592608363087,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市秦淮区淮海路50号-1扬子大厦一层大堂": {
+    "latitude": 32.04358998745236,
+    "longitude": 118.79194002306377,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "江宁区禄口街道南京航空航天大学金城学院行知楼一楼大厅": {
+    "latitude": 31.706964629469844,
+    "longitude": 118.8915060498565,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市江北新区浦滨路150号中科创新广场5号楼一楼": {
+    "latitude": 32.0785968193686,
+    "longitude": 118.67312726173645,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江北虹悦城4F-21-2铺位VIP客服中心旁": {
+    "latitude": 32.02869101214606,
+    "longitude": 118.79167295683565,
+    "meta": {
+      "status": "ok",
+      "level": "生活服务",
+      "precise": 0,
+      "confidence": 70
+    }
+  },
+  "南京市雨花台区西春路1号创智大厦一层106室": {
+    "latitude": 31.974847273998545,
+    "longitude": 118.75522663619317,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区双闸路海峡云谷科技园3号楼一层大堂": {
+    "latitude": 31.987044271619084,
+    "longitude": 118.69007711891258,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区绿都大道绿地广场C2座一层4-13号": {
+    "latitude": 31.97665358834983,
+    "longitude": 118.7972989544141,
+    "meta": {
+      "status": "ok",
+      "level": "道路",
+      "precise": 0,
+      "confidence": 30
+    }
+  },
+  "南京市浦口区浦口大道13号新城总部大厦一层大堂": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市浦口区大桥北路1号华侨广场一层大堂": {
+    "latitude": 32.13436162466506,
+    "longitude": 118.73531192168137,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区江东中路305号中泰国际大厦一层1-60、61号": {
+    "latitude": 32.006744049751106,
+    "longitude": 118.7338200158904,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市玄武区玄武大道699-22号江苏软件园22幢一层大堂": {
+    "latitude": 32.093203255235174,
+    "longitude": 118.89188414664565,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区集慧路18号联创科技大厦B座一层大堂": {
+    "latitude": 32.0396729094055,
+    "longitude": 118.72985561401379,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区中山路100号艾尚天地A座一层大堂": {
+    "latitude": 32.05280915593814,
+    "longitude": 118.79124320747968,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区仙林大学城文澜路6号中建大厦一层大堂": {
+    "latitude": 32.10296617996765,
+    "longitude": 118.92748327536168,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区中山南路501号通服大厦一层大堂": {
+    "latitude": 32.02643052324305,
+    "longitude": 118.78755359725855,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区中山东路532号金蝶产业园E幢三层青梦家大堂": {
+    "latitude": 32.04470827984389,
+    "longitude": 118.83045873451778,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市秦淮区中山南路189号中住大厦一层大堂": {
+    "latitude": 32.04054952440752,
+    "longitude": 118.79094119716724,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区中央路 284号金谷创客一层 107 号": {
+    "latitude": 32.091588234951736,
+    "longitude": 118.79079603099683,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市玄武区中央路32号联通大厦一层大堂": {
+    "latitude": 32.0685141892799,
+    "longitude": 118.79103219551538,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区安德门大街50号怡化华东研发运营中心A座一层大堂": {
+    "latitude": 31.978501675188834,
+    "longitude": 118.76856808996628,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区西城路300号3幢君泰国际大厦3幢一层大堂": {
+    "latitude": 31.983591740700643,
+    "longitude": 118.74045516987876,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区草场门大街105号江苏教育频道一层大堂": {
+    "latitude": 32.06252632909463,
+    "longitude": 118.74578903850535,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区河西45号地块金融城8号楼101室一层东大堂": {
+    "latitude": 31.994491206340008,
+    "longitude": 118.72474560312025,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "雨花台区软件大道50号南京中兴和泰酒店一层大堂": {
+    "latitude": 31.98162231824623,
+    "longitude": 118.79396049181682,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区嘉陵江东街99号金融城1号楼一层大堂": {
+    "latitude": 31.994899722336942,
+    "longitude": 118.72603395288267,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区太平南路305号江苏钟山宾馆集团江苏饭店商务大楼一层大堂": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市玄武区黄埔路2号黄埔大厦一层大堂": {
+    "latitude": 32.04828412133868,
+    "longitude": 118.81751729618827,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区凤游寺52号悦动新门西体育文化产业园15号楼一层106号": {
+    "latitude": 32.02198047792086,
+    "longitude": 118.77645341573286,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 0,
+      "confidence": 80
+    }
+  },
+  "南京市秦淮区洪武路50号金贸大厦一层A2-2号": {
+    "latitude": 32.04531252692646,
+    "longitude": 118.79347370006097,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区应天大街888号金鹰世界6层F644室": {
+    "latitude": 32.0279567057316,
+    "longitude": 118.74701854925686,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区紫东路1号紫东创意园1幢F4栋一层": {
+    "latitude": 32.085457273577745,
+    "longitude": 118.91930528165994,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区湖南路1号凤凰广场一层10号": {
+    "latitude": 32.074938416875675,
+    "longitude": 118.78955897447902,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区湖景路9号苏宁青创园D栋一层大堂": {
+    "latitude": 32.09675064649749,
+    "longitude": 118.89754490864733,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区江东北路289号银城广场A座一层大堂": {
+    "latitude": 32.061174083073745,
+    "longitude": 118.7456450401321,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区双龙大道1688号江宁金鹰购物中心负一层AB1-00378室": {
+    "latitude": 31.938144191921122,
+    "longitude": 118.82717731432038,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区大钟亭路6号电信营业厅一层大堂": {
+    "latitude": 32.0550423626287,
+    "longitude": 118.79413116986372,
+    "meta": {
+      "status": "ok",
+      "level": "生活服务",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市雨花台区花神大道17号华博智慧园一层大堂": {
+    "latitude": 31.980315727112696,
+    "longitude": 118.78208426416106,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区菲尼克斯路70号总部基地34号楼一层大堂": {
+    "latitude": 31.9379915924396,
+    "longitude": 118.83987935423147,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市玄武区玄武大道699-8号徐庄软件园8幢一层101室": {
+    "latitude": 32.095783419366676,
+    "longitude": 118.88771268534897,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区胜太路99号1号楼一层103-2单元": {
+    "latitude": 31.951437367234316,
+    "longitude": 118.82599918664404,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市雨花台区文竹路8号凯润大厦3号楼一层102室": {
+    "latitude": 31.98024635413279,
+    "longitude": 118.78460562806646,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区龙江路28号深业漫埠一层6室": {
+    "latitude": 32.102270862226625,
+    "longitude": 118.74509401953229,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "鼓楼区湖北路51号南京鼓楼新城吾悦广场负一层中庭": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市鼓楼区南昌路40号长江科技园一层大堂": {
+    "latitude": 32.0890116221742,
+    "longitude": 118.78409583968954,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区永智路5号白下高新技术产业园科技创业研发孵化楼5号楼一层": {
+    "latitude": 32.01839005180632,
+    "longitude": 118.88209504201177,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区白龙江东街22号艺树家工场一层大堂": {
+    "latitude": 31.98974881055588,
+    "longitude": 118.74154355683464,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区凤凰东街150号华润苏果一层": {
+    "latitude": 32.05239470332347,
+    "longitude": 118.7575785796794,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "江宁区双龙大道1698号南京景枫L1层10号": {
+    "latitude": 31.936404374129797,
+    "longitude": 118.82563600172637,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区莫愁路329号越界梦幻城67号楼一层": {
+    "latitude": 32.0440224617942,
+    "longitude": 118.77740337380966,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区龙眠大道568号生命科技小镇7栋一层": {
+    "latitude": 31.932227020960852,
+    "longitude": 118.89913302295844,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市江宁区胜太西路62号纳科汽车生活广场B楼一层": {
+    "latitude": 31.950244163877503,
+    "longitude": 118.80796669166729,
+    "meta": {
+      "status": "ok",
+      "level": "汽车服务",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市玄武区玄武大道108号徐庄曼度广场一层": {
+    "latitude": 32.104562415970015,
+    "longitude": 118.89316971166097,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区行健路16号移动龙江阳光广场一层": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "鼓楼区汉中路140号南京医科大学南门东侧一层": {
+    "latitude": 32.04880012533408,
+    "longitude": 118.78071255164733,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区云南北路49号天星翠琅大厦一层": {
+    "latitude": 32.072023001237994,
+    "longitude": 118.78590574563106,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区软件大道天溯科技园170-1号2栋一层": {
+    "latitude": 31.979699944351562,
+    "longitude": 118.76287076693035,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区虎踞路51号中国移动营业一层大堂": {
+    "latitude": 32.051475127425455,
+    "longitude": 118.76833965087508,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市秦淮区太平南路389号凤凰和睿大厦一层102室": {
+    "latitude": 32.03534794218681,
+    "longitude": 118.79778556650886,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区将军大道9号托乐嘉花园108幢一层114室": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市六合区葛关路818-2号美利广场一层124室": {
+    "latitude": 32.248417546969705,
+    "longitude": 118.75564003638888,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市浦口区江北新区丽景路2号研发大厦A座一层101室": {
+    "latitude": 32.16457404092317,
+    "longitude": 118.7196397244321,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "鼓楼区南通路118号南京滨江世茂4幢一层01号": {
+    "latitude": 32.08501015946561,
+    "longitude": 118.73923545065732,
+    "meta": {
+      "status": "ok",
+      "level": "政府机构",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市秦淮区光华路158号A幢必得科技研发中心一层": {
+    "latitude": 32.025317362715874,
+    "longitude": 118.86885051540322,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区安德门大街21号江苏科技金融大厦一层": {
+    "latitude": 31.9902365132606,
+    "longitude": 118.77019267548107,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区水西门大街272号金基广场一层101室": {
+    "latitude": 32.03957052487292,
+    "longitude": 118.76131526110926,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区云龙山路98号天盛大厦A幢一层04号": {
+    "latitude": 31.99003400594049,
+    "longitude": 118.73912001839928,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市仙林街道纬地路9号江苏生命科技创新园A1区一层": {
+    "latitude": 32.137543405093076,
+    "longitude": 118.9637771535591,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市江北新区星火路9号软件大厦B座一层104室": {
+    "latitude": 32.16876301070217,
+    "longitude": 118.70363659143294,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区卡子门大街99号复地活力广场一层29号": {
+    "latitude": 31.987648213691653,
+    "longitude": 118.81014660964836,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区太平南路1号新世纪广场A幢一层大堂": {
+    "latitude": 32.04675101206707,
+    "longitude": 118.80176209550989,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区应天大街388号晨光1865创意园e1栋一层": {
+    "latitude": 32.013227996082605,
+    "longitude": 118.79456972261369,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区中山北路281号新城市虹桥中心01栋一层01室": {
+    "latitude": 32.08212007865467,
+    "longitude": 118.76982643632466,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区山西路8号金山大厦A座六层": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市江宁区科建路29号有志大厦A座一层101室": {
+    "latitude": 31.933497683478386,
+    "longitude": 118.85513374958805,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市浦口区江北新区星火路15号智芯科技大厦一层": {
+    "latitude": 32.16270315454747,
+    "longitude": 118.7038394288171,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区虎踞关18号-8河海大学一层": {
+    "latitude": 32.06136595084591,
+    "longitude": 118.76602696333964,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "鼓楼区宁海路126号南京师范大学3号门一层": {
+    "latitude": 32.058854424636564,
+    "longitude": 118.7778130011222,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "栖霞区文澜路89号南京理工大学紫金学院五食堂一层": {
+    "latitude": 32.13227286342762,
+    "longitude": 118.94076400368229,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "浦口区学府路8号南京大学金陵学院第一学生餐厅三层教工食堂": {
+    "latitude": 32.1804263792797,
+    "longitude": 118.71550015298102,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区胜利路89号紫金研发创业中心3幢4号楼一层": {
+    "latitude": 31.953668243275462,
+    "longitude": 118.82082620453427,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区石鼓路107号华威大厦一层": {
+    "latitude": 32.04648512358135,
+    "longitude": 118.78444420256632,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "栖霞区仙林大学城羊山北路1号南京工业职业技术学院五号食堂二层": {
+    "latitude": 32.12675700212732,
+    "longitude": 118.94568599923257,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市栖霞区学海路1号金鹰湖滨天地C馆G层": {
+    "latitude": 32.10886213415223,
+    "longitude": 118.93337849510145,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区仙林街道学津路8号高创中心一层大堂": {
+    "latitude": 32.103002731219775,
+    "longitude": 118.9289571252119,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区石杨路116号1幢江苏省住建大厦一层大堂": {
+    "latitude": 32.01229814884172,
+    "longitude": 118.87729728211353,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "鼓楼区虎踞北路15号南京艺术学院44号楼一层可一书店": {
+    "latitude": 32.06917274252847,
+    "longitude": 118.76193994276089,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市雨花台区宁双路19号云密城K栋一层": {
+    "latitude": 31.975875979361124,
+    "longitude": 118.75818224098212,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区大桥南路1号晶典国际大厦底商": {
+    "latitude": 32.092034016467814,
+    "longitude": 118.75989998077829,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "栖霞区仙林大道163号南京大学仙林校区诚园5幢底商": {
+    "latitude": 32.12025541386233,
+    "longitude": 118.96053400117644,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市建邺区江东中路369号新华传媒广场1号楼一层": {
+    "latitude": 31.99668091023233,
+    "longitude": 118.72611776478675,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区中山北路28号江苏商厦底商": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市玄武区珠江路488号未来城A座底商": {
+    "latitude": 32.0540124885094,
+    "longitude": 118.80502860383581,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区升州路熙南里街区15A栋一层": {
+    "latitude": 32.03120260891693,
+    "longitude": 118.78796079914622,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区汉中门大街1号金鹰特惠中心五层": {
+    "latitude": 32.046447554814435,
+    "longitude": 118.77016204326318,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区华侨路26号底商": {
+    "latitude": 32.05275743553813,
+    "longitude": 118.78817324839933,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市玄武区后标营路钟山花园城博雅居会所底商": {
+    "latitude": 32.03569918751167,
+    "longitude": 118.8531576571272,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市鼓楼区广州路188号苏宁环球大厦一层大堂": {
+    "latitude": 32.05712801122188,
+    "longitude": 118.78140397739834,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "栖霞区学林路1号南京师范大学仙林校区中北学院一食堂二层": {
+    "latitude": 32.120330719493815,
+    "longitude": 118.91502988641575,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市江宁区正方中路888号浩鲸科技综合楼一层": {
+    "latitude": 31.845221972447153,
+    "longitude": 118.78465701114163,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市江宁区弘景大道3666号中国传媒大学南广学院三食堂一层中超华城超市": {
+    "latitude": 31.89171411801545,
+    "longitude": 118.89763824258982,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "江宁区南京禄口国际机场T2航站楼出发大厅二层12号": {
+    "latitude": 31.737768181050928,
+    "longitude": 118.8865813593897,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区建宁路65号金川科技园20栋一层1号": {
+    "latitude": 32.097338334402494,
+    "longitude": 118.77286279877893,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区北京东路36号兰园集贸市场一层A区2号": {
+    "latitude": 32.06232077002799,
+    "longitude": 118.80912317018084,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区瑞金路街道蓝旗街188号紫荆大厦一层": {
+    "latitude": 32.03240094797317,
+    "longitude": 118.83005755127702,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区花神大道21号德讯科技大厦一层大堂": {
+    "latitude": 31.979704998044525,
+    "longitude": 118.78258695592444,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区宏运大道4597号景祥大厦B区底商": {
+    "latitude": 31.97236804164075,
+    "longitude": 118.86505643225127,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区西格玛广场新地一期一层大堂": {
+    "latitude": 32.00270733784716,
+    "longitude": 118.7325045373016,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区水佑岗路6号万谷京东云智慧产业园一层大堂": {
+    "latitude": 32.07470902080553,
+    "longitude": 118.76930200556792,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区中央路302号垠坤创意中央24号楼底商": {
+    "latitude": 32.09332890410357,
+    "longitude": 118.79156462119116,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区竹山路68号江宁万达百货商场一层": {
+    "latitude": 31.95711371562584,
+    "longitude": 118.84986716404416,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区所街171号悦府15号楼底商": {
+    "latitude": 32.02846601425156,
+    "longitude": 118.75033302709703,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市玄武区花园路8号春风泊寓一层": {
+    "latitude": 32.085143850334795,
+    "longitude": 118.83071250582434,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "鼓楼区中山路321号南京鼓楼医院新大楼急诊部三层CD区": {
+    "latitude": 32.062502996213254,
+    "longitude": 118.78957855753914,
+    "meta": {
+      "status": "ok",
+      "level": "医疗",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市玄武区红山路88号常发广场1号楼一层": {
+    "latitude": 32.09209619168746,
+    "longitude": 118.81632650240425,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区永乐路111号万象都荟商业广场底商": {
+    "latitude": 32.00436558597765,
+    "longitude": 118.80318995211799,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市江宁区东山街道金源路4号绿地之窗商务广场1幢一层110室": {
+    "latitude": 31.974132288580908,
+    "longitude": 118.79851067871651,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市迈皋桥街道经五路1号弘阳家居一层2号门A1070号底商": {
+    "latitude": 32.12107949105984,
+    "longitude": 118.84015172046209,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区太平南路450号斯亚财富中心一层大堂": {
+    "latitude": 32.03432197664663,
+    "longitude": 118.79636354888656,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区兴智路6号兴智科技园B座一层大堂": {
+    "latitude": 32.14320291351762,
+    "longitude": 118.88553366567342,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区河西大街71号明基医院门诊楼一层大堂左侧": {
+    "latitude": 31.994035145362467,
+    "longitude": 118.73714635136331,
+    "meta": {
+      "status": "ok",
+      "level": "医疗",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市栖霞区仙林大道181号万达茂二层": {
+    "latitude": 32.12727080061614,
+    "longitude": 118.99569269070092,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区东吉大道1号13号楼一层": {
+    "latitude": 31.834399119751982,
+    "longitude": 118.77957718331325,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市建邺区奥体大街68号新城科技园国际研发总部园4A一层大堂": {
+    "latitude": 32.00162611497191,
+    "longitude": 118.74870206361312,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区中山南路2号东方福来德四层": {
+    "latitude": 32.04687504208386,
+    "longitude": 118.78977447797087,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市浦口区大桥北路48号大洋百货商场一层": {
+    "latitude": 32.14455401014363,
+    "longitude": 118.73023802266937,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区太清路益家生活广场一层": {
+    "latitude": 31.974101964559683,
+    "longitude": 118.70570790427786,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区嘉陵江东街18号国家广告产业园05栋一层大堂": {
+    "latitude": 31.98851154987539,
+    "longitude": 118.74186308410455,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区白龙江东街8号新城科技园综合体A区三栋一层大堂": {
+    "latitude": 31.98837580236526,
+    "longitude": 118.74536701457676,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区正洪街18号东宇大厦一禾广场一层": {
+    "latitude": 32.045292709338774,
+    "longitude": 118.7926893895202,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "栖霞区文澜路99号南京信息职业技术学院第二食堂二层": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市建邺区江东中路222号地铁2号线奥体东站负一层33号": {
+    "latitude": 32.0133359214295,
+    "longitude": 118.73061306521979,
+    "meta": {
+      "status": "ok",
+      "level": "商圈",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区白龙江东街9号新城基金大厦一层大堂": {
+    "latitude": 31.986470339174502,
+    "longitude": 118.74409573261904,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "栖霞区文苑路3号南京财经大学仙林校区图书馆一层": {
+    "latitude": 32.1147999846995,
+    "longitude": 118.93058970564573,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市栖霞区文苑路8号东城汇B栋一层": {
+    "latitude": 32.10308952126761,
+    "longitude": 118.91573550539384,
+    "meta": {
+      "status": "ok",
+      "level": "商圈",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "栖霞区文苑路9号南京邮电大学仙林校区图书馆一层G01室": {
+    "latitude": 32.118202107101666,
+    "longitude": 118.93818416008818,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "鼓楼区江东街道江东北路319号华彩荟南京店一层": {
+    "latitude": 32.06664934612214,
+    "longitude": 118.74528212470607,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "葛关路625号南京科技职业学院第一食堂二层": {
+    "latitude": 32.240742982713336,
+    "longitude": 118.75814882401714,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市浦口区惠达路6号北斗大厦写字楼大堂一层": {
+    "latitude": 32.16809723578309,
+    "longitude": 118.70524653456793,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区御道街29号世纪华联购物中心一层": {
+    "latitude": 32.038918107714316,
+    "longitude": 118.82369754826637,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市栖霞区和燕路348号沃尔玛超市一层": {
+    "latitude": 32.112965837593556,
+    "longitude": 118.8186452085866,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区建宁路8号玉桥商业广场1G012-1号": {
+    "latitude": 32.09740631783182,
+    "longitude": 118.78756213116091,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区中华路255号华泰证券一层": {
+    "latitude": 32.027557904832626,
+    "longitude": 118.7907938750636,
+    "meta": {
+      "status": "ok",
+      "level": "金融",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市栖霞区晓庄中心村130号金陵科技学院第一食堂二层": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市玄武区中山东路145号全民健身中心一层104室": {
+    "latitude": 32.048084574521944,
+    "longitude": 118.7973035357722,
+    "meta": {
+      "status": "ok",
+      "level": "休闲娱乐",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "浦口区宁六路217号南京信息工程大学西苑第一食堂一层": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市玄武区苏宁大道9号苏宁易购广场负二层C102商铺": {
+    "latitude": 32.09133632039091,
+    "longitude": 118.8978740477862,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区中山路55号一层": {
+    "latitude": 32.0507029029334,
+    "longitude": 118.78984912715876,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "栖霞区笃学路南京师范大学仙林校区西区大众书店二层": {
+    "latitude": 32.11107232016998,
+    "longitude": 118.92144576402912,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市雨花台区英才路2号菁英体育中心一层大堂": {
+    "latitude": 31.945351238388998,
+    "longitude": 118.75083212563837,
+    "meta": {
+      "status": "ok",
+      "level": "生活服务",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市雨花台区三鸿路6号江苏国家数字出版基地一层大堂": {
+    "latitude": 31.937317914763256,
+    "longitude": 118.64031782078169,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市浦口区佛寺三宫48号江苏警官学院训练中心一层": {
+    "latitude": 32.09816208518045,
+    "longitude": 118.66287112806793,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市江宁区弘景大道1号工程学院生活服务中心一层": {
+    "latitude": 31.928509009302026,
+    "longitude": 118.88784374812289,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市江宁区弘景大道99号金陵科技学院北区第一食堂二层": {
+    "latitude": 31.904467592401147,
+    "longitude": 118.90545898019025,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市六合区大厂卸甲甸幸福路8号新办公大楼一层大堂": {
+    "latitude": 32.20747281175262,
+    "longitude": 118.75498220726392,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区马群街道马群街169号二层E1E2号": {
+    "latitude": 32.05198131995538,
+    "longitude": 118.8944056003816,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区淳化街道芝行路161号一层": {
+    "latitude": 31.944175879859618,
+    "longitude": 118.93957347938992,
+    "meta": {
+      "status": "ok",
+      "level": "乡镇",
+      "precise": 0,
+      "confidence": 25
+    }
+  },
+  "南京市栖霞区科创路1号金港一期配套用房一层": {
+    "latitude": 32.128372999748834,
+    "longitude": 118.91154203561216,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市六合区雄州街道龙津路44号紫晶国际购物广场一层": {
+    "latitude": 32.345884533405695,
+    "longitude": 118.84945169774579,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区东南大学路2号东南大学九龙湖校区橘园餐厅一层": {
+    "latitude": 31.889269794719745,
+    "longitude": 118.81960828192386,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "栖霞区仙林大学城仙林大道100号南京审计大学金审学院学生第四食堂一层": {
+    "latitude": 32.093733992419935,
+    "longitude": 118.92329995643226,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "浦口区宁六路219号南京信息工程大学东苑食堂三层": {
+    "latitude": 32.21228598545819,
+    "longitude": 118.72652074463853,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区苏源大道19号九龙湖企业园C2栋一层大堂": {
+    "latitude": 31.918130640265733,
+    "longitude": 118.8176815064355,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市雨花台区长虹路222号德盈国际广场1幢一层": {
+    "latitude": 32.014899523333135,
+    "longitude": 118.77175518808512,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市山西路8号金山大厦B座苏宁易购一层底商": {
+    "latitude": 32.074400073329144,
+    "longitude": 118.77845771498673,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区玄武大道699-18号先声药业8号楼一层大堂": {
+    "latitude": 32.0951075472123,
+    "longitude": 118.89417805959593,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市雨花台区软件大道118号B3栋一层": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市鼓楼区中山北路281号虹桥新城市广场一层中庭": {
+    "latitude": 32.082734248625236,
+    "longitude": 118.76897726812606,
+    "meta": {
+      "status": "ok",
+      "level": "休闲娱乐",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市江宁区江宁大学城龙眠大道629号交通职业技术学院第一食堂一层": {
+    "latitude": 31.91817538805172,
+    "longitude": 118.9228358918058,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "秦淮区中山东路18号南京新百B座一层": {
+    "latitude": 32.04741722189206,
+    "longitude": 118.79165013987571,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区仙林街道学衡路5号水平方美食广场二层S-29商铺": {
+    "latitude": 32.099473020287284,
+    "longitude": 118.92293596303962,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区东山街道潭园西路199号二层A-2F-C04": {
+    "latitude": 31.944076987883264,
+    "longitude": 118.85011698280648,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区淳化街道中国药科大学江宁校区图书馆二层": {
+    "latitude": 31.90772304149415,
+    "longitude": 118.92223088304485,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "秦淮区五老村街道洪武北路98号南京图书发行大厦底商": {
+    "latitude": 32.04735050166164,
+    "longitude": 118.793882429068,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区佛城东路8号河海大学江宁校区生活组团二三期食堂四层": {
+    "latitude": 31.923603575827148,
+    "longitude": 118.7948822431006,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市江宁区淳化街道江苏海事职业技术学院念稼餐厅二层": {
+    "latitude": 31.924348379627663,
+    "longitude": 118.91368727900054,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市雨花台区铁心桥街道龙西路310号三江学院主校区5号食堂二层": {
+    "latitude": 31.96380239227237,
+    "longitude": 118.7598607248275,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市雨花台区铁心桥街道软件大道109号雨花客厅3号楼一层大堂": {
+    "latitude": 31.981825610009025,
+    "longitude": 118.77238714601138,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区宏运大道4597号景祥大厦底商": {
+    "latitude": 31.97236804164075,
+    "longitude": 118.86505643225127,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区永丰大道36号天安数码城2栋一层103": {
+    "latitude": 32.01729363129915,
+    "longitude": 118.87604441541878,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "江宁区南京医科大学江宁校区青教公寓南侧一层": {
+    "latitude": 31.838273429148256,
+    "longitude": 118.59499157051198,
+    "meta": {
+      "status": "ok",
+      "level": "乡镇",
+      "precise": 0,
+      "confidence": 25
+    }
+  },
+  "栖霞区文苑路1号南京师范大学仙林校区北区学生餐厅三层": {
+    "latitude": 32.11209015283739,
+    "longitude": 118.9195002139556,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市建邺区江东中路98号万达广场苏宁易购负一层WBB25号": {
+    "latitude": 32.03826798151284,
+    "longitude": 118.7438080053642,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市溧水区高平大街55号万达广场二层2029铺": {
+    "latitude": 31.632469597260236,
+    "longitude": 119.05371810630409,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区中山东路532-2号金蝶软件园E栋一层协办空间": {
+    "latitude": 32.04341483934796,
+    "longitude": 118.82999134616094,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市江宁区润发路9号南方时代广场一层大堂": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市江宁区双龙大道1539号21世纪太阳城购物中心负一层": {
+    "latitude": 31.933377175850584,
+    "longitude": 118.83080655841124,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区弘景大道3601号晓庄学院方山校区大学生服务中心二层": {
+    "latitude": 31.89902899116753,
+    "longitude": 118.9082108492895,
+    "meta": {
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "栖霞区栖霞大道163号南京大学仙林校区四组团门面房南京大学小移人家营业厅一层": {
+    "latitude": 32.15188177310466,
+    "longitude": 118.94824877502198,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 0,
+      "confidence": 80
+    }
+  },
+  "雨花台区凤信路6号金证南京科技园3号楼一层大堂": {
+    "latitude": 31.978447998118803,
+    "longitude": 118.78536298944192,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区竹山路68号万达广场苏宁易购店一层": {
+    "latitude": 31.956842969105598,
+    "longitude": 118.84994702340398,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "江宁区天元东路388号南京义乌小商品城A区9幢一层12号": {
+    "latitude": 31.944857090220754,
+    "longitude": 118.88386138013605,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市高淳区凤山西路60号宝龙城市广场一层M-L1-017-2商铺": {
+    "latitude": 31.346772290358047,
+    "longitude": 118.87939284920722,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市浦口区浦口大道6号明发财富中心5栋一层104号": {
+    "latitude": 32.06913900795061,
+    "longitude": 118.66595195664496,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市玄武区珠江路239号底商": {
+    "latitude": 32.055822812888515,
+    "longitude": 118.79787557672095,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市栖霞区和悦街5号好邻里生活中心丁家庄店一层": {
+    "latitude": 32.123917182662645,
+    "longitude": 118.85686667074735,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区学海路1号金鹰湖滨天地B区四层": {
+    "latitude": 32.10943047504406,
+    "longitude": 118.93322964587844,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "建邺区奥体大街69号南京新城科技园04栋底商": {
+    "latitude": 31.998360780482674,
+    "longitude": 118.74626523025618,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市江宁区胜太路8号同曦假日百货负一层BB152": {
+    "latitude": 31.950072895247857,
+    "longitude": 118.81561486477925,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市秦淮区淮海路88号苏宁雅悦一层大堂": {
+    "latitude": 32.04308604358715,
+    "longitude": 118.7932340321509,
+    "meta": {
+      "status": "ok",
+      "level": "宾馆",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市浦口区湖滨路2号桃花里商业街05-01-04栋一层106室": {
+    "latitude": 32.20621217432042,
+    "longitude": 118.74233164025856,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区集庆门大街270号苏宁睿城慧谷E06一层A01号": {
+    "latitude": 32.038348558848085,
+    "longitude": 118.72949162062112,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "栖霞区文苑路9号南京邮电大学仙林校区3号教学楼前": {
+    "latitude": 32.11198647389209,
+    "longitude": 118.93805246850043,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市雨花台区小行路16号万谷移动互联科技园6号楼一层107室": {
+    "latitude": 31.998827843657754,
+    "longitude": 118.76573824794873,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市浦口区浦珠北路1号万象汇负一层Y117-Y118": {
+    "latitude": 32.13063904773916,
+    "longitude": 118.73689599361767,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市栖霞区恒泰路8号汇智科技园B2栋一层": {
+    "latitude": 32.1592482973402,
+    "longitude": 118.90346698772187,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区云龙山路80号天泽星网大厦一层": {
+    "latitude": 31.996439373217953,
+    "longitude": 118.74542827901254,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市雨花台区民智路11号喜马拉雅A,B栋一层大堂": {
+    "latitude": null,
+    "longitude": null,
+    "meta": {
+      "status": "error",
+      "baidu_status": 401,
+      "message": "当前并发量已经超过约定并发配额，限制访问"
+    }
+  },
+  "南京市鼓楼区集庆门大街272号苏宁慧谷E07一层102室": {
+    "latitude": 32.03815909104004,
+    "longitude": 118.72792740123661,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区上元大街327号凤凰创客空间大厦一层105室": {
+    "latitude": 31.958318700193743,
+    "longitude": 118.84480386503716,
+    "meta": {
+      "status": "ok",
+      "level": "休闲娱乐",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市建邺区庐山路168号新地中心二期E区四层": {
+    "latitude": 32.00363866124834,
+    "longitude": 118.73385262438042,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区清水亭西路51号俊杰科创大厦1层大堂": {
+    "latitude": 31.921933357402175,
+    "longitude": 118.82953285102863,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区江东中路229号欧洲城B座一层大堂": {
+    "latitude": 32.01508559537089,
+    "longitude": 118.7416604263815,
+    "meta": {
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70
+    }
+  },
+  "南京市建邺区江东中路河西万达中心A座102-2号": {
+    "latitude": 32.03555042495193,
+    "longitude": 118.74447787178299,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "浦口区华创路南京软件园腾飞大厦4号楼一层103号": {
+    "latitude": 32.04439517466815,
+    "longitude": 118.64925227755337,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区龙蟠中路216号金城大厦A区一层大堂": {
+    "latitude": 32.04279030237403,
+    "longitude": 118.81099308293041,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "秦淮区菱角市66号南京国家领军人才创业园07栋二层": {
+    "latitude": 32.03250999841362,
+    "longitude": 118.77613227151303,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市玄武区友谊河路100号品硕广场一层S05号": {
+    "latitude": 32.02617176916821,
+    "longitude": 118.85912941249644,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市建邺区梦都大街150号建筑师工社一层大堂": {
+    "latitude": 32.01841194181209,
+    "longitude": 118.73353453439934,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区珠江路88号新世界中心一层102室": {
+    "latitude": 32.05575724645049,
+    "longitude": 118.7946294599301,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区石鼓路42号建华大厦一层大堂": {
+    "latitude": 32.04564628811896,
+    "longitude": 118.78848999092216,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市秦淮区健康路3号水平方负一层15A号": {
+    "latitude": 32.02957362604877,
+    "longitude": 118.79346929836397,
+    "meta": {
+      "status": "ok",
+      "level": "餐饮",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市玄武区龙蟠路155号-9紫金联合立方广场5幢一层": {
+    "latitude": 32.08574392716983,
+    "longitude": 118.8137247401557,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市鼓楼区建宁路300号大观·天地MALL一层": {
+    "latitude": 32.09866266382163,
+    "longitude": 118.75011958970785,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市建邺区江东中路98号建邺万达百货商场一层1378号": {
+    "latitude": 32.03834970667285,
+    "longitude": 118.74284502185749,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区洪武路359号福鑫国际大厦一层104-1室": {
+    "latitude": 32.03608394880282,
+    "longitude": 118.79328568471773,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市秦淮区永丰大道36号天安数码城2栋一层102、103单元": {
+    "latitude": 32.01729363129915,
+    "longitude": 118.87604441541878,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区秣周东路12号悠谷1期3号楼协同大楼未来网络小镇一层大堂": {
+    "latitude": 31.874597726297733,
+    "longitude": 118.83411780235157,
+    "meta": {
+      "status": "ok",
+      "level": "工业园区",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市玄武区石婆婆庵杨将军巷9号曼度文化广场一层南13-13A": {
+    "latitude": 32.05209669717989,
+    "longitude": 118.79981708441966,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 0,
+      "confidence": 80
+    }
+  },
+  "南京市鼓楼区凤凰街道新城市广场三层": {
+    "latitude": 32.06183735630207,
+    "longitude": 118.74776944283265,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区天元东路388号义乌小商品城A区6栋106室": {
+    "latitude": 31.944778344922973,
+    "longitude": 118.88493997556188,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市溧水区经济开发区创业路89号": {
+    "latitude": 31.722050297185575,
+    "longitude": 118.98636010492721,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市浦口区珠江镇凤凰大街107室": {
+    "latitude": 32.06373144512113,
+    "longitude": 118.6323967424558,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区高新园龙眠大道660号新一商业广场5幢114号": {
+    "latitude": 31.919199064275638,
+    "longitude": 118.910321058763,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市江宁区经贸学院路8号保利樾广场1栋102室商场外一层店铺": {
+    "latitude": 31.939133554341296,
+    "longitude": 118.89433822746837,
+    "meta": {
+      "status": "ok",
+      "level": "楼号",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区中山门大街301号森林摩尔商业街负一楼37号": {
+    "latitude": 32.044370153753334,
+    "longitude": 118.87306123265068,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江宁区禄口街道航金大道金城商业街5-013号底商": {
+    "latitude": 31.707277973096758,
+    "longitude": 118.88820001608815,
+    "meta": {
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市江北新区浦滨路150号中科创新广场5栋一层大堂": {
+    "latitude": 32.0785968193686,
+    "longitude": 118.67312726173645,
+    "meta": {
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75
+    }
+  },
+  "南京市玄武区钟山风景区紫岚里游客中心旁": {
+    "latitude": 32.06929138716847,
+    "longitude": 118.85940636008516,
+    "meta": {
+      "status": "ok",
+      "level": "旅游景点",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市雨花台区安德门大街52号A栋超级物种内": {
+    "latitude": 31.976335500750274,
+    "longitude": 118.76872044258076,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市建邺区江东中路329号金奥国际中心负一层145-2室": {
+    "latitude": 32.00464101360387,
+    "longitude": 118.73216695409094,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "南京市鼓楼区中山北路6号绿地购物中心B1M层": {
+    "latitude": 32.06744224191819,
+    "longitude": 118.7903181324655,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  },
+  "南京市秦淮区汉中路27号友谊广场BF层05号": {
+    "latitude": 32.04760804760108,
+    "longitude": 118.78780557195411,
+    "meta": {
+      "status": "ok",
+      "level": "NoClass",
+      "precise": 0,
+      "confidence": 50
+    }
+  },
+  "秦淮区中山南路18号南京国际贸易中心一层": {
+    "latitude": 32.03185967321475,
+    "longitude": 118.78894722842674,
+    "meta": {
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80
+    }
+  }
+}
