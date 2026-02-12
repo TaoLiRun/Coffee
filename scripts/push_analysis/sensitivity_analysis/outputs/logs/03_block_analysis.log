@@ -1,0 +1,439 @@
+2026-02-05 21:20:13,491 - INFO - Starting Block Analysis
+2026-02-05 21:20:13,491 - INFO - Loading preprocessed data...
+2026-02-05 21:20:16,442 - INFO - Loaded 51,847,472 records with 9 columns.
+2026-02-05 21:20:16,760 - INFO - ================================================================================
+2026-02-05 21:20:16,761 - INFO - Identifying Periods via data_source Transitions
+2026-02-05 21:20:16,761 - INFO - ================================================================================
+2026-02-05 21:26:01,620 - INFO - Identified periods for 779,744 customers
+2026-02-05 21:26:01,620 - INFO - Maximum active periods: 13
+2026-02-05 21:26:01,620 - INFO - Maximum dormant periods: 12
+2026-02-05 21:26:07,664 - INFO - Calculating Active Period Metrics...
+2026-02-05 22:16:39,668 - INFO - --- Stats for push_group=0, Period=1 (119978 customers) ---
+2026-02-05 22:16:39,677 - INFO - avg_order_value | Mean:    44.09 | Std:    37.01
+2026-02-05 22:16:39,677 - INFO - total_spend     | Mean:   213.90 | Std:  1015.32
+2026-02-05 22:16:39,678 - INFO - n_orders        | Mean:     5.38 | Std:    15.27
+2026-02-05 22:16:39,678 - INFO - order_per_week  | Mean:     1.18 | Std:     0.62
+2026-02-05 22:16:39,678 - INFO - weeks_active    | Mean:     4.63 | Std:     9.21
+2026-02-05 22:16:39,678 - INFO - unique_stores   | Mean:     1.57 | Std:     1.50
+2026-02-05 22:16:39,678 - INFO - coupon_usage_rate | Mean:     0.75 | Std:     0.38
+2026-02-05 22:16:39,678 - INFO - avg_discount    | Mean:     0.26 | Std:     0.10
+2026-02-05 22:16:45,598 - INFO - --- Stats for push_group=0, Period=2 (77044 customers) ---
+2026-02-05 22:16:45,606 - INFO - avg_order_value | Mean:    45.14 | Std:    36.14
+2026-02-05 22:16:45,606 - INFO - total_spend     | Mean:   225.35 | Std:   566.26
+2026-02-05 22:16:45,606 - INFO - n_orders        | Mean:     5.47 | Std:    13.88
+2026-02-05 22:16:45,606 - INFO - order_per_week  | Mean:     1.14 | Std:     0.57
+2026-02-05 22:16:45,606 - INFO - weeks_active    | Mean:     4.90 | Std:     8.78
+2026-02-05 22:16:45,606 - INFO - unique_stores   | Mean:     1.66 | Std:     1.54
+2026-02-05 22:16:45,606 - INFO - coupon_usage_rate | Mean:     0.76 | Std:     0.37
+2026-02-05 22:16:45,606 - INFO - avg_discount    | Mean:     0.26 | Std:     0.09
+2026-02-05 22:16:45,609 - INFO - Push Sensitivity (56856 with push data):
+2026-02-05 22:16:45,609 - INFO -   Avg days from push: 6.10
+2026-02-05 22:16:45,609 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:45,609 - INFO -   Used deeper discount rate: 0.8282
+2026-02-05 22:16:49,812 - INFO - --- Stats for push_group=0, Period=3 (54569 customers) ---
+2026-02-05 22:16:49,820 - INFO - avg_order_value | Mean:    45.84 | Std:    34.11
+2026-02-05 22:16:49,821 - INFO - total_spend     | Mean:   208.69 | Std:   438.43
+2026-02-05 22:16:49,821 - INFO - n_orders        | Mean:     4.91 | Std:    10.52
+2026-02-05 22:16:49,821 - INFO - order_per_week  | Mean:     1.13 | Std:     0.56
+2026-02-05 22:16:49,821 - INFO - weeks_active    | Mean:     4.63 | Std:     7.42
+2026-02-05 22:16:49,821 - INFO - unique_stores   | Mean:     1.65 | Std:     1.40
+2026-02-05 22:16:49,821 - INFO - coupon_usage_rate | Mean:     0.75 | Std:     0.37
+2026-02-05 22:16:49,821 - INFO - avg_discount    | Mean:     0.26 | Std:     0.08
+2026-02-05 22:16:49,823 - INFO - Push Sensitivity (38823 with push data):
+2026-02-05 22:16:49,823 - INFO -   Avg days from push: 4.86
+2026-02-05 22:16:49,824 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:49,824 - INFO -   Used deeper discount rate: 0.8474
+2026-02-05 22:16:52,645 - INFO - --- Stats for push_group=0, Period=4 (36862 customers) ---
+2026-02-05 22:16:52,650 - INFO - avg_order_value | Mean:    46.87 | Std:    37.23
+2026-02-05 22:16:52,650 - INFO - total_spend     | Mean:   194.74 | Std:   364.15
+2026-02-05 22:16:52,650 - INFO - n_orders        | Mean:     4.45 | Std:     8.33
+2026-02-05 22:16:52,650 - INFO - order_per_week  | Mean:     1.13 | Std:     0.56
+2026-02-05 22:16:52,651 - INFO - weeks_active    | Mean:     4.35 | Std:     6.39
+2026-02-05 22:16:52,651 - INFO - unique_stores   | Mean:     1.65 | Std:     1.31
+2026-02-05 22:16:52,651 - INFO - coupon_usage_rate | Mean:     0.74 | Std:     0.37
+2026-02-05 22:16:52,651 - INFO - avg_discount    | Mean:     0.26 | Std:     0.08
+2026-02-05 22:16:52,652 - INFO - Push Sensitivity (25539 with push data):
+2026-02-05 22:16:52,652 - INFO -   Avg days from push: 4.42
+2026-02-05 22:16:52,652 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:52,652 - INFO -   Used deeper discount rate: 0.8600
+2026-02-05 22:16:54,415 - INFO - --- Stats for push_group=0, Period=5 (22695 customers) ---
+2026-02-05 22:16:54,419 - INFO - avg_order_value | Mean:    46.99 | Std:    35.32
+2026-02-05 22:16:54,420 - INFO - total_spend     | Mean:   175.40 | Std:   281.65
+2026-02-05 22:16:54,420 - INFO - n_orders        | Mean:     3.95 | Std:     6.37
+2026-02-05 22:16:54,420 - INFO - order_per_week  | Mean:     1.12 | Std:     0.54
+2026-02-05 22:16:54,420 - INFO - weeks_active    | Mean:     3.99 | Std:     5.46
+2026-02-05 22:16:54,420 - INFO - unique_stores   | Mean:     1.63 | Std:     1.25
+2026-02-05 22:16:54,420 - INFO - coupon_usage_rate | Mean:     0.75 | Std:     0.37
+2026-02-05 22:16:54,420 - INFO - avg_discount    | Mean:     0.26 | Std:     0.08
+2026-02-05 22:16:54,421 - INFO - Push Sensitivity (15259 with push data):
+2026-02-05 22:16:54,421 - INFO -   Avg days from push: 4.26
+2026-02-05 22:16:54,421 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:54,421 - INFO -   Used deeper discount rate: 0.8756
+2026-02-05 22:16:55,383 - INFO - --- Stats for push_group=0, Period=6 (12266 customers) ---
+2026-02-05 22:16:55,388 - INFO - avg_order_value | Mean:    47.26 | Std:    37.61
+2026-02-05 22:16:55,388 - INFO - total_spend     | Mean:   154.52 | Std:   235.72
+2026-02-05 22:16:55,388 - INFO - n_orders        | Mean:     3.41 | Std:     4.96
+2026-02-05 22:16:55,388 - INFO - order_per_week  | Mean:     1.12 | Std:     0.55
+2026-02-05 22:16:55,388 - INFO - weeks_active    | Mean:     3.57 | Std:     4.70
+2026-02-05 22:16:55,388 - INFO - unique_stores   | Mean:     1.58 | Std:     1.13
+2026-02-05 22:16:55,388 - INFO - coupon_usage_rate | Mean:     0.74 | Std:     0.38
+2026-02-05 22:16:55,388 - INFO - avg_discount    | Mean:     0.26 | Std:     0.08
+2026-02-05 22:16:55,389 - INFO - Push Sensitivity (7987 with push data):
+2026-02-05 22:16:55,389 - INFO -   Avg days from push: 3.91
+2026-02-05 22:16:55,389 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:55,389 - INFO -   Used deeper discount rate: 0.8902
+2026-02-05 22:16:55,848 - INFO - --- Stats for push_group=0, Period=7 (5697 customers) ---
+2026-02-05 22:16:55,853 - INFO - avg_order_value | Mean:    45.51 | Std:    33.07
+2026-02-05 22:16:55,853 - INFO - total_spend     | Mean:   134.39 | Std:   196.09
+2026-02-05 22:16:55,853 - INFO - n_orders        | Mean:     2.99 | Std:     4.13
+2026-02-05 22:16:55,854 - INFO - order_per_week  | Mean:     1.11 | Std:     0.52
+2026-02-05 22:16:55,854 - INFO - weeks_active    | Mean:     3.11 | Std:     3.92
+2026-02-05 22:16:55,854 - INFO - unique_stores   | Mean:     1.51 | Std:     1.02
+2026-02-05 22:16:55,854 - INFO - coupon_usage_rate | Mean:     0.74 | Std:     0.39
+2026-02-05 22:16:55,854 - INFO - avg_discount    | Mean:     0.25 | Std:     0.07
+2026-02-05 22:16:55,855 - INFO - Push Sensitivity (3577 with push data):
+2026-02-05 22:16:55,855 - INFO -   Avg days from push: 3.40
+2026-02-05 22:16:55,855 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:55,855 - INFO -   Used deeper discount rate: 0.9119
+2026-02-05 22:16:56,062 - INFO - --- Stats for push_group=0, Period=8 (2171 customers) ---
+2026-02-05 22:16:56,066 - INFO - avg_order_value | Mean:    45.97 | Std:    40.00
+2026-02-05 22:16:56,066 - INFO - total_spend     | Mean:   113.60 | Std:   171.01
+2026-02-05 22:16:56,066 - INFO - n_orders        | Mean:     2.51 | Std:     3.22
+2026-02-05 22:16:56,066 - INFO - order_per_week  | Mean:     1.12 | Std:     0.52
+2026-02-05 22:16:56,066 - INFO - weeks_active    | Mean:     2.59 | Std:     3.18
+2026-02-05 22:16:56,066 - INFO - unique_stores   | Mean:     1.41 | Std:     0.85
+2026-02-05 22:16:56,066 - INFO - coupon_usage_rate | Mean:     0.73 | Std:     0.40
+2026-02-05 22:16:56,067 - INFO - avg_discount    | Mean:     0.24 | Std:     0.07
+2026-02-05 22:16:56,067 - INFO - Push Sensitivity (1270 with push data):
+2026-02-05 22:16:56,067 - INFO -   Avg days from push: 2.93
+2026-02-05 22:16:56,067 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:56,067 - INFO -   Used deeper discount rate: 0.9213
+2026-02-05 22:16:56,151 - INFO - --- Stats for push_group=0, Period=9 (700 customers) ---
+2026-02-05 22:16:56,156 - INFO - avg_order_value | Mean:    44.75 | Std:    40.16
+2026-02-05 22:16:56,156 - INFO - total_spend     | Mean:    95.16 | Std:   123.92
+2026-02-05 22:16:56,156 - INFO - n_orders        | Mean:     2.13 | Std:     2.45
+2026-02-05 22:16:56,157 - INFO - order_per_week  | Mean:     1.11 | Std:     0.47
+2026-02-05 22:16:56,157 - INFO - weeks_active    | Mean:     2.18 | Std:     2.60
+2026-02-05 22:16:56,157 - INFO - unique_stores   | Mean:     1.32 | Std:     0.67
+2026-02-05 22:16:56,157 - INFO - coupon_usage_rate | Mean:     0.68 | Std:     0.42
+2026-02-05 22:16:56,157 - INFO - avg_discount    | Mean:     0.23 | Std:     0.07
+2026-02-05 22:16:56,157 - INFO - Push Sensitivity (417 with push data):
+2026-02-05 22:16:56,158 - INFO -   Avg days from push: 2.85
+2026-02-05 22:16:56,158 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:56,158 - INFO -   Used deeper discount rate: 0.9544
+2026-02-05 22:16:56,199 - INFO - --- Stats for push_group=0, Period=10 (174 customers) ---
+2026-02-05 22:16:56,203 - INFO - avg_order_value | Mean:    44.41 | Std:    34.08
+2026-02-05 22:16:56,203 - INFO - total_spend     | Mean:    73.47 | Std:    81.61
+2026-02-05 22:16:56,203 - INFO - n_orders        | Mean:     1.66 | Std:     1.41
+2026-02-05 22:16:56,203 - INFO - order_per_week  | Mean:     1.09 | Std:     0.40
+2026-02-05 22:16:56,203 - INFO - weeks_active    | Mean:     1.66 | Std:     1.51
+2026-02-05 22:16:56,203 - INFO - unique_stores   | Mean:     1.17 | Std:     0.56
+2026-02-05 22:16:56,203 - INFO - coupon_usage_rate | Mean:     0.66 | Std:     0.44
+2026-02-05 22:16:56,203 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-05 22:16:56,204 - INFO - Push Sensitivity (103 with push data):
+2026-02-05 22:16:56,204 - INFO -   Avg days from push: 2.59
+2026-02-05 22:16:56,204 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:16:56,204 - INFO -   Used deeper discount rate: 0.9320
+2026-02-05 22:17:46,195 - INFO - --- Stats for push_group=1, Period=1 (659766 customers) ---
+2026-02-05 22:17:46,235 - INFO - avg_order_value | Mean:    45.09 | Std:    36.38
+2026-02-05 22:17:46,235 - INFO - total_spend     | Mean:   138.57 | Std:   400.13
+2026-02-05 22:17:46,235 - INFO - n_orders        | Mean:     3.40 | Std:    10.09
+2026-02-05 22:17:46,235 - INFO - order_per_week  | Mean:     1.16 | Std:     0.57
+2026-02-05 22:17:46,236 - INFO - weeks_active    | Mean:     3.07 | Std:     6.43
+2026-02-05 22:17:46,236 - INFO - unique_stores   | Mean:     1.33 | Std:     1.07
+2026-02-05 22:17:46,236 - INFO - coupon_usage_rate | Mean:     0.72 | Std:     0.42
+2026-02-05 22:17:46,236 - INFO - avg_discount    | Mean:     0.26 | Std:     0.11
+2026-02-05 22:18:10,101 - INFO - --- Stats for push_group=1, Period=2 (310174 customers) ---
+2026-02-05 22:18:10,118 - INFO - avg_order_value | Mean:    44.96 | Std:    36.12
+2026-02-05 22:18:10,118 - INFO - total_spend     | Mean:   166.88 | Std:   419.82
+2026-02-05 22:18:10,118 - INFO - n_orders        | Mean:     4.04 | Std:    10.38
+2026-02-05 22:18:10,118 - INFO - order_per_week  | Mean:     1.14 | Std:     0.55
+2026-02-05 22:18:10,119 - INFO - weeks_active    | Mean:     3.74 | Std:     6.87
+2026-02-05 22:18:10,119 - INFO - unique_stores   | Mean:     1.45 | Std:     1.21
+2026-02-05 22:18:10,119 - INFO - coupon_usage_rate | Mean:     0.72 | Std:     0.40
+2026-02-05 22:18:10,119 - INFO - avg_discount    | Mean:     0.26 | Std:     0.09
+2026-02-05 22:18:10,127 - INFO - Push Sensitivity (228838 with push data):
+2026-02-05 22:18:10,128 - INFO -   Avg days from push: 6.18
+2026-02-05 22:18:10,128 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:10,129 - INFO -   Used deeper discount rate: 0.8467
+2026-02-05 22:18:24,474 - INFO - --- Stats for push_group=1, Period=3 (189514 customers) ---
+2026-02-05 22:18:24,488 - INFO - avg_order_value | Mean:    45.07 | Std:    33.71
+2026-02-05 22:18:24,488 - INFO - total_spend     | Mean:   168.79 | Std:   420.18
+2026-02-05 22:18:24,488 - INFO - n_orders        | Mean:     3.98 | Std:     8.45
+2026-02-05 22:18:24,488 - INFO - order_per_week  | Mean:     1.13 | Std:     0.56
+2026-02-05 22:18:24,488 - INFO - weeks_active    | Mean:     3.84 | Std:     6.20
+2026-02-05 22:18:24,489 - INFO - unique_stores   | Mean:     1.49 | Std:     1.17
+2026-02-05 22:18:24,489 - INFO - coupon_usage_rate | Mean:     0.72 | Std:     0.39
+2026-02-05 22:18:24,489 - INFO - avg_discount    | Mean:     0.26 | Std:     0.09
+2026-02-05 22:18:24,494 - INFO - Push Sensitivity (135918 with push data):
+2026-02-05 22:18:24,495 - INFO -   Avg days from push: 5.12
+2026-02-05 22:18:24,495 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:24,495 - INFO -   Used deeper discount rate: 0.8598
+2026-02-05 22:18:33,297 - INFO - --- Stats for push_group=1, Period=4 (116178 customers) ---
+2026-02-05 22:18:33,308 - INFO - avg_order_value | Mean:    45.40 | Std:    33.37
+2026-02-05 22:18:33,309 - INFO - total_spend     | Mean:   163.11 | Std:   305.72
+2026-02-05 22:18:33,309 - INFO - n_orders        | Mean:     3.78 | Std:     6.97
+2026-02-05 22:18:33,309 - INFO - order_per_week  | Mean:     1.12 | Std:     0.55
+2026-02-05 22:18:33,309 - INFO - weeks_active    | Mean:     3.76 | Std:     5.56
+2026-02-05 22:18:33,309 - INFO - unique_stores   | Mean:     1.51 | Std:     1.13
+2026-02-05 22:18:33,309 - INFO - coupon_usage_rate | Mean:     0.72 | Std:     0.39
+2026-02-05 22:18:33,309 - INFO - avg_discount    | Mean:     0.26 | Std:     0.08
+2026-02-05 22:18:33,313 - INFO - Push Sensitivity (81307 with push data):
+2026-02-05 22:18:33,313 - INFO -   Avg days from push: 4.79
+2026-02-05 22:18:33,314 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:33,314 - INFO -   Used deeper discount rate: 0.8689
+2026-02-05 22:18:38,477 - INFO - --- Stats for push_group=1, Period=5 (66677 customers) ---
+2026-02-05 22:18:38,484 - INFO - avg_order_value | Mean:    45.57 | Std:    35.30
+2026-02-05 22:18:38,484 - INFO - total_spend     | Mean:   153.48 | Std:   277.25
+2026-02-05 22:18:38,484 - INFO - n_orders        | Mean:     3.51 | Std:     5.90
+2026-02-05 22:18:38,484 - INFO - order_per_week  | Mean:     1.12 | Std:     0.55
+2026-02-05 22:18:38,484 - INFO - weeks_active    | Mean:     3.57 | Std:     4.96
+2026-02-05 22:18:38,484 - INFO - unique_stores   | Mean:     1.51 | Std:     1.08
+2026-02-05 22:18:38,485 - INFO - coupon_usage_rate | Mean:     0.73 | Std:     0.39
+2026-02-05 22:18:38,485 - INFO - avg_discount    | Mean:     0.25 | Std:     0.08
+2026-02-05 22:18:38,487 - INFO - Push Sensitivity (45119 with push data):
+2026-02-05 22:18:38,487 - INFO -   Avg days from push: 4.42
+2026-02-05 22:18:38,487 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:38,487 - INFO -   Used deeper discount rate: 0.8863
+2026-02-05 22:18:41,113 - INFO - --- Stats for push_group=1, Period=6 (34037 customers) ---
+2026-02-05 22:18:41,120 - INFO - avg_order_value | Mean:    46.10 | Std:    36.79
+2026-02-05 22:18:41,120 - INFO - total_spend     | Mean:   137.80 | Std:   216.61
+2026-02-05 22:18:41,120 - INFO - n_orders        | Mean:     3.10 | Std:     4.60
+2026-02-05 22:18:41,120 - INFO - order_per_week  | Mean:     1.11 | Std:     0.53
+2026-02-05 22:18:41,120 - INFO - weeks_active    | Mean:     3.25 | Std:     4.32
+2026-02-05 22:18:41,120 - INFO - unique_stores   | Mean:     1.49 | Std:     1.02
+2026-02-05 22:18:41,121 - INFO - coupon_usage_rate | Mean:     0.73 | Std:     0.39
+2026-02-05 22:18:41,121 - INFO - avg_discount    | Mean:     0.25 | Std:     0.08
+2026-02-05 22:18:41,122 - INFO - Push Sensitivity (22359 with push data):
+2026-02-05 22:18:41,122 - INFO -   Avg days from push: 3.98
+2026-02-05 22:18:41,122 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:41,123 - INFO -   Used deeper discount rate: 0.8974
+2026-02-05 22:18:42,207 - INFO - --- Stats for push_group=1, Period=7 (15076 customers) ---
+2026-02-05 22:18:42,211 - INFO - avg_order_value | Mean:    45.89 | Std:    44.92
+2026-02-05 22:18:42,211 - INFO - total_spend     | Mean:   124.20 | Std:   185.99
+2026-02-05 22:18:42,211 - INFO - n_orders        | Mean:     2.77 | Std:     3.78
+2026-02-05 22:18:42,211 - INFO - order_per_week  | Mean:     1.12 | Std:     0.53
+2026-02-05 22:18:42,211 - INFO - weeks_active    | Mean:     2.90 | Std:     3.74
+2026-02-05 22:18:42,211 - INFO - unique_stores   | Mean:     1.44 | Std:     0.93
+2026-02-05 22:18:42,211 - INFO - coupon_usage_rate | Mean:     0.72 | Std:     0.40
+2026-02-05 22:18:42,211 - INFO - avg_discount    | Mean:     0.24 | Std:     0.08
+2026-02-05 22:18:42,212 - INFO - Push Sensitivity (9431 with push data):
+2026-02-05 22:18:42,212 - INFO -   Avg days from push: 3.51
+2026-02-05 22:18:42,212 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:42,212 - INFO -   Used deeper discount rate: 0.9103
+2026-02-05 22:18:42,692 - INFO - --- Stats for push_group=1, Period=8 (5595 customers) ---
+2026-02-05 22:18:42,696 - INFO - avg_order_value | Mean:    44.34 | Std:    40.06
+2026-02-05 22:18:42,696 - INFO - total_spend     | Mean:   105.86 | Std:   160.89
+2026-02-05 22:18:42,696 - INFO - n_orders        | Mean:     2.38 | Std:     2.99
+2026-02-05 22:18:42,696 - INFO - order_per_week  | Mean:     1.12 | Std:     0.51
+2026-02-05 22:18:42,696 - INFO - weeks_active    | Mean:     2.46 | Std:     3.07
+2026-02-05 22:18:42,697 - INFO - unique_stores   | Mean:     1.39 | Std:     0.86
+2026-02-05 22:18:42,697 - INFO - coupon_usage_rate | Mean:     0.70 | Std:     0.41
+2026-02-05 22:18:42,697 - INFO - avg_discount    | Mean:     0.23 | Std:     0.07
+2026-02-05 22:18:42,697 - INFO - Push Sensitivity (3427 with push data):
+2026-02-05 22:18:42,697 - INFO -   Avg days from push: 3.14
+2026-02-05 22:18:42,697 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:42,697 - INFO -   Used deeper discount rate: 0.9268
+2026-02-05 22:18:42,871 - INFO - --- Stats for push_group=1, Period=9 (1731 customers) ---
+2026-02-05 22:18:42,874 - INFO - avg_order_value | Mean:    41.55 | Std:    26.21
+2026-02-05 22:18:42,875 - INFO - total_spend     | Mean:    85.65 | Std:   113.34
+2026-02-05 22:18:42,875 - INFO - n_orders        | Mean:     2.02 | Std:     2.48
+2026-02-05 22:18:42,875 - INFO - order_per_week  | Mean:     1.12 | Std:     0.49
+2026-02-05 22:18:42,875 - INFO - weeks_active    | Mean:     2.07 | Std:     2.55
+2026-02-05 22:18:42,875 - INFO - unique_stores   | Mean:     1.30 | Std:     0.71
+2026-02-05 22:18:42,875 - INFO - coupon_usage_rate | Mean:     0.67 | Std:     0.43
+2026-02-05 22:18:42,875 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-05 22:18:42,875 - INFO - Push Sensitivity (995 with push data):
+2026-02-05 22:18:42,876 - INFO -   Avg days from push: 3.10
+2026-02-05 22:18:42,876 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:42,876 - INFO -   Used deeper discount rate: 0.9437
+2026-02-05 22:18:42,933 - INFO - --- Stats for push_group=1, Period=10 (411 customers) ---
+2026-02-05 22:18:42,936 - INFO - avg_order_value | Mean:    39.97 | Std:    22.76
+2026-02-05 22:18:42,936 - INFO - total_spend     | Mean:    76.28 | Std:   102.62
+2026-02-05 22:18:42,936 - INFO - n_orders        | Mean:     1.79 | Std:     1.88
+2026-02-05 22:18:42,937 - INFO - order_per_week  | Mean:     1.13 | Std:     0.50
+2026-02-05 22:18:42,937 - INFO - weeks_active    | Mean:     1.76 | Std:     2.03
+2026-02-05 22:18:42,937 - INFO - unique_stores   | Mean:     1.23 | Std:     0.60
+2026-02-05 22:18:42,937 - INFO - coupon_usage_rate | Mean:     0.66 | Std:     0.44
+2026-02-05 22:18:42,937 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-05 22:18:42,937 - INFO - Push Sensitivity (235 with push data):
+2026-02-05 22:18:42,937 - INFO -   Avg days from push: 2.67
+2026-02-05 22:18:42,937 - INFO -   Same day wakeup rate: 0.0000
+2026-02-05 22:18:42,938 - INFO -   Used deeper discount rate: 0.9277
+2026-02-05 22:18:43,147 - INFO - Calculating Dormant Period Metrics...
+2026-02-05 22:48:34,991 - INFO - --- Stats for push_group=0, Period=1 (113837 customers) ---
+2026-02-05 22:48:34,996 - INFO - dormant_length  | Mean:   130.60 | Std:   147.21
+2026-02-05 22:48:34,996 - INFO - total_pushes    | Mean:    35.86 | Std:    39.62
+2026-02-05 22:48:34,996 - INFO - avg_push_discount | Mean:     0.39 | Std:     0.02
+2026-02-05 22:48:35,310 - INFO - --- Stats for push_group=0, Period=2 (70660 customers) ---
+2026-02-05 22:48:35,313 - INFO - dormant_length  | Mean:    80.57 | Std:   100.29
+2026-02-05 22:48:35,313 - INFO - total_pushes    | Mean:    24.71 | Std:    28.72
+2026-02-05 22:48:35,313 - INFO - avg_push_discount | Mean:     0.39 | Std:     0.02
+2026-02-05 22:48:35,516 - INFO - --- Stats for push_group=0, Period=3 (47808 customers) ---
+2026-02-05 22:48:35,519 - INFO - dormant_length  | Mean:    60.82 | Std:    75.90
+2026-02-05 22:48:35,519 - INFO - total_pushes    | Mean:    19.55 | Std:    22.00
+2026-02-05 22:48:35,519 - INFO - avg_push_discount | Mean:     0.39 | Std:     0.02
+2026-02-05 22:48:35,671 - INFO - --- Stats for push_group=0, Period=4 (30400 customers) ---
+2026-02-05 22:48:35,673 - INFO - dormant_length  | Mean:    48.62 | Std:    60.34
+2026-02-05 22:48:35,673 - INFO - total_pushes    | Mean:    16.28 | Std:    17.41
+2026-02-05 22:48:35,674 - INFO - avg_push_discount | Mean:     0.40 | Std:     0.02
+2026-02-05 22:48:35,786 - INFO - --- Stats for push_group=0, Period=5 (17237 customers) ---
+2026-02-05 22:48:35,789 - INFO - dormant_length  | Mean:    38.70 | Std:    47.81
+2026-02-05 22:48:35,789 - INFO - total_pushes    | Mean:    13.95 | Std:    14.38
+2026-02-05 22:48:35,789 - INFO - avg_push_discount | Mean:     0.40 | Std:     0.03
+2026-02-05 22:48:35,883 - INFO - --- Stats for push_group=0, Period=6 (8375 customers) ---
+2026-02-05 22:48:35,885 - INFO - dormant_length  | Mean:    30.82 | Std:    37.67
+2026-02-05 22:48:35,885 - INFO - total_pushes    | Mean:    11.96 | Std:    11.67
+2026-02-05 22:48:35,886 - INFO - avg_push_discount | Mean:     0.40 | Std:     0.03
+2026-02-05 22:48:35,963 - INFO - --- Stats for push_group=0, Period=7 (3428 customers) ---
+2026-02-05 22:48:35,965 - INFO - dormant_length  | Mean:    24.67 | Std:    30.03
+2026-02-05 22:48:35,965 - INFO - total_pushes    | Mean:    10.40 | Std:     9.75
+2026-02-05 22:48:35,965 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:48:36,039 - INFO - --- Stats for push_group=0, Period=8 (1201 customers) ---
+2026-02-05 22:48:36,041 - INFO - dormant_length  | Mean:    21.41 | Std:    24.95
+2026-02-05 22:48:36,041 - INFO - total_pushes    | Mean:     9.57 | Std:     8.60
+2026-02-05 22:48:36,041 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:48:36,113 - INFO - --- Stats for push_group=0, Period=9 (307 customers) ---
+2026-02-05 22:48:36,115 - INFO - dormant_length  | Mean:    16.09 | Std:    17.73
+2026-02-05 22:48:36,115 - INFO - total_pushes    | Mean:     7.71 | Std:     6.16
+2026-02-05 22:48:36,115 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:48:36,185 - INFO - --- Stats for push_group=0, Period=10 (60 customers) ---
+2026-02-05 22:48:36,187 - INFO - dormant_length  | Mean:    12.85 | Std:    14.06
+2026-02-05 22:48:36,187 - INFO - total_pushes    | Mean:     6.90 | Std:     5.32
+2026-02-05 22:48:36,187 - INFO - avg_push_discount | Mean:     0.42 | Std:     0.03
+2026-02-05 22:48:38,862 - INFO - --- Stats for push_group=1, Period=1 (605439 customers) ---
+2026-02-05 22:48:38,877 - INFO - dormant_length  | Mean:   147.19 | Std:   146.85
+2026-02-05 22:48:38,877 - INFO - total_pushes    | Mean:    40.23 | Std:    40.08
+2026-02-05 22:48:38,878 - INFO - avg_push_discount | Mean:     0.39 | Std:     0.02
+2026-02-05 22:48:39,707 - INFO - --- Stats for push_group=1, Period=2 (276395 customers) ---
+2026-02-05 22:48:39,716 - INFO - dormant_length  | Mean:    87.84 | Std:   101.64
+2026-02-05 22:48:39,716 - INFO - total_pushes    | Mean:    25.92 | Std:    28.23
+2026-02-05 22:48:39,716 - INFO - avg_push_discount | Mean:     0.39 | Std:     0.02
+2026-02-05 22:48:40,166 - INFO - --- Stats for push_group=1, Period=3 (162713 customers) ---
+2026-02-05 22:48:40,173 - INFO - dormant_length  | Mean:    65.47 | Std:    77.44
+2026-02-05 22:48:40,173 - INFO - total_pushes    | Mean:    20.13 | Std:    21.56
+2026-02-05 22:48:40,173 - INFO - avg_push_discount | Mean:     0.39 | Std:     0.02
+2026-02-05 22:48:40,464 - INFO - --- Stats for push_group=1, Period=4 (93855 customers) ---
+2026-02-05 22:48:40,469 - INFO - dormant_length  | Mean:    51.56 | Std:    61.58
+2026-02-05 22:48:40,469 - INFO - total_pushes    | Mean:    16.57 | Std:    17.12
+2026-02-05 22:48:40,469 - INFO - avg_push_discount | Mean:     0.40 | Std:     0.02
+2026-02-05 22:48:40,639 - INFO - --- Stats for push_group=1, Period=5 (49702 customers) ---
+2026-02-05 22:48:40,642 - INFO - dormant_length  | Mean:    40.88 | Std:    49.39
+2026-02-05 22:48:40,643 - INFO - total_pushes    | Mean:    14.08 | Std:    14.11
+2026-02-05 22:48:40,643 - INFO - avg_push_discount | Mean:     0.40 | Std:     0.03
+2026-02-05 22:48:40,772 - INFO - --- Stats for push_group=1, Period=6 (22949 customers) ---
+2026-02-05 22:48:40,775 - INFO - dormant_length  | Mean:    32.29 | Std:    38.97
+2026-02-05 22:48:40,775 - INFO - total_pushes    | Mean:    12.06 | Std:    11.62
+2026-02-05 22:48:40,775 - INFO - avg_push_discount | Mean:     0.40 | Std:     0.03
+2026-02-05 22:48:40,873 - INFO - --- Stats for push_group=1, Period=7 (9113 customers) ---
+2026-02-05 22:48:40,876 - INFO - dormant_length  | Mean:    25.84 | Std:    31.26
+2026-02-05 22:48:40,876 - INFO - total_pushes    | Mean:    10.51 | Std:     9.88
+2026-02-05 22:48:40,876 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:48:40,949 - INFO - --- Stats for push_group=1, Period=8 (2912 customers) ---
+2026-02-05 22:48:40,951 - INFO - dormant_length  | Mean:    20.28 | Std:    24.50
+2026-02-05 22:48:40,951 - INFO - total_pushes    | Mean:     9.01 | Std:     8.26
+2026-02-05 22:48:40,951 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:48:41,025 - INFO - --- Stats for push_group=1, Period=9 (767 customers) ---
+2026-02-05 22:48:41,028 - INFO - dormant_length  | Mean:    17.71 | Std:    20.90
+2026-02-05 22:48:41,028 - INFO - total_pushes    | Mean:     8.28 | Std:     7.46
+2026-02-05 22:48:41,028 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:48:41,104 - INFO - --- Stats for push_group=1, Period=10 (154 customers) ---
+2026-02-05 22:48:41,106 - INFO - dormant_length  | Mean:    15.55 | Std:    18.68
+2026-02-05 22:48:41,106 - INFO - total_pushes    | Mean:     7.41 | Std:     5.92
+2026-02-05 22:48:41,106 - INFO - avg_push_discount | Mean:     0.41 | Std:     0.03
+2026-02-05 22:49:10,801 - INFO - Push-sensitivity metrics saved (677460 records)
+2026-02-05 22:49:10,801 - INFO - Results saved to /home/litao/Coffee/model-free/scripts/push_analysis/sensitivity_analysis/push_sensitivity_analysis/outputs/tables
+2026-02-05 22:49:10,801 - INFO - Analysis complete!
+2026-02-06 12:11:36,559 - INFO - Starting Block Analysis
+2026-02-06 12:11:36,559 - INFO - Loading preprocessed data...
+2026-02-06 12:11:39,520 - INFO - Loaded 51,847,472 records with 9 columns.
+2026-02-06 12:11:39,792 - INFO - ================================================================================
+2026-02-06 12:11:39,793 - INFO - Identifying Periods via data_source Transitions
+2026-02-06 12:11:39,793 - INFO - ================================================================================
+2026-02-06 12:14:47,781 - INFO - Identified periods for 779,744 customers
+2026-02-06 12:14:47,781 - INFO - Maximum active periods: 13
+2026-02-06 12:14:47,781 - INFO - Maximum dormant periods: 12
+2026-02-06 12:14:49,739 - INFO - Calculating Active Period Metrics (Filtered: >= 10 periods)...
+2026-02-06 12:14:51,289 - INFO - Push group 0: 174 customers with >= 10 active periods
+2026-02-06 12:14:51,314 - INFO - --- Stats for push_group=0, Period=1 (174 customers) ---
+2026-02-06 12:14:51,317 - INFO - active_length   | Mean:    11.29 | Std:    17.08
+2026-02-06 12:14:51,317 - INFO - total_orders    | Mean:     2.07 | Std:     1.77
+2026-02-06 12:14:51,318 - INFO - avg_discount    | Mean:     0.25 | Std:     0.09
+2026-02-06 12:14:51,322 - INFO - --- Stats for push_group=0, Period=2 (174 customers) ---
+2026-02-06 12:14:51,324 - INFO - active_length   | Mean:    13.55 | Std:    20.88
+2026-02-06 12:14:51,324 - INFO - total_orders    | Mean:     2.34 | Std:     2.32
+2026-02-06 12:14:51,324 - INFO - avg_discount    | Mean:     0.24 | Std:     0.09
+2026-02-06 12:14:51,328 - INFO - --- Stats for push_group=0, Period=3 (174 customers) ---
+2026-02-06 12:14:51,330 - INFO - active_length   | Mean:    14.02 | Std:    22.23
+2026-02-06 12:14:51,330 - INFO - total_orders    | Mean:     2.39 | Std:     3.46
+2026-02-06 12:14:51,330 - INFO - avg_discount    | Mean:     0.23 | Std:     0.07
+2026-02-06 12:14:51,335 - INFO - --- Stats for push_group=0, Period=4 (174 customers) ---
+2026-02-06 12:14:51,337 - INFO - active_length   | Mean:    12.44 | Std:    21.12
+2026-02-06 12:14:51,337 - INFO - total_orders    | Mean:     2.02 | Std:     1.96
+2026-02-06 12:14:51,337 - INFO - avg_discount    | Mean:     0.23 | Std:     0.08
+2026-02-06 12:14:51,342 - INFO - --- Stats for push_group=0, Period=5 (174 customers) ---
+2026-02-06 12:14:51,345 - INFO - active_length   | Mean:    11.02 | Std:    14.08
+2026-02-06 12:14:51,345 - INFO - total_orders    | Mean:     1.97 | Std:     1.59
+2026-02-06 12:14:51,345 - INFO - avg_discount    | Mean:     0.23 | Std:     0.08
+2026-02-06 12:14:51,350 - INFO - --- Stats for push_group=0, Period=6 (174 customers) ---
+2026-02-06 12:14:51,352 - INFO - active_length   | Mean:    11.00 | Std:    17.60
+2026-02-06 12:14:51,352 - INFO - total_orders    | Mean:     2.03 | Std:     1.95
+2026-02-06 12:14:51,352 - INFO - avg_discount    | Mean:     0.23 | Std:     0.08
+2026-02-06 12:14:51,356 - INFO - --- Stats for push_group=0, Period=7 (174 customers) ---
+2026-02-06 12:14:51,357 - INFO - active_length   | Mean:     9.93 | Std:    15.48
+2026-02-06 12:14:51,358 - INFO - total_orders    | Mean:     1.99 | Std:     2.03
+2026-02-06 12:14:51,358 - INFO - avg_discount    | Mean:     0.23 | Std:     0.09
+2026-02-06 12:14:51,361 - INFO - --- Stats for push_group=0, Period=8 (174 customers) ---
+2026-02-06 12:14:51,363 - INFO - active_length   | Mean:     9.30 | Std:    16.35
+2026-02-06 12:14:51,363 - INFO - total_orders    | Mean:     1.96 | Std:     1.80
+2026-02-06 12:14:51,363 - INFO - avg_discount    | Mean:     0.23 | Std:     0.08
+2026-02-06 12:14:51,367 - INFO - --- Stats for push_group=0, Period=9 (174 customers) ---
+2026-02-06 12:14:51,370 - INFO - active_length   | Mean:     8.48 | Std:    14.11
+2026-02-06 12:14:51,370 - INFO - total_orders    | Mean:     1.78 | Std:     1.36
+2026-02-06 12:14:51,370 - INFO - avg_discount    | Mean:     0.23 | Std:     0.07
+2026-02-06 12:14:51,375 - INFO - --- Stats for push_group=0, Period=10 (174 customers) ---
+2026-02-06 12:14:51,377 - INFO - active_length   | Mean:     7.45 | Std:    12.57
+2026-02-06 12:14:51,377 - INFO - total_orders    | Mean:     1.66 | Std:     1.41
+2026-02-06 12:14:51,377 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-06 12:14:52,416 - INFO - Push group 1: 411 customers with >= 10 active periods
+2026-02-06 12:14:52,453 - INFO - --- Stats for push_group=1, Period=1 (411 customers) ---
+2026-02-06 12:14:52,455 - INFO - active_length   | Mean:    13.07 | Std:    21.06
+2026-02-06 12:14:52,455 - INFO - total_orders    | Mean:     2.22 | Std:     2.16
+2026-02-06 12:14:52,455 - INFO - avg_discount    | Mean:     0.24 | Std:     0.07
+2026-02-06 12:14:52,459 - INFO - --- Stats for push_group=1, Period=2 (411 customers) ---
+2026-02-06 12:14:52,461 - INFO - active_length   | Mean:    12.68 | Std:    20.15
+2026-02-06 12:14:52,461 - INFO - total_orders    | Mean:     2.12 | Std:     1.71
+2026-02-06 12:14:52,461 - INFO - avg_discount    | Mean:     0.24 | Std:     0.08
+2026-02-06 12:14:52,464 - INFO - --- Stats for push_group=1, Period=3 (411 customers) ---
+2026-02-06 12:14:52,466 - INFO - active_length   | Mean:    12.54 | Std:    18.28
+2026-02-06 12:14:52,466 - INFO - total_orders    | Mean:     2.11 | Std:     1.78
+2026-02-06 12:14:52,466 - INFO - avg_discount    | Mean:     0.23 | Std:     0.06
+2026-02-06 12:14:52,471 - INFO - --- Stats for push_group=1, Period=4 (411 customers) ---
+2026-02-06 12:14:52,473 - INFO - active_length   | Mean:    11.68 | Std:    19.04
+2026-02-06 12:14:52,473 - INFO - total_orders    | Mean:     2.02 | Std:     1.81
+2026-02-06 12:14:52,474 - INFO - avg_discount    | Mean:     0.23 | Std:     0.07
+2026-02-06 12:14:52,478 - INFO - --- Stats for push_group=1, Period=5 (411 customers) ---
+2026-02-06 12:14:52,481 - INFO - active_length   | Mean:     8.44 | Std:    13.41
+2026-02-06 12:14:52,481 - INFO - total_orders    | Mean:     1.71 | Std:     1.20
+2026-02-06 12:14:52,481 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-06 12:14:52,486 - INFO - --- Stats for push_group=1, Period=6 (411 customers) ---
+2026-02-06 12:14:52,488 - INFO - active_length   | Mean:     8.93 | Std:    15.33
+2026-02-06 12:14:52,488 - INFO - total_orders    | Mean:     1.74 | Std:     1.50
+2026-02-06 12:14:52,488 - INFO - avg_discount    | Mean:     0.21 | Std:     0.07
+2026-02-06 12:14:52,492 - INFO - --- Stats for push_group=1, Period=7 (411 customers) ---
+2026-02-06 12:14:52,494 - INFO - active_length   | Mean:    10.20 | Std:    17.08
+2026-02-06 12:14:52,494 - INFO - total_orders    | Mean:     1.89 | Std:     1.66
+2026-02-06 12:14:52,494 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-06 12:14:52,498 - INFO - --- Stats for push_group=1, Period=8 (411 customers) ---
+2026-02-06 12:14:52,500 - INFO - active_length   | Mean:     9.97 | Std:    16.80
+2026-02-06 12:14:52,500 - INFO - total_orders    | Mean:     1.85 | Std:     1.65
+2026-02-06 12:14:52,500 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-06 12:14:52,504 - INFO - --- Stats for push_group=1, Period=9 (411 customers) ---
+2026-02-06 12:14:52,506 - INFO - active_length   | Mean:     8.37 | Std:    16.86
+2026-02-06 12:14:52,506 - INFO - total_orders    | Mean:     1.72 | Std:     1.56
+2026-02-06 12:14:52,506 - INFO - avg_discount    | Mean:     0.21 | Std:     0.06
+2026-02-06 12:14:52,511 - INFO - --- Stats for push_group=1, Period=10 (411 customers) ---
+2026-02-06 12:14:52,514 - INFO - active_length   | Mean:     8.15 | Std:    15.92
+2026-02-06 12:14:52,514 - INFO - total_orders    | Mean:     1.79 | Std:     1.88
+2026-02-06 12:14:52,514 - INFO - avg_discount    | Mean:     0.22 | Std:     0.07
+2026-02-06 12:14:52,523 - INFO - Analysis complete!

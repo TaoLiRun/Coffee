@@ -1,0 +1,343 @@
+#!/usr/bin/env python3
+"""
+Script 3: Block Analysis - Customer Lifecycle Across Multiple Active/Dormant Periods
+
+Purpose: Track customer behavior across multiple active/dormant cycles to understand
+         how engagement and push sensitivity evolve over the customer lifecycle.
+
+Updated Logic:
+- A row is 'Active' if dormant_period == 0 OR data_source == 1 (purchase).
+- Wake-up purchases are now correctly categorized as the start of an Active period.
+
+New Metrics (for active periods 2+):
+- Time from last push to purchase
+- Portion of wake-up on the same day as push
+- Used deeper discount than last pushed
+"""
+
+import pandas as pd
+import numpy as np
+import os
+import logging
+from pathlib import Path
+import warnings
+warnings.filterwarnings('ignore')
+
+# Set up logging
+log_dir = Path(__file__).parent.parent / "outputs" / "logs"
+log_dir.mkdir(parents=True, exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(log_dir / "03_block_analysis.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+
+def load_preprocessed_data(sample_members=None):
+    """
+    Load preprocessed data from parquet file.
+    Loads full dataset with minimal columns to save memory.
+    """
+    logger.info("Loading preprocessed data...")
+    data_path = Path(__file__).parent.parent.parent.parent.parent.parent / "data" / "intermediate" / "analysis_data.parquet"
+
+    # Read only necessary columns
+    columns_needed = ['member_id', 'dt', 'data_source', 'push_group', 'origin_money',
+                      'total_items', 'dept_id', 'use_coupon_num', 'use_discount']
+
+    df = pd.read_parquet(data_path, columns=columns_needed)
+
+    if sample_members is not None:
+        sample_set = set(sample_members)
+        df = df[df['member_id'].isin(sample_set)]
+        logger.info(f"Filtered to {len(sample_set)} sampled members")
+
+    logger.info(f"Loaded {len(df):,} records with {len(df.columns)} columns")
+    return df
+
+def identify_periods(df):
+    """
+    Identifies blocks using data_source directly.
+    Logic: data_source=1 is Active, data_source=0 is Dormant.
+    """
+    logger.info("=" * 80)
+    logger.info("Identifying Periods via data_source Transitions")
+    logger.info("=" * 80)
+
+    # 1. Sort and identify state changes directly from data_source
+    df = df.sort_values(['member_id', 'dt']).copy()
+    # Detect transitions: 1 if the current state differs from the previous record
+    df['is_new_block'] = (df['data_source'] != df.groupby('member_id')['data_source'].shift(1).fillna(df['data_source'])).astype(int)
+
+    # 2. Assign unique Block ID per member per stint
+    df['block_num'] = df.groupby('member_id')['is_new_block'].cumsum()
+
+    # 3. Calculate sequence numbers using a thin summary table (stint_info)
+    # We only need data_source to tell if the block is active (1) or dormant (0)
+    stint_info = df.groupby(['member_id', 'block_num'])['data_source'].first().reset_index()
+    stint_info['period_num'] = stint_info.groupby(['member_id', 'data_source']).cumcount() + 1
+    
+    # 4. Map back to main dataframe
+    df = df.merge(
+        stint_info[['member_id', 'block_num', 'period_num']], 
+        on=['member_id', 'block_num'], 
+        how='left'
+    )
+    
+    # 5. Final Period Columns
+    # Active periods get a number if data_source == 1, else NaN
+    df['active_period_num'] = np.where(df['data_source'] == 1, df['period_num'], np.nan)
+    # Dormant periods get a number if data_source == 0, else NaN
+    df['dormant_period_num'] = np.where(df['data_source'] == 0, df['period_num'], np.nan)
+
+    # Summary statistics
+    n_members = df['member_id'].nunique()
+    n_active_periods = df[df['data_source'] == 1]['period_num'].max()
+    n_dormant_periods = df[df['data_source'] == 0]['period_num'].max()
+
+    logger.info(f"Identified periods for {n_members:,} customers")
+    logger.info(f"Maximum active periods: {n_active_periods}")
+    logger.info(f"Maximum dormant periods: {n_dormant_periods}")
+
+    # Drop intermediate logic columns
+    df = df.drop(columns=['is_new_block', 'block_num', 'period_num'])
+
+    return df
+
+
+def calculate_active_period_metrics_incremental(df, max_periods=10):
+    """
+    Calculate metrics for active periods processing incrementally by period.
+    Only keeps aggregated results in memory, not raw data.
+    """
+    logger.info("Calculating Active Period Metrics (incremental mode)...")
+
+    # Prepare push-sensitivity data ONCE (need full data for this)
+    logger.info("Preparing push-sensitivity mapping...")
+    dormant_pushes = df[df['data_source'] == 0].copy()
+    last_pushes = dormant_pushes.groupby(['member_id', 'dormant_period_num']).agg({
+        'dt': 'max',
+        'use_discount': 'last'
+    }).reset_index()
+    last_pushes.columns = ['member_id', 'dormant_period_num', 'last_push_dt', 'last_push_discount']
+
+    active_purchases_all = df[df['data_source'] == 1].copy()
+    first_purchases = active_purchases_all.groupby(['member_id', 'active_period_num']).agg({
+        'dt': 'min',
+        'use_discount': 'first'
+    }).reset_index()
+    first_purchases.columns = ['member_id', 'active_period_num', 'first_purchase_dt', 'purchase_discount']
+    first_purchases['prev_dormant_period'] = first_purchases['active_period_num'] - 1
+
+    push_sens_merged = first_purchases.merge(
+        last_pushes,
+        left_on=['member_id', 'prev_dormant_period'],
+        right_on=['member_id', 'dormant_period_num'],
+        how='left'
+    )
+
+    push_sens_merged['days_from_push_to_purchase'] = (push_sens_merged['first_purchase_dt'] - push_sens_merged['last_push_dt']).dt.days
+    push_sens_merged['same_day_wakeup'] = (
+        push_sens_merged['first_purchase_dt'].dt.normalize() == push_sens_merged['last_push_dt'].dt.normalize()
+    ).astype(int)
+    push_sens_merged['used_deeper_discount'] = (push_sens_merged['purchase_discount'] < push_sens_merged['last_push_discount']).astype(float)
+    push_sens_merged['used_deeper_discount'] = push_sens_merged['used_deeper_discount'].fillna(0.0)
+
+    # Clear dormant data to save memory
+    del dormant_pushes, last_pushes
+
+    all_metrics = []
+
+    # Process period by period
+    for pg in [0, 1]:
+        for p_num in range(1, max_periods + 1):
+            # Filter to this period only (saves memory)
+            period_data = active_purchases_all[
+                (active_purchases_all['active_period_num'] == p_num) &
+                (active_purchases_all['push_group'] == pg)
+            ].copy()
+
+            if period_data.empty:
+                continue
+
+            # Calculate metrics
+            member_metrics = period_data.groupby('member_id').agg({
+                'origin_money': ['mean', 'sum', 'count'],
+                'total_items': 'mean',
+                'dept_id': 'nunique',
+                'use_coupon_num': lambda x: (x > 0).mean(),
+                'use_discount': 'mean',
+                'dt': ['min', 'max']
+            })
+            member_metrics.columns = ['avg_order_value', 'total_spend', 'n_orders', 'avg_basket_size',
+                                       'unique_stores', 'coupon_usage_rate', 'avg_discount', 'dt_min', 'dt_max']
+            member_metrics['weeks_active'] = ((member_metrics['dt_max'] - member_metrics['dt_min']).dt.days / 7).clip(lower=1)
+            member_metrics = member_metrics.drop(columns=['dt_min', 'dt_max'])
+            member_metrics['order_per_week'] = member_metrics['n_orders'] / member_metrics['weeks_active']
+            member_metrics['push_group'] = pg
+            member_metrics['active_period_num'] = p_num
+
+            # Merge push-sensitivity metrics for periods 2+
+            if p_num >= 2:
+                push_sens_data = push_sens_merged[
+                    (push_sens_merged['active_period_num'] == p_num) &
+                    (push_sens_merged['last_push_dt'].notna())
+                ]
+
+                if not push_sens_data.empty:
+                    push_sens_agg = push_sens_data.groupby('member_id').agg({
+                        'days_from_push_to_purchase': 'mean',
+                        'same_day_wakeup': 'max',
+                        'used_deeper_discount': 'max'
+                    })
+                    push_sens_agg.columns = ['avg_days_from_push', 'same_day_wakeup', 'used_deeper_discount']
+
+                    member_metrics = member_metrics.reset_index()
+                    member_metrics = member_metrics.merge(
+                        push_sens_agg,
+                        left_on='member_id',
+                        right_index=True,
+                        how='left'
+                    )
+
+                    member_metrics['avg_days_from_push'] = member_metrics['avg_days_from_push'].fillna(0)
+                    member_metrics['same_day_wakeup'] = member_metrics['same_day_wakeup'].fillna(0).astype(int)
+                    member_metrics['used_deeper_discount'] = member_metrics['used_deeper_discount'].fillna(0).astype(int)
+                else:
+                    member_metrics = member_metrics.reset_index()
+                    member_metrics['avg_days_from_push'] = 0
+                    member_metrics['same_day_wakeup'] = 0
+                    member_metrics['used_deeper_discount'] = 0
+            else:
+                member_metrics = member_metrics.reset_index()
+                member_metrics['avg_days_from_push'] = 0
+                member_metrics['same_day_wakeup'] = 0
+                member_metrics['used_deeper_discount'] = 0
+
+            # Log statistics
+            logger.info(f"--- push_group={pg}, Period={p_num} ({len(member_metrics)} customers) ---")
+            stats_cols = ['avg_order_value', 'total_spend', 'n_orders', 'order_per_week',
+                         'weeks_active', 'unique_stores', 'coupon_usage_rate', 'avg_discount']
+            summary = member_metrics[stats_cols].agg(['mean', 'std']).T
+            for col, row in summary.iterrows():
+                logger.info(f"{col:15} | Mean: {row['mean']:8.2f} | Std: {row['std']:8.2f}")
+
+            if p_num >= 2:
+                members_with_push = member_metrics[member_metrics['avg_days_from_push'] > 0]
+                if not members_with_push.empty:
+                    logger.info(f"Push Sensitivity ({len(members_with_push)} with push data):")
+                    logger.info(f"  Avg days from push: {members_with_push['avg_days_from_push'].mean():.2f}")
+                    logger.info(f"  Same day wakeup rate: {members_with_push['same_day_wakeup'].mean():.4f}")
+                    logger.info(f"  Used deeper discount rate: {members_with_push['used_deeper_discount'].mean():.4f}")
+
+            all_metrics.append(member_metrics)
+
+            # Discard period data to save memory
+            del period_data, member_metrics
+
+    return pd.concat(all_metrics, ignore_index=True)
+
+
+def calculate_dormant_period_metrics_incremental(df, max_periods=10):
+    """
+    Calculate metrics for dormant periods processing incrementally by period.
+    Only keeps aggregated results in memory, not raw data.
+    """
+    logger.info("Calculating Dormant Period Metrics (incremental mode)...")
+
+    dormant_pushes = df[df['data_source'] == 0].copy()
+    all_metrics = []
+
+    for pg in [0, 1]:
+        for p_num in range(1, max_periods + 1):
+            period_pushes = dormant_pushes[
+                (dormant_pushes['dormant_period_num'] == p_num) &
+                (dormant_pushes['push_group'] == pg)
+            ].copy()
+
+            if period_pushes.empty:
+                continue
+
+            push_metrics = period_pushes.groupby('member_id').agg({
+                'dt': ['min', 'max', 'count'],
+                'use_discount': 'mean'
+            })
+            push_metrics.columns = ['first_push', 'last_push', 'total_pushes', 'avg_push_discount']
+            push_metrics['dormant_length'] = (push_metrics['last_push'] - push_metrics['first_push']).dt.days.clip(lower=1)
+            push_metrics = push_metrics.drop(columns=['first_push', 'last_push'])
+            push_metrics['push_group'] = pg
+            push_metrics['dormant_period_num'] = p_num
+
+            # Log statistics
+            logger.info(f"--- push_group={pg}, Period={p_num} ({len(push_metrics)} customers) ---")
+            stats_cols = ['dormant_length', 'total_pushes', 'avg_push_discount']
+            summary = push_metrics[stats_cols].agg(['mean', 'std']).T
+            for col, row in summary.iterrows():
+                logger.info(f"{col:15} | Mean: {row['mean']:8.2f} | Std: {row['std']:8.2f}")
+
+            all_metrics.append(push_metrics.reset_index())
+
+            # Discard period data to save memory
+            del period_pushes, push_metrics
+
+    return pd.concat(all_metrics, ignore_index=True)
+
+
+def main(sample_size=None):
+    """
+    Run block analysis with incremental metric calculation.
+    Only logs results, does not save CSV files.
+
+    Args:
+        sample_size: If provided, sample this many customers for testing.
+                    Set to None (default) to process all data.
+    """
+    logger.info("=" * 80)
+    logger.info("Starting Block Analysis (Incremental Mode)")
+    logger.info("=" * 80)
+
+    if sample_size:
+        logger.info(f"*** SAMPLE MODE: Testing with {sample_size} customers ***")
+
+    # Get sampled members if needed
+    sampled_members = None
+    if sample_size:
+        import pyarrow.parquet as pq
+        data_path = Path(__file__).parent.parent.parent.parent.parent.parent / "data" / "intermediate" / "analysis_data.parquet"
+        parquet_file = pq.ParquetFile(data_path)
+
+        all_members = set()
+        for i in range(parquet_file.num_row_groups):
+            chunk = parquet_file.read_row_group(i, columns=['member_id']).to_pandas()
+            all_members.update(chunk['member_id'].unique())
+
+        all_members = list(all_members)
+        sampled_members = pd.Series(all_members).sample(n=min(sample_size, len(all_members)), random_state=42).tolist()
+        logger.info(f"Sampled {len(sampled_members)} customers from {len(all_members):,} total")
+
+    # Load all data (necessary for period identification)
+    df = load_preprocessed_data(sample_members=sampled_members)
+
+    # Identify periods (requires full dataset)
+    df_with_periods = identify_periods(df)
+
+    # Clear original df to save memory before metric calculation
+    del df
+
+    # Calculate metrics incrementally (period by period)
+    active_metrics = calculate_active_period_metrics_incremental(df_with_periods)
+    dormant_metrics = calculate_dormant_period_metrics_incremental(df_with_periods)
+
+    logger.info("=" * 80)
+    logger.info("Analysis complete! Results logged above.")
+    logger.info("=" * 80)
+
+
+if __name__ == "__main__":
+    # Set sample_size=1000 for testing, sample_size=None for full data
+    main(sample_size=None)
