@@ -1,0 +1,17 @@
+﻿metric,comparison,n,pvalue,stars
+n_purchases,treat_pre_vs_post,49042,0.0013961026427440203,**
+n_purchases,ctrl_pre_vs_post,66158,0.0,***
+n_purchases,T_vs_C_in_pre,115200,0.0,***
+n_purchases,T_vs_C_in_post,115200,1.5210522430811707e-07,***
+new_product_ratio,treat_pre_vs_post,21913,3.301261375683715e-08,***
+new_product_ratio,ctrl_pre_vs_post,47736,3.828041383009727e-160,***
+new_product_ratio,T_vs_C_in_pre,91343,0.0,***
+new_product_ratio,T_vs_C_in_post,79032,0.0,***
+total_discount,treat_pre_vs_post,21913,2.2995876170053053e-79,***
+total_discount,ctrl_pre_vs_post,47736,5.836631905882877e-17,***
+total_discount,T_vs_C_in_pre,91343,3.188078509974106e-144,***
+total_discount,T_vs_C_in_post,79032,5.3112645598164984e-278,***
+coupon_usage_rate,treat_pre_vs_post,21913,8.385425695994682e-06,***
+coupon_usage_rate,ctrl_pre_vs_post,47736,0.39740573388969946,ns
+coupon_usage_rate,T_vs_C_in_pre,91343,5.758482634177565e-152,***
+coupon_usage_rate,T_vs_C_in_post,79032,2.6431396906496445e-97,***
