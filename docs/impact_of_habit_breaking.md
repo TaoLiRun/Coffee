@@ -196,59 +196,74 @@ Use this to strengthen identification and to run heterogeneity by closure length
 
 **2b. Training data selection.**
 
-- **Unit:** One observation = (consumer, closure, period), where period is either a **pre-closure week** (e.g., weeks −2, −1 for 2-week pre; weeks −4, −3, −2, −1 for 4-week) or the **closure window** for **control** consumers (observed; used for evaluation only).
-- **Label:** Binary = 1 if consumer made ≥1 Luckin purchase in that period, 0 otherwise.
-- **Features:** All from **history strictly before** period start (no look-ahead).
-- **Training set:** All (consumer–closure–period) with observed labels: all pre-closure periods for treated and control. Control closure period (t=0) used for evaluation, not training.
+- **Sample:** Only closures with `closure_start ≥ 2020-09-01` are used (89 of 101 total), ensuring all 4 pre-closure weeks fall within the data window (2020-06-01 to 2021-12-31).
+- **Eligibility:** A consumer is included in treatment or control only if their **first ever order predates `closure_start − 28 days`** (i.e., they must have been active before the earliest pre-closure week). This prevents look-ahead contamination and guarantees computable history features for period −4.
+- **Unit:** One observation = (consumer, closure, period), where period ∈ {−4, −3, −2, −1} (pre-closure weeks) for both treatment and control, plus period 0 (closure window) for **control only** (observed; used for evaluation, not training).
+- **Label:** Binary = 1 if consumer made ≥1 Luckin purchase in that 7-day period, 0 otherwise.
+- **Features:** All computed from order history **strictly before** the period start date (no look-ahead).
+- **Training set:** All (consumer–closure–period) rows with period ∈ {−4, −3, −2, −1}. Control period 0 is held out for evaluation.
 - **Prediction target:** For each consumer–closure, predict purchase during closure window (t=0).
 
-**2c. Feature variables (≥50).**
+**2c. Feature variables.**
 
-Data sources: `order_commodity_result.csv`, `order_result.csv`, `member_result.csv`, `store_closures.csv`, `no_push_members.csv`. See table below.
+Single behavioral data source: `order_result.csv`. Demographics from `member_result.csv`. No `order_commodity_result.csv` is used; item-count columns (`coffee_commodity_num`, `food_commodity_num`, etc.) are embedded in `order_result.csv`.
 
-| # | Variable | Source | Construction |
-|---|----------|--------|--------------|
-| 1–12 | Purchase freq/recency | order_commodity, order_result | purchases_per_week (all, 4w, 2w, 1w), days_since_last, purchased_in_last_7/14_days, total_purchase_days, total_orders, total_spend (all, 4w, 2w) |
-| 13–18 | Regularity/habit | order_commodity | mean/std/cv inter_purchase_interval, longest_streak, share_weeks_with_purchase, max_gap |
-| 19–27 | Temporal (dow) | order_commodity | share_purchases_mon…sun, modal_purchase_dow, entropy_dow |
-| 28–32 | Temporal (tod) | order_result | share_morning/afternoon/evening, hour_mean, hour_std |
-| 33–38 | Product/basket | order_commodity, order_result | unique_products, new_product_ratio, coffee_share, avg_basket_size, avg_discount, coupon_usage_rate |
-| 39–41 | Store | order_commodity | unique_stores, preferred_store_ratio, second_store_ratio |
-| 42–53 | Demographics | member_result | gender, birth_year, age, level, has_inviter, manufacturer, callphone, camera, location, network, push, sdcard |
-| 54–60 | Closure-specific | store_closures, visits | closure_length_days, closure_start_month/weekday/season, is_treated, share_visited_stores_closed, tenure_days |
-| 61–65 | Order-level | order_result | avg_coffee_num, avg_food_num, avg_use_coffee_wallet, avg_delivery_pay, take_address_rate |
+**Features used in X (46 consumer-level features):** All computed from history strictly before `period_start`. Closure-specific features are deliberately excluded — consumers cannot forecast a closure, so those features carry no information about pre-closure purchase propensity.
 
-**2d. Train random forest.**
+| # | Variable group | Variables | Construction |
+|---|----------------|-----------|---------------|
+| 1–12 | Purchase frequency & recency | `total_purchase_days_pre`, `purchases_per_week_all_pre`, `purchases_per_week_last_{4w,2w,1w}`, `days_since_last_purchase`, `purchased_in_last_{7,14}_days`, `total_orders_pre`, `total_spend_pre`, `total_spend_last_{4w,2w}` | Computed over all history before `period_start`; rolling windows use deduped purchase-day counts |
+| 13–18 | Regularity / habit | `mean_inter_purchase_interval_days`, `std_inter_purchase_interval_days`, `cv_inter_purchase_interval`, `max_gap_between_purchases`, `longest_consecutive_streak_days`, `share_weeks_with_purchase` | Computed per member from sorted unique purchase dates before `period_start` |
+| 19–27 | Day-of-week | `share_purchases_dow{0…6}`, `modal_purchase_dow`, `entropy_dow` | DoW share = fraction of all purchase-day rows falling on each weekday; entropy uses natural log |
+| 28–29 | Basket & breadth | `avg_basket_size`, `n_order_categories_avg` | `avg_basket_size` = mean total items per order (sum of `*_commodity_num`); `n_order_categories_avg` = mean distinct non-zero category counts per order |
+| 30–32 | Store loyalty | `unique_stores_pre`, `preferred_store_ratio`, `second_store_ratio` | Computed from visit-deduplicated (`member_id`, `date`, `dept_id`) order history |
+| 33–40 | Order-level behaviour | `avg_discount_per_order`, `coupon_usage_rate`, `avg_coffee_num`, `avg_food_num`, `avg_use_coffee_wallet`, `avg_delivery_pay`, `coffee_share_orders`, `take_address_rate` | Mean per member over history; `avg_delivery_pay` treats NaN (pickup/in-store) as 0; `coffee_share_orders` = share of orders with `coffee_commodity_num > 0`; `take_address_rate` = share with non-null `take_address` |
+| 41–46 | Demographics | `gender`, `level`, `has_inviter`, `manufacturer`, `callphone`, `push` | Integer-encoded (NaN → 1; sorted distinct values → 2, 3, …); encoding map saved to `data/intermediate/demo_encoding_map.csv`. Excludes `birth_year`, `camera`, `location`, `network`, `sdcard`. |
 
-- 500 trees; tune `max_features` (mtry) via OOB or cross-validation.
-- One global model across all closure events; closure characteristics as features.
-- Impute missing: numeric → median; categorical → mode.
+**Features stored in panel but excluded from X (used in Step 4 DiD regression):**
+
+| Variable | Construction |
+|----------|--------------|
+| `closure_length_days` | Duration of the closure in days |
+| `closure_start_month` | Calendar month of closure start (1–12) |
+| `closure_start_weekday` | Day-of-week of closure start (0=Monday) |
+| `closure_start_season` | Season of closure start (1–4) |
+| `share_visited_stores_closed` | Whether this is a treatment consumer (= `is_treated`); captures treatment assignment |
+| `tenure_days` | Days from first order in data to `period_start`; proxy for how long the member has been active |
+
+**2d. Train XGBoost.**
+
+- **Algorithm:** XGBoost gradient-boosted trees (`binary:logistic`, eval metric: AUC).
+- **Hyperparameters:** 500 boosting rounds, `max_depth = 6`, `eta = 0.1`, `tree_method = hist`.
+- **Hardware:** Uses `device = cuda` when a GPU is detected; falls back to CPU otherwise. No manual imputation is needed — the pipeline raises `ValueError` on any NaN in the feature matrix, so the training matrix is guaranteed NaN-free.
+- **Scope:** One global model trained across all 89 closure events; closure characteristics (`closure_length_days`, `closure_start_month`, etc.) are included as features to capture event-level heterogeneity.
 
 **2e. Evaluation.**
 
-- **Variable importance:** Permutation importance or mean decrease in impurity; rank by contribution to accuracy.
-- **Accuracy by group and period:**
-  - **Treatment, Pre (t=−1):** OOB accuracy for last pre-closure week.
+- **Variable importance:** Gain-based importance from `model.get_score(importance_type="gain")`; top 30 features printed and full ranking saved.
+- **Accuracy by group and period** (threshold = 0.5):
+  - **Treatment, Pre (t=−1):** Predicted vs observed for the last pre-closure week.
   - **Control, Pre (t=−1):** Same.
-  - **Control, During (t=0):** Predicted vs actual; accuracy, precision, recall, F1, false positive rate (µ), false negative rate (λ).
+  - **Control, During (t=0):** Predicted vs observed for actual closure window; yields false positive rate µ and false negative rate λ used for Paper 2 attenuation correction.
 
 **2f. Outputs from running the code.**
 
-1. **Variable importance ranking:** Table/CSV with `feature`, `importance`, `rank` (sorted descending).
-2. **Prediction accuracy table:**
+1. **`variable_importance.csv`:** Columns `feature`, `importance` (gain), `rank` (sorted descending).
+2. **`prediction_accuracy.csv`:** One row per evaluation group with columns `accuracy`, `precision`, `recall`, `f1`, `fpr`, `fnr`, `n`, `group`.
+3. **`train_displacement_model.log`:** Full log including variable statistics (mean, min, max for all 52 features), dataset counts, and the complete accuracy table.
 
-| Group | Period | Accuracy | Precision | Recall | F1 | n |
-|-------|--------|----------|------------|--------|-----|---|
-| Treatment | Pre (t=−1) | … | … | … | … | … |
-| Control | Pre (t=−1) | … | … | … | … | … |
-| Control | During (t=0) | … | … | … | … | … |
+Example accuracy table (1-closure test, closure Sept 5 2020, dept 239, 46 behavioral/demographic features):
 
-3. **Optional:** Accuracy by closure length (short/medium/long).
+| group | accuracy | precision | recall | f1 | fpr | fnr | n |
+|-------|----------|-----------|--------|----|-----|-----|---|
+| Treatment_Pre_t-1 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | 0.000 | 4 |
+| Control_Pre_t-1 | 0.816 | 0.863 | 0.694 | 0.769 | 0.087 | 0.306 | 16,705 |
+| Control_During_t0 | 0.579 | 0.727 | 0.513 | 0.602 | 0.314 | 0.487 | 16,705 |
 
 **2g. Classify displaced vs non-displaced.**
 
-- **Displaced** = predicted probability > 0.5 (or tuned threshold).
-- **Correction (Paper 2):** For control, replace predicted with observed at t=0; drop misclassified controls.
+- **Displaced** = predicted probability > 0.5 (default threshold; sensitivity to 0.4 and 0.6 is a robustness check, Step 5c).
+- **Correction (Paper 2, future):** For control consumers, replace model prediction with observed purchase at t=0; use µ (FPR) and λ (FNR) from the Control_During_t0 row to bound the attenuation in the displacement effect estimate (Paper 2 Appendix D). Not yet implemented.
 
 ---
 
@@ -339,7 +354,7 @@ Compare displacement effect between **push0** (opted out of push at first use) a
 | Area | Done | Not done |
 |------|------|----------|
 | **Treatment/control** | Preferred-store-based treatment; never-treated control; threshold justification | Boundary/multi-closure rules; control comparability; closure distribution (geo, timing, duration, severity) |
-| **Displacement** | — | Target definition; training data; full feature set; RF training; OOB and control-window evaluation; classification + Paper 2 correction |
+| **Displacement** | Target definition; 4-week panel (periods −4…−1 + control t=0); 46 behavioral/demographic features from `order_result.csv` (closure-event features excluded from X, stored for Step 4); XGBoost (500 rounds, gain importance); accuracy table (Treatment/Control pre & during); `variable_importance.csv`, `prediction_accuracy.csv` | Displacement label assignment to treatment consumers; Paper 2 attenuation correction (µ, λ bounds); accuracy by closure length |
 | **Sample** | Pre/during/post windows; period-level behavior panel | Normalized time units; stacked consumer–closure; clustering design |
 | **Estimation** | Descriptive stats, t-tests, visual comparison | DiD ATT; triple-difference; event study; closure-length interaction |
 | **Robustness** | 14 vs 28 day window; duration-split and push-split plots | Parallel trends test; matching; threshold sensitivity; severity subsample; attenuation bound |

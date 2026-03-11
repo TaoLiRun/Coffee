@@ -1,21 +1,28 @@
-2026-03-08 22:31:47,094 | INFO | ================================================================================
-2026-03-08 22:31:47,094 | INFO | Displacement Classification Model Training
-2026-03-08 22:31:47,094 | INFO | Started at 2026-03-08T22:31:47.094668
-2026-03-08 22:31:47,094 | INFO | ================================================================================
-2026-03-08 22:32:50,648 | INFO | Loading order result from /home/litao/Coffee/data/data1031/order_result.csv
-2026-03-08 22:33:34,248 | INFO |   Loaded 7,312,498 orders
-2026-03-08 22:33:34,250 | INFO | Loading member demographics from /home/litao/Coffee/data/data1031/member_result.csv
-2026-03-08 22:33:34,894 | INFO |   Loaded 809,751 members
-2026-03-08 22:33:34,916 | INFO | Loaded 120,841 no-push members
-2026-03-08 22:33:49,987 | INFO | 
+2026-03-11 16:20:01,859 | INFO | ================================================================================
+2026-03-11 16:20:01,859 | INFO | Displacement Classification Model Training
+2026-03-11 16:20:01,859 | INFO | Started at 2026-03-11T16:20:01.859464
+2026-03-11 16:20:01,859 | INFO | ================================================================================
+2026-03-11 16:20:01,859 | INFO | Loading order result from /home/litao/Coffee/data/data1031/order_result.csv
+2026-03-11 16:20:31,393 | INFO |   Loaded 7,312,498 orders
+2026-03-11 16:20:31,399 | INFO |   Closures after Aug-2020 filter: 89
+2026-03-11 16:20:31,399 | INFO |   [DEBUG] Using last 20 closure(s) (tail)
+2026-03-11 16:20:31,426 | INFO | Loaded 120,841 no-push members
+2026-03-11 16:20:31,426 | INFO | Loading member demographics from /home/litao/Coffee/data/data1031/member_result.csv
+2026-03-11 16:20:32,242 | INFO |   Loaded 809,751 members
+2026-03-11 16:20:32,493 | INFO |   Saved encoding map (147 entries) → /home/litao/Coffee/model-free/data/intermediate/demo_encoding_map.csv
+2026-03-11 16:20:39,451 | INFO | 
+Pre-filtering data to exact panel members across all closures...
+2026-03-11 16:20:54,396 | INFO |   Treatment members (union):  7,173
+2026-03-11 16:20:54,397 | INFO |   Control members (union):    101,333
+2026-03-11 16:20:54,397 | INFO |   Total panel members:        108,506
+2026-03-11 16:20:59,428 | INFO |   df_order_full: 7,312,498 → 2,437,905 rows
+2026-03-11 16:20:59,428 | INFO | 
 Building training panel (4-week window)...
-2026-03-08 22:34:15,454 | INFO |   Closure 1/101...
-2026-03-08 22:34:34,516 | INFO |   Closure 25/101...
-2026-03-08 22:35:06,219 | INFO |   Closure 50/101...
-2026-03-08 22:35:48,762 | INFO |   Closure 75/101...
-2026-03-08 22:36:30,976 | INFO |   Closure 100/101...
-2026-03-08 22:38:10,102 | INFO |   Panel: 19,475,706 rows, 115,200 unique members
-2026-03-08 22:38:10,199 | INFO |   Label distribution: {0: 13955812, 1: 5519894}
-2026-03-08 22:38:14,946 | INFO | 
-Computing features...
-2026-03-08 22:40:12,753 | INFO |   Row 1/19475706...
+2026-03-11 16:21:04,012 | INFO |   Earliest order date in data: 2020-06-01
+2026-03-11 16:21:05,184 | INFO |   Closure 1/20...
+2026-03-11 16:22:21,309 | INFO |   Panel: 8,300,103 rows, 106,392 unique members
+2026-03-11 16:22:21,347 | INFO |   Label distribution: {0: 6993250, 1: 1306853}
+2026-03-11 16:22:23,011 | INFO | 
+Computing features (vectorized)...
+2026-03-11 16:22:28,408 | INFO |   100 unique (closure, period) groups across 106,392 unique members — iterating by closure × period...
+2026-03-11 16:22:28,409 | INFO |   Group 1/100  dept=133  closure=2021-07-28  period_start=2021-06-30
