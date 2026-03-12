@@ -19,12 +19,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_PATH = PROJECT_ROOT / "data" / "processed" / "order_commodity_result_processed.csv"
 GEOCODED_STORES_PATH = (
     PROJECT_ROOT
-    / "plots"
-    / "nanjing_store_locations"
     / "outputs"
+    / "nanjing_store_locations"
     / "nanjing_stores_geocoded.csv"
 )
-OUTPUT_DIR = PROJECT_ROOT / "plots" / "nanjing_store_locations"
+OUTPUT_DIR = PROJECT_ROOT / "outputs" / "store"
 OUTPUT_CSV = OUTPUT_DIR / "store_closures.csv"
 
 

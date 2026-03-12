@@ -1,4 +1,5 @@
 import json
+import re
 import time
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
@@ -10,10 +11,11 @@ import requests
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 # The raw data for Nanjing store addresses lives directly under the top-level
 # `data1031` directory in this project (see workspace structure).
-DATA_CSV = PROJECT_ROOT / "data1031" / "dapt_id_address.csv"
+DATA_CSV = PROJECT_ROOT / "data" / "data1031" / "dapt_id_address.csv"
 
-# Save all outputs (CSV, cache, map) in the same directory as this script.
-OUTPUT_DIR = Path(__file__).resolve().parent
+# Save all outputs (CSV, cache, map) in the project-level outputs/ subdirectory.
+# parents[0]=store, parents[1]=src, parents[2]=model-free
+OUTPUT_DIR = Path(__file__).resolve().parents[2] / "outputs" / "nanjing_store_locations"
 # Use a Baidu-specific cache file so we do not mix with any previous Nominatim cache.
 GEOCODE_CACHE_PATH = OUTPUT_DIR / "geocode_cache_baidu.json"
 GEOCODED_CSV_PATH = OUTPUT_DIR / "nanjing_stores_geocoded.csv"
@@ -130,10 +132,44 @@ def geocode_address(
 
 
 def is_within_nanjing_bounds(lat: Optional[float], lon: Optional[float]) -> bool:
-    """Simple bounding-box check around Nanjing city."""
+    """Simple bounding-box check around Nanjing city.
+
+    Gaochun and Lishui districts extend to ~31.1° N, so the lower lat
+    bound is set to 31.0 rather than 31.5.
+    """
     if lat is None or lon is None:
         return False
-    return 31.5 <= lat <= 32.5 and 118.0 <= lon <= 119.5
+    return 31.0 <= lat <= 32.5 and 118.0 <= lon <= 119.5
+
+
+# Matches floor/room/sub-building descriptors that Baidu cannot resolve.
+_SUBLOC_RE = re.compile(
+    r"(?:"
+    r"负?[一二三四五六七八九十百]+[层楼]"
+    r"|底商|大堂|中庭|食堂|餐厅"
+    r"|[A-Za-z0-9]+(?:,[A-Za-z0-9]+)*栋"
+    r"|[A-Za-z0-9]+幢"
+    r"|[A-Za-z0-9]+座"
+    r")[^号]*$"
+)
+
+
+def simplify_address(addr: str) -> str:
+    """Strip floor/sub-building locators from a Nanjing address for geocoding retry.
+
+    Examples
+    --------
+    '南京市栖霞区文澜路99号南京信息职业技术学院第二食堂二层'
+        -> '南京市栖霞区文澜路99号南京信息职业技术学院第二食堂'
+    '南京市鼓楼区山西路8号金山大厦A座六层'
+        -> '南京市鼓楼区山西路8号金山大厦'
+    '南京市雨花台区民智路11号喜马拉雅A,B栋一层大堂'
+        -> '南京市雨花台区民智路11号喜马拉雅'
+    """
+    result = _SUBLOC_RE.sub('', addr).strip()
+    # Also remove trailing punctuation or spaces left after stripping
+    result = result.rstrip('，。 ')
+    return result if result else addr
 
 
 def build_geocoded_table(limit_rows: Optional[int] = None, output_path: Optional[Path] = None) -> pd.DataFrame:
@@ -154,11 +190,34 @@ def build_geocoded_table(limit_rows: Optional[int] = None, output_path: Optional
     for addr in unique_addresses:
         if addr in cache:
             info = cache[addr]
+            # Retry previously failed entries with a simplified address
+            if info.get("meta", {}).get("status") == "error":
+                simplified = simplify_address(addr)
+                if simplified and simplified != addr:
+                    try:
+                        lat, lon, meta = geocode_address(simplified, session=session)
+                    except Exception:  # noqa: BLE001
+                        lat, lon, meta = None, None, {"status": "error"}
+                    if lat is not None:
+                        meta["fallback_address"] = simplified
+                        info = {"latitude": lat, "longitude": lon, "meta": meta}
+                        cache[addr] = info
+                        save_cache(cache)
         else:
             try:
                 lat, lon, meta = geocode_address(addr, session=session)
             except Exception as exc:  # noqa: BLE001
                 lat, lon, meta = None, None, {"status": "error", "error": str(exc)}
+            # Retry with simplified address if initial attempt failed
+            if lat is None:
+                simplified = simplify_address(addr)
+                if simplified and simplified != addr:
+                    try:
+                        lat, lon, meta = geocode_address(simplified, session=session)
+                    except Exception:  # noqa: BLE001
+                        pass
+                    if lat is not None:
+                        meta["fallback_address"] = simplified
             info = {
                 "latitude": lat,
                 "longitude": lon,

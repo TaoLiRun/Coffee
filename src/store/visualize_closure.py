@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 
 # Project paths
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-CLOSURES_CSV = PROJECT_ROOT / "plots" / "nanjing_store_locations" / "store_closures.csv"
+CLOSURES_CSV = PROJECT_ROOT / "outputs" / "store" / "store_closures.csv"
 OUTPUT_DIR = Path(__file__).resolve().parent
 OUTPUT_HTML = OUTPUT_DIR / "store_closures_map.html"
 

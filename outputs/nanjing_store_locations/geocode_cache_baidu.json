@@ -170,12 +170,14 @@
     }
   },
   "南京市浦口区浦口大道13号新城总部大厦一层大堂": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.0717021116133,
+    "longitude": 118.65382617971852,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "南京市浦口区浦口大道13号新城总部大厦"
     }
   },
   "南京市浦口区大桥北路1号华侨广场一层大堂": {
@@ -349,12 +351,14 @@
     }
   },
   "南京市秦淮区太平南路305号江苏钟山宾馆集团江苏饭店商务大楼一层大堂": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.038500530721386,
+    "longitude": 118.79886398227357,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "南京市秦淮区太平南路305号江苏钟山宾馆集团江苏饭店商务大楼"
     }
   },
   "南京市玄武区黄埔路2号黄埔大厦一层大堂": {
@@ -518,12 +522,14 @@
     }
   },
   "鼓楼区湖北路51号南京鼓楼新城吾悦广场负一层中庭": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.07319395187247,
+    "longitude": 118.78317723247504,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "鼓楼区湖北路51号南京鼓楼新城吾悦广场"
     }
   },
   "南京市鼓楼区南昌路40号长江科技园一层大堂": {
@@ -617,12 +623,14 @@
     }
   },
   "南京市鼓楼区行健路16号移动龙江阳光广场一层": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.06284686872551,
+    "longitude": 118.75232313312384,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70,
+      "fallback_address": "南京市鼓楼区行健路16号移动龙江阳光广场"
     }
   },
   "鼓楼区汉中路140号南京医科大学南门东侧一层": {
@@ -676,12 +684,14 @@
     }
   },
   "南京市江宁区将军大道9号托乐嘉花园108幢一层114室": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 31.955451005249245,
+    "longitude": 118.79218076894045,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "地产小区",
+      "precise": 1,
+      "confidence": 70,
+      "fallback_address": "南京市江宁区将军大道9号托乐嘉花园"
     }
   },
   "南京市六合区葛关路818-2号美利广场一层124室": {
@@ -815,12 +825,14 @@
     }
   },
   "南京市鼓楼区山西路8号金山大厦A座六层": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.07458105135482,
+    "longitude": 118.7787224456205,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "南京市鼓楼区山西路8号金山大厦"
     }
   },
   "南京市江宁区科建路29号有志大厦A座一层101室": {
@@ -994,12 +1006,14 @@
     }
   },
   "南京市鼓楼区中山北路28号江苏商厦底商": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.068040600170214,
+    "longitude": 118.78787617876718,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "商务大厦",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "南京市鼓楼区中山北路28号江苏商厦"
     }
   },
   "南京市玄武区珠江路488号未来城A座底商": {
@@ -1383,12 +1397,14 @@
     }
   },
   "栖霞区文澜路99号南京信息职业技术学院第二食堂二层": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.134965349840314,
+    "longitude": 118.94820700381577,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70,
+      "fallback_address": "栖霞区文澜路99号南京信息职业技术学院第二"
     }
   },
   "南京市建邺区江东中路222号地铁2号线奥体东站负一层33号": {
@@ -1512,12 +1528,14 @@
     }
   },
   "南京市栖霞区晓庄中心村130号金陵科技学院第一食堂二层": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.12896957910626,
+    "longitude": 118.81802735405685,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70,
+      "fallback_address": "南京市栖霞区晓庄中心村130号金陵科技学院第一"
     }
   },
   "南京市玄武区中山东路145号全民健身中心一层104室": {
@@ -1531,12 +1549,14 @@
     }
   },
   "浦口区宁六路217号南京信息工程大学西苑第一食堂一层": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.20817228415513,
+    "longitude": 118.71478887467822,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "教育",
+      "precise": 1,
+      "confidence": 70,
+      "fallback_address": "浦口区宁六路217号南京信息工程大学西苑第一"
     }
   },
   "南京市玄武区苏宁大道9号苏宁易购广场负二层C102商铺": {
@@ -1740,12 +1760,14 @@
     }
   },
   "南京市雨花台区软件大道118号B3栋一层": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 31.98118326774237,
+    "longitude": 118.7754415644064,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "门址",
+      "precise": 1,
+      "confidence": 80,
+      "fallback_address": "南京市雨花台区软件大道118号"
     }
   },
   "南京市鼓楼区中山北路281号虹桥新城市广场一层中庭": {
@@ -1929,12 +1951,14 @@
     }
   },
   "南京市江宁区润发路9号南方时代广场一层大堂": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 32.00388699212841,
+    "longitude": 118.88564730132043,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "购物",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "南京市江宁区润发路9号南方时代广场"
     }
   },
   "南京市江宁区双龙大道1539号21世纪太阳城购物中心负一层": {
@@ -2148,12 +2172,14 @@
     }
   },
   "南京市雨花台区民智路11号喜马拉雅A,B栋一层大堂": {
-    "latitude": null,
-    "longitude": null,
+    "latitude": 31.971525840762926,
+    "longitude": 118.81179661720908,
     "meta": {
-      "status": "error",
-      "baidu_status": 401,
-      "message": "当前并发量已经超过约定并发配额，限制访问"
+      "status": "ok",
+      "level": "宾馆",
+      "precise": 1,
+      "confidence": 75,
+      "fallback_address": "南京市雨花台区民智路11号喜马拉雅"
     }
   },
   "南京市鼓楼区集庆门大街272号苏宁慧谷E07一层102室": {
