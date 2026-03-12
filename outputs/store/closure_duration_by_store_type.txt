@@ -1,0 +1,42 @@
+store_closures.csv — Closure Duration & Seasonality Analysis
+====================================================================
+
+SECTION 1: Closure Duration by Store Type
+------------------------------------------
+Total rows: 101
+
+Group                 Count       %   mean_days    min    max
+----------------------------------------------------
+含"大学"/"学院"             60   59.4%        65.7     35    107
+其他                       41   40.6%        22.8     10    101
+
+SECTION 2: Seasonality of University/College Store Closures
+-------------------------------------------------------------
+All 60 university/college closures follow Chinese academic calendar breaks:
+
+Closure START month:
+  Month  1 (Jan): 21
+  Month  6 (Jun): 9
+  Month  7 (Jul): 29
+  Month 12 (Dec): 1
+
+Closure END month:
+  Month  2 (Feb): 14
+  Month  3 (Mar): 8
+  Month  8 (Aug): 5
+  Month  9 (Sep): 20
+  Month 10 (Oct): 13
+
+Interpretation:
+  * Start Jan (21) → Winter semester break (Jan–Feb)
+  * Start Jun/Jul (9+29=38) → Summer semester break (Jul–Sep/Oct)
+  * End Feb/Mar (14+8=22) → Spring semester resumes
+  * End Sep/Oct (20+13=33) → Fall semester resumes
+
+Conclusion:
+  All 60 university store closures are HOLIDAY-DRIVEN seasonal breaks,
+  NOT displacement events. Non-university closures (41 rows, mean 22.8 days)
+  are more likely to represent true displacement or turnover.
+  Recommend adding is_university flag or config toggle to exclude these
+  from displacement model training.
+====================================================================
