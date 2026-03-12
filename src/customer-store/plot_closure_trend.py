@@ -228,7 +228,7 @@ def main(limit_closures: int | None = None):
 
     customer_preference = get_customer_store_preference(df, lowest_purchases=DEFAULT_LOWEST_PURCHASES)
 
-    for window_weeks in [2, 4]:
+    for window_weeks in [2, 4, 8]:
         print(f"\n--- Building panel for {window_weeks}-week window ---")
         panel = build_week_level_panel(
             df, df_order, closures, customer_preference,
