@@ -1,0 +1,19 @@
+{
+  "data": {
+    "window_weeks": 4,
+    "min_purchases_threshold": 5,
+    "min_store_ratio": 0.8,
+    "closure_filter_start": "2020-09-01"
+  },
+  "model": {
+    "xgb_params": {
+      "max_depth": 6,
+      "eta": 0.1,
+      "objective": "binary:logistic",
+      "eval_metric": "auc",
+      "tree_method": "hist"
+    },
+    "num_boost_round": 500,
+    "decision_threshold": 0.5
+  }
+}
