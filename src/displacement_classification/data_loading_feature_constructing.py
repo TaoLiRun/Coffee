@@ -37,7 +37,7 @@ SCRIPT_DIR   = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parents[2]          # model-free/
 
 DATA_DIR            = PROJECT_ROOT.parent / "data" / "data1031"
-CLOSURES_CSV        = PROJECT_ROOT / "outputs" / "store" / "store_closures.csv"
+CLOSURES_CSV        = PROJECT_ROOT / "outputs" / "store" / "non_uni_store_closures.csv"
 MEMBER_RESULT_PATH  = DATA_DIR / "member_result.csv"
 NO_PUSH_MEMBERS_PATH = PROJECT_ROOT / "data" / "processed" / "no_push_members.csv"
 DEMO_INTERMEDIATE_DIR = PROJECT_ROOT / "data" / "intermediate"

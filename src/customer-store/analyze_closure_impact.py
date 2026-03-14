@@ -25,7 +25,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]  # model-free directory
 DATA_DIR = PROJECT_ROOT.parent / "data" / "data1031"
 ORDER_COMMODITY_PATH = DATA_DIR / "order_commodity_result.csv"
 ORDER_RESULT_PATH = DATA_DIR / "order_result.csv"
-CLOSURES_CSV = PROJECT_ROOT / "outputs" / "store" / "store_closures.csv"
+CLOSURES_CSV = PROJECT_ROOT / "outputs" / "store" / "non_uni_store_closures.csv"
 OUTPUT_DIR = PROJECT_ROOT / "plots" / "customer_store_analysis"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
