@@ -25,6 +25,7 @@ GEOCODED_STORES_PATH = (
 )
 OUTPUT_DIR = PROJECT_ROOT / "outputs" / "store"
 OUTPUT_CSV = OUTPUT_DIR / "store_closures.csv"
+NON_UNI_OUTPUT_CSV = OUTPUT_DIR / "non_uni_store_closures.csv"
 
 
 def load_order_data() -> pd.DataFrame:
@@ -157,7 +158,8 @@ def create_closures_table(
 
     # Convert closures list to DataFrame
     closures_df = pd.DataFrame(
-        closures, columns=["dept_id", "closure_start", "closure_end", "closure_duration_days"]
+        closures,
+        columns=["dept_id", "closure_start", "closure_end", "closure_duration_days"],
     )
 
     # Merge with geocoded store data
@@ -197,6 +199,24 @@ def create_closures_table(
     return closures_df
 
 
+def add_university_flag(closures_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add an is_university flag based on the address field.
+
+    A store is considered a university/college store if its address
+    contains either "大学" or "学院".
+    """
+    if "address" not in closures_df.columns:
+        closures_df["is_university"] = False
+        return closures_df
+
+    closures_df = closures_df.copy()
+    closures_df["is_university"] = closures_df["address"].astype(str).str.contains(
+        "大学|学院", na=False
+    )
+    return closures_df
+
+
 def main(min_closure_days: int = 10):
     """
     Main function to identify store closures.
@@ -224,10 +244,19 @@ def main(min_closure_days: int = 10):
     # Create closures table
     closures_df = create_closures_table(closures, geocoded_df)
 
-    # Save to CSV
+    # Add university flag
+    closures_df = add_university_flag(closures_df)
+
+    # Save full closures table to CSV
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     closures_df.to_csv(OUTPUT_CSV, index=False, encoding="utf-8-sig")
     print(f"\nClosures table saved to: {OUTPUT_CSV}")
+
+    # Create and save non-university closures table
+    non_uni_df = closures_df[~closures_df["is_university"]].copy()
+    non_uni_df.drop(columns=["is_university"], inplace=True)
+    non_uni_df.to_csv(NON_UNI_OUTPUT_CSV, index=False, encoding="utf-8-sig")
+    print(f"Non-university closures table saved to: {NON_UNI_OUTPUT_CSV}")
 
     # Display first few rows
     if len(closures_df) > 0:
