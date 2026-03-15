@@ -1,0 +1,275 @@
+================================================================================
+Displacement Classification Model Training
+Started at 2026-03-15T14:58:30.419977
+================================================================================
+Loading order result from /home/litao/Coffee/data/data1031/order_result.csv
+  Loaded 7,312,498 orders
+  Closures after Aug-2020 filter: 41
+  [DEBUG] Using last 3 closure(s) (tail)
+Loaded 120,841 no-push members
+Loading member demographics from /home/litao/Coffee/data/data1031/member_result.csv
+  Loaded 809,751 members
+  Saved encoding map (147 entries) → /home/litao/Coffee/model-free/data/intermediate/demo_encoding_map.csv
+
+Calculating customer store preferences (min 5 purchases)...
+  Qualified customers: 286,784
+  Preferred store ratio - Mean: 0.696, Median: 0.714
+
+Pre-filtering data to exact panel members across all closures...
+  Never-treated control pool: 123,102 customers
+  Treatment members (union):  913
+  Control members (union):    106,704
+  Total panel members:        107,617
+  df_order_full: 7,312,498 → 2,427,738 rows
+
+Building training panel (4 pre-periods of length D=closure_duration_days)...
+  Never-treated control pool: 123,102 customers
+  Never-treated control pool: 123,102 customers
+  Earliest order date in data: 2020-06-01
+  Closure 1/3...
+  Panel: 1,399,355 rows, 104,861 unique members
+  Label distribution: {0: 1094173, 1: 305182}
+
+Computing features (vectorized)...
+  15 (closure × period) groups across 104,861 unique members — iterating over 14 unique period_start dates...
+  period_start 1/14  date=2021-06-23
+  period_start 10/14  date=2021-09-23
+  Merging behavioral features back onto panel...
+  Done. Feature matrix: 1,399,355 rows × 63 columns
+
+================================================================================
+Variable Statistics (mean, min, max)
+================================================================================
+  total_purchase_days_pre: mean=17.7075, min=1.0000, max=417.0000
+  purchases_per_week_all_pre: mean=0.2758, min=0.0136, max=6.8000
+  purchases_per_week_last_4w: mean=0.2863, min=0.0000, max=7.2500
+  purchases_per_week_last_2w: mean=0.2805, min=0.0000, max=7.5000
+  purchases_per_week_last_1w: mean=0.2991, min=0.0000, max=8.0000
+  days_since_last_purchase: mean=83.1868, min=1.0000, max=523.0000
+  purchased_in_last_7_days: mean=0.1625, min=0.0000, max=1.0000
+  purchased_in_last_14_days: mean=0.2506, min=0.0000, max=1.0000
+  total_orders_pre: mean=19.1304, min=1.0000, max=3043.0000
+  total_spend_pre: mean=2351.4082, min=39.6000, max=1031223.2000
+  total_spend_last_4w: mean=162.2701, min=0.0000, max=162259.6000
+  total_spend_last_2w: mean=79.6841, min=0.0000, max=90963.3000
+  mean_inter_purchase_interval_days: mean=25.4224, min=0.0000, max=491.0000
+  std_inter_purchase_interval_days: mean=30.7758, min=0.0000, max=343.6539
+  max_gap_between_purchases: mean=92.5795, min=0.0000, max=507.0000
+  cv_inter_purchase_interval: mean=1.2546, min=0.0000, max=6.6764
+  longest_consecutive_streak_days: mean=2.1560, min=1.0000, max=162.0000
+  share_weeks_with_purchase: mean=0.1785, min=0.0133, max=1.0182
+  modal_purchase_dow: mean=2.2675, min=0.0000, max=6.0000
+  share_purchases_dow0: mean=0.1540, min=0.0000, max=1.0000
+  share_purchases_dow1: mean=0.1559, min=0.0000, max=1.0000
+  share_purchases_dow2: mean=0.1548, min=0.0000, max=1.0000
+  share_purchases_dow3: mean=0.1564, min=0.0000, max=1.0000
+  share_purchases_dow4: mean=0.1622, min=0.0000, max=1.0000
+  share_purchases_dow5: mean=0.1150, min=0.0000, max=1.0000
+  share_purchases_dow6: mean=0.1017, min=0.0000, max=1.0000
+  entropy_dow: mean=1.4920, min=-0.0000, max=1.9459
+  avg_basket_size: mean=1.5138, min=1.0000, max=19.2000
+  n_order_categories_avg: mean=1.1978, min=1.0000, max=3.0000
+  unique_stores_pre: mean=1.7096, min=1.0000, max=20.0000
+  preferred_store_ratio: mean=0.9442, min=0.3333, max=1.0000
+  second_store_ratio: mean=0.0469, min=0.0000, max=0.5000
+  avg_discount_per_order: mean=3.4367, min=2.2000, max=4.0000
+  coupon_usage_rate: mean=0.7779, min=0.0000, max=1.0000
+  avg_coffee_num: mean=0.8589, min=0.0000, max=15.0000
+  avg_food_num: mean=0.1335, min=0.0000, max=8.8000
+  avg_use_coffee_wallet: mean=0.0613, min=0.0000, max=15.0000
+  avg_delivery_pay: mean=0.5811, min=0.0000, max=6.0000
+  coffee_share_orders: mean=0.7060, min=0.0000, max=1.0000
+  take_address_rate: mean=0.1060, min=0.0000, max=1.0000
+  gender: mean=2.3678, min=1.0000, max=3.0000
+  level: mean=2.7541, min=2.0000, max=14.0000
+  has_inviter: mean=2.2640, min=2.0000, max=3.0000
+  manufacturer: mean=49.7646, min=1.0000, max=120.0000
+  callphone: mean=2.1981, min=1.0000, max=3.0000
+  push: mean=2.1556, min=1.0000, max=3.0000
+
+================================================================================
+Label balance audit (by closure_duration_days)
+================================================================================
+  D=11 train: n=268,152, n_positive=42,325, label_rate=0.1578
+  D=11 eval_pre_treatment: n=422, n_positive=101, label_rate=0.2393
+  D=11 eval_pre_control: n=88,962, n_positive=15,872, label_rate=0.1784
+  D=11 eval_during: n=88,962, n_positive=15,747, label_rate=0.1770
+  D=12 train: n=311,070, n_positive=80,657, label_rate=0.2593
+  D=12 eval_pre_treatment: n=103, n_positive=28, label_rate=0.2718
+  D=12 eval_pre_control: n=103,587, n_positive=27,657, label_rate=0.2670
+  D=12 eval_during: n=103,587, n_positive=25,145, label_rate=0.2427
+  D=14 train: n=260,907, n_positive=67,032, label_rate=0.2569
+  D=14 eval_pre_treatment: n=335, n_positive=23, label_rate=0.0687
+  D=14 eval_pre_control: n=86,634, n_positive=14,232, label_rate=0.1643
+  D=14 eval_during: n=86,634, n_positive=16,363, label_rate=0.1889
+  Saved /home/litao/Coffee/model-free/outputs/displacement_classification/label_balance_audit.csv
+
+GPU available: True
+
+Training 3 model(s), one per duration: [11, 12, 14]
+
+  Duration D=11: train n=268,152, eval_pre n=89,384, eval_during n=88,962
+
+Saved model → /home/litao/Coffee/model-free/outputs/displacement_classification/displacement_model_11.json
+
+================================================================================
+Variable Importance Ranking (top 30)
+================================================================================
+    1. purchases_per_week_last_2w: 167.19
+    2. days_since_last_purchase: 132.84
+    3. purchases_per_week_last_1w: 106.62
+    4. total_purchase_days_pre: 100.58
+    5. purchases_per_week_last_4w: 43.00
+    6. preferred_store_ratio: 19.91
+    7. share_weeks_with_purchase: 15.31
+    8. unique_stores_pre: 13.38
+    9. purchases_per_week_all_pre: 11.88
+   10. take_address_rate: 11.35
+   11. share_purchases_dow6: 10.98
+   12. avg_coffee_num: 10.41
+   13. total_orders_pre: 9.81
+   14. cv_inter_purchase_interval: 9.36
+   15. std_inter_purchase_interval_days: 9.12
+   16. avg_delivery_pay: 7.53
+   17. callphone: 7.27
+   18. total_spend_pre: 7.24
+   19. mean_inter_purchase_interval_days: 7.22
+   20. second_store_ratio: 7.13
+   21. coffee_share_orders: 7.01
+   22. gender: 6.99
+   23. share_purchases_dow5: 6.70
+   24. level: 6.59
+   25. max_gap_between_purchases: 6.42
+   26. manufacturer: 5.98
+   27. entropy_dow: 5.81
+   28. longest_consecutive_streak_days: 5.72
+   29. share_purchases_dow4: 5.67
+   30. total_spend_last_4w: 5.53
+
+Saved variable_importance_11.csv → /home/litao/Coffee/model-free/outputs/displacement_classification
+
+================================================================================
+Prediction Accuracy Table
+================================================================================
+ accuracy  precision   recall       f1      fpr      fnr     n             group
+ 0.767773   0.525424 0.306931 0.387500 0.087227 0.693069   422 Treatment_Pre_t-1
+ 0.859817   0.796203 0.287991 0.422986 0.016008 0.712009 88962   Control_Pre_t-1
+ 0.859086   0.776001 0.286658 0.418661 0.017797 0.713342 88962 Control_During_t0
+
+Saved prediction_accuracy_11.csv → /home/litao/Coffee/model-free/outputs/displacement_classification
+
+Scoring full panel...
+Saved scored panel (446,498 rows) → /home/litao/Coffee/model-free/outputs/displacement_classification/panel_with_scores_11.parquet
+Saved score summary CSV → /home/litao/Coffee/model-free/outputs/displacement_classification/displacement_scores_11.csv
+
+  Duration D=12: train n=311,070, eval_pre n=103,690, eval_during n=103,587
+
+Saved model → /home/litao/Coffee/model-free/outputs/displacement_classification/displacement_model_12.json
+
+================================================================================
+Variable Importance Ranking (top 30)
+================================================================================
+    1. purchases_per_week_last_4w: 342.80
+    2. purchases_per_week_last_2w: 166.29
+    3. days_since_last_purchase: 106.25
+    4. total_purchase_days_pre: 78.98
+    5. purchases_per_week_all_pre: 44.40
+    6. purchases_per_week_last_1w: 37.38
+    7. preferred_store_ratio: 22.16
+    8. total_spend_last_4w: 12.76
+    9. mean_inter_purchase_interval_days: 12.05
+   10. share_weeks_with_purchase: 11.68
+   11. total_orders_pre: 9.54
+   12. std_inter_purchase_interval_days: 8.55
+   13. second_store_ratio: 8.22
+   14. take_address_rate: 8.00
+   15. coffee_share_orders: 7.88
+   16. avg_delivery_pay: 7.52
+   17. gender: 7.05
+   18. cv_inter_purchase_interval: 6.80
+   19. max_gap_between_purchases: 6.74
+   20. total_spend_pre: 6.38
+   21. entropy_dow: 6.27
+   22. share_purchases_dow6: 6.22
+   23. avg_coffee_num: 6.10
+   24. avg_food_num: 5.86
+   25. share_purchases_dow5: 5.85
+   26. avg_basket_size: 5.83
+   27. n_order_categories_avg: 5.79
+   28. longest_consecutive_streak_days: 5.75
+   29. share_purchases_dow1: 5.71
+   30. avg_discount_per_order: 5.67
+
+Saved variable_importance_12.csv → /home/litao/Coffee/model-free/outputs/displacement_classification
+
+================================================================================
+Prediction Accuracy Table
+================================================================================
+ accuracy  precision   recall       f1      fpr      fnr      n             group
+ 0.718447   0.470588 0.285714 0.355556 0.120000 0.714286    103 Treatment_Pre_t-1
+ 0.812351   0.736709 0.462451 0.568217 0.060200 0.537549 103587   Control_Pre_t-1
+ 0.817593   0.692450 0.447166 0.543412 0.063665 0.552834 103587 Control_During_t0
+
+Saved prediction_accuracy_12.csv → /home/litao/Coffee/model-free/outputs/displacement_classification
+
+Scoring full panel...
+Saved scored panel (518,347 rows) → /home/litao/Coffee/model-free/outputs/displacement_classification/panel_with_scores_12.parquet
+Saved score summary CSV → /home/litao/Coffee/model-free/outputs/displacement_classification/displacement_scores_12.csv
+
+  Duration D=14: train n=260,907, eval_pre n=86,969, eval_during n=86,634
+
+Saved model → /home/litao/Coffee/model-free/outputs/displacement_classification/displacement_model_14.json
+
+================================================================================
+Variable Importance Ranking (top 30)
+================================================================================
+    1. purchases_per_week_last_2w: 139.67
+    2. days_since_last_purchase: 133.67
+    3. purchases_per_week_last_1w: 120.32
+    4. total_purchase_days_pre: 86.77
+    5. purchases_per_week_last_4w: 84.64
+    6. share_weeks_with_purchase: 25.92
+    7. preferred_store_ratio: 23.64
+    8. purchases_per_week_all_pre: 14.87
+    9. std_inter_purchase_interval_days: 12.97
+   10. avg_coffee_num: 10.94
+   11. share_purchases_dow6: 10.87
+   12. cv_inter_purchase_interval: 10.02
+   13. take_address_rate: 9.67
+   14. avg_delivery_pay: 9.11
+   15. gender: 8.71
+   16. mean_inter_purchase_interval_days: 8.01
+   17. max_gap_between_purchases: 7.91
+   18. coffee_share_orders: 7.62
+   19. second_store_ratio: 7.41
+   20. callphone: 7.30
+   21. share_purchases_dow5: 7.28
+   22. total_orders_pre: 7.26
+   23. unique_stores_pre: 7.14
+   24. total_spend_pre: 6.65
+   25. total_spend_last_2w: 6.44
+   26. level: 6.37
+   27. entropy_dow: 6.32
+   28. longest_consecutive_streak_days: 6.04
+   29. total_spend_last_4w: 6.00
+   30. coupon_usage_rate: 5.86
+
+Saved variable_importance_14.csv → /home/litao/Coffee/model-free/outputs/displacement_classification
+
+================================================================================
+Prediction Accuracy Table
+================================================================================
+ accuracy  precision   recall       f1      fpr      fnr     n             group
+ 0.904478   0.200000 0.130435 0.157895 0.038462 0.869565   335 Treatment_Pre_t-1
+ 0.873468   0.707751 0.391372 0.504027 0.031767 0.608628 86634   Control_Pre_t-1
+ 0.850278   0.782384 0.287172 0.420135 0.018599 0.712828 86634 Control_During_t0
+
+Saved prediction_accuracy_14.csv → /home/litao/Coffee/model-free/outputs/displacement_classification
+
+Scoring full panel...
+Saved scored panel (434,510 rows) → /home/litao/Coffee/model-free/outputs/displacement_classification/panel_with_scores_14.parquet
+Saved score summary CSV → /home/litao/Coffee/model-free/outputs/displacement_classification/displacement_scores_14.csv
+
+================================================================================
+Completed at 2026-03-15T15:03:38.197236
+================================================================================

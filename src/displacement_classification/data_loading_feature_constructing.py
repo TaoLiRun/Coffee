@@ -5,7 +5,7 @@ displacement classification pipeline.
 Exports
 -------
 Constants : DATA_DIR, CLOSURES_CSV, OUTPUT_DIR, LOG_DIR, LOG_FILE,
-            WINDOW_WEEKS, DEMO_INTERMEDIATE_DIR
+            NUM_PRE_PERIODS, DEMO_INTERMEDIATE_DIR
 Functions : setup_logging, log_print,
             load_no_push_ids, load_member_demographics, load_order_result_full,
             build_training_panel, compute_features_for_panel
@@ -36,13 +36,27 @@ SCRIPT_DIR   = Path(__file__).resolve().parent
 # parents[0]=displacement_classification, parents[1]=src, parents[2]=model-free
 PROJECT_ROOT = SCRIPT_DIR.parents[2]          # model-free/
 
-DATA_DIR            = PROJECT_ROOT.parent / "data" / "data1031"
-CLOSURES_CSV        = PROJECT_ROOT / "outputs" / "store" / "non_uni_store_closures.csv"
-MEMBER_RESULT_PATH  = DATA_DIR / "member_result.csv"
-NO_PUSH_MEMBERS_PATH = PROJECT_ROOT / "data" / "processed" / "no_push_members.csv"
-DEMO_INTERMEDIATE_DIR = PROJECT_ROOT / "data" / "intermediate"
+# Data dir: prefer location where order_result.csv exists (works with either repo layout)
+_data_candidates = [
+    PROJECT_ROOT.parent / "data" / "data1031",
+    PROJECT_ROOT / "data" / "data1031",
+]
+DATA_DIR = next(
+    (p for p in _data_candidates if (p / "order_result.csv").exists()),
+    _data_candidates[0],
+)
 
-OUTPUT_DIR = PROJECT_ROOT / "outputs" / "displacement_classification"
+# Outputs/closures: prefer PROJECT_ROOT; if not found, try model-free subdir (when PROJECT_ROOT is parent repo)
+_outputs_root = PROJECT_ROOT
+if not (PROJECT_ROOT / "outputs" / "store").exists() and (PROJECT_ROOT / "model-free" / "outputs" / "store").exists():
+    _outputs_root = PROJECT_ROOT / "model-free"
+
+CLOSURES_CSV        = _outputs_root / "outputs" / "store" / "non_uni_store_closures.csv"
+MEMBER_RESULT_PATH  = DATA_DIR / "member_result.csv"
+NO_PUSH_MEMBERS_PATH = _outputs_root / "data" / "processed" / "no_push_members.csv"
+DEMO_INTERMEDIATE_DIR = _outputs_root / "data" / "intermediate"
+
+OUTPUT_DIR = _outputs_root / "outputs" / "displacement_classification"
 LOG_DIR    = OUTPUT_DIR / "logs"
 LOG_FILE   = LOG_DIR / "train_displacement_model.log"
 
@@ -65,7 +79,7 @@ def load_config() -> dict:
 
 CONFIG = load_config()
 
-WINDOW_WEEKS = CONFIG["data"]["window_weeks"]
+NUM_PRE_PERIODS = CONFIG["data"]["num_pre_periods"]
 
 # ---------------------------------------------------------------------------
 # Imports from customer-store analysis module
@@ -219,31 +233,41 @@ def build_training_panel(
     """
     Build (member_id, dept_id, closure_start, period, label) panel.
 
-    period: −WINDOW_WEEKS … −1 (pre-closure weeks, e.g. −6..−1 when
-    window_weeks=6); 0 for control during closure (evaluation only —
-    excluded from XGBoost training set in main.py).
+    Each period has length D = closure_duration_days for that closure.
+    period: −num_pre_periods … −1 (pre-closure spans of D days each);
+    0 for control during closure (evaluation only — excluded from training in main.py).
+    Closures are skipped if there is insufficient history for 4 pre-periods of length D.
     """
-    log_print(logger, "\nBuilding training panel (4-week window)...")
+    log_print(logger, f"\nBuilding training panel ({NUM_PRE_PERIODS} pre-periods of length D=closure_duration_days)...")
     control_pool = get_never_treated_members(
         closures, customer_preference, DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO
     )
     df_com_s = build_date_sorted_index(df_orders)
     log_print(logger, f"  Never-treated control pool: {len(control_pool):,} customers")
-    log_print(logger, f"  Earliest order date in data: {df_orders['date'].min()}")
 
     df_orders_ts = df_orders.copy()
     df_orders_ts["date"] = pd.to_datetime(df_orders_ts["date"])
     member_first_purchase = df_orders_ts.groupby("member_id")["date"].min()
+    earliest_order_date = df_orders_ts["date"].min()
+    log_print(logger, f"  Earliest order date in data: {earliest_order_date.date()}")
 
     rows: List[Dict[str, Any]] = []
     n_closures = len(closures)
+    skipped_history = 0
     for idx, (_, closure) in enumerate(closures.iterrows()):
         if (idx + 1) % 25 == 0 or idx == 0:
             log_print(logger, f"  Closure {idx + 1}/{n_closures}...")
-        dept_id         = int(closure["dept_id"])
-        closure_start   = pd.to_datetime(closure["closure_start"])
-        closure_end     = pd.to_datetime(closure["closure_end"])
-        closure_duration = max(int(closure["closure_duration_days"]), 1)
+        dept_id = int(closure["dept_id"])
+        closure_start = pd.to_datetime(closure["closure_start"])
+        closure_end = pd.to_datetime(closure["closure_end"])
+        D = max(int(closure["closure_duration_days"]), 1)
+
+        # Skip closure if not enough calendar history for 4 pre-periods of length D
+        # (need at least 7 days before period -4 start for feature computation)
+        min_closure_start = earliest_order_date + pd.Timedelta(days=NUM_PRE_PERIODS * D + 8)
+        if closure_start < min_closure_start:
+            skipped_history += 1
+            continue
 
         treatment = _get_treated_members_for_store(
             customer_preference, dept_id, DEFAULT_LOWEST_RATIO
@@ -257,7 +281,7 @@ def build_training_panel(
         if not closure_control:
             continue
 
-        earliest_preperiod = closure_start - pd.Timedelta(days=WINDOW_WEEKS * 7)
+        earliest_preperiod = closure_start - pd.Timedelta(days=NUM_PRE_PERIODS * D)
 
         def _has_pre_window_history(members: list) -> list:
             return [
@@ -266,54 +290,58 @@ def build_training_panel(
                 and member_first_purchase[m] < earliest_preperiod
             ]
 
-        treatment       = _has_pre_window_history(treatment)
+        treatment = _has_pre_window_history(treatment)
         closure_control = _has_pre_window_history(closure_control)
         if not treatment or not closure_control:
             continue
 
         for group_label, members in [("treatment", treatment), ("control", closure_control)]:
-            for w in range(-WINDOW_WEEKS, 0):      # periods −4, −3, −2, −1
-                period_start = (closure_start + pd.Timedelta(days=7 * w)).date()
-                period_end   = (closure_start + pd.Timedelta(days=7 * w + 6)).date()
-                pc        = _slice_by_date(df_com_s, period_start, period_end)
-                pc        = pc[pc["member_id"].isin(members)]
+            for w in range(-NUM_PRE_PERIODS, 0):  # periods −4, −3, −2, −1 (each of length D days)
+                period_start = (closure_start + pd.Timedelta(days=w * D)).date()
+                period_end = (closure_start + pd.Timedelta(days=(w + 1) * D - 1)).date()
+                pc = _slice_by_date(df_com_s, period_start, period_end)
+                pc = pc[pc["member_id"].isin(members)]
                 purchasers = set(pc["member_id"].unique()) if not pc.empty else set()
                 for mid in members:
                     rows.append({
-                        "member_id":           mid,
-                        "dept_id":             dept_id,
-                        "closure_start":       closure["closure_start"],
-                        "closure_end":         closure["closure_end"],
-                        "closure_length_days": closure_duration,
-                        "group":               group_label,
-                        "period":              w,
-                        "period_start":        period_start,
-                        "period_end":          period_end,
-                        "label":               1 if mid in purchasers else 0,
-                        "is_treated":          1 if group_label == "treatment" else 0,
+                        "member_id": mid,
+                        "dept_id": dept_id,
+                        "closure_start": closure["closure_start"],
+                        "closure_end": closure["closure_end"],
+                        "closure_length_days": D,
+                        "closure_duration_days": D,
+                        "group": group_label,
+                        "period": w,
+                        "period_start": period_start,
+                        "period_end": period_end,
+                        "label": 1 if mid in purchasers else 0,
+                        "is_treated": 1 if group_label == "treatment" else 0,
                     })
             # Control: add period 0 (during closure) for evaluation only
             if group_label == "control":
-                dur_start  = closure_start.date()
-                dur_end    = closure_end.date()
-                pc         = _slice_by_date(df_com_s, dur_start, dur_end)
-                pc         = pc[pc["member_id"].isin(members)]
+                dur_start = closure_start.date()
+                dur_end = closure_end.date()
+                pc = _slice_by_date(df_com_s, dur_start, dur_end)
+                pc = pc[pc["member_id"].isin(members)]
                 purchasers = set(pc["member_id"].unique()) if not pc.empty else set()
                 for mid in members:
                     rows.append({
-                        "member_id":           mid,
-                        "dept_id":             dept_id,
-                        "closure_start":       closure["closure_start"],
-                        "closure_end":         closure["closure_end"],
-                        "closure_length_days": closure_duration,
-                        "group":               group_label,
-                        "period":              0,
-                        "period_start":        dur_start,
-                        "period_end":          dur_end,
-                        "label":               1 if mid in purchasers else 0,
-                        "is_treated":          0,
+                        "member_id": mid,
+                        "dept_id": dept_id,
+                        "closure_start": closure["closure_start"],
+                        "closure_end": closure["closure_end"],
+                        "closure_length_days": D,
+                        "closure_duration_days": D,
+                        "group": group_label,
+                        "period": 0,
+                        "period_start": dur_start,
+                        "period_end": dur_end,
+                        "label": 1 if mid in purchasers else 0,
+                        "is_treated": 0,
                     })
 
+    if skipped_history > 0:
+        log_print(logger, f"  Skipped {skipped_history} closure(s) for insufficient history.")
     panel = pd.DataFrame(rows)
     sample = os.environ.get("DISPLACEMENT_SAMPLE")
     if sample:

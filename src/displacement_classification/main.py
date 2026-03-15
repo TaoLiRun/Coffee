@@ -36,7 +36,6 @@ from data_loading_feature_constructing import (
     # Constants
     CLOSURES_CSV,
     OUTPUT_DIR,
-    WINDOW_WEEKS,
     CONFIG,
     # Re-exported from analyze_closure_impact
     DEFAULT_LOWEST_PURCHASES,
@@ -69,12 +68,9 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     df_order_full = load_order_result_full(logger)
     closures = pd.read_csv(CLOSURES_CSV, encoding="utf-8-sig")
 
-    # Retain only closures where all pre-closure weeks fall after the earliest
-    # order date (2020-06-01).  With a 6-week window, the earliest pre-period
-    # starts at closure_start − 42 days.  The exact cutoff date is controlled
-    # by CONFIG["data"]["closure_filter_start"] (currently 2020-09-01), which
-    # ensures there is sufficient pre-closure purchase history for every panel
-    # row.
+    # Retain only closures where closure_start is on or after the filter date
+    # (CONFIG["data"]["closure_filter_start"]).  Panel building further skips
+    # closures that do not have enough history for num_pre_periods of length D.
     closures["closure_start_dt"] = pd.to_datetime(closures["closure_start"])
     closures = (
         closures[closures["closure_start_dt"] >= pd.Timestamp(CONFIG["data"]["closure_filter_start"])]
@@ -142,16 +138,15 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     )
 
     # Feature columns: exclude identifiers, label, and closure-specific columns.
-    # Closure-specific features (closure_length_days, closure_start_month, etc.)
-    # describe the closure event, not the consumer's pre-closure behaviour.
-    # They belong in the DiD regression (Step 4), not in the displacement classifier.
+    # closure_length_days / closure_duration_days are not used as features.
     exclude = {
         # --- identifiers / bookkeeping ---
         "member_id", "dept_id", "closure_start", "closure_end",
         "period", "group", "label", "is_treated", "period_start", "period_end",
         # --- closure-event features ---
-        "closure_length_days", "closure_start_month", "closure_start_weekday",
-        "closure_start_season", "share_visited_stores_closed", "tenure_days",
+        "closure_length_days", "closure_duration_days", "closure_start_month",
+        "closure_start_weekday", "closure_start_season",
+        "share_visited_stores_closed", "tenure_days",
     }
     feature_cols = [
         c for c in features_df.columns
@@ -160,52 +155,85 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
 
     print_variable_statistics(logger, features_df, feature_cols)
 
-    # ---- Dataset statistics ---------------------------------------------
+    # ---- Label imbalance audit (from data) ------------------------------
     log_print(logger, "\n" + "=" * 80)
-    log_print(logger, "Selected Data Statistics")
+    log_print(logger, "Label balance audit (by closure_duration_days)")
     log_print(logger, "=" * 80)
+    audit_rows = []
+    for D in sorted(features_df["closure_duration_days"].unique()):
+        sub = features_df[features_df["closure_duration_days"] == D]
+        train_sub = sub[sub["period"] <= -2]
+        eval_pre_sub = sub[sub["period"] == -1]
+        eval_during_sub = sub[(sub["period"] == 0) & (sub["group"] == "control")]
+        for slice_name, slice_df in [
+            ("train", train_sub),
+            ("eval_pre_treatment", eval_pre_sub[eval_pre_sub["group"] == "treatment"]),
+            ("eval_pre_control", eval_pre_sub[eval_pre_sub["group"] == "control"]),
+            ("eval_during", eval_during_sub),
+        ]:
+            if slice_df.empty:
+                continue
+            n = len(slice_df)
+            n_pos = slice_df["label"].sum()
+            rate = n_pos / n if n else 0
+            audit_rows.append({
+                "closure_duration_days": D,
+                "slice": slice_name,
+                "n_rows": n,
+                "n_positive": int(n_pos),
+                "label_rate": round(rate, 4),
+            })
+            log_print(logger, f"  D={D} {slice_name}: n={n:,}, n_positive={int(n_pos):,}, label_rate={rate:.4f}")
+    if audit_rows:
+        audit_df = pd.DataFrame(audit_rows)
+        audit_path = OUTPUT_DIR / "label_balance_audit.csv"
+        audit_df.to_csv(audit_path, index=False)
+        log_print(logger, f"  Saved {audit_path}")
 
-    # Train on periods strictly before t=-1 so that t=-1 remains a
-    # true temporal hold-out for evaluation.
-    train_df    = features_df[features_df["period"] <= -2]
-    eval_pre    = features_df[features_df["period"] == -1]
-    eval_during = features_df[(features_df["period"] == 0) & (features_df["group"] == "control")]
-
-    log_print(logger, f"  Training observations (t<=-2): {len(train_df):,}")
-    log_print(logger, f"  Treatment Pre (t=-1) eval:     {len(eval_pre[eval_pre['group']=='treatment']):,}")
-    log_print(logger, f"  Control Pre (t=-1) eval:       {len(eval_pre[eval_pre['group']=='control']):,}")
-    log_print(logger, f"  Control During (t=0) eval:     {len(eval_during):,}")
-    log_print(logger, f"  Label rate (train):            {train_df['label'].mean():.4f}")
-
-    # ---- Prepare training data ------------------------------------------
-    # compute_features_for_panel raises on any NaN so the matrix is NaN-free.
-    X_train = train_df[feature_cols].copy()
-    y_train = train_df["label"].values
-
-    # ---- Train ----------------------------------------------------------
+    # ---- Train one model per unique closure_duration_days ---------------
     use_gpu = check_gpu()
     log_print(logger, f"\nGPU available: {use_gpu}")
 
     try:
         import xgboost as xgb
         cfg_model = CONFIG["model"]
-        params = {
+        params_base = {
             **cfg_model["xgb_params"],
             "device": "cuda" if use_gpu else "cpu",
             "n_jobs": -1 if not use_gpu else 1,
         }
-        dtrain = xgb.DMatrix(X_train, label=y_train, feature_names=feature_cols)
-        model  = xgb.train(params, dtrain, num_boost_round=cfg_model["num_boost_round"])
+        durations = sorted(features_df["closure_duration_days"].unique())
+        log_print(logger, f"\nTraining {len(durations)} model(s), one per duration: {durations}")
 
-        save_model_artifacts(
-            model=model,
-            features_df=features_df,
-            feature_cols=feature_cols,
-            eval_pre=eval_pre,
-            eval_during=eval_during,
-            output_dir=OUTPUT_DIR,
-            logger=logger,
-        )
+        for D in durations:
+            sub = features_df[features_df["closure_duration_days"] == D]
+            train_df = sub[sub["period"] <= -2]
+            eval_pre = sub[sub["period"] == -1]
+            eval_during = sub[(sub["period"] == 0) & (sub["group"] == "control")]
+
+            if train_df.empty:
+                log_print(logger, f"  Duration D={D}: no training rows, skipping.")
+                continue
+
+            X_train = train_df[feature_cols].copy()
+            y_train = train_df["label"].values
+            dtrain = xgb.DMatrix(X_train, label=y_train, feature_names=feature_cols)
+            model = xgb.train(
+                params_base, dtrain,
+                num_boost_round=cfg_model["num_boost_round"],
+            )
+
+            log_print(logger, f"\n  Duration D={D}: train n={len(train_df):,}, eval_pre n={len(eval_pre):,}, eval_during n={len(eval_during):,}")
+            save_model_artifacts(
+                model=model,
+                features_df=sub,
+                feature_cols=feature_cols,
+                eval_pre=eval_pre,
+                eval_during=eval_during,
+                output_dir=OUTPUT_DIR,
+                logger=logger,
+                model_suffix=str(D),
+            )
 
     except ImportError:
         log_print(logger, "XGBoost not installed. Install with: pip install xgboost")

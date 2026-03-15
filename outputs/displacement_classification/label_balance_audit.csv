@@ -1,0 +1,13 @@
+closure_duration_days,slice,n_rows,n_positive,label_rate
+11,train,268152,42325,0.1578
+11,eval_pre_treatment,422,101,0.2393
+11,eval_pre_control,88962,15872,0.1784
+11,eval_during,88962,15747,0.177
+12,train,311070,80657,0.2593
+12,eval_pre_treatment,103,28,0.2718
+12,eval_pre_control,103587,27657,0.267
+12,eval_during,103587,25145,0.2427
+14,train,260907,67032,0.2569
+14,eval_pre_treatment,335,23,0.0687
+14,eval_pre_control,86634,14232,0.1643
+14,eval_during,86634,16363,0.1889

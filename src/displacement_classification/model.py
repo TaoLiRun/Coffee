@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -93,23 +93,25 @@ def save_model_artifacts(
     eval_during: pd.DataFrame,
     output_dir: Path,
     logger: logging.Logger,
+    model_suffix: Optional[str] = None,
 ) -> None:
     """Persist all model artifacts produced by a training run.
 
-    Writes five files to *output_dir*:
+    Writes five files to *output_dir*. If *model_suffix* is provided (e.g. duration
+    for per-duration models), filenames use that suffix: e.g. displacement_model_11.json.
 
-    * ``displacement_model.json``   – XGBoost booster (load with
-      :func:`load_displacement_model`).
-    * ``variable_importance.csv``   – gain-based feature importances.
-    * ``prediction_accuracy.csv``   – per-group accuracy / F1 table.
-    * ``panel_with_scores.parquet`` – full panel with ``displacement_prob``
-      and ``predicted_displaced`` appended.
-    * ``displacement_scores.csv``   – lightweight ID + score summary.
+    * ``displacement_model[_suffix].json`` – XGBoost booster.
+    * ``variable_importance[_suffix].csv`` – gain-based feature importances.
+    * ``prediction_accuracy[_suffix].csv`` – per-group accuracy / F1 table.
+    * ``panel_with_scores[_suffix].parquet`` – full panel with scores.
+    * ``displacement_scores[_suffix].csv`` – lightweight ID + score summary.
     """
     import xgboost as xgb
 
+    suf = f"_{model_suffix}" if model_suffix is not None else ""
+
     # ---- 1. Model -------------------------------------------------------
-    model_path = output_dir / "displacement_model.json"
+    model_path = output_dir / f"displacement_model{suf}.json"
     model.save_model(str(model_path))
     log_print(logger, f"\nSaved model → {model_path}")
 
@@ -123,8 +125,8 @@ def save_model_artifacts(
     log_print(logger, "=" * 80)
     for _, r in imp_df.head(30).iterrows():
         log_print(logger, f"  {r['rank']:3d}. {r['feature']}: {r['importance']:.2f}")
-    imp_df.to_csv(output_dir / "variable_importance.csv", index=False)
-    log_print(logger, f"\nSaved variable_importance.csv → {output_dir}")
+    imp_df.to_csv(output_dir / f"variable_importance{suf}.csv", index=False)
+    log_print(logger, f"\nSaved variable_importance{suf}.csv → {output_dir}")
 
     # ---- 3. Prediction accuracy table -----------------------------------
     results = []
@@ -146,8 +148,8 @@ def save_model_artifacts(
     log_print(logger, "=" * 80)
     res_df = pd.DataFrame(results)
     log_print(logger, res_df.to_string(index=False))
-    res_df.to_csv(output_dir / "prediction_accuracy.csv", index=False)
-    log_print(logger, f"\nSaved prediction_accuracy.csv → {output_dir}")
+    res_df.to_csv(output_dir / f"prediction_accuracy{suf}.csv", index=False)
+    log_print(logger, f"\nSaved prediction_accuracy{suf}.csv → {output_dir}")
 
     # ---- 4. Score full panel --------------------------------------------
     log_print(logger, "\nScoring full panel...")
@@ -171,7 +173,7 @@ def save_model_artifacts(
     seen: set = set()
     out_cols = [c for c in keep_cols if c in features_df.columns and not (c in seen or seen.add(c))]
 
-    scored_path = output_dir / "panel_with_scores.parquet"
+    scored_path = output_dir / f"panel_with_scores{suf}.parquet"
     features_df[out_cols].to_parquet(str(scored_path), index=False)
     log_print(logger, f"Saved scored panel ({len(features_df):,} rows) → {scored_path}")
 
@@ -182,7 +184,7 @@ def save_model_artifacts(
         "displacement_prob", "predicted_displaced",
     ]
     summary_cols = [c for c in summary_cols if c in features_df.columns]
-    scores_csv_path = output_dir / "displacement_scores.csv"
+    scores_csv_path = output_dir / f"displacement_scores{suf}.csv"
     features_df[summary_cols].to_csv(str(scores_csv_path), index=False)
     log_print(logger, f"Saved score summary CSV → {scores_csv_path}")
 
