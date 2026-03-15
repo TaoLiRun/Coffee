@@ -11,7 +11,7 @@ This script analyzes:
 """
 
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -27,6 +27,7 @@ ORDER_COMMODITY_PATH = DATA_DIR / "order_commodity_result.csv"
 ORDER_RESULT_PATH = DATA_DIR / "order_result.csv"
 CLOSURES_CSV = PROJECT_ROOT / "outputs" / "store" / "non_uni_store_closures.csv"
 OUTPUT_DIR = PROJECT_ROOT / "plots" / "customer_store_analysis"
+OUTPUT_CUSTOMER_STORE_DIR = PROJECT_ROOT / "outputs" / "customer-store"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Default config values
@@ -36,6 +37,13 @@ DEFAULT_WINDOW_DAYS = 14   # pre/post window in days
 ROBUSTNESS_WINDOW_DAYS = 28
 DEFAULT_CLOSURE_TWO_GROUP_THRESHOLD = 30  # days: short vs long closure split
 NO_PUSH_MEMBERS_PATH = PROJECT_ROOT / "data" / "processed" / "no_push_members.csv"
+
+# Set-up-time-matched control (Option A): True = match control stores by set_up_time, one-time use, pre-closure preference
+USE_SET_UP_TIME_MATCHED_CONTROL = True
+DEPT_STATIC_PATH = DATA_DIR / "dept_result_static.csv"
+SET_UP_TIME_NEAREST_N = 5
+MIN_GROUP_SIZE = 50  # skip closure if #treatment or #control < this
+MIN_CTRL_TREAT_RATIO = 2.0  # skip closure if ctrl_rate < this * treat_rate
 
 
 # ---------------------------------------------------------------------------
@@ -102,6 +110,27 @@ def load_order_result_data() -> pd.DataFrame:
     print(f"  Total orders: {len(df):,}")
     return df[["member_id", "order_id", "dt", "date", "dept_id",
                "total_discount", "used_coupon", "disount_tag"]]
+
+
+def load_store_set_up_times(path: Path) -> pd.DataFrame:
+    """
+    Load store static table and return dept_id (int) and set_up_time (date).
+    Raises FileNotFoundError if path missing; raises ValueError if required cols or set_up_time missing.
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"Store static file not found: {path}")
+    df = pd.read_csv(path, encoding="utf-8-sig")
+    if "dept_id" not in df.columns or "set_up_time" not in df.columns:
+        raise ValueError(f"Store static must have columns dept_id and set_up_time; got {list(df.columns)}")
+    df["dept_id"] = df["dept_id"].astype(str).str.strip().replace(r"^0+", "", regex=True)
+    df = df[df["dept_id"] != ""]
+    df["dept_id"] = df["dept_id"].astype(int)
+    df["set_up_time"] = pd.to_datetime(df["set_up_time"], errors="coerce")
+    if df["set_up_time"].isna().any():
+        bad = df[df["set_up_time"].isna()]["dept_id"].tolist()
+        raise ValueError(f"Store static has missing or invalid set_up_time for dept_id: {bad[:10]}{'...' if len(bad) > 10 else ''}")
+    df["set_up_time"] = df["set_up_time"].dt.date
+    return df[["dept_id", "set_up_time"]].drop_duplicates(subset=["dept_id"])
 
 
 # ---------------------------------------------------------------------------
@@ -523,6 +552,111 @@ def get_closure_specific_control_members(
 
 
 # ---------------------------------------------------------------------------
+# Set-up-time-matched control (one-time use per store, pre-closure preference)
+# ---------------------------------------------------------------------------
+
+def get_control_stores_per_closure(
+    closures_df: pd.DataFrame,
+    store_df: pd.DataFrame,
+    n_nearest: int,
+    treated_store_ids: set,
+) -> Dict[Tuple[int, Any], List[int]]:
+    """
+    Assign up to n_nearest control stores per closure by set_up_time similarity.
+    Each store is used as control at most once (closure_start_asc order).
+    Raises if closed store not in store_df or no candidates for a closure.
+    Returns dict mapping (dept_id, closure_start) -> list of control store dept_ids.
+    """
+    store_df = store_df.dropna(subset=["set_up_time"]).copy()
+    closures_sorted = closures_df.sort_values("closure_start").reset_index(drop=True)
+    used_control_store_ids: set = set()
+    result: Dict[Tuple[int, Any], List[int]] = {}
+
+    for _, closure in closures_sorted.iterrows():
+        closed_dept_id = int(closure["dept_id"])
+        closure_start = closure["closure_start"]
+        closure_key = (closed_dept_id, closure_start)
+
+        if closed_dept_id not in store_df["dept_id"].values:
+            raise ValueError(
+                f"Closed store dept_id={closed_dept_id} (closure_start={closure_start}) "
+                f"not found in store static. Cannot get set_up_time."
+            )
+
+        t0 = store_df.loc[store_df["dept_id"] == closed_dept_id, "set_up_time"].iloc[0]
+
+        candidates = store_df[
+            (~store_df["dept_id"].isin(treated_store_ids))
+            & (~store_df["dept_id"].isin(used_control_store_ids))
+        ].copy()
+        if candidates.empty:
+            raise ValueError(
+                f"No eligible control store candidates for closure {closure_key}. "
+                "All similar stores may be treated or already used."
+            )
+
+        candidates["_diff"] = candidates["set_up_time"].apply(
+            lambda d: abs((d - t0).days) if hasattr(d - t0, "days") else float("inf")
+        )
+        candidates = candidates.sort_values("_diff")
+        chosen = candidates.head(n_nearest)["dept_id"].tolist()
+        used_control_store_ids.update(chosen)
+        result[closure_key] = chosen
+
+    return result
+
+
+def get_preference_before_date(
+    unique_visits: pd.DataFrame,
+    cutoff_date: Any,
+) -> pd.DataFrame:
+    """
+    Compute preferred store and ratio using only visits with date < cutoff_date.
+    Returns DataFrame with member_id, preferred_store, preferred_ratio, total_purchases.
+    """
+    pre = unique_visits[unique_visits["date"] < pd.Timestamp(cutoff_date).date()]
+    if pre.empty:
+        return pd.DataFrame(columns=["member_id", "preferred_store", "preferred_ratio", "total_purchases"])
+
+    cust_store = pre.groupby(["member_id", "dept_id"]).size().reset_index(name="store_purchases")
+    cust_total = pre.groupby("member_id").size().reset_index(name="total_purchases")
+    cust_store = cust_store.merge(cust_total, on="member_id")
+    cust_store["ratio"] = cust_store["store_purchases"] / cust_store["total_purchases"]
+    idx_max = cust_store.groupby("member_id")["ratio"].idxmax()
+    preferred = cust_store.loc[idx_max].rename(
+        columns={"dept_id": "preferred_store", "ratio": "preferred_ratio", "total_purchases": "total_purchases"}
+    )[["member_id", "preferred_store", "preferred_ratio", "total_purchases"]]
+    preferred["preferred_store"] = preferred["preferred_store"].astype(int)
+    return preferred
+
+
+def get_closure_control_members_set_up_matched(
+    unique_visits: pd.DataFrame,
+    closure_start_date: Any,
+    control_store_ids: List[int],
+    lowest_purchases: int,
+    lowest_ratio: float,
+    closure_key: Tuple[int, Any],
+) -> List[int]:
+    """
+    Return control member IDs: qualified (pre-closure) and preferred_store in control_store_ids.
+    Returns empty list if no qualified members (caller should skip and log).
+    """
+    if not control_store_ids:
+        return []
+
+    pref = get_preference_before_date(unique_visits, closure_start_date)
+    control_set = set(control_store_ids)
+    out = pref[
+        (pref["preferred_store"].isin(control_set))
+        & (pref["total_purchases"] >= lowest_purchases)
+        & (pref["preferred_ratio"] >= lowest_ratio)
+    ]["member_id"].tolist()
+
+    return sorted(out) if out else []
+
+
+# ---------------------------------------------------------------------------
 # Staggered DiD closure impact analysis
 # ---------------------------------------------------------------------------
 
@@ -534,20 +668,20 @@ def analyze_closure_impact(
     lowest_purchases: int = DEFAULT_LOWEST_PURCHASES,
     lowest_ratio: float = DEFAULT_LOWEST_RATIO,
     window_days: int = DEFAULT_WINDOW_DAYS,
+    use_set_up_time_matched_control: bool = False,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Staggered Difference-in-Difference closure impact analysis.
 
-    For each closure:
-      - Treatment: customers whose preferred store is the closed store
-        AND preferred_ratio >= lowest_ratio
-      - Control: customers who meet lowest_purchases threshold and are
-        NEVER treated by any closure in the dataset (never-treated pool,
-        precomputed once and shared across all closures)
-      - Compare behavior in pre / during / post periods
+    If use_set_up_time_matched_control is False (default):
+      - Treatment: customers whose preferred store is the closed store (global preference).
+      - Control: never-treated pool, qualified at closure time.
 
-    period_df has one row per (closure, group, period, customer) so that
-    downstream analysis and tests can work at the individual customer level.
+    If use_set_up_time_matched_control is True:
+      - Treatment: pre-closure preference, preferred_store = closed store, qualified.
+      - Control: pre-closure preference, preferred_store in nearest-N set_up_time–matched stores (each store used once).
+
+    period_df has one row per (closure, group, period, customer).
 
     Returns:
       summary_df : one row per closure with group sizes and purchase rates
@@ -555,6 +689,7 @@ def analyze_closure_impact(
     """
     print(f"\nAnalyzing closure impact (staggered DiD, window={window_days} days)...")
     print(f"  Config: lowest_purchases={lowest_purchases}, lowest_ratio={lowest_ratio}")
+    print(f"  Control: use_set_up_time_matched_control={use_set_up_time_matched_control}")
 
     # Pre-sort once so _slice_by_date (binary search) works correctly
     print("  Pre-sorting data by date for fast period slicing...")
@@ -562,13 +697,21 @@ def analyze_closure_impact(
     df_ord_s = build_date_sorted_index(df_order)
     print("  Pre-sorting done.")
 
-    # Precompute unique visits (member_id, date, dept_id) for closure-specific control
     unique_visits = df_commodity[["member_id", "date", "dept_id"]].drop_duplicates()
 
-    # Precompute the never-treated control pool (candidates; closure-specific subset used per closure)
-    control_pool = get_never_treated_members(
-        closures, customer_preference, lowest_purchases, lowest_ratio
-    )
+    if use_set_up_time_matched_control:
+        store_df = load_store_set_up_times(DEPT_STATIC_PATH)
+        treated_store_ids = set(closures["dept_id"].astype(int).unique())
+        control_stores_by_closure = get_control_stores_per_closure(
+            closures, store_df, n_nearest=SET_UP_TIME_NEAREST_N, treated_store_ids=treated_store_ids
+        )
+        print(f"  Set-up-time-matched control: {len(control_stores_by_closure)} closures with control stores assigned.")
+        control_pool = None
+    else:
+        control_pool = get_never_treated_members(
+            closures, customer_preference, lowest_purchases, lowest_ratio
+        )
+        control_stores_by_closure = None
 
     summary_rows: List[Dict] = []
     period_frames: List[pd.DataFrame] = []
@@ -585,21 +728,51 @@ def analyze_closure_impact(
         post_start = (closure_end + pd.Timedelta(days=1)).date()
         post_end   = (closure_end + pd.Timedelta(days=window_days)).date()
 
-        treatment = _get_treated_members_for_store(
-            customer_preference, dept_id, lowest_ratio
-        )
+        if use_set_up_time_matched_control:
+            closure_key = (dept_id, closure["closure_start"])
+            pref = get_preference_before_date(unique_visits, closure_start.date())
+            treatment = pref[
+                (pref["preferred_store"] == dept_id)
+                & (pref["preferred_ratio"] >= lowest_ratio)
+                & (pref["total_purchases"] >= lowest_purchases)
+            ]["member_id"].tolist()
+            control_store_ids = control_stores_by_closure[closure_key]
+            closure_control = get_closure_control_members_set_up_matched(
+                unique_visits, closure_start.date(), control_store_ids,
+                lowest_purchases, lowest_ratio, closure_key,
+            )
+        else:
+            treatment = _get_treated_members_for_store(
+                customer_preference, dept_id, lowest_ratio
+            )
+            closure_control = get_closure_specific_control_members(
+                unique_visits, control_pool, closure_start.date(),
+                lowest_purchases, lowest_ratio,
+            )
 
         if not treatment:
-            print(f"  Closure {dept_id}: no treatment customers, skipping.")
+            print(f"  Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): no qualified treatment members.")
             continue
 
-        # Closure-specific control: qualified at the time of this closure
-        closure_control = get_closure_specific_control_members(
-            unique_visits, control_pool, closure_start.date(),
-            lowest_purchases, lowest_ratio,
-        )
         if not closure_control:
-            print(f"  Closure {dept_id}: no eligible control customers, skipping.")
+            msg = f"  Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): no qualified control members."
+            if use_set_up_time_matched_control:
+                msg += f" (control_stores={control_store_ids})"
+            print(msg)
+            continue
+
+        if len(treatment) < MIN_GROUP_SIZE or len(closure_control) < MIN_GROUP_SIZE:
+            print(f"  Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): #treatment={len(treatment)} or #control={len(closure_control)} < {MIN_GROUP_SIZE}.")
+            continue
+
+        # Compute during-period purchase rates for filter
+        during_slice = _slice_by_date(df_com_s, dur_start, dur_end)
+        during_purch = during_slice[["member_id"]].drop_duplicates()
+        t_rate = during_purch["member_id"].isin(treatment).sum() / len(treatment)
+        c_rate = during_purch["member_id"].isin(closure_control).sum() / len(closure_control)
+
+        if c_rate < MIN_CTRL_TREAT_RATIO * t_rate:
+            print(f"  Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): ctrl_rate={c_rate:.3f} < {MIN_CTRL_TREAT_RATIO}*treat_rate={t_rate:.3f}.")
             continue
 
         # Period lengths for normalisation
@@ -631,13 +804,6 @@ def analyze_closure_impact(
                     cust_df["period"]                  = period_label
                     period_frames.append(cust_df)
 
-        # High-level purchase rate summary during closure
-        during_slice = _slice_by_date(df_com_s, dur_start, dur_end)
-        during_purch = during_slice[["member_id"]].drop_duplicates()
-        t_rate = during_purch["member_id"].isin(treatment).sum() / len(treatment)
-        c_rate = (during_purch["member_id"].isin(closure_control).sum() / len(closure_control)
-                  if closure_control else np.nan)
-
         summary_rows.append({
             "dept_id":                        dept_id,
             "closure_start":                  closure["closure_start"],
@@ -662,6 +828,19 @@ def analyze_closure_impact(
         pd.concat(period_frames, ignore_index=True) if period_frames else pd.DataFrame()
     )
     print(f"\n  Analyzed {len(summary_df)} closures.")
+
+    # Save the subset of closures that were not skipped (same schema as non_uni_store_closures.csv)
+    if not summary_df.empty:
+        kept = closures.merge(
+            summary_df[["dept_id", "closure_start"]],
+            on=["dept_id", "closure_start"],
+            how="inner",
+        )
+        OUTPUT_CUSTOMER_STORE_DIR.mkdir(parents=True, exist_ok=True)
+        closures_used_path = OUTPUT_CUSTOMER_STORE_DIR / "closures_used.csv"
+        kept.to_csv(closures_used_path, index=False, encoding="utf-8-sig")
+        print(f"  Closures used in analysis (not skipped) saved to: {closures_used_path} ({len(kept)} rows)")
+
     return summary_df, period_df_out
 
 
@@ -1271,6 +1450,7 @@ def main(
     lowest_ratio: float = DEFAULT_LOWEST_RATIO,
     window_days: int = DEFAULT_WINDOW_DAYS,
     closure_two_group_threshold: int = DEFAULT_CLOSURE_TWO_GROUP_THRESHOLD,
+    use_set_up_time_matched_control: bool = USE_SET_UP_TIME_MATCHED_CONTROL,
 ):
     """Main analysis function. Run with: python analyze_closure_impact.py > analyze_closure_impact.log 2>&1"""
     print("=" * 70)
@@ -1307,6 +1487,7 @@ def main(
         lowest_purchases=lowest_purchases,
         lowest_ratio=lowest_ratio,
         window_days=window_days,
+        use_set_up_time_matched_control=use_set_up_time_matched_control,
     )
 
     # Task 2b: Robustness check — 28-day window
@@ -1319,6 +1500,7 @@ def main(
         lowest_purchases=lowest_purchases,
         lowest_ratio=lowest_ratio,
         window_days=ROBUSTNESS_WINDOW_DAYS,
+        use_set_up_time_matched_control=use_set_up_time_matched_control,
     )
 
     # Merge with closure metadata and save

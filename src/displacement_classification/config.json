@@ -1,6 +1,6 @@
 {
   "data": {
-    "window_weeks": 4,
+    "window_weeks": 6,
     "min_purchases_threshold": 5,
     "min_store_ratio": 0.8,
     "closure_filter_start": "2020-09-01"

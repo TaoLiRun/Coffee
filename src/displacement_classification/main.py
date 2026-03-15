@@ -69,9 +69,12 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     df_order_full = load_order_result_full(logger)
     closures = pd.read_csv(CLOSURES_CSV, encoding="utf-8-sig")
 
-    # Retain only closures where all 4 pre-closure weeks fall after the earliest
-    # order date (2020-06-01).  Period −4 starts at closure_start − 28 days,
-    # so we require closure_start >= 2020-09-01 (ensuring ≥4 weeks of history).
+    # Retain only closures where all pre-closure weeks fall after the earliest
+    # order date (2020-06-01).  With a 6-week window, the earliest pre-period
+    # starts at closure_start − 42 days.  The exact cutoff date is controlled
+    # by CONFIG["data"]["closure_filter_start"] (currently 2020-09-01), which
+    # ensures there is sufficient pre-closure purchase history for every panel
+    # row.
     closures["closure_start_dt"] = pd.to_datetime(closures["closure_start"])
     closures = (
         closures[closures["closure_start_dt"] >= pd.Timestamp(CONFIG["data"]["closure_filter_start"])]
@@ -161,11 +164,14 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     log_print(logger, "\n" + "=" * 80)
     log_print(logger, "Selected Data Statistics")
     log_print(logger, "=" * 80)
-    train_df    = features_df[features_df["period"] != 0]   # exclude control period 0 from training
+
+    # Train on periods strictly before t=-1 so that t=-1 remains a
+    # true temporal hold-out for evaluation.
+    train_df    = features_df[features_df["period"] <= -2]
     eval_pre    = features_df[features_df["period"] == -1]
     eval_during = features_df[(features_df["period"] == 0) & (features_df["group"] == "control")]
 
-    log_print(logger, f"  Training observations:         {len(train_df):,}")
+    log_print(logger, f"  Training observations (t<=-2): {len(train_df):,}")
     log_print(logger, f"  Treatment Pre (t=-1) eval:     {len(eval_pre[eval_pre['group']=='treatment']):,}")
     log_print(logger, f"  Control Pre (t=-1) eval:       {len(eval_pre[eval_pre['group']=='control']):,}")
     log_print(logger, f"  Control During (t=0) eval:     {len(eval_during):,}")

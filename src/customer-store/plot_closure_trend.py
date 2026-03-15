@@ -20,15 +20,24 @@ from analyze_closure_impact import (
     CLOSURES_CSV,
     DEFAULT_LOWEST_PURCHASES,
     DEFAULT_LOWEST_RATIO,
+    DEPT_STATIC_PATH,
+    MIN_CTRL_TREAT_RATIO,
+    MIN_GROUP_SIZE,
     OUTPUT_DIR,
+    SET_UP_TIME_NEAREST_N,
+    USE_SET_UP_TIME_MATCHED_CONTROL,
     build_date_sorted_index,
+    get_closure_control_members_set_up_matched,
     get_closure_specific_control_members,
+    get_control_stores_per_closure,
     get_customer_store_preference,
+    get_preference_before_date,
     get_never_treated_members,
     load_order_commodity_data,
     load_order_result_data,
+    load_store_set_up_times,
 )
-from analyze_closure_impact import _compute_customer_behavior, _get_treated_members_for_store
+from analyze_closure_impact import _compute_customer_behavior, _get_treated_members_for_store, _slice_by_date
 
 # Metrics to plot: (column_name, y_label, is_per_week)
 METRICS = [
@@ -47,18 +56,31 @@ def build_week_level_panel(
     window_weeks: int,
     lowest_purchases: int,
     lowest_ratio: float,
+    use_set_up_time_matched_control: bool = False,
 ) -> pd.DataFrame:
     """
     Build panel with one row per (closure, group, t, member_id)
     where t in {-n_weeks,...,-1, 0, 1,..., n_weeks}.
     t=0 is during-closure; t<0 are pre weeks; t>0 are post weeks.
+    When use_set_up_time_matched_control is True, treatment and control use
+    pre-closure preference and control stores are set_up_time–matched (one-time use).
     """
     df_com_s = build_date_sorted_index(df_commodity)
     df_ord_s = build_date_sorted_index(df_order)
     unique_visits = df_commodity[["member_id", "date", "dept_id"]].drop_duplicates()
-    control_pool = get_never_treated_members(
-        closures, customer_preference, lowest_purchases, lowest_ratio
-    )
+
+    if use_set_up_time_matched_control:
+        store_df = load_store_set_up_times(DEPT_STATIC_PATH)
+        treated_store_ids = set(closures["dept_id"].astype(int).unique())
+        control_stores_by_closure = get_control_stores_per_closure(
+            closures, store_df, n_nearest=SET_UP_TIME_NEAREST_N, treated_store_ids=treated_store_ids
+        )
+        control_pool = None
+    else:
+        control_pool = get_never_treated_members(
+            closures, customer_preference, lowest_purchases, lowest_ratio
+        )
+        control_stores_by_closure = None
 
     rows: List[Dict] = []
     n_closures = len(closures)
@@ -70,17 +92,50 @@ def build_week_level_panel(
         closure_end = pd.to_datetime(closure["closure_end"])
         closure_duration = max(int(closure["closure_duration_days"]), 1)
 
-        treatment = _get_treated_members_for_store(
-            customer_preference, dept_id, lowest_ratio
-        )
+        if use_set_up_time_matched_control:
+            closure_key = (dept_id, closure["closure_start"])
+            pref = get_preference_before_date(unique_visits, closure_start.date())
+            treatment = pref[
+                (pref["preferred_store"] == dept_id)
+                & (pref["preferred_ratio"] >= lowest_ratio)
+                & (pref["total_purchases"] >= lowest_purchases)
+            ]["member_id"].tolist()
+            control_store_ids = control_stores_by_closure[closure_key]
+            closure_control = get_closure_control_members_set_up_matched(
+                unique_visits, closure_start.date(), control_store_ids,
+                lowest_purchases, lowest_ratio, closure_key,
+            )
+        else:
+            treatment = _get_treated_members_for_store(
+                customer_preference, dept_id, lowest_ratio
+            )
+            closure_control = get_closure_specific_control_members(
+                unique_visits, control_pool, closure_start.date(),
+                lowest_purchases, lowest_ratio,
+            )
+
         if not treatment:
+            print(f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): no qualified treatment members.")
+            continue
+        if not closure_control:
+            msg = f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): no qualified control members."
+            if use_set_up_time_matched_control:
+                msg += f" (control_stores={control_store_ids})"
+            print(msg)
             continue
 
-        closure_control = get_closure_specific_control_members(
-            unique_visits, control_pool, closure_start.date(),
-            lowest_purchases, lowest_ratio,
-        )
-        if not closure_control:
+        if len(treatment) < MIN_GROUP_SIZE or len(closure_control) < MIN_GROUP_SIZE:
+            print(f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): #treatment={len(treatment)} or #control={len(closure_control)} < {MIN_GROUP_SIZE}.")
+            continue
+
+        dur_start = closure_start.date()
+        dur_end = closure_end.date()
+        during_slice = _slice_by_date(df_com_s, dur_start, dur_end)
+        during_purch = during_slice[["member_id"]].drop_duplicates()
+        t_rate = during_purch["member_id"].isin(treatment).sum() / len(treatment)
+        c_rate = during_purch["member_id"].isin(closure_control).sum() / len(closure_control)
+        if c_rate < MIN_CTRL_TREAT_RATIO * t_rate:
+            print(f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): ctrl_rate={c_rate:.3f} < {MIN_CTRL_TREAT_RATIO}*treat_rate={t_rate:.3f}.")
             continue
 
         for group_label, members in [("treatment", treatment), ("control", closure_control)]:
@@ -225,6 +280,7 @@ def main(limit_closures: int | None = None):
         print(f"\nLoaded {len(closures)} closures (limited for quick test).")
     else:
         print(f"\nLoaded {len(closures)} closures.")
+    print(f"  Control: use_set_up_time_matched_control={USE_SET_UP_TIME_MATCHED_CONTROL}")
 
     customer_preference = get_customer_store_preference(df, lowest_purchases=DEFAULT_LOWEST_PURCHASES)
 
@@ -235,6 +291,7 @@ def main(limit_closures: int | None = None):
             window_weeks=window_weeks,
             lowest_purchases=DEFAULT_LOWEST_PURCHASES,
             lowest_ratio=DEFAULT_LOWEST_RATIO,
+            use_set_up_time_matched_control=USE_SET_UP_TIME_MATCHED_CONTROL,
         )
         print(f"  Panel rows: {len(panel):,}")
 

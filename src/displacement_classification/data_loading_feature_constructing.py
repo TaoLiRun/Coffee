@@ -219,8 +219,9 @@ def build_training_panel(
     """
     Build (member_id, dept_id, closure_start, period, label) panel.
 
-    period: −4, −3, −2, −1 (pre-closure weeks); 0 for control during closure
-    (evaluation only — excluded from XGBoost training set).
+    period: −WINDOW_WEEKS … −1 (pre-closure weeks, e.g. −6..−1 when
+    window_weeks=6); 0 for control during closure (evaluation only —
+    excluded from XGBoost training set in main.py).
     """
     log_print(logger, "\nBuilding training panel (4-week window)...")
     control_pool = get_never_treated_members(

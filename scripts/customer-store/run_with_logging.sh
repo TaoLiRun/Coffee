@@ -6,7 +6,6 @@
 # Usage:
 #   ./run_with_logging.sh analyze_closure_impact
 #   ./run_with_logging.sh plot_closure_trend
-#   ./run_with_logging.sh displacement   # runs src/displacement_classification/main.py
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"       # scripts/customer-store
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"   # model-free/
