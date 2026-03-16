@@ -2,20 +2,20 @@
 
 This module implements two parallel causal specifications on top of the existing displacement-model outputs:
 
-1. Thresholded DDD (`score >= tau`, for multiple thresholds)
+1. Thresholded DDD (`score >= 0.5` by default)
 2. Continuous-score DDD (`Post × Treated × displacement_prob`)
 
 ## Inputs
 
 - Period outcomes: `plots/customer_store_analysis/period_behavior_p5_r80_w{window}.csv`
-- Displacement scores: `outputs/displacement_classification/displacement_scores_*.csv`
+- Displacement scores: `outputs/displacement_classification/displacement_scores_t0_ex_ante.csv`
 
 ## Run
 
 From this folder:
 
 ```bash
-python run.py --window 14 --outcome n_purchases --thresholds 0.4,0.5,0.6
+python run.py --window 14 --outcome n_purchases --thresholds 0.5
 ```
 
 ## Outputs

@@ -40,32 +40,34 @@ def load_period_behavior(window_days: int, cfg: dict | None = None) -> pd.DataFr
     return df
 
 
-def load_displacement_scores(score_period: int, cfg: dict | None = None) -> pd.DataFrame:
+def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
     cfg = cfg or load_config()
     project_root = get_project_root()
-    scores_dir = project_root / cfg["paths"]["scores_dir"]
-    files = sorted(scores_dir.glob("displacement_scores_*.csv"))
-    if not files:
-        raise FileNotFoundError(f"No displacement score files found in: {scores_dir}")
+    score_path = project_root / cfg["paths"]["score_file"]
+    if not score_path.exists():
+        raise FileNotFoundError(
+            f"Ex-ante score file not found: {score_path}. "
+            "Run displacement_classification/main.py first to generate displacement_scores_t0_ex_ante.csv."
+        )
 
-    frames = []
-    for file_path in files:
-        df = pd.read_csv(file_path, encoding="utf-8-sig")
-        required = {"member_id", "dept_id", "closure_start", "period", "displacement_prob"}
-        missing = required - set(df.columns)
-        if missing:
-            raise ValueError(f"Missing required columns in {file_path.name}: {sorted(missing)}")
-        frames.append(df)
-
-    all_scores = pd.concat(frames, ignore_index=True)
-    all_scores["closure_start"] = _normalize_closure_start(all_scores["closure_start"])
-    score_df = all_scores[all_scores["period"] == score_period].copy()
-    if score_df.empty:
-        raise ValueError(f"No score rows found at period={score_period}")
+    score_df = pd.read_csv(score_path, encoding="utf-8-sig")
+    required = {
+        "member_id",
+        "dept_id",
+        "closure_start",
+        "displacement_prob_t0_ex_ante",
+    }
+    missing = required - set(score_df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns in {score_path.name}: {sorted(missing)}")
 
     key_cols = ["member_id", "dept_id", "closure_start"]
     score_df = (
-        score_df.sort_values(key_cols)
+        score_df.assign(
+            displacement_prob=score_df["displacement_prob_t0_ex_ante"].astype(float),
+            closure_start=_normalize_closure_start(score_df["closure_start"]),
+        )
+        .sort_values(key_cols)
         .drop_duplicates(subset=key_cols, keep="first")
         .loc[:, key_cols + ["displacement_prob"]]
     )
@@ -75,13 +77,12 @@ def load_displacement_scores(score_period: int, cfg: dict | None = None) -> pd.D
 def build_estimation_sample(
     window_days: int,
     outcome: str,
-    score_period: int,
     thresholds: Iterable[float],
     cfg: dict | None = None,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
     panel = load_period_behavior(window_days=window_days, cfg=cfg)
-    scores = load_displacement_scores(score_period=score_period, cfg=cfg)
+    scores = load_displacement_scores(cfg=cfg)
 
     if outcome not in panel.columns:
         raise ValueError(f"Outcome '{outcome}' is not in period behavior columns")

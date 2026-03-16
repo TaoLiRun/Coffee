@@ -446,6 +446,136 @@ def build_training_panel(
     return panel
 
 
+def build_t0_ex_ante_panel(
+    logger: logging.Logger,
+    df_orders: pd.DataFrame,
+    closures: pd.DataFrame,
+    customer_preference: pd.DataFrame,
+    unique_visits: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Build ex-ante t0 scoring panel for both treatment and control groups.
+
+    One row per (member_id, dept_id, closure_start, group) with:
+    - period_start = closure_start (features use history up to closure_start - 1)
+    - score_time = "t0_ex_ante"
+
+    This panel is for post-training scoring only (not for model training).
+    """
+    log_print(logger, "\nBuilding ex-ante t0 scoring panel (both groups)...")
+
+    pair_registry = load_or_build_closure_pair_registry(
+        logger, df_orders, closures, customer_preference, unique_visits
+    )
+    reg_map: Dict[tuple[int, str], pd.Series] = {
+        _closure_key(r["dept_id"], r["closure_start"]): r
+        for _, r in pair_registry.iterrows()
+    }
+
+    control_pool = get_never_treated_members(
+        closures, customer_preference, DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO
+    )
+    log_print(logger, f"  Never-treated control pool: {len(control_pool):,} customers")
+
+    df_orders_ts = df_orders.copy()
+    df_orders_ts["date"] = pd.to_datetime(df_orders_ts["date"])
+    member_first_purchase = df_orders_ts.groupby("member_id")["date"].min()
+    earliest_order_date = df_orders_ts["date"].min()
+
+    rows: List[Dict[str, Any]] = []
+    skipped_history = 0
+    for _, closure in closures.iterrows():
+        dept_id = int(closure["dept_id"])
+        closure_start = pd.to_datetime(closure["closure_start"])
+        closure_end = pd.to_datetime(closure["closure_end"])
+        D = max(int(closure["closure_duration_days"]), 1)
+
+        min_closure_start = earliest_order_date + pd.Timedelta(days=NUM_PRE_PERIODS * D + 8)
+        if closure_start < min_closure_start:
+            skipped_history += 1
+            continue
+
+        key = _closure_key(dept_id, closure["closure_start"])
+        reg_row = reg_map.get(key)
+        if reg_row is None or reg_row.get("status") != "kept":
+            continue
+
+        if USE_SET_UP_TIME_MATCHED_CONTROL:
+            control_store_ids = parse_control_store_ids(reg_row.get("control_store_ids", ""))
+            if not control_store_ids:
+                continue
+            treatment, closure_control, _ = get_treatment_and_control_members_for_closure(
+                unique_visits=unique_visits,
+                customer_preference=customer_preference,
+                closure=closure,
+                lowest_purchases=DEFAULT_LOWEST_PURCHASES,
+                lowest_ratio=DEFAULT_LOWEST_RATIO,
+                use_set_up_time_matched_control=True,
+                control_pool=None,
+                control_stores_by_closure={(dept_id, closure["closure_start"]): control_store_ids},
+            )
+        else:
+            treatment, closure_control, _ = get_treatment_and_control_members_for_closure(
+                unique_visits=unique_visits,
+                customer_preference=customer_preference,
+                closure=closure,
+                lowest_purchases=DEFAULT_LOWEST_PURCHASES,
+                lowest_ratio=DEFAULT_LOWEST_RATIO,
+                use_set_up_time_matched_control=False,
+                control_pool=control_pool,
+                control_stores_by_closure=None,
+            )
+
+        if not treatment or not closure_control:
+            continue
+
+        earliest_preperiod = closure_start - pd.Timedelta(days=NUM_PRE_PERIODS * D)
+
+        def _has_pre_window_history(members: list) -> list:
+            return [
+                m for m in members
+                if m in member_first_purchase.index and member_first_purchase[m] < earliest_preperiod
+            ]
+
+        treatment = _has_pre_window_history(treatment)
+        closure_control = _has_pre_window_history(closure_control)
+        if not treatment or not closure_control:
+            continue
+
+        period_start = closure_start.date()
+        period_end = closure_end.date()
+
+        for group_label, members in [("treatment", treatment), ("control", closure_control)]:
+            is_treated = 1 if group_label == "treatment" else 0
+            for mid in members:
+                rows.append(
+                    {
+                        "member_id": mid,
+                        "dept_id": dept_id,
+                        "closure_start": closure["closure_start"],
+                        "closure_end": closure["closure_end"],
+                        "closure_length_days": D,
+                        "closure_duration_days": D,
+                        "group": group_label,
+                        "period": 0,
+                        "period_start": period_start,
+                        "period_end": period_end,
+                        "label": 0,
+                        "is_treated": is_treated,
+                        "score_time": "t0_ex_ante",
+                    }
+                )
+
+    panel = pd.DataFrame(rows)
+    if skipped_history > 0:
+        log_print(logger, f"  Skipped {skipped_history} closure(s) for insufficient history.")
+    log_print(
+        logger,
+        f"  Ex-ante panel: {len(panel):,} rows, {panel['member_id'].nunique() if not panel.empty else 0:,} unique members",
+    )
+    return panel
+
+
 # ---------------------------------------------------------------------------
 # Feature construction
 # ---------------------------------------------------------------------------

@@ -32,6 +32,7 @@ from data_loading_feature_constructing import (
     load_member_demographics,
     load_order_result_full,
     build_training_panel,
+    build_t0_ex_ante_panel,
     compute_features_for_panel,
     load_or_build_closure_pair_registry,
     parse_control_store_ids,
@@ -152,6 +153,16 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     features_df = compute_features_for_panel(
         logger, panel, df_order_full, member_demographics,
     )
+    t0_panel = build_t0_ex_ante_panel(
+        logger, df_order_full, closures, customer_preference, unique_visits,
+    )
+    if t0_panel.empty:
+        log_print(logger, "  Ex-ante t0 panel is empty; no t0 scores will be generated.", level="warning")
+        t0_features_df = pd.DataFrame()
+    else:
+        t0_features_df = compute_features_for_panel(
+            logger, t0_panel, df_order_full, member_demographics,
+        )
 
     # Feature columns: exclude identifiers, label, and closure-specific columns.
     # closure_length_days / closure_duration_days are not used as features.
@@ -220,12 +231,18 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
         }
         durations = sorted(features_df["closure_duration_days"].unique())
         log_print(logger, f"\nTraining {len(durations)} model(s), one per duration: {durations}")
+        t0_score_chunks = []
 
         for D in durations:
             sub = features_df[features_df["closure_duration_days"] == D]
             train_df = sub[sub["period"] <= -2]
             eval_pre = sub[sub["period"] == -1]
             eval_during = sub[(sub["period"] == 0) & (sub["group"] == "control")]
+            t0_sub = (
+                t0_features_df[t0_features_df["closure_duration_days"] == D].copy()
+                if not t0_features_df.empty
+                else pd.DataFrame()
+            )
 
             if train_df.empty:
                 log_print(logger, f"  Duration D={D}: no training rows, skipping.")
@@ -250,6 +267,38 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
                 logger=logger,
                 model_suffix=str(D),
             )
+
+            if not t0_sub.empty:
+                dt0 = xgb.DMatrix(t0_sub[feature_cols], feature_names=feature_cols)
+                t0_sub["displacement_prob_t0_ex_ante"] = model.predict(dt0)
+                threshold = cfg_model.get("classification_threshold", 0.5)
+                t0_sub["predicted_displaced_t0_ex_ante"] = (
+                    t0_sub["displacement_prob_t0_ex_ante"] >= threshold
+                ).astype(int)
+                t0_score_chunks.append(
+                    t0_sub[
+                        [
+                            "member_id",
+                            "dept_id",
+                            "closure_start",
+                            "closure_end",
+                            "closure_duration_days",
+                            "group",
+                            "is_treated",
+                            "score_time",
+                            "displacement_prob_t0_ex_ante",
+                            "predicted_displaced_t0_ex_ante",
+                        ]
+                    ]
+                )
+
+        if t0_score_chunks:
+            t0_scores = pd.concat(t0_score_chunks, ignore_index=True)
+            t0_scores_path = OUTPUT_DIR / "displacement_scores_t0_ex_ante.csv"
+            t0_scores.to_csv(t0_scores_path, index=False)
+            log_print(logger, f"\nSaved ex-ante t0 scores: {t0_scores_path} ({len(t0_scores):,} rows)")
+        else:
+            log_print(logger, "\nNo ex-ante t0 scores generated (all duration slices empty).", level="warning")
 
     except ImportError:
         log_print(logger, "XGBoost not installed. Install with: pip install xgboost")

@@ -23,7 +23,6 @@ def main() -> None:
     parser.add_argument("--window", type=int, default=defaults["window_days"])
     parser.add_argument("--outcome", type=str, default=defaults["outcome"])
     parser.add_argument("--thresholds", type=str, default=",".join(str(x) for x in defaults["thresholds"]))
-    parser.add_argument("--score-period", type=int, default=defaults["score_period"])
     parser.add_argument("--cluster-col", type=str, default=defaults["cluster_col"])
     args = parser.parse_args()
 
@@ -31,7 +30,6 @@ def main() -> None:
     sample = build_estimation_sample(
         window_days=args.window,
         outcome=args.outcome,
-        score_period=args.score_period,
         thresholds=thresholds,
         cfg=cfg,
     )
