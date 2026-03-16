@@ -48,6 +48,8 @@ For each consumer–closure pair, define:
 
 For **treated** consumers we do not observe this; for **control** consumers we do (their behavior during the same calendar window is the counterfactual). So we **train a classifier** on pre-closure (and control) behavior to predict “would have purchased during closure window,” and then use this predicted displacement status in the regression.
 
+In addition to hard classification (displaced vs non-displaced), the predicted probability can be used as a **continuous displacement propensity score** to preserve more information from the model output.
+
 ### 2.3 Regression Framework
 
 **Time:** For each closure event, define:
@@ -80,6 +82,16 @@ Time can be normalized (e.g., in weeks) so that different closure lengths are co
 - \(\delta^D\): **displacement effect**—additional post-closure reduction for consumers whose planned purchases were interrupted.  
 - \(\beta\): main effect of being displaced (allowed to differ for control).  
 - Event-study version: replace single post dummies with \(t\)-specific dummies in the same way.
+
+**Continuous-score variant (recommended as a complement):**
+
+\[
+	ext{Purchases}_{it} = \delta^B \cdot \mathbb{1}(t>0)\times\mathbb{1}(\text{Treated}_i) + \delta^S \cdot \mathbb{1}(t>0)\times\mathbb{1}(\text{Treated}_i)\times s_i + \beta^S \cdot \mathbb{1}(t>0)\times s_i + \phi_i + \omega_t + \nu_{it}
+\]
+
+- \(s_i\): predicted purchase propensity during closure (continuous score from Step 2 model).
+- \(\delta^S\): how treatment post-effect scales with displacement propensity.
+- This avoids dependence on a single hard threshold and is reported alongside threshold-based DDD.
 
 **Closure-length heterogeneity (unique to our setting):**
 
@@ -172,22 +184,18 @@ The following steps align the analysis with Paper 2 and exploit our multi-closur
 
 ### Step 1: Finalize and Validate the Treatment/Control Definition
 
-**1a. Verify the treatment definition at the consumer level.**
+**1a. Treatment definition (status: partially done).**
 
 - Document and justify: **How many pre-closure purchases** define “regular” (current: 5); sensitivity to this choice.
 - **Boundary consumers:** If a consumer’s nearest store closed but another store was within a reasonable distance, are they treated or excluded? Define and implement a rule (e.g., distance threshold, or “all stores within X km closed”).
 - **Multiple closures:** Construct **one observation per consumer–closure event**. Decide how to handle consumers who experience several closures (e.g., allow multiple rows per consumer with clustering at consumer or consumer–closure level in inference).
 
-**1b. Verify the control definition (closure-specific).**
+**1b. Control definition (done in current codebase).**
 
-- **Global pool:** Control candidates are regular Luckin purchasers whose preferred store **never** appears in the closures list (“never-treated” pool). They are not exposed to any closure.
-- **Closure-specific selection:** For **each closure event**, the control group is redefined as those never-treated consumers who, **before that closure’s start date**, satisfy:
-  - At least **5** Luckin purchases (pre-closure).
-  - At least **4 of those 5** purchases at the **same store** (i.e., pre-closure preferred-store share ≥ 0.8).
-- This ensures control consumers are **frequent purchasers at the time the closure happened**, comparable to the treated. The **same consumer can be in the control group for multiple closures** if they meet the pre-closure criteria for each.
-- **Additional checks (if feasible):** Geographic and demographic comparability to treated; exclude anyone in regions with closures at nearby dates (anticipation or spillover).
+- Implemented in production pipeline: closure-specific matched controls are generated via set-up-time matching and persisted in `outputs/customer-store/closure_pair_registry.csv`.
+- Treatment/control pairing used by displacement training is now loaded from this registry (kept closures), ensuring consistency across customer-store and displacement pipelines.
 
-**1c. Exploit variation across closure events.**
+**1c. Remaining validation tasks for treatment/control comparability.**
 
 - Document distribution of closures by:  
   - **Geography** (e.g., district, campus vs non-campus).  
@@ -285,6 +293,7 @@ Additional run-level artifacts:
 **2g. Classify displaced vs non-displaced.**
 
 - **Displaced** = predicted probability ≥ 0.5 (configurable `decision_threshold`).
+- **Continuous score use (recommended):** Use raw predicted probability as a soft displacement measure in regression (`Post × Treated × score`) in addition to binary classification.
 - **Correction (Paper 2, future):** For control consumers, replace model prediction with observed purchase at t=0; use µ (FPR) and λ (FNR) from the Control_During_t0 row to bound the attenuation in the displacement effect estimate (Paper 2 Appendix D). Not yet implemented.
 
 ---
@@ -321,6 +330,7 @@ Additional run-level artifacts:
 
 - Estimate Equation 9 (or event-study version): \(\delta^B\), \(\delta^D\), \(\beta\).  
 - Present event study for displacement effect over time.
+- Also estimate a **continuous-score DDD** using predicted displacement propensity to avoid threshold arbitrariness and test monotonic dose-response.
 
 **4c. Closure-length interaction.**
 
@@ -341,6 +351,7 @@ Additional run-level artifacts:
 **5c. Classification threshold.**
 
 - Try thresholds for “displaced” (e.g. predicted probability &gt; 0.4, 0.5, 0.6); show displacement effect stability.
+- Add score calibration and functional-form robustness for continuous-score specification (e.g., linear vs binned/spline score effects).
 
 **5d. Subsample by closure severity.**
 
@@ -375,11 +386,11 @@ Compare displacement effect between **push0** (opted out of push at first use) a
 
 | Area | Done | Not done |
 |------|------|----------|
-| **Treatment/control** | Pre-closure preferred-store-based treatment; default set-up-time–matched closure-specific control (with one-time control-store assignment); threshold justification; closure-level screening (`MIN_GROUP_SIZE`, control/treatment rate filter) | Boundary/multi-closure rules; control comparability; closure distribution (geo, timing, duration, severity) |
-| **Displacement** | Registry-aligned panel (periods −4…−1 + control t=0, with period length = closure duration `D`); 46 behavioral/demographic features from `order_result.csv`; train/eval split (`<=-2`, `-1`, `0-control`); XGBoost trained per duration `D` (500 rounds, gain importance); duration-suffixed outputs (`displacement_model_D.json`, `variable_importance_D.csv`, `prediction_accuracy_D.csv`, `displacement_scores_D.csv`) plus `label_balance_audit.csv` | Displacement label assignment to treated consumers for causal estimation stage; Paper 2 attenuation correction (µ, λ bounds); threshold and calibration sensitivity analysis |
+| **Treatment/control** | Pre-closure preferred-store-based treatment; default set-up-time–matched closure-specific control (with one-time control-store assignment); threshold justification; closure-level screening (`MIN_GROUP_SIZE`, control/treatment rate filter); pairing registry (`closure_pair_registry.csv`) shared across pipelines | Boundary/multi-closure rules; formal geo comparability diagnostics; closure severity formalization in estimation |
+| **Displacement** | Registry-aligned panel (periods −4…−1 + control t=0, with period length = closure duration `D`); 46 behavioral/demographic features from `order_result.csv`; train/eval split (`<=-2`, `-1`, `0-control`); XGBoost trained per duration `D` (500 rounds, gain importance); duration-suffixed outputs (`displacement_model_D.json`, `variable_importance_D.csv`, `prediction_accuracy_D.csv`, `displacement_scores_D.csv`) plus `label_balance_audit.csv` | Causal-stage displacement decomposition estimates (DDD/event study); continuous-score specification implementation; Paper 2 attenuation correction (µ, λ bounds); threshold/calibration robustness |
 | **Sample** | Pre/during/post windows; period-level behavior panel | Normalized time units; stacked consumer–closure; clustering design |
 | **Estimation** | Descriptive stats, t-tests, visual comparison | DiD ATT; triple-difference; event study; closure-length interaction |
-| **Robustness** | 14 vs 28 day window; duration-split and push-split plots | Parallel trends test; matching; threshold sensitivity; severity subsample; attenuation bound |
+| **Robustness** | 14 vs 28 day window; duration-split and push-split plots; model evaluation by pre/during groups and duration | Parallel trends test; matching; threshold sensitivity; severity subsample; attenuation bound; continuous-score calibration robustness |
 | **Heterogeneity** | Duration-split, push-split (visual) | Competitor, habit strength, demographics, push0 vs push1 (regression) |
 
 ---
