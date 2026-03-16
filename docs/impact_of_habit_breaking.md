@@ -203,24 +203,32 @@ Use this to strengthen identification and to run heterogeneity by closure length
 
 **2a. Define the prediction target.**
 
-- For each **consumer–closure** observation, the binary label is: **Would this consumer have made a Luckin purchase during the closure window in the counterfactual without the closure?**
-- For treated consumers this is unobserved; the model is trained on **pre-closure periods** (and control) where the label is observed (whether a purchase was made in that period).
+- For each **consumer–closure–period** row, the binary label is: whether the customer made **at least one Luckin purchase** in that period.
+- The model is used to predict purchase propensity around closure windows, with control period 0 used as observed validation for the during-closure counterfactual.
 
 **2b. Training data selection.**
 
-- **Sample:** Only closures with `closure_start ≥ 2020-09-01` are used (89 of 101 total), ensuring all 4 pre-closure weeks fall within the data window (2020-06-01 to 2021-12-31).
-- **Eligibility:** A consumer is included in treatment or control only if their **first ever order predates `closure_start − 28 days`** (i.e., they must have been active before the earliest pre-closure week). This prevents look-ahead contamination and guarantees computable history features for period −4.
-- **Unit:** One observation = (consumer, closure, period), where period ∈ {−4, −3, −2, −1} (pre-closure weeks) for both treatment and control, plus period 0 (closure window) for **control only** (observed; used for evaluation, not training).
-- **Label:** Binary = 1 if consumer made ≥1 Luckin purchase in that 7-day period, 0 otherwise.
-- **Features:** All computed from order history **strictly before** the period start date (no look-ahead).
-- **Training set:** All (consumer–closure–period) rows with period ∈ {−4, −3, −2, −1}. Control period 0 is held out for evaluation.
-- **Prediction target:** For each consumer–closure, predict purchase during closure window (t=0).
+- **Sample:** Closures are filtered by `closure_start ≥ 2020-09-01` (from config).
+- **Pair source:** Treatment/control pairing is loaded from `outputs/customer-store/closure_pair_registry.csv` (kept closures only), aligned with customer-store analysis logic.
+- **Unit:** One observation = (consumer, closure, period), where periods are:
+  - `-4, -3, -2, -1` for treatment and control;
+  - `0` for control only (during-closure evaluation row).
+- **Period length:** Each period length equals closure duration `D = closure_duration_days` (not fixed 7-day weeks).
+- **History guardrails:**
+  - Closure-level: skip closures lacking sufficient history (`closure_start` must be at least `earliest_order_date + 4D + 8 days`).
+  - Member-level: keep only members with first purchase date strictly before earliest pre-period start (`closure_start - 4D`).
+- **Label:** Binary = 1 if customer made ≥1 purchase in that period, else 0.
+- **Features:** Computed strictly from history up to `period_start - 1 day` (no look-ahead).
+- **Train/eval split:**
+  - Train: `period <= -2`
+  - Eval pre: `period = -1`
+  - Eval during: `period = 0` and `group = control`
 
 **2c. Feature variables.**
 
 Single behavioral data source: `order_result.csv`. Demographics from `member_result.csv`. No `order_commodity_result.csv` is used; item-count columns (`coffee_commodity_num`, `food_commodity_num`, etc.) are embedded in `order_result.csv`.
 
-**Features used in X (46 consumer-level features):** All computed from history strictly before `period_start`. Closure-specific features are deliberately excluded — consumers cannot forecast a closure, so those features carry no information about pre-closure purchase propensity.
+**Features used in X (46 consumer-level features):** All computed from history strictly before `period_start`.
 
 | # | Variable group | Variables | Construction |
 |---|----------------|-----------|---------------|
@@ -230,7 +238,7 @@ Single behavioral data source: `order_result.csv`. Demographics from `member_res
 | 28–29 | Basket & breadth | `avg_basket_size`, `n_order_categories_avg` | `avg_basket_size` = mean total items per order (sum of `*_commodity_num`); `n_order_categories_avg` = mean distinct non-zero category counts per order |
 | 30–32 | Store loyalty | `unique_stores_pre`, `preferred_store_ratio`, `second_store_ratio` | Computed from visit-deduplicated (`member_id`, `date`, `dept_id`) order history |
 | 33–40 | Order-level behaviour | `avg_discount_per_order`, `coupon_usage_rate`, `avg_coffee_num`, `avg_food_num`, `avg_use_coffee_wallet`, `avg_delivery_pay`, `coffee_share_orders`, `take_address_rate` | Mean per member over history; `avg_delivery_pay` treats NaN (pickup/in-store) as 0; `coffee_share_orders` = share of orders with `coffee_commodity_num > 0`; `take_address_rate` = share with non-null `take_address` |
-| 41–46 | Demographics | `gender`, `level`, `has_inviter`, `manufacturer`, `callphone`, `push` | Integer-encoded (NaN → 1; sorted distinct values → 2, 3, …); encoding map saved to `data/intermediate/demo_encoding_map.csv`. Excludes `birth_year`, `camera`, `location`, `network`, `sdcard`. |
+| 41–46 | Demographics | `gender`, `level`, `has_inviter`, `manufacturer`, `callphone`, `push` | Integer-encoded categorical features (NaN → 1; sorted distinct values → 2, 3, …); encoding map saved to `data/intermediate/demo_encoding_map.csv`. Excludes `birth_year`, `camera`, `location`, `network`, `sdcard`. |
 
 **Features stored in panel but excluded from X (used in Step 4 DiD regression):**
 
@@ -248,7 +256,7 @@ Single behavioral data source: `order_result.csv`. Demographics from `member_res
 - **Algorithm:** XGBoost gradient-boosted trees (`binary:logistic`, eval metric: AUC).
 - **Hyperparameters:** 500 boosting rounds, `max_depth = 6`, `eta = 0.1`, `tree_method = hist`.
 - **Hardware:** Uses `device = cuda` when a GPU is detected; falls back to CPU otherwise. No manual imputation is needed — the pipeline raises `ValueError` on any NaN in the feature matrix, so the training matrix is guaranteed NaN-free.
-- **Scope:** One global model trained across all 89 closure events; closure characteristics (`closure_length_days`, `closure_start_month`, etc.) are included as features to capture event-level heterogeneity.
+- **Scope:** One model is trained per unique closure duration `D` (e.g., `D=10,11,...`), not one global pooled model.
 
 **2e. Evaluation.**
 
@@ -257,24 +265,26 @@ Single behavioral data source: `order_result.csv`. Demographics from `member_res
   - **Treatment, Pre (t=−1):** Predicted vs observed for the last pre-closure week.
   - **Control, Pre (t=−1):** Same.
   - **Control, During (t=0):** Predicted vs observed for actual closure window; yields false positive rate µ and false negative rate λ used for Paper 2 attenuation correction.
+- **Label-balance audit:** Saved by closure duration and data split (`train`, `eval_pre_treatment`, `eval_pre_control`, `eval_during`) to monitor class imbalance.
 
 **2f. Outputs from running the code.**
 
-1. **`variable_importance.csv`:** Columns `feature`, `importance` (gain), `rank` (sorted descending).
-2. **`prediction_accuracy.csv`:** One row per evaluation group with columns `accuracy`, `precision`, `recall`, `f1`, `fpr`, `fnr`, `n`, `group`.
-3. **`train_displacement_model.log`:** Full log including variable statistics (mean, min, max for all 52 features), dataset counts, and the complete accuracy table.
+For each duration `D`, artifacts are saved with suffix `_D`, including:
 
-Example accuracy table (1-closure test, closure Sept 5 2020, dept 239, 46 behavioral/demographic features):
+1. **`displacement_model_D.json`**
+2. **`variable_importance_D.csv`**
+3. **`prediction_accuracy_D.csv`**
+4. **`panel_with_scores_D.parquet`**
+5. **`displacement_scores_D.csv`**
 
-| group | accuracy | precision | recall | f1 | fpr | fnr | n |
-|-------|----------|-----------|--------|----|-----|-----|---|
-| Treatment_Pre_t-1 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | 0.000 | 4 |
-| Control_Pre_t-1 | 0.816 | 0.863 | 0.694 | 0.769 | 0.087 | 0.306 | 16,705 |
-| Control_During_t0 | 0.579 | 0.727 | 0.513 | 0.602 | 0.314 | 0.487 | 16,705 |
+Additional run-level artifacts:
+
+- **`label_balance_audit.csv`** (class balance by duration and split)
+- **training log** in `outputs/displacement_classification/logs/`
 
 **2g. Classify displaced vs non-displaced.**
 
-- **Displaced** = predicted probability > 0.5 (default threshold; sensitivity to 0.4 and 0.6 is a robustness check, Step 5c).
+- **Displaced** = predicted probability ≥ 0.5 (configurable `decision_threshold`).
 - **Correction (Paper 2, future):** For control consumers, replace model prediction with observed purchase at t=0; use µ (FPR) and λ (FNR) from the Control_During_t0 row to bound the attenuation in the displacement effect estimate (Paper 2 Appendix D). Not yet implemented.
 
 ---
@@ -366,7 +376,7 @@ Compare displacement effect between **push0** (opted out of push at first use) a
 | Area | Done | Not done |
 |------|------|----------|
 | **Treatment/control** | Pre-closure preferred-store-based treatment; default set-up-time–matched closure-specific control (with one-time control-store assignment); threshold justification; closure-level screening (`MIN_GROUP_SIZE`, control/treatment rate filter) | Boundary/multi-closure rules; control comparability; closure distribution (geo, timing, duration, severity) |
-| **Displacement** | Target definition; 4-week panel (periods −4…−1 + control t=0); 46 behavioral/demographic features from `order_result.csv` (closure-event features excluded from X, stored for Step 4); XGBoost (500 rounds, gain importance); accuracy table (Treatment/Control pre & during); `variable_importance.csv`, `prediction_accuracy.csv` | Displacement label assignment to treatment consumers; Paper 2 attenuation correction (µ, λ bounds); accuracy by closure length |
+| **Displacement** | Registry-aligned panel (periods −4…−1 + control t=0, with period length = closure duration `D`); 46 behavioral/demographic features from `order_result.csv`; train/eval split (`<=-2`, `-1`, `0-control`); XGBoost trained per duration `D` (500 rounds, gain importance); duration-suffixed outputs (`displacement_model_D.json`, `variable_importance_D.csv`, `prediction_accuracy_D.csv`, `displacement_scores_D.csv`) plus `label_balance_audit.csv` | Displacement label assignment to treated consumers for causal estimation stage; Paper 2 attenuation correction (µ, λ bounds); threshold and calibration sensitivity analysis |
 | **Sample** | Pre/during/post windows; period-level behavior panel | Normalized time units; stacked consumer–closure; clustering design |
 | **Estimation** | Descriptive stats, t-tests, visual comparison | DiD ATT; triple-difference; event study; closure-length interaction |
 | **Robustness** | 14 vs 28 day window; duration-split and push-split plots | Parallel trends test; matching; threshold sensitivity; severity subsample; attenuation bound |
