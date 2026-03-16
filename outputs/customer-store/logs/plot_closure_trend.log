@@ -18,25 +18,25 @@ Calculating customer store preferences (min 5 purchases)...
 
 --- Building panel for 2-week window ---
     Processing closure 1/41...
-    Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=453 < 50.
-    Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.681 < 2.0*treat_rate=0.351.
-    Skipping closure (dept_id=64, closure_start=2020-10-11): ctrl_rate=0.402 < 2.0*treat_rate=0.281.
-    Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.446 < 2.0*treat_rate=0.309.
-    Skipping closure (dept_id=181, closure_start=2021-02-11): ctrl_rate=0.107 < 2.0*treat_rate=0.160.
-    Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.314 < 2.0*treat_rate=0.205.
-    Skipping closure (dept_id=57, closure_start=2021-07-01): ctrl_rate=0.331 < 2.0*treat_rate=0.220.
+    Skipping closure (dept_id=239, closure_start=2020-09-05): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=101, closure_start=2020-09-12): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=181, closure_start=2021-02-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=21, closure_start=2021-04-09): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=57, closure_start=2021-07-01): not found as kept in closure_pair_registry.csv.
     Processing closure 20/41...
-    Skipping closure (dept_id=147, closure_start=2021-07-27): ctrl_rate=0.244 < 2.0*treat_rate=0.161.
-    Skipping closure (dept_id=110, closure_start=2021-07-28): ctrl_rate=0.163 < 2.0*treat_rate=0.170.
-    Skipping closure (dept_id=160, closure_start=2021-07-28): ctrl_rate=0.169 < 2.0*treat_rate=0.118.
-    Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.179.
-    Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.312 < 2.0*treat_rate=0.178.
-    Skipping closure (dept_id=75, closure_start=2021-07-31): ctrl_rate=0.498 < 2.0*treat_rate=0.345.
-    Skipping closure (dept_id=220, closure_start=2021-08-03): ctrl_rate=0.030 < 2.0*treat_rate=0.032.
-    Skipping closure (dept_id=182, closure_start=2021-08-03): ctrl_rate=0.043 < 2.0*treat_rate=0.068.
-    Skipping closure (dept_id=196, closure_start=2021-08-03): ctrl_rate=0.082 < 2.0*treat_rate=0.081.
-    Skipping closure (dept_id=189, closure_start=2021-08-03): no qualified control members. (control_stores=[14, 203, 202, 204, 201])
-    Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=21 < 50.
+    Skipping closure (dept_id=147, closure_start=2021-07-27): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=110, closure_start=2021-07-28): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=160, closure_start=2021-07-28): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=68, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=75, closure_start=2021-07-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=220, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=182, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=196, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=189, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=197, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
     Processing closure 40/41...
   Panel rows: 275,125
   (group, t) combinations: 10
@@ -44,25 +44,25 @@ Calculating customer store preferences (min 5 purchases)...
 
 --- Building panel for 4-week window ---
     Processing closure 1/41...
-    Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=453 < 50.
-    Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.681 < 2.0*treat_rate=0.351.
-    Skipping closure (dept_id=64, closure_start=2020-10-11): ctrl_rate=0.402 < 2.0*treat_rate=0.281.
-    Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.446 < 2.0*treat_rate=0.309.
-    Skipping closure (dept_id=181, closure_start=2021-02-11): ctrl_rate=0.107 < 2.0*treat_rate=0.160.
-    Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.314 < 2.0*treat_rate=0.205.
-    Skipping closure (dept_id=57, closure_start=2021-07-01): ctrl_rate=0.331 < 2.0*treat_rate=0.220.
+    Skipping closure (dept_id=239, closure_start=2020-09-05): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=101, closure_start=2020-09-12): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=181, closure_start=2021-02-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=21, closure_start=2021-04-09): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=57, closure_start=2021-07-01): not found as kept in closure_pair_registry.csv.
     Processing closure 20/41...
-    Skipping closure (dept_id=147, closure_start=2021-07-27): ctrl_rate=0.244 < 2.0*treat_rate=0.161.
-    Skipping closure (dept_id=110, closure_start=2021-07-28): ctrl_rate=0.163 < 2.0*treat_rate=0.170.
-    Skipping closure (dept_id=160, closure_start=2021-07-28): ctrl_rate=0.169 < 2.0*treat_rate=0.118.
-    Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.179.
-    Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.312 < 2.0*treat_rate=0.178.
-    Skipping closure (dept_id=75, closure_start=2021-07-31): ctrl_rate=0.498 < 2.0*treat_rate=0.345.
-    Skipping closure (dept_id=220, closure_start=2021-08-03): ctrl_rate=0.030 < 2.0*treat_rate=0.032.
-    Skipping closure (dept_id=182, closure_start=2021-08-03): ctrl_rate=0.043 < 2.0*treat_rate=0.068.
-    Skipping closure (dept_id=196, closure_start=2021-08-03): ctrl_rate=0.082 < 2.0*treat_rate=0.081.
-    Skipping closure (dept_id=189, closure_start=2021-08-03): no qualified control members. (control_stores=[14, 203, 202, 204, 201])
-    Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=21 < 50.
+    Skipping closure (dept_id=147, closure_start=2021-07-27): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=110, closure_start=2021-07-28): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=160, closure_start=2021-07-28): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=68, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=75, closure_start=2021-07-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=220, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=182, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=196, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=189, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=197, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
     Processing closure 40/41...
   Panel rows: 495,225
   (group, t) combinations: 18
@@ -70,25 +70,25 @@ Calculating customer store preferences (min 5 purchases)...
 
 --- Building panel for 8-week window ---
     Processing closure 1/41...
-    Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=453 < 50.
-    Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.681 < 2.0*treat_rate=0.351.
-    Skipping closure (dept_id=64, closure_start=2020-10-11): ctrl_rate=0.402 < 2.0*treat_rate=0.281.
-    Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.446 < 2.0*treat_rate=0.309.
-    Skipping closure (dept_id=181, closure_start=2021-02-11): ctrl_rate=0.107 < 2.0*treat_rate=0.160.
-    Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.314 < 2.0*treat_rate=0.205.
-    Skipping closure (dept_id=57, closure_start=2021-07-01): ctrl_rate=0.331 < 2.0*treat_rate=0.220.
+    Skipping closure (dept_id=239, closure_start=2020-09-05): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=101, closure_start=2020-09-12): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=181, closure_start=2021-02-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=21, closure_start=2021-04-09): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=57, closure_start=2021-07-01): not found as kept in closure_pair_registry.csv.
     Processing closure 20/41...
-    Skipping closure (dept_id=147, closure_start=2021-07-27): ctrl_rate=0.244 < 2.0*treat_rate=0.161.
-    Skipping closure (dept_id=110, closure_start=2021-07-28): ctrl_rate=0.163 < 2.0*treat_rate=0.170.
-    Skipping closure (dept_id=160, closure_start=2021-07-28): ctrl_rate=0.169 < 2.0*treat_rate=0.118.
-    Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.179.
-    Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.312 < 2.0*treat_rate=0.178.
-    Skipping closure (dept_id=75, closure_start=2021-07-31): ctrl_rate=0.498 < 2.0*treat_rate=0.345.
-    Skipping closure (dept_id=220, closure_start=2021-08-03): ctrl_rate=0.030 < 2.0*treat_rate=0.032.
-    Skipping closure (dept_id=182, closure_start=2021-08-03): ctrl_rate=0.043 < 2.0*treat_rate=0.068.
-    Skipping closure (dept_id=196, closure_start=2021-08-03): ctrl_rate=0.082 < 2.0*treat_rate=0.081.
-    Skipping closure (dept_id=189, closure_start=2021-08-03): no qualified control members. (control_stores=[14, 203, 202, 204, 201])
-    Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=21 < 50.
+    Skipping closure (dept_id=147, closure_start=2021-07-27): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=110, closure_start=2021-07-28): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=160, closure_start=2021-07-28): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=68, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=75, closure_start=2021-07-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=220, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=182, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=196, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=189, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=197, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
     Processing closure 40/41...
   Panel rows: 935,425
   (group, t) combinations: 34

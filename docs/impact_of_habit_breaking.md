@@ -99,18 +99,26 @@ This tests whether longer interruptions lead to larger or more persistent displa
 
 ## 3. What Has Been Done
 
-The script `model-free/scripts/customer-store/analyze_closure_impact.py` implements the following.
+The script `model-free/src/customer-store/analyze_closure_impact.py` implements the following.
 
 ### 3.1 Data and Sample
 
 - **Order data:** `order_commodity_result.csv`, `order_result.csv` (commodity-level and order-level, with store `dept_id`, `member_id`, date, discount, coupon).
-- **Closures:** `store_closures.csv` with `dept_id`, `closure_start`, `closure_end`, `closure_duration_days`, and optionally latitude, longitude, address.
+- **Closures (constructed):** `model-free/src/store/identify_closures.py` identifies closures from daily store demand as **≥10 consecutive zero-demand days**, requiring **non-zero demand both before and after** the zero-demand spell. It then merges geocoded store metadata and keeps stores with valid coordinates within Nanjing bounds.
+- **Analysis closure input:** `outputs/store/non_uni_store_closures.csv` (derived from `outputs/store/store_closures.csv` by excluding stores whose `address` contains `大学` or `学院`).
 - **Thresholds:** “Regular” customer: at least **5** pre-closure purchases (`DEFAULT_LOWEST_PURCHASES`) and preferred-store loyalty ratio **≥ 0.8** (`DEFAULT_LOWEST_RATIO`). The script includes **threshold justification** (coverage at different purchase and ratio cutoffs).
 
 ### 3.2 Treatment and Control (Current)
 
-- **Treatment (per closure):** Customers whose **preferred store** is the closed store and whose **preferred-store ratio ≥ 0.8** (computed over full pre-closure history).
-- **Control (closure-specific):** For each closure, control = never-treated consumers who, **before that closure’s start**, had ≥5 purchases and ≥4 of those at one store (ratio ≥ 0.8). The never-treated pool = consumers whose preferred store never closed; from this pool we select those qualified at the time of each closure. The same consumer can be control for multiple closures.
+- **Default mode (enabled): set-up-time–matched control (`USE_SET_UP_TIME_MATCHED_CONTROL=True`).**
+  - **Treatment (per closure):** Using only visits **before closure start**, customers whose pre-closure preferred store is the closed store, with pre-closure `total_purchases ≥ 5` and `preferred_ratio ≥ 0.8`.
+  - **Control stores (per closure):** Up to `SET_UP_TIME_NEAREST_N=5` stores chosen by nearest `set_up_time` to the closed store, restricted to non-treated stores; each control store is used at most once across closures (processed in closure-start order).
+  - **Control members (per closure):** Customers whose pre-closure preferred store is in that closure’s matched control-store set, with the same pre-closure thresholds (`≥5` purchases and ratio `≥0.8`).
+- **Alternative mode (disabled by default): never-treated closure-specific control.**
+  - Never-treated pool = qualified loyal customers whose preferred store never appears in closures.
+  - For each closure, keep pool members who were qualified at that closure date (`≥5` purchases before closure start and max single-store share `≥0.8`).
+
+In both modes, one observation unit remains the **consumer–closure event**, and the same consumer can appear in multiple closures.
 
 ### 3.3 Time Windows
 
@@ -141,6 +149,10 @@ The script `model-free/scripts/customer-store/analyze_closure_impact.py` impleme
 
 - **Paired t-tests:** Treatment and control, pre vs post (per customer, control deduplicated across closures).
 - **Two-sample t-tests:** Treatment vs control in pre and in post.
+- **Closure-level inclusion filters in analysis:**
+  - Skip closure if either group size is below `MIN_GROUP_SIZE=50`.
+  - Skip closure if control during-closure purchase rate is too low: `control_rate < 2.0 × treatment_rate` (`MIN_CTRL_TREAT_RATIO=2.0`).
+  - The retained subset is exported as `outputs/customer-store/closures_used.csv`.
 - No regression-based DiD or triple-difference yet; no displacement classification; no event-study or formal pre-trend tests.
 
 ### 3.7 Outputs
@@ -353,7 +365,7 @@ Compare displacement effect between **push0** (opted out of push at first use) a
 
 | Area | Done | Not done |
 |------|------|----------|
-| **Treatment/control** | Preferred-store-based treatment; never-treated control; threshold justification | Boundary/multi-closure rules; control comparability; closure distribution (geo, timing, duration, severity) |
+| **Treatment/control** | Pre-closure preferred-store-based treatment; default set-up-time–matched closure-specific control (with one-time control-store assignment); threshold justification; closure-level screening (`MIN_GROUP_SIZE`, control/treatment rate filter) | Boundary/multi-closure rules; control comparability; closure distribution (geo, timing, duration, severity) |
 | **Displacement** | Target definition; 4-week panel (periods −4…−1 + control t=0); 46 behavioral/demographic features from `order_result.csv` (closure-event features excluded from X, stored for Step 4); XGBoost (500 rounds, gain importance); accuracy table (Treatment/Control pre & during); `variable_importance.csv`, `prediction_accuracy.csv` | Displacement label assignment to treatment consumers; Paper 2 attenuation correction (µ, λ bounds); accuracy by closure length |
 | **Sample** | Pre/during/post windows; period-level behavior panel | Normalized time units; stacked consumer–closure; clustering design |
 | **Estimation** | Descriptive stats, t-tests, visual comparison | DiD ATT; triple-difference; event study; closure-length interaction |
@@ -364,5 +376,6 @@ Compare displacement effect between **push0** (opted out of push at first use) a
 
 *References:*  
 - Levine, J., & Hristakeva, S. (2026). *Stopping Shopping at Stop and Shop? How Temporary Disruptions Affect Store Choice.* Draft January 5, 2026 (Paper 2).  
-- Script: `model-free/scripts/customer-store/analyze_closure_impact.py`  
-- Closures: `model-free/plots/nanjing_store_locations/store_closures.csv`
+- Script: `model-free/src/customer-store/analyze_closure_impact.py`  
+- Closure construction: `model-free/src/store/identify_closures.py`  
+- Closures used for analysis: `model-free/outputs/store/non_uni_store_closures.csv`

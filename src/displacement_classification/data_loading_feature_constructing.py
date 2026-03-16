@@ -11,9 +11,7 @@ Functions : setup_logging, log_print,
             build_training_panel, compute_features_for_panel
 Re-exports (from analyze_closure_impact):
             DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO,
-            get_customer_store_preference, get_never_treated_members,
-            get_closure_specific_control_members,
-            _get_treated_members_for_store
+            get_customer_store_preference
 """
 
 from __future__ import annotations
@@ -52,6 +50,7 @@ if not (PROJECT_ROOT / "outputs" / "store").exists() and (PROJECT_ROOT / "model-
     _outputs_root = PROJECT_ROOT / "model-free"
 
 CLOSURES_CSV        = _outputs_root / "outputs" / "store" / "non_uni_store_closures.csv"
+PAIR_REGISTRY_CSV   = _outputs_root / "outputs" / "customer-store" / "closure_pair_registry.csv"
 MEMBER_RESULT_PATH  = DATA_DIR / "member_result.csv"
 NO_PUSH_MEMBERS_PATH = _outputs_root / "data" / "processed" / "no_push_members.csv"
 DEMO_INTERMEDIATE_DIR = _outputs_root / "data" / "intermediate"
@@ -89,9 +88,16 @@ sys.path.insert(0, str(PROJECT_ROOT / "src" / "customer-store"))
 from analyze_closure_impact import (           # noqa: E402
     DEFAULT_LOWEST_PURCHASES,
     DEFAULT_LOWEST_RATIO,
+    MIN_CTRL_TREAT_RATIO,
+    MIN_GROUP_SIZE,
+    USE_SET_UP_TIME_MATCHED_CONTROL,
     build_date_sorted_index,
+    build_closure_pair_registry,
     get_closure_specific_control_members,
+    get_closure_control_members_set_up_matched,
     get_customer_store_preference,
+    get_preference_before_date,
+    get_treatment_and_control_members_for_closure,
     get_never_treated_members,
 )
 from analyze_closure_impact import (           # noqa: E402
@@ -218,6 +224,63 @@ def load_order_result_full(logger: logging.Logger) -> pd.DataFrame:
     return df
 
 
+def _closure_key(dept_id: Any, closure_start: Any) -> tuple[int, str]:
+    return int(dept_id), pd.to_datetime(closure_start).strftime("%Y-%m-%d")
+
+
+def parse_control_store_ids(serialized: Any) -> List[int]:
+    if serialized is None or (isinstance(serialized, float) and np.isnan(serialized)):
+        return []
+    s = str(serialized).strip()
+    if not s:
+        return []
+    return [int(x) for x in s.split("|") if x != ""]
+
+
+def load_or_build_closure_pair_registry(
+    logger: logging.Logger,
+    df_orders: pd.DataFrame,
+    closures: pd.DataFrame,
+    customer_preference: pd.DataFrame,
+    unique_visits: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Load closure_pair_registry cache if valid; otherwise rebuild it.
+    """
+    expected_keys = {
+        _closure_key(r["dept_id"], r["closure_start"])
+        for _, r in closures.iterrows()
+    }
+
+    if PAIR_REGISTRY_CSV.exists():
+        reg = pd.read_csv(PAIR_REGISTRY_CSV, encoding="utf-8-sig")
+        if {"dept_id", "closure_start", "status", "control_store_ids"}.issubset(reg.columns):
+            actual_keys = {
+                _closure_key(r["dept_id"], r["closure_start"])
+                for _, r in reg.iterrows()
+            }
+            if expected_keys.issubset(actual_keys):
+                log_print(logger, f"Loaded closure pair registry from cache: {PAIR_REGISTRY_CSV}")
+                return reg
+
+        log_print(logger, "Existing closure pair registry does not match current closures; rebuilding...")
+
+    log_print(logger, "Building closure pair registry for displacement pipeline...")
+    reg = build_closure_pair_registry(
+        df_orders_like=df_orders,
+        closures=closures,
+        customer_preference=customer_preference,
+        unique_visits=unique_visits,
+        lowest_purchases=DEFAULT_LOWEST_PURCHASES,
+        lowest_ratio=DEFAULT_LOWEST_RATIO,
+        use_set_up_time_matched_control=USE_SET_UP_TIME_MATCHED_CONTROL,
+        min_group_size=MIN_GROUP_SIZE,
+        min_ctrl_treat_ratio=MIN_CTRL_TREAT_RATIO,
+        output_path=PAIR_REGISTRY_CSV,
+    )
+    return reg
+
+
 # ---------------------------------------------------------------------------
 # Panel construction
 # ---------------------------------------------------------------------------
@@ -239,6 +302,14 @@ def build_training_panel(
     Closures are skipped if there is insufficient history for 4 pre-periods of length D.
     """
     log_print(logger, f"\nBuilding training panel ({NUM_PRE_PERIODS} pre-periods of length D=closure_duration_days)...")
+    pair_registry = load_or_build_closure_pair_registry(
+        logger, df_orders, closures, customer_preference, unique_visits
+    )
+    reg_map: Dict[tuple[int, str], pd.Series] = {
+        _closure_key(r["dept_id"], r["closure_start"]): r
+        for _, r in pair_registry.iterrows()
+    }
+
     control_pool = get_never_treated_members(
         closures, customer_preference, DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO
     )
@@ -269,16 +340,38 @@ def build_training_panel(
             skipped_history += 1
             continue
 
-        treatment = _get_treated_members_for_store(
-            customer_preference, dept_id, DEFAULT_LOWEST_RATIO
-        )
-        if not treatment:
+        key = _closure_key(dept_id, closure["closure_start"])
+        reg_row = reg_map.get(key)
+        if reg_row is None or reg_row.get("status") != "kept":
             continue
-        closure_control = get_closure_specific_control_members(
-            unique_visits, control_pool,
-            closure_start.date(), DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO,
-        )
-        if not closure_control:
+
+        if USE_SET_UP_TIME_MATCHED_CONTROL:
+            control_store_ids = parse_control_store_ids(reg_row.get("control_store_ids", ""))
+            if not control_store_ids:
+                continue
+            treatment, closure_control, _ = get_treatment_and_control_members_for_closure(
+                unique_visits=unique_visits,
+                customer_preference=customer_preference,
+                closure=closure,
+                lowest_purchases=DEFAULT_LOWEST_PURCHASES,
+                lowest_ratio=DEFAULT_LOWEST_RATIO,
+                use_set_up_time_matched_control=True,
+                control_pool=None,
+                control_stores_by_closure={(dept_id, closure["closure_start"]): control_store_ids},
+            )
+        else:
+            treatment, closure_control, _ = get_treatment_and_control_members_for_closure(
+                unique_visits=unique_visits,
+                customer_preference=customer_preference,
+                closure=closure,
+                lowest_purchases=DEFAULT_LOWEST_PURCHASES,
+                lowest_ratio=DEFAULT_LOWEST_RATIO,
+                use_set_up_time_matched_control=False,
+                control_pool=control_pool,
+                control_stores_by_closure=None,
+            )
+
+        if not treatment or not closure_control:
             continue
 
         earliest_preperiod = closure_start - pd.Timedelta(days=NUM_PRE_PERIODS * D)

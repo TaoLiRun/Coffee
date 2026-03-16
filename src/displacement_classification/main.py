@@ -33,6 +33,10 @@ from data_loading_feature_constructing import (
     load_order_result_full,
     build_training_panel,
     compute_features_for_panel,
+    load_or_build_closure_pair_registry,
+    parse_control_store_ids,
+    USE_SET_UP_TIME_MATCHED_CONTROL,
+    get_treatment_and_control_members_for_closure,
     # Constants
     CLOSURES_CSV,
     OUTPUT_DIR,
@@ -41,9 +45,6 @@ from data_loading_feature_constructing import (
     DEFAULT_LOWEST_PURCHASES,
     DEFAULT_LOWEST_RATIO,
     get_customer_store_preference,
-    get_never_treated_members,
-    get_closure_specific_control_members,
-    _get_treated_members_for_store,
 )
 from model import (
     check_gpu,
@@ -105,19 +106,34 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     log_print(logger, "\nPre-filtering data to exact panel members across all closures...")
     all_treated_members: set = set()
     all_control_members: set = set()
-    never_treated_pool = get_never_treated_members(
-        closures, customer_preference, DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO
+    pair_registry = load_or_build_closure_pair_registry(
+        logger, df_order_full, closures, customer_preference, unique_visits
     )
+    reg_map = {
+        (int(r["dept_id"]), pd.to_datetime(r["closure_start"]).strftime("%Y-%m-%d")): r
+        for _, r in pair_registry.iterrows()
+    }
+
     for _, closure in closures.iterrows():
-        treated = _get_treated_members_for_store(
-            customer_preference, int(closure["dept_id"]), DEFAULT_LOWEST_RATIO
+        dept_id = int(closure["dept_id"])
+        key = (dept_id, pd.to_datetime(closure["closure_start"]).strftime("%Y-%m-%d"))
+        reg_row = reg_map.get(key)
+        if reg_row is None or reg_row.get("status") != "kept":
+            continue
+
+        control_stores = parse_control_store_ids(reg_row.get("control_store_ids", ""))
+        treated, ctrl, _ = get_treatment_and_control_members_for_closure(
+            unique_visits=unique_visits,
+            customer_preference=customer_preference,
+            closure=closure,
+            lowest_purchases=DEFAULT_LOWEST_PURCHASES,
+            lowest_ratio=DEFAULT_LOWEST_RATIO,
+            use_set_up_time_matched_control=USE_SET_UP_TIME_MATCHED_CONTROL,
+            control_pool=None,
+            control_stores_by_closure={(dept_id, closure["closure_start"]): control_stores},
         )
+
         all_treated_members.update(treated)
-        ctrl = get_closure_specific_control_members(
-            unique_visits, never_treated_pool,
-            pd.to_datetime(closure["closure_start"]).date(),
-            DEFAULT_LOWEST_PURCHASES, DEFAULT_LOWEST_RATIO,
-        )
         all_control_members.update(ctrl)
 
     panel_members = all_treated_members | all_control_members

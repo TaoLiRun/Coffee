@@ -133,6 +133,44 @@ def load_store_set_up_times(path: Path) -> pd.DataFrame:
     return df[["dept_id", "set_up_time"]].drop_duplicates(subset=["dept_id"])
 
 
+def load_store_static_features(path: Path) -> pd.DataFrame:
+    """
+    Load store static table and return dept-level features used for registry output.
+
+    Required columns: dept_id, set_up_time.
+    Optional columns: address.
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"Store static file not found: {path}")
+
+    df = pd.read_csv(path, encoding="utf-8-sig")
+    required = {"dept_id", "set_up_time"}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Store static must have columns {sorted(required)}; missing={sorted(missing)}")
+
+    df["dept_id"] = df["dept_id"].astype(str).str.strip().replace(r"^0+", "", regex=True)
+    df = df[df["dept_id"] != ""]
+    df["dept_id"] = df["dept_id"].astype(int)
+    df["set_up_time"] = pd.to_datetime(df["set_up_time"], errors="coerce").dt.date
+
+    if df["set_up_time"].isna().any():
+        bad = df[df["set_up_time"].isna()]["dept_id"].tolist()
+        raise ValueError(
+            f"Store static has missing or invalid set_up_time for dept_id: "
+            f"{bad[:10]}{'...' if len(bad) > 10 else ''}"
+        )
+
+    out_cols = ["dept_id", "set_up_time"]
+    if "address" in df.columns:
+        out_cols.append("address")
+    else:
+        df["address"] = ""
+        out_cols.append("address")
+
+    return df[out_cols].drop_duplicates(subset=["dept_id"])
+
+
 # ---------------------------------------------------------------------------
 # Threshold justification
 # ---------------------------------------------------------------------------
@@ -656,6 +694,195 @@ def get_closure_control_members_set_up_matched(
     return sorted(out) if out else []
 
 
+def get_treatment_and_control_members_for_closure(
+    unique_visits: pd.DataFrame,
+    customer_preference: pd.DataFrame,
+    closure: pd.Series,
+    lowest_purchases: int,
+    lowest_ratio: float,
+    use_set_up_time_matched_control: bool,
+    control_pool: Optional[List] = None,
+    control_stores_by_closure: Optional[Dict[Tuple[int, Any], List[int]]] = None,
+) -> Tuple[List, List, List[int]]:
+    """
+    Return treatment members, control members, and control store IDs for one closure.
+
+    The selection logic is shared across impact analysis, trend plotting,
+    and displacement-classification panel construction.
+    """
+    dept_id = int(closure["dept_id"])
+    closure_start = pd.to_datetime(closure["closure_start"])
+
+    if use_set_up_time_matched_control:
+        if control_stores_by_closure is None:
+            raise ValueError("control_stores_by_closure is required when use_set_up_time_matched_control=True")
+
+        closure_key = (dept_id, closure["closure_start"])
+        pref = get_preference_before_date(unique_visits, closure_start.date())
+        treatment = pref[
+            (pref["preferred_store"] == dept_id)
+            & (pref["preferred_ratio"] >= lowest_ratio)
+            & (pref["total_purchases"] >= lowest_purchases)
+        ]["member_id"].tolist()
+
+        control_store_ids = control_stores_by_closure.get(closure_key, [])
+        closure_control = get_closure_control_members_set_up_matched(
+            unique_visits,
+            closure_start.date(),
+            control_store_ids,
+            lowest_purchases,
+            lowest_ratio,
+            closure_key,
+        )
+        return treatment, closure_control, control_store_ids
+
+    treatment = _get_treated_members_for_store(
+        customer_preference, dept_id, lowest_ratio
+    )
+    closure_control = get_closure_specific_control_members(
+        unique_visits,
+        control_pool or [],
+        closure_start.date(),
+        lowest_purchases,
+        lowest_ratio,
+    )
+    return treatment, closure_control, []
+
+
+def _serialize_int_list(values: List[int]) -> str:
+    return "|".join(str(int(v)) for v in values)
+
+
+def _serialize_text_list(values: List[Any]) -> str:
+    return "|".join("" if pd.isna(v) else str(v) for v in values)
+
+
+def build_closure_pair_registry(
+    df_orders_like: pd.DataFrame,
+    closures: pd.DataFrame,
+    customer_preference: pd.DataFrame,
+    unique_visits: Optional[pd.DataFrame] = None,
+    lowest_purchases: int = DEFAULT_LOWEST_PURCHASES,
+    lowest_ratio: float = DEFAULT_LOWEST_RATIO,
+    use_set_up_time_matched_control: bool = USE_SET_UP_TIME_MATCHED_CONTROL,
+    min_group_size: int = MIN_GROUP_SIZE,
+    min_ctrl_treat_ratio: float = MIN_CTRL_TREAT_RATIO,
+    output_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """
+    Build and save closure-level treatment/control comparability registry.
+
+    Output is closure-level only (no individual member rows) and includes:
+    - closure metadata
+    - treated-store setup/address
+    - matched control-store IDs, setup times, and addresses
+    - treatment/control group sizes and during-closure rates
+    - pass/fail status and skip reason under current screening rules
+    """
+    if unique_visits is None:
+        unique_visits = df_orders_like[["member_id", "date", "dept_id"]].drop_duplicates()
+
+    df_s = build_date_sorted_index(df_orders_like)
+
+    if use_set_up_time_matched_control:
+        store_setups = load_store_set_up_times(DEPT_STATIC_PATH)
+        treated_store_ids = set(closures["dept_id"].astype(int).unique())
+        control_stores_by_closure = get_control_stores_per_closure(
+            closures,
+            store_setups,
+            n_nearest=SET_UP_TIME_NEAREST_N,
+            treated_store_ids=treated_store_ids,
+        )
+        control_pool = None
+    else:
+        control_pool = get_never_treated_members(
+            closures, customer_preference, lowest_purchases, lowest_ratio
+        )
+        control_stores_by_closure = None
+
+    static_df = load_store_static_features(DEPT_STATIC_PATH)
+    static_map = static_df.set_index("dept_id")
+
+    rows: List[Dict[str, Any]] = []
+    for _, closure in closures.iterrows():
+        dept_id = int(closure["dept_id"])
+        closure_start = pd.to_datetime(closure["closure_start"])
+        closure_end = pd.to_datetime(closure["closure_end"])
+
+        treatment, closure_control, control_store_ids = get_treatment_and_control_members_for_closure(
+            unique_visits=unique_visits,
+            customer_preference=customer_preference,
+            closure=closure,
+            lowest_purchases=lowest_purchases,
+            lowest_ratio=lowest_ratio,
+            use_set_up_time_matched_control=use_set_up_time_matched_control,
+            control_pool=control_pool,
+            control_stores_by_closure=control_stores_by_closure,
+        )
+
+        dur_start = closure_start.date()
+        dur_end = closure_end.date()
+        during_slice = _slice_by_date(df_s, dur_start, dur_end)
+        during_purch = during_slice[["member_id"]].drop_duplicates()
+
+        n_treat = len(treatment)
+        n_ctrl = len(closure_control)
+        t_rate = during_purch["member_id"].isin(treatment).sum() / n_treat if n_treat > 0 else np.nan
+        c_rate = during_purch["member_id"].isin(closure_control).sum() / n_ctrl if n_ctrl > 0 else np.nan
+
+        if n_treat == 0:
+            status, skip_reason = "skipped", "no_treatment"
+        elif n_ctrl == 0:
+            status, skip_reason = "skipped", "no_control"
+        elif n_treat < min_group_size or n_ctrl < min_group_size:
+            status, skip_reason = "skipped", "min_group_size"
+        elif c_rate < min_ctrl_treat_ratio * t_rate:
+            status, skip_reason = "skipped", "low_control_rate"
+        else:
+            status, skip_reason = "kept", ""
+
+        treated_setup_time = static_map.at[dept_id, "set_up_time"] if dept_id in static_map.index else ""
+        treated_address = static_map.at[dept_id, "address"] if dept_id in static_map.index else ""
+
+        ctrl_setups = [static_map.at[sid, "set_up_time"] if sid in static_map.index else "" for sid in control_store_ids]
+        ctrl_addrs = [static_map.at[sid, "address"] if sid in static_map.index else "" for sid in control_store_ids]
+
+        rows.append({
+            "dept_id": dept_id,
+            "closure_start": closure["closure_start"],
+            "closure_end": closure["closure_end"],
+            "closure_duration_days": closure["closure_duration_days"],
+            "selection_mode": "set_up_time_matched" if use_set_up_time_matched_control else "never_treated_pool",
+            "lowest_purchases": lowest_purchases,
+            "lowest_ratio": lowest_ratio,
+            "min_group_size": min_group_size,
+            "min_ctrl_treat_ratio": min_ctrl_treat_ratio,
+            "treated_store_set_up_time": treated_setup_time,
+            "treated_store_address": treated_address,
+            "control_store_ids": _serialize_int_list(control_store_ids),
+            "control_store_set_up_times": _serialize_text_list(ctrl_setups),
+            "control_store_addresses": _serialize_text_list(ctrl_addrs),
+            "n_control_stores": len(control_store_ids),
+            "n_treatment": n_treat,
+            "n_control": n_ctrl,
+            "treatment_purchase_rate_during": t_rate,
+            "control_purchase_rate_during": c_rate,
+            "selectivity_ratio": (t_rate / c_rate) if pd.notna(t_rate) and pd.notna(c_rate) and c_rate > 0 else np.nan,
+            "status": status,
+            "skip_reason": skip_reason,
+        })
+
+    registry = pd.DataFrame(rows).sort_values("closure_start").reset_index(drop=True)
+
+    if output_path is None:
+        output_path = OUTPUT_CUSTOMER_STORE_DIR / "closure_pair_registry.csv"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    registry.to_csv(output_path, index=False, encoding="utf-8-sig")
+    print(f"  Closure pair registry saved to: {output_path} ({len(registry)} rows)")
+    print(f"  Kept closures in registry: {(registry['status'] == 'kept').sum()} / {len(registry)}")
+    return registry
+
+
 # ---------------------------------------------------------------------------
 # Staggered DiD closure impact analysis
 # ---------------------------------------------------------------------------
@@ -728,27 +955,16 @@ def analyze_closure_impact(
         post_start = (closure_end + pd.Timedelta(days=1)).date()
         post_end   = (closure_end + pd.Timedelta(days=window_days)).date()
 
-        if use_set_up_time_matched_control:
-            closure_key = (dept_id, closure["closure_start"])
-            pref = get_preference_before_date(unique_visits, closure_start.date())
-            treatment = pref[
-                (pref["preferred_store"] == dept_id)
-                & (pref["preferred_ratio"] >= lowest_ratio)
-                & (pref["total_purchases"] >= lowest_purchases)
-            ]["member_id"].tolist()
-            control_store_ids = control_stores_by_closure[closure_key]
-            closure_control = get_closure_control_members_set_up_matched(
-                unique_visits, closure_start.date(), control_store_ids,
-                lowest_purchases, lowest_ratio, closure_key,
-            )
-        else:
-            treatment = _get_treated_members_for_store(
-                customer_preference, dept_id, lowest_ratio
-            )
-            closure_control = get_closure_specific_control_members(
-                unique_visits, control_pool, closure_start.date(),
-                lowest_purchases, lowest_ratio,
-            )
+        treatment, closure_control, control_store_ids = get_treatment_and_control_members_for_closure(
+            unique_visits=unique_visits,
+            customer_preference=customer_preference,
+            closure=closure,
+            lowest_purchases=lowest_purchases,
+            lowest_ratio=lowest_ratio,
+            use_set_up_time_matched_control=use_set_up_time_matched_control,
+            control_pool=control_pool,
+            control_stores_by_closure=control_stores_by_closure,
+        )
 
         if not treatment:
             print(f"  Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): no qualified treatment members.")
@@ -1477,6 +1693,23 @@ def main(
 
     # Shared inputs for Tasks 2 & 3
     customer_preference = get_customer_store_preference(df, lowest_purchases=lowest_purchases)
+    unique_visits = df[["member_id", "date", "dept_id"]].drop_duplicates()
+
+    print("\n" + "=" * 70)
+    print("Task 1.5: Build Closure Pair Registry")
+    print("=" * 70)
+    build_closure_pair_registry(
+        df_orders_like=df,
+        closures=closures,
+        customer_preference=customer_preference,
+        unique_visits=unique_visits,
+        lowest_purchases=lowest_purchases,
+        lowest_ratio=lowest_ratio,
+        use_set_up_time_matched_control=use_set_up_time_matched_control,
+        min_group_size=MIN_GROUP_SIZE,
+        min_ctrl_treat_ratio=MIN_CTRL_TREAT_RATIO,
+        output_path=OUTPUT_CUSTOMER_STORE_DIR / "closure_pair_registry.csv",
+    )
 
     # Task 2a: Staggered DiD — primary window
     print("\n" + "=" * 70)

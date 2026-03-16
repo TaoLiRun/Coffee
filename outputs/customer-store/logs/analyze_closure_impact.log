@@ -72,6 +72,12 @@ Calculating customer store preferences (min 5 purchases)...
   Preferred store ratio - Mean: 0.696, Median: 0.714
 
 ======================================================================
+Task 1.5: Build Closure Pair Registry
+======================================================================
+  Closure pair registry saved to: /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv (41 rows)
+  Kept closures in registry: 23 / 41
+
+======================================================================
 Task 2: Staggered DiD Closure Impact (window=14 days)
 ======================================================================
 
