@@ -36,7 +36,9 @@ DEFAULT_LOWEST_RATIO = 0.8
 DEFAULT_WINDOW_DAYS = 14   # pre/post window in days
 ROBUSTNESS_WINDOW_DAYS = 28
 DEFAULT_CLOSURE_TWO_GROUP_THRESHOLD = 30  # days: short vs long closure split
+MAX_CLOSURE_DURATION_DAYS = 30  # keep closures with duration strictly less than this
 NO_PUSH_MEMBERS_PATH = PROJECT_ROOT / "data" / "processed" / "no_push_members.csv"
+EXCLUDED_CONTROL_STORE_KEYWORDS = ("大学", "学院")
 
 # Set-up-time-matched control (Option A): True = match control stores by set_up_time, one-time use, pre-closure preference
 USE_SET_UP_TIME_MATCHED_CONTROL = True
@@ -114,7 +116,8 @@ def load_order_result_data() -> pd.DataFrame:
 
 def load_store_set_up_times(path: Path) -> pd.DataFrame:
     """
-    Load store static table and return dept_id (int) and set_up_time (date).
+    Load store static table and return dept_id (int), set_up_time (date),
+    and optional text columns for control-store keyword filtering.
     Raises FileNotFoundError if path missing; raises ValueError if required cols or set_up_time missing.
     """
     if not path.exists():
@@ -130,7 +133,44 @@ def load_store_set_up_times(path: Path) -> pd.DataFrame:
         bad = df[df["set_up_time"].isna()]["dept_id"].tolist()
         raise ValueError(f"Store static has missing or invalid set_up_time for dept_id: {bad[:10]}{'...' if len(bad) > 10 else ''}")
     df["set_up_time"] = df["set_up_time"].dt.date
-    return df[["dept_id", "set_up_time"]].drop_duplicates(subset=["dept_id"])
+
+    out_cols = ["dept_id", "set_up_time"]
+    for c in ["name", "dept_name", "store_name", "address"]:
+        if c in df.columns:
+            out_cols.append(c)
+
+    return df[out_cols].drop_duplicates(subset=["dept_id"])
+
+
+def contains_excluded_control_store_keyword(text: Any) -> bool:
+    """Return True if text contains excluded university keywords for control stores."""
+    if text is None or (isinstance(text, float) and pd.isna(text)):
+        return False
+    s = str(text)
+    return any(k in s for k in EXCLUDED_CONTROL_STORE_KEYWORDS)
+
+
+def filter_closures_shorter_than_max(
+    closures: pd.DataFrame,
+    max_duration_days: int = MAX_CLOSURE_DURATION_DAYS,
+    context: str = "analysis",
+) -> pd.DataFrame:
+    """Keep only closures with closure_duration_days < max_duration_days."""
+    if "closure_duration_days" not in closures.columns:
+        raise ValueError("closures is missing required column: closure_duration_days")
+
+    out = closures[closures["closure_duration_days"] < max_duration_days].copy()
+    dropped = len(closures) - len(out)
+    if dropped > 0:
+        print(
+            f"  [{context}] Filtered out {dropped} closure(s) with "
+            f"closure_duration_days >= {max_duration_days}."
+        )
+    if out.empty:
+        raise ValueError(
+            f"No closures remain after applying closure_duration_days < {max_duration_days} filter."
+        )
+    return out.reset_index(drop=True)
 
 
 def load_store_static_features(path: Path) -> pd.DataFrame:
@@ -606,6 +646,24 @@ def get_control_stores_per_closure(
     Returns dict mapping (dept_id, closure_start) -> list of control store dept_ids.
     """
     store_df = store_df.dropna(subset=["set_up_time"]).copy()
+    text_cols = [c for c in ["name", "dept_name", "store_name", "address"] if c in store_df.columns]
+    if text_cols:
+        joined_text = (
+            store_df[text_cols]
+            .fillna("")
+            .astype(str)
+            .agg(" ".join, axis=1)
+        )
+        store_df["_exclude_for_control"] = joined_text.apply(contains_excluded_control_store_keyword)
+        excluded_count = int(store_df["_exclude_for_control"].sum())
+        if excluded_count > 0:
+            print(
+                f"  Excluding {excluded_count} store(s) from control matching by keywords "
+                f"{EXCLUDED_CONTROL_STORE_KEYWORDS}."
+            )
+    else:
+        store_df["_exclude_for_control"] = False
+
     closures_sorted = closures_df.sort_values("closure_start").reset_index(drop=True)
     used_control_store_ids: set = set()
     result: Dict[Tuple[int, Any], List[int]] = {}
@@ -626,11 +684,12 @@ def get_control_stores_per_closure(
         candidates = store_df[
             (~store_df["dept_id"].isin(treated_store_ids))
             & (~store_df["dept_id"].isin(used_control_store_ids))
+            & (~store_df["_exclude_for_control"])
         ].copy()
         if candidates.empty:
             raise ValueError(
                 f"No eligible control store candidates for closure {closure_key}. "
-                "All similar stores may be treated or already used."
+                "All similar stores may be treated, excluded by keywords, or already used."
             )
 
         candidates["_diff"] = candidates["set_up_time"].apply(
@@ -779,6 +838,12 @@ def build_closure_pair_registry(
     - treatment/control group sizes and during-closure rates
     - pass/fail status and skip reason under current screening rules
     """
+    closures = filter_closures_shorter_than_max(
+        closures,
+        max_duration_days=MAX_CLOSURE_DURATION_DAYS,
+        context="registry",
+    )
+
     if unique_visits is None:
         unique_visits = df_orders_like[["member_id", "date", "dept_id"]].drop_duplicates()
 
@@ -917,6 +982,12 @@ def analyze_closure_impact(
     print(f"\nAnalyzing closure impact (staggered DiD, window={window_days} days)...")
     print(f"  Config: lowest_purchases={lowest_purchases}, lowest_ratio={lowest_ratio}")
     print(f"  Control: use_set_up_time_matched_control={use_set_up_time_matched_control}")
+
+    closures = filter_closures_shorter_than_max(
+        closures,
+        max_duration_days=MAX_CLOSURE_DURATION_DAYS,
+        context=f"did_w{window_days}",
+    )
 
     # Pre-sort once so _slice_by_date (binary search) works correctly
     print("  Pre-sorting data by date for fast period slicing...")
@@ -1678,6 +1749,12 @@ def main(
     df_order = load_order_result_data()
     closures = pd.read_csv(CLOSURES_CSV, encoding="utf-8-sig")
     print(f"\nLoaded {len(closures)} store closures.")
+    closures = filter_closures_shorter_than_max(
+        closures,
+        max_duration_days=MAX_CLOSURE_DURATION_DAYS,
+        context="main",
+    )
+    print(f"Using {len(closures)} closures with closure_duration_days < {MAX_CLOSURE_DURATION_DAYS}.")
 
     # Task 0: Threshold justification
     analyze_threshold_justification(

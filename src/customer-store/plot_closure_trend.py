@@ -20,12 +20,15 @@ from analyze_closure_impact import (
     CLOSURES_CSV,
     DEFAULT_LOWEST_PURCHASES,
     DEFAULT_LOWEST_RATIO,
+    MAX_CLOSURE_DURATION_DAYS,
     MIN_CTRL_TREAT_RATIO,
     MIN_GROUP_SIZE,
     OUTPUT_DIR,
     OUTPUT_CUSTOMER_STORE_DIR,
     USE_SET_UP_TIME_MATCHED_CONTROL,
     build_date_sorted_index,
+    contains_excluded_control_store_keyword,
+    filter_closures_shorter_than_max,
     get_treatment_and_control_members_for_closure,
     get_customer_store_preference,
     load_order_commodity_data,
@@ -56,6 +59,28 @@ def _parse_control_store_ids(serialized: object) -> List[int]:
     if not s:
         return []
     return [int(x) for x in s.split("|") if x != ""]
+
+
+def _filter_control_store_ids_from_registry_row(reg_row: pd.Series) -> List[int]:
+    """
+    Parse control_store_ids and exclude stores whose registry address text contains
+    university keywords (大学/学院).
+    """
+    control_store_ids = _parse_control_store_ids(reg_row.get("control_store_ids", ""))
+    if not control_store_ids:
+        return []
+
+    addr_serialized = reg_row.get("control_store_addresses", "")
+    addresses = str(addr_serialized).split("|") if pd.notna(addr_serialized) else []
+    if not addresses:
+        return control_store_ids
+
+    kept: List[int] = []
+    for idx, sid in enumerate(control_store_ids):
+        addr = addresses[idx] if idx < len(addresses) else ""
+        if not contains_excluded_control_store_keyword(addr):
+            kept.append(sid)
+    return kept
 
 
 def load_kept_registry_rows() -> Dict[tuple[int, str], pd.Series]:
@@ -133,9 +158,12 @@ def build_week_level_panel(
             print(f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): not found as kept in closure_pair_registry.csv.")
             continue
 
-        control_store_ids = _parse_control_store_ids(reg_row["control_store_ids"])
+        control_store_ids = _filter_control_store_ids_from_registry_row(reg_row)
         if not control_store_ids:
-            print(f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): empty control_store_ids in closure_pair_registry.csv.")
+            print(
+                f"    Skipping closure (dept_id={dept_id}, closure_start={closure['closure_start']}): "
+                "no eligible control_store_ids after keyword filtering."
+            )
             continue
 
         treatment, closure_control, _ = get_treatment_and_control_members_for_closure(
@@ -310,6 +338,11 @@ def main(limit_closures: int | None = None):
     df = load_order_commodity_data()
     df_order = load_order_result_data()
     closures = pd.read_csv(CLOSURES_CSV, encoding="utf-8-sig")
+    closures = filter_closures_shorter_than_max(
+        closures,
+        max_duration_days=MAX_CLOSURE_DURATION_DAYS,
+        context="trend",
+    )
     if limit_closures:
         closures = closures.head(limit_closures)
         print(f"\nLoaded {len(closures)} closures (limited for quick test).")
