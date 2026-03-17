@@ -1,0 +1,77 @@
+============================================================
+Closure Trend Line Plots (weekly periods)
+============================================================
+Loading order commodity data from: /home/litao/Coffee/data/data1031/order_commodity_result.csv
+  Total records: 10,631,250
+  Unique customers: 779,744
+  Unique stores: 260
+  Date range: 2020-06-01 to 2021-12-31
+Loading order result data from: /home/litao/Coffee/data/data1031/order_result.csv
+  Total orders: 7,312,498
+  [trend] Filtered out 7 closure(s) with closure_duration_days >= 30.
+
+Loaded 34 closures.
+  Control: use_set_up_time_matched_control=True
+
+Calculating customer store preferences (min 5 purchases)...
+  Qualified customers: 286,784
+  Preferred store ratio - Mean: 0.696, Median: 0.714
+
+--- Building panel for 2-week window ---
+    Processing closure 1/34...
+    Skipping closure (dept_id=239, closure_start=2020-09-05): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=101, closure_start=2020-09-12): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=21, closure_start=2021-04-09): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=57, closure_start=2021-07-01): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=68, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Processing closure 20/34...
+    Skipping closure (dept_id=64, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=196, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=189, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=197, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=165, closure_start=2021-11-10): not found as kept in closure_pair_registry.csv.
+  Panel rows: 233,585
+  (group, t) combinations: 10
+  Saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_trend_lines_w2.pdf
+
+--- Building panel for 4-week window ---
+    Processing closure 1/34...
+    Skipping closure (dept_id=239, closure_start=2020-09-05): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=101, closure_start=2020-09-12): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=21, closure_start=2021-04-09): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=57, closure_start=2021-07-01): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=68, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Processing closure 20/34...
+    Skipping closure (dept_id=64, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=196, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=189, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=197, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=165, closure_start=2021-11-10): not found as kept in closure_pair_registry.csv.
+  Panel rows: 420,453
+  (group, t) combinations: 18
+  Saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_trend_lines_w4.pdf
+
+--- Building panel for 8-week window ---
+    Processing closure 1/34...
+    Skipping closure (dept_id=239, closure_start=2020-09-05): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=101, closure_start=2020-09-12): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-11): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=64, closure_start=2020-10-31): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=21, closure_start=2021-04-09): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=57, closure_start=2021-07-01): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=68, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Processing closure 20/34...
+    Skipping closure (dept_id=64, closure_start=2021-07-29): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=196, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=189, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=197, closure_start=2021-08-03): not found as kept in closure_pair_registry.csv.
+    Skipping closure (dept_id=165, closure_start=2021-11-10): not found as kept in closure_pair_registry.csv.
+  Panel rows: 794,189
+  (group, t) combinations: 34
+  Saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_trend_lines_w8.pdf
+
+Done.
