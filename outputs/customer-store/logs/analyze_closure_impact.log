@@ -10,6 +10,8 @@ Loading order result data from: /home/litao/Coffee/data/data1031/order_result.cs
   Total orders: 7,312,498
 
 Loaded 41 store closures.
+  [main] Filtered out 7 closure(s) with closure_duration_days >= 30.
+Using 34 closures with closure_duration_days < 30.
 
 ======================================================================
 Threshold Justification Analysis
@@ -74,8 +76,9 @@ Calculating customer store preferences (min 5 purchases)...
 ======================================================================
 Task 1.5: Build Closure Pair Registry
 ======================================================================
-  Closure pair registry saved to: /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv (41 rows)
-  Kept closures in registry: 23 / 41
+  Excluding 37 store(s) from control matching by keywords ('大学', '学院').
+  Closure pair registry saved to: /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv (34 rows)
+  Kept closures in registry: 22 / 34
 
 ======================================================================
 Task 2: Staggered DiD Closure Impact (window=14 days)
@@ -86,51 +89,45 @@ Analyzing closure impact (staggered DiD, window=14 days)...
   Control: use_set_up_time_matched_control=True
   Pre-sorting data by date for fast period slicing...
   Pre-sorting done.
-  Set-up-time-matched control: 41 closures with control stores assigned.
-  Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=453 < 50.
-  Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.681 < 2.0*treat_rate=0.351.
+  Excluding 37 store(s) from control matching by keywords ('大学', '学院').
+  Set-up-time-matched control: 34 closures with control stores assigned.
+  Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=424 < 50.
+  Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.684 < 2.0*treat_rate=0.351.
   Skipping closure (dept_id=64, closure_start=2020-10-11): ctrl_rate=0.402 < 2.0*treat_rate=0.281.
-  Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.446 < 2.0*treat_rate=0.309.
-  Closure dept=166 (2021-01-12 – 2021-03-06): treated=281, control=1672, treat_rate=0.107, ctrl_rate=0.560
-  Closure dept=253 (2021-01-20 – 2021-02-28): treated=178, control=1143, treat_rate=0.034, ctrl_rate=0.339
-  Closure dept=254 (2021-01-30 – 2021-02-21): treated=151, control=459, treat_rate=0.139, ctrl_rate=0.305
+  Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.414 < 2.0*treat_rate=0.309.
+  Closure dept=254 (2021-01-30 – 2021-02-21): treated=151, control=828, treat_rate=0.139, ctrl_rate=0.338
   Closure dept=228 (2021-02-04 – 2021-02-20): treated=125, control=788, treat_rate=0.056, ctrl_rate=0.344
   Closure dept=225 (2021-02-09 – 2021-02-18): treated=396, control=2106, treat_rate=0.030, ctrl_rate=0.152
-  Skipping closure (dept_id=181, closure_start=2021-02-11): ctrl_rate=0.107 < 2.0*treat_rate=0.160.
-  Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.314 < 2.0*treat_rate=0.205.
-  Closure dept=8 (2021-05-27 – 2021-06-10): treated=132, control=1791, treat_rate=0.106, ctrl_rate=0.513
-  Closure dept=166 (2021-06-29 – 2021-10-07): treated=467, control=778, treat_rate=0.171, ctrl_rate=0.531
+  Closure dept=181 (2021-02-11 – 2021-02-25): treated=50, control=447, treat_rate=0.160, ctrl_rate=0.349
+  Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.307 < 2.0*treat_rate=0.205.
+  Closure dept=8 (2021-05-27 – 2021-06-10): treated=132, control=598, treat_rate=0.106, ctrl_rate=0.386
   Skipping closure (dept_id=57, closure_start=2021-07-01): ctrl_rate=0.331 < 2.0*treat_rate=0.220.
-  Closure dept=19 (2021-07-15 – 2021-07-25): treated=597, control=2664, treat_rate=0.117, ctrl_rate=0.256
+  Closure dept=19 (2021-07-15 – 2021-07-25): treated=597, control=2764, treat_rate=0.117, ctrl_rate=0.254
   Closure dept=124 (2021-07-22 – 2021-08-18): treated=1291, control=2029, treat_rate=0.108, ctrl_rate=0.354
   Closure dept=238 (2021-07-24 – 2021-08-21): treated=773, control=1059, treat_rate=0.076, ctrl_rate=0.366
-  Closure dept=44 (2021-07-24 – 2021-08-05): treated=367, control=1274, treat_rate=0.074, ctrl_rate=0.249
-  Closure dept=39 (2021-07-25 – 2021-08-19): treated=253, control=3177, treat_rate=0.130, ctrl_rate=0.276
-  Skipping closure (dept_id=147, closure_start=2021-07-27): ctrl_rate=0.244 < 2.0*treat_rate=0.161.
-  Closure dept=246 (2021-07-27 – 2021-08-08): treated=76, control=839, treat_rate=0.039, ctrl_rate=0.178
+  Closure dept=44 (2021-07-24 – 2021-08-05): treated=367, control=1231, treat_rate=0.074, ctrl_rate=0.244
+  Closure dept=39 (2021-07-25 – 2021-08-19): treated=253, control=2890, treat_rate=0.130, ctrl_rate=0.284
+  Closure dept=246 (2021-07-27 – 2021-08-08): treated=76, control=481, treat_rate=0.039, ctrl_rate=0.235
   Closure dept=133 (2021-07-28 – 2021-08-22): treated=228, control=2128, treat_rate=0.039, ctrl_rate=0.331
-  Skipping closure (dept_id=110, closure_start=2021-07-28): ctrl_rate=0.163 < 2.0*treat_rate=0.170.
-  Skipping closure (dept_id=160, closure_start=2021-07-28): ctrl_rate=0.169 < 2.0*treat_rate=0.118.
-  Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.179.
-  Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.312 < 2.0*treat_rate=0.178.
-  Closure dept=47 (2021-07-30 – 2021-08-10): treated=223, control=2623, treat_rate=0.085, ctrl_rate=0.194
-  Skipping closure (dept_id=75, closure_start=2021-07-31): ctrl_rate=0.498 < 2.0*treat_rate=0.345.
-  Skipping closure (dept_id=220, closure_start=2021-08-03): ctrl_rate=0.030 < 2.0*treat_rate=0.032.
-  Skipping closure (dept_id=182, closure_start=2021-08-03): ctrl_rate=0.043 < 2.0*treat_rate=0.068.
-  Skipping closure (dept_id=196, closure_start=2021-08-03): ctrl_rate=0.082 < 2.0*treat_rate=0.081.
+  Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.285 < 2.0*treat_rate=0.179.
+  Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.178.
+  Closure dept=47 (2021-07-30 – 2021-08-10): treated=223, control=3241, treat_rate=0.085, ctrl_rate=0.199
+  Closure dept=220 (2021-08-03 – 2021-08-12): treated=599, control=1261, treat_rate=0.032, ctrl_rate=0.213
+  Closure dept=182 (2021-08-03 – 2021-08-20): treated=221, control=1422, treat_rate=0.068, ctrl_rate=0.232
+  Skipping closure (dept_id=196, closure_start=2021-08-03): no qualified control members. (control_stores=[205, 207, 206, 208, 209])
   Skipping closure (dept_id=189, closure_start=2021-08-03): no qualified control members. (control_stores=[14, 203, 202, 204, 201])
-  Closure dept=59 (2021-08-03 – 2021-08-19): treated=423, control=2677, treat_rate=0.057, ctrl_rate=0.279
-  Closure dept=121 (2021-08-03 – 2021-08-20): treated=418, control=1535, treat_rate=0.079, ctrl_rate=0.191
-  Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=21 < 50.
-  Closure dept=46 (2021-08-04 – 2021-08-19): treated=313, control=1908, treat_rate=0.045, ctrl_rate=0.178
-  Closure dept=62 (2021-08-04 – 2021-08-17): treated=231, control=2473, treat_rate=0.078, ctrl_rate=0.189
-  Closure dept=3 (2021-08-09 – 2021-08-22): treated=734, control=4135, treat_rate=0.014, ctrl_rate=0.079
-  Closure dept=5 (2021-08-18 – 2021-08-31): treated=432, control=586, treat_rate=0.042, ctrl_rate=0.208
-  Closure dept=131 (2021-08-29 – 2021-09-08): treated=408, control=3680, treat_rate=0.064, ctrl_rate=0.224
-  Closure dept=165 (2021-11-10 – 2021-11-21): treated=115, control=4889, treat_rate=0.043, ctrl_rate=0.292
+  Closure dept=59 (2021-08-03 – 2021-08-19): treated=423, control=2908, treat_rate=0.057, ctrl_rate=0.315
+  Closure dept=121 (2021-08-03 – 2021-08-20): treated=418, control=1890, treat_rate=0.079, ctrl_rate=0.226
+  Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=157 < 50.
+  Closure dept=46 (2021-08-04 – 2021-08-19): treated=313, control=2495, treat_rate=0.045, ctrl_rate=0.304
+  Closure dept=62 (2021-08-04 – 2021-08-17): treated=231, control=2485, treat_rate=0.078, ctrl_rate=0.210
+  Closure dept=3 (2021-08-09 – 2021-08-22): treated=734, control=819, treat_rate=0.014, ctrl_rate=0.173
+  Closure dept=5 (2021-08-18 – 2021-08-31): treated=432, control=2056, treat_rate=0.042, ctrl_rate=0.288
+  Closure dept=131 (2021-08-29 – 2021-09-08): treated=408, control=2350, treat_rate=0.064, ctrl_rate=0.249
+  Skipping closure (dept_id=165, closure_start=2021-11-10): ctrl_rate=0.070 < 2.0*treat_rate=0.043.
 
-  Analyzed 23 closures.
-  Closures used in analysis (not skipped) saved to: /home/litao/Coffee/model-free/outputs/customer-store/closures_used.csv (23 rows)
+  Analyzed 22 closures.
+  Closures used in analysis (not skipped) saved to: /home/litao/Coffee/model-free/outputs/customer-store/closures_used.csv (22 rows)
 
 ======================================================================
 Task 2 (robustness): Staggered DiD Closure Impact (window=28 days)
@@ -141,51 +138,45 @@ Analyzing closure impact (staggered DiD, window=28 days)...
   Control: use_set_up_time_matched_control=True
   Pre-sorting data by date for fast period slicing...
   Pre-sorting done.
-  Set-up-time-matched control: 41 closures with control stores assigned.
-  Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=453 < 50.
-  Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.681 < 2.0*treat_rate=0.351.
+  Excluding 37 store(s) from control matching by keywords ('大学', '学院').
+  Set-up-time-matched control: 34 closures with control stores assigned.
+  Skipping closure (dept_id=239, closure_start=2020-09-05): #treatment=7 or #control=424 < 50.
+  Skipping closure (dept_id=101, closure_start=2020-09-12): ctrl_rate=0.684 < 2.0*treat_rate=0.351.
   Skipping closure (dept_id=64, closure_start=2020-10-11): ctrl_rate=0.402 < 2.0*treat_rate=0.281.
-  Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.446 < 2.0*treat_rate=0.309.
-  Closure dept=166 (2021-01-12 – 2021-03-06): treated=281, control=1672, treat_rate=0.107, ctrl_rate=0.560
-  Closure dept=253 (2021-01-20 – 2021-02-28): treated=178, control=1143, treat_rate=0.034, ctrl_rate=0.339
-  Closure dept=254 (2021-01-30 – 2021-02-21): treated=151, control=459, treat_rate=0.139, ctrl_rate=0.305
+  Skipping closure (dept_id=64, closure_start=2020-10-31): ctrl_rate=0.414 < 2.0*treat_rate=0.309.
+  Closure dept=254 (2021-01-30 – 2021-02-21): treated=151, control=828, treat_rate=0.139, ctrl_rate=0.338
   Closure dept=228 (2021-02-04 – 2021-02-20): treated=125, control=788, treat_rate=0.056, ctrl_rate=0.344
   Closure dept=225 (2021-02-09 – 2021-02-18): treated=396, control=2106, treat_rate=0.030, ctrl_rate=0.152
-  Skipping closure (dept_id=181, closure_start=2021-02-11): ctrl_rate=0.107 < 2.0*treat_rate=0.160.
-  Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.314 < 2.0*treat_rate=0.205.
-  Closure dept=8 (2021-05-27 – 2021-06-10): treated=132, control=1791, treat_rate=0.106, ctrl_rate=0.513
-  Closure dept=166 (2021-06-29 – 2021-10-07): treated=467, control=778, treat_rate=0.171, ctrl_rate=0.531
+  Closure dept=181 (2021-02-11 – 2021-02-25): treated=50, control=447, treat_rate=0.160, ctrl_rate=0.349
+  Skipping closure (dept_id=21, closure_start=2021-04-09): ctrl_rate=0.307 < 2.0*treat_rate=0.205.
+  Closure dept=8 (2021-05-27 – 2021-06-10): treated=132, control=598, treat_rate=0.106, ctrl_rate=0.386
   Skipping closure (dept_id=57, closure_start=2021-07-01): ctrl_rate=0.331 < 2.0*treat_rate=0.220.
-  Closure dept=19 (2021-07-15 – 2021-07-25): treated=597, control=2664, treat_rate=0.117, ctrl_rate=0.256
+  Closure dept=19 (2021-07-15 – 2021-07-25): treated=597, control=2764, treat_rate=0.117, ctrl_rate=0.254
   Closure dept=124 (2021-07-22 – 2021-08-18): treated=1291, control=2029, treat_rate=0.108, ctrl_rate=0.354
   Closure dept=238 (2021-07-24 – 2021-08-21): treated=773, control=1059, treat_rate=0.076, ctrl_rate=0.366
-  Closure dept=44 (2021-07-24 – 2021-08-05): treated=367, control=1274, treat_rate=0.074, ctrl_rate=0.249
-  Closure dept=39 (2021-07-25 – 2021-08-19): treated=253, control=3177, treat_rate=0.130, ctrl_rate=0.276
-  Skipping closure (dept_id=147, closure_start=2021-07-27): ctrl_rate=0.244 < 2.0*treat_rate=0.161.
-  Closure dept=246 (2021-07-27 – 2021-08-08): treated=76, control=839, treat_rate=0.039, ctrl_rate=0.178
+  Closure dept=44 (2021-07-24 – 2021-08-05): treated=367, control=1231, treat_rate=0.074, ctrl_rate=0.244
+  Closure dept=39 (2021-07-25 – 2021-08-19): treated=253, control=2890, treat_rate=0.130, ctrl_rate=0.284
+  Closure dept=246 (2021-07-27 – 2021-08-08): treated=76, control=481, treat_rate=0.039, ctrl_rate=0.235
   Closure dept=133 (2021-07-28 – 2021-08-22): treated=228, control=2128, treat_rate=0.039, ctrl_rate=0.331
-  Skipping closure (dept_id=110, closure_start=2021-07-28): ctrl_rate=0.163 < 2.0*treat_rate=0.170.
-  Skipping closure (dept_id=160, closure_start=2021-07-28): ctrl_rate=0.169 < 2.0*treat_rate=0.118.
-  Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.179.
-  Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.312 < 2.0*treat_rate=0.178.
-  Closure dept=47 (2021-07-30 – 2021-08-10): treated=223, control=2623, treat_rate=0.085, ctrl_rate=0.194
-  Skipping closure (dept_id=75, closure_start=2021-07-31): ctrl_rate=0.498 < 2.0*treat_rate=0.345.
-  Skipping closure (dept_id=220, closure_start=2021-08-03): ctrl_rate=0.030 < 2.0*treat_rate=0.032.
-  Skipping closure (dept_id=182, closure_start=2021-08-03): ctrl_rate=0.043 < 2.0*treat_rate=0.068.
-  Skipping closure (dept_id=196, closure_start=2021-08-03): ctrl_rate=0.082 < 2.0*treat_rate=0.081.
+  Skipping closure (dept_id=68, closure_start=2021-07-29): ctrl_rate=0.285 < 2.0*treat_rate=0.179.
+  Skipping closure (dept_id=64, closure_start=2021-07-29): ctrl_rate=0.308 < 2.0*treat_rate=0.178.
+  Closure dept=47 (2021-07-30 – 2021-08-10): treated=223, control=3241, treat_rate=0.085, ctrl_rate=0.199
+  Closure dept=220 (2021-08-03 – 2021-08-12): treated=599, control=1261, treat_rate=0.032, ctrl_rate=0.213
+  Closure dept=182 (2021-08-03 – 2021-08-20): treated=221, control=1422, treat_rate=0.068, ctrl_rate=0.232
+  Skipping closure (dept_id=196, closure_start=2021-08-03): no qualified control members. (control_stores=[205, 207, 206, 208, 209])
   Skipping closure (dept_id=189, closure_start=2021-08-03): no qualified control members. (control_stores=[14, 203, 202, 204, 201])
-  Closure dept=59 (2021-08-03 – 2021-08-19): treated=423, control=2677, treat_rate=0.057, ctrl_rate=0.279
-  Closure dept=121 (2021-08-03 – 2021-08-20): treated=418, control=1535, treat_rate=0.079, ctrl_rate=0.191
-  Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=21 < 50.
-  Closure dept=46 (2021-08-04 – 2021-08-19): treated=313, control=1908, treat_rate=0.045, ctrl_rate=0.178
-  Closure dept=62 (2021-08-04 – 2021-08-17): treated=231, control=2473, treat_rate=0.078, ctrl_rate=0.189
-  Closure dept=3 (2021-08-09 – 2021-08-22): treated=734, control=4135, treat_rate=0.014, ctrl_rate=0.079
-  Closure dept=5 (2021-08-18 – 2021-08-31): treated=432, control=586, treat_rate=0.042, ctrl_rate=0.208
-  Closure dept=131 (2021-08-29 – 2021-09-08): treated=408, control=3680, treat_rate=0.064, ctrl_rate=0.224
-  Closure dept=165 (2021-11-10 – 2021-11-21): treated=115, control=4889, treat_rate=0.043, ctrl_rate=0.292
+  Closure dept=59 (2021-08-03 – 2021-08-19): treated=423, control=2908, treat_rate=0.057, ctrl_rate=0.315
+  Closure dept=121 (2021-08-03 – 2021-08-20): treated=418, control=1890, treat_rate=0.079, ctrl_rate=0.226
+  Skipping closure (dept_id=197, closure_start=2021-08-03): #treatment=9 or #control=157 < 50.
+  Closure dept=46 (2021-08-04 – 2021-08-19): treated=313, control=2495, treat_rate=0.045, ctrl_rate=0.304
+  Closure dept=62 (2021-08-04 – 2021-08-17): treated=231, control=2485, treat_rate=0.078, ctrl_rate=0.210
+  Closure dept=3 (2021-08-09 – 2021-08-22): treated=734, control=819, treat_rate=0.014, ctrl_rate=0.173
+  Closure dept=5 (2021-08-18 – 2021-08-31): treated=432, control=2056, treat_rate=0.042, ctrl_rate=0.288
+  Closure dept=131 (2021-08-29 – 2021-09-08): treated=408, control=2350, treat_rate=0.064, ctrl_rate=0.249
+  Skipping closure (dept_id=165, closure_start=2021-11-10): ctrl_rate=0.070 < 2.0*treat_rate=0.043.
 
-  Analyzed 23 closures.
-  Closures used in analysis (not skipped) saved to: /home/litao/Coffee/model-free/outputs/customer-store/closures_used.csv (23 rows)
+  Analyzed 22 closures.
+  Closures used in analysis (not skipped) saved to: /home/litao/Coffee/model-free/outputs/customer-store/closures_used.csv (22 rows)
 
 Summary saved to: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_impact_did_p5_r80_w14.csv
 Robustness summary saved to: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_impact_did_p5_r80_w28.csv
@@ -197,34 +188,34 @@ Summary Statistics (primary window)
 ======================================================================
 
 #treatment:
-  Mean   : 374.435
-  Median : 313.000
-  Min    : 76.000
+  Mean   : 383.682
+  Median : 340.000
+  Min    : 50.000
   Max    : 1291.000
 
 #control:
-  Mean   : 2017.957
-  Median : 1908.000
-  Min    : 459.000
-  Max    : 4889.000
+  Mean   : 1739.818
+  Median : 1959.500
+  Min    : 447.000
+  Max    : 3241.000
 
 treatment_purchase_rate_during:
-  Mean   : 0.075
-  Median : 0.074
+  Mean   : 0.074
+  Median : 0.071
   Min    : 0.014
-  Max    : 0.171
+  Max    : 0.160
 
 control_purchase_rate_during:
-  Mean   : 0.286
-  Median : 0.276
-  Min    : 0.079
-  Max    : 0.560
+  Mean   : 0.275
+  Median : 0.269
+  Min    : 0.152
+  Max    : 0.386
 
 selectivity_ratio:
-  Mean   : 0.272
-  Median : 0.222
-  Min    : 0.100
-  Max    : 0.472
+  Mean   : 0.269
+  Median : 0.265
+  Min    : 0.079
+  Max    : 0.462
 
 ======================================================================
 Task 3: Statistical Tests
@@ -235,56 +226,56 @@ Statistical Tests (customer-level, window=14 days)
 ======================================================================
 
   Metric: Purchase Days per Day
-    treat_pre_vs_post          : p=0.0032  **  (n=8361 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=46413 customers)
-    T_vs_C_in_pre              : p=0.0893  ns  (nT=8361, nC=46413)
-    T_vs_C_in_post             : p=0.3106  ns  (nT=8361, nC=46413)
+    treat_pre_vs_post          : p=0.5080  ns  (n=8441 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=38276 customers)
+    T_vs_C_in_pre              : p=0.0001  ***  (nT=8441, nC=38276)
+    T_vs_C_in_post             : p=0.6470  ns  (nT=8441, nC=38276)
 
   Metric: New Product Ratio
-    treat_pre_vs_post          : p=0.2878  ns  (n=1392 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=7281 customers)
-    T_vs_C_in_pre              : p=0.0850  ns  (nT=2589, nC=13914)
-    T_vs_C_in_post             : p=0.0001  ***  (nT=2420, nC=12406)
+    treat_pre_vs_post          : p=0.1575  ns  (n=1345 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=6114 customers)
+    T_vs_C_in_pre              : p=0.0057  **  (nT=2451, nC=11621)
+    T_vs_C_in_post             : p=0.0000  ***  (nT=2403, nC=10651)
 
   Metric: Mean Total Discount
-    treat_pre_vs_post          : p=0.0000  ***  (n=1392 customers)
-    ctrl_pre_vs_post           : p=0.0287  *  (n=7281 customers)
-    T_vs_C_in_pre              : p=0.1886  ns  (nT=2589, nC=13914)
-    T_vs_C_in_post             : p=0.0000  ***  (nT=2420, nC=12406)
+    treat_pre_vs_post          : p=0.0001  ***  (n=1345 customers)
+    ctrl_pre_vs_post           : p=0.0008  ***  (n=6113 customers)
+    T_vs_C_in_pre              : p=0.6459  ns  (nT=2451, nC=11621)
+    T_vs_C_in_post             : p=0.0000  ***  (nT=2403, nC=10650)
 
   Metric: Coupon Usage Rate
-    treat_pre_vs_post          : p=0.8164  ns  (n=1392 customers)
-    ctrl_pre_vs_post           : p=0.1018  ns  (n=7281 customers)
-    T_vs_C_in_pre              : p=0.7641  ns  (nT=2589, nC=13914)
-    T_vs_C_in_post             : p=0.5705  ns  (nT=2420, nC=12406)
+    treat_pre_vs_post          : p=0.8926  ns  (n=1345 customers)
+    ctrl_pre_vs_post           : p=0.0074  **  (n=6114 customers)
+    T_vs_C_in_pre              : p=0.3053  ns  (nT=2451, nC=11621)
+    T_vs_C_in_post             : p=0.1618  ns  (nT=2403, nC=10651)
 
 ======================================================================
 Statistical Tests (customer-level, window=28 days)
 ======================================================================
 
   Metric: Purchase Days per Day
-    treat_pre_vs_post          : p=0.0000  ***  (n=8361 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=46413 customers)
-    T_vs_C_in_pre              : p=0.1023  ns  (nT=8361, nC=46413)
-    T_vs_C_in_post             : p=0.0777  ns  (nT=8361, nC=46413)
+    treat_pre_vs_post          : p=0.0000  ***  (n=8441 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=38276 customers)
+    T_vs_C_in_pre              : p=0.0000  ***  (nT=8441, nC=38276)
+    T_vs_C_in_post             : p=0.3422  ns  (nT=8441, nC=38276)
 
   Metric: New Product Ratio
-    treat_pre_vs_post          : p=0.0257  *  (n=2460 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=12828 customers)
-    T_vs_C_in_pre              : p=0.9846  ns  (nT=3885, nC=20542)
-    T_vs_C_in_post             : p=0.0000  ***  (nT=3479, nC=17779)
+    treat_pre_vs_post          : p=0.0067  **  (n=2407 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=11063 customers)
+    T_vs_C_in_pre              : p=0.0219  *  (nT=3811, nC=17727)
+    T_vs_C_in_post             : p=0.0000  ***  (nT=3434, nC=15514)
 
   Metric: Mean Total Discount
-    treat_pre_vs_post          : p=0.0000  ***  (n=2460 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=12827 customers)
-    T_vs_C_in_pre              : p=0.0085  **  (nT=3885, nC=20542)
-    T_vs_C_in_post             : p=0.0016  **  (nT=3479, nC=17778)
+    treat_pre_vs_post          : p=0.0000  ***  (n=2407 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=11062 customers)
+    T_vs_C_in_pre              : p=0.5326  ns  (nT=3811, nC=17727)
+    T_vs_C_in_post             : p=0.0003  ***  (nT=3434, nC=15513)
 
   Metric: Coupon Usage Rate
-    treat_pre_vs_post          : p=0.0176  *  (n=2460 customers)
-    ctrl_pre_vs_post           : p=0.1230  ns  (n=12828 customers)
-    T_vs_C_in_pre              : p=0.9615  ns  (nT=3885, nC=20542)
-    T_vs_C_in_post             : p=0.2562  ns  (nT=3479, nC=17779)
+    treat_pre_vs_post          : p=0.0218  *  (n=2407 customers)
+    ctrl_pre_vs_post           : p=0.0178  *  (n=11063 customers)
+    T_vs_C_in_pre              : p=0.0979  ns  (nT=3811, nC=17727)
+    T_vs_C_in_post             : p=0.1785  ns  (nT=3434, nC=15514)
   Test results saved to: /home/litao/Coffee/model-free/plots/customer_store_analysis/stat_tests_p5_r80_w14.csv
   Robustness test results saved to: /home/litao/Coffee/model-free/plots/customer_store_analysis/stat_tests_p5_r80_w28.csv
 
@@ -303,136 +294,76 @@ Task 5: Duration-Split Behavior Comparison
 ======================================================================
 
 Duration-split plots (threshold=30 days):
-  Short closures (< 30 days): 20 closures, 151,518 rows
-  Long  closures (>= 30 days): 2 closures, 13,557 rows
+  Short closures (< 30 days): 22 closures, 140,151 rows
+  Long  closures (>= 30 days): 0 closures, 0 rows
 
 ======================================================================
 Statistical Tests (customer-level, window=14 days)
 ======================================================================
 
   Metric: Purchase Days per Day
-    treat_pre_vs_post          : p=0.1655  ns  (n=7686 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=42820 customers)
-    T_vs_C_in_pre              : p=0.7536  ns  (nT=7686, nC=42820)
-    T_vs_C_in_post             : p=0.0018  **  (nT=7686, nC=42820)
+    treat_pre_vs_post          : p=0.5080  ns  (n=8441 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=38276 customers)
+    T_vs_C_in_pre              : p=0.0001  ***  (nT=8441, nC=38276)
+    T_vs_C_in_post             : p=0.6470  ns  (nT=8441, nC=38276)
 
   Metric: New Product Ratio
-    treat_pre_vs_post          : p=0.0760  ns  (n=1264 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=6477 customers)
-    T_vs_C_in_pre              : p=0.1527  ns  (nT=2305, nC=12318)
-    T_vs_C_in_post             : p=0.0007  ***  (nT=2238, nC=11178)
+    treat_pre_vs_post          : p=0.1575  ns  (n=1345 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=6114 customers)
+    T_vs_C_in_pre              : p=0.0057  **  (nT=2451, nC=11621)
+    T_vs_C_in_post             : p=0.0000  ***  (nT=2403, nC=10651)
 
   Metric: Mean Total Discount
-    treat_pre_vs_post          : p=0.0000  ***  (n=1264 customers)
-    ctrl_pre_vs_post           : p=0.0750  ns  (n=6477 customers)
-    T_vs_C_in_pre              : p=0.1240  ns  (nT=2305, nC=12318)
-    T_vs_C_in_post             : p=0.0000  ***  (nT=2238, nC=11178)
+    treat_pre_vs_post          : p=0.0001  ***  (n=1345 customers)
+    ctrl_pre_vs_post           : p=0.0008  ***  (n=6113 customers)
+    T_vs_C_in_pre              : p=0.6459  ns  (nT=2451, nC=11621)
+    T_vs_C_in_post             : p=0.0000  ***  (nT=2403, nC=10650)
 
   Metric: Coupon Usage Rate
-    treat_pre_vs_post          : p=0.6080  ns  (n=1264 customers)
-    ctrl_pre_vs_post           : p=0.2785  ns  (n=6477 customers)
-    T_vs_C_in_pre              : p=0.5663  ns  (nT=2305, nC=12318)
-    T_vs_C_in_post             : p=0.4844  ns  (nT=2238, nC=11178)
+    treat_pre_vs_post          : p=0.8926  ns  (n=1345 customers)
+    ctrl_pre_vs_post           : p=0.0074  **  (n=6114 customers)
+    T_vs_C_in_pre              : p=0.3053  ns  (nT=2451, nC=11621)
+    T_vs_C_in_post             : p=0.1618  ns  (nT=2403, nC=10651)
 
 Creating behavior comparison plots (window=14 days)...
   Combined plot saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/behavior_comparison_w14_short_lt30.pdf
-
-======================================================================
-Statistical Tests (customer-level, window=14 days)
-======================================================================
-
-  Metric: Purchase Days per Day
-    treat_pre_vs_post          : p=0.0000  ***  (n=675 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=3593 customers)
-    T_vs_C_in_pre              : p=0.0000  ***  (nT=675, nC=3593)
-    T_vs_C_in_post             : p=0.0000  ***  (nT=675, nC=3593)
-
-  Metric: New Product Ratio
-    treat_pre_vs_post          : p=0.0446  *  (n=128 customers)
-    ctrl_pre_vs_post           : p=0.0767  ns  (n=804 customers)
-    T_vs_C_in_pre              : p=0.2024  ns  (nT=284, nC=1596)
-    T_vs_C_in_post             : p=0.0007  ***  (nT=182, nC=1228)
-
-  Metric: Mean Total Discount
-    treat_pre_vs_post          : p=0.8045  ns  (n=128 customers)
-    ctrl_pre_vs_post           : p=0.1389  ns  (n=804 customers)
-    T_vs_C_in_pre              : p=0.6563  ns  (nT=284, nC=1596)
-    T_vs_C_in_post             : p=0.5802  ns  (nT=182, nC=1228)
-
-  Metric: Coupon Usage Rate
-    treat_pre_vs_post          : p=0.3906  ns  (n=128 customers)
-    ctrl_pre_vs_post           : p=0.0670  ns  (n=804 customers)
-    T_vs_C_in_pre              : p=0.5226  ns  (nT=284, nC=1596)
-    T_vs_C_in_post             : p=0.8399  ns  (nT=182, nC=1228)
-
-Creating behavior comparison plots (window=14 days)...
-  Combined plot saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/behavior_comparison_w14_long_ge30.pdf
+  No long closures (>=30 days) found.
 
 Duration-split plots (threshold=30 days):
-  Short closures (< 30 days): 20 closures, 151,518 rows
-  Long  closures (>= 30 days): 2 closures, 13,557 rows
+  Short closures (< 30 days): 22 closures, 140,151 rows
+  Long  closures (>= 30 days): 0 closures, 0 rows
 
 ======================================================================
 Statistical Tests (customer-level, window=28 days)
 ======================================================================
 
   Metric: Purchase Days per Day
-    treat_pre_vs_post          : p=0.0001  ***  (n=7686 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=42820 customers)
-    T_vs_C_in_pre              : p=0.6856  ns  (nT=7686, nC=42820)
-    T_vs_C_in_post             : p=0.0001  ***  (nT=7686, nC=42820)
+    treat_pre_vs_post          : p=0.0000  ***  (n=8441 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=38276 customers)
+    T_vs_C_in_pre              : p=0.0000  ***  (nT=8441, nC=38276)
+    T_vs_C_in_post             : p=0.3422  ns  (nT=8441, nC=38276)
 
   Metric: New Product Ratio
-    treat_pre_vs_post          : p=0.0080  **  (n=2237 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=11518 customers)
-    T_vs_C_in_pre              : p=0.9028  ns  (nT=3483, nC=18387)
-    T_vs_C_in_post             : p=0.0000  ***  (nT=3194, nC=16077)
+    treat_pre_vs_post          : p=0.0067  **  (n=2407 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=11063 customers)
+    T_vs_C_in_pre              : p=0.0219  *  (nT=3811, nC=17727)
+    T_vs_C_in_post             : p=0.0000  ***  (nT=3434, nC=15514)
 
   Metric: Mean Total Discount
-    treat_pre_vs_post          : p=0.0000  ***  (n=2237 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=11517 customers)
-    T_vs_C_in_pre              : p=0.0103  *  (nT=3483, nC=18387)
-    T_vs_C_in_post             : p=0.0076  **  (nT=3194, nC=16076)
+    treat_pre_vs_post          : p=0.0000  ***  (n=2407 customers)
+    ctrl_pre_vs_post           : p=0.0000  ***  (n=11062 customers)
+    T_vs_C_in_pre              : p=0.5326  ns  (nT=3811, nC=17727)
+    T_vs_C_in_post             : p=0.0003  ***  (nT=3434, nC=15513)
 
   Metric: Coupon Usage Rate
-    treat_pre_vs_post          : p=0.0273  *  (n=2237 customers)
-    ctrl_pre_vs_post           : p=0.0107  *  (n=11518 customers)
-    T_vs_C_in_pre              : p=0.3494  ns  (nT=3483, nC=18387)
-    T_vs_C_in_post             : p=0.2648  ns  (nT=3194, nC=16077)
+    treat_pre_vs_post          : p=0.0218  *  (n=2407 customers)
+    ctrl_pre_vs_post           : p=0.0178  *  (n=11063 customers)
+    T_vs_C_in_pre              : p=0.0979  ns  (nT=3811, nC=17727)
+    T_vs_C_in_post             : p=0.1785  ns  (nT=3434, nC=15514)
 
 Creating behavior comparison plots (window=28 days)...
   Combined plot saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/behavior_comparison_w28_short_lt30_robustness.pdf
-
-======================================================================
-Statistical Tests (customer-level, window=28 days)
-======================================================================
-
-  Metric: Purchase Days per Day
-    treat_pre_vs_post          : p=0.0000  ***  (n=675 customers)
-    ctrl_pre_vs_post           : p=0.0000  ***  (n=3593 customers)
-    T_vs_C_in_pre              : p=0.0000  ***  (nT=675, nC=3593)
-    T_vs_C_in_post             : p=0.0000  ***  (nT=675, nC=3593)
-
-  Metric: New Product Ratio
-    treat_pre_vs_post          : p=0.3484  ns  (n=223 customers)
-    ctrl_pre_vs_post           : p=0.2486  ns  (n=1310 customers)
-    T_vs_C_in_pre              : p=0.6223  ns  (nT=402, nC=2155)
-    T_vs_C_in_post             : p=0.0156  *  (nT=285, nC=1702)
-
-  Metric: Mean Total Discount
-    treat_pre_vs_post          : p=0.0327  *  (n=223 customers)
-    ctrl_pre_vs_post           : p=0.0417  *  (n=1310 customers)
-    T_vs_C_in_pre              : p=0.5349  ns  (nT=402, nC=2155)
-    T_vs_C_in_post             : p=0.0184  *  (nT=285, nC=1702)
-
-  Metric: Coupon Usage Rate
-    treat_pre_vs_post          : p=0.3766  ns  (n=223 customers)
-    ctrl_pre_vs_post           : p=0.0068  **  (n=1310 customers)
-    T_vs_C_in_pre              : p=0.0035  **  (nT=402, nC=2155)
-    T_vs_C_in_post             : p=0.5104  ns  (nT=285, nC=1702)
-
-Creating behavior comparison plots (window=28 days)...
-  Combined plot saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/behavior_comparison_w28_long_ge30_robustness.pdf
+  No long closures (>=30 days) found.
 
 ======================================================================
 Task 6: Push-Split Treatment Behavior Comparison
@@ -440,15 +371,15 @@ Task 6: Push-Split Treatment Behavior Comparison
   Loaded 120,841 no-push member IDs.
 
 Push-split treatment plot (window=14 days):
-  treatment_no_push   : 1,790 unique members
-  treatment_with_push : 6,571 unique members
+  treatment_no_push   : 1,818 unique members
+  treatment_with_push : 6,623 unique members
 
 Creating push-split behavior comparison plot (window=14 days)...
   Push-split combined plot saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/behavior_comparison_w14_push_split.pdf
 
 Push-split treatment plot (window=28 days):
-  treatment_no_push   : 1,790 unique members
-  treatment_with_push : 6,571 unique members
+  treatment_no_push   : 1,818 unique members
+  treatment_with_push : 6,623 unique members
 
 Creating push-split behavior comparison plot (window=28 days)...
   Push-split combined plot saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/behavior_comparison_w28_push_split_robustness.pdf
