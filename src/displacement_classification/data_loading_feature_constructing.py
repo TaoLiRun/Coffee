@@ -92,7 +92,6 @@ from analyze_closure_impact import (           # noqa: E402
     MIN_GROUP_SIZE,
     USE_SET_UP_TIME_MATCHED_CONTROL,
     build_date_sorted_index,
-    build_closure_pair_registry,
     get_closure_specific_control_members,
     get_closure_control_members_set_up_matched,
     get_customer_store_preference,
@@ -245,38 +244,30 @@ def load_or_build_closure_pair_registry(
     unique_visits: pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Load closure_pair_registry cache if valid; otherwise rebuild it.
+    Load closure_pair_registry from existing CSV.
+
+    This pipeline requires the registry to be pre-built by
+    analyze_closure_impact.py. If the CSV is missing, raise an error to
+    remind users to run that script first.
     """
-    expected_keys = {
-        _closure_key(r["dept_id"], r["closure_start"])
-        for _, r in closures.iterrows()
-    }
+    if not PAIR_REGISTRY_CSV.exists():
+        raise FileNotFoundError(
+            f"Required closure pair registry not found: {PAIR_REGISTRY_CSV}. "
+            "Please run analyze_closure_impact.py first to generate this file."
+        )
 
-    if PAIR_REGISTRY_CSV.exists():
-        reg = pd.read_csv(PAIR_REGISTRY_CSV, encoding="utf-8-sig")
-        if {"dept_id", "closure_start", "status", "control_store_ids"}.issubset(reg.columns):
-            actual_keys = {
-                _closure_key(r["dept_id"], r["closure_start"])
-                for _, r in reg.iterrows()
-            }
-            if expected_keys.issubset(actual_keys):
-                log_print(logger, f"Loaded closure pair registry from cache: {PAIR_REGISTRY_CSV}")
-                return reg
+    reg = pd.read_csv(PAIR_REGISTRY_CSV, encoding="utf-8-sig")
+    if "status" not in reg.columns:
+        raise ValueError(
+            f"closure_pair_registry.csv is missing required column 'status': {PAIR_REGISTRY_CSV}"
+        )
 
-        log_print(logger, "Existing closure pair registry does not match current closures; rebuilding...")
-
-    log_print(logger, "Building closure pair registry for displacement pipeline...")
-    reg = build_closure_pair_registry(
-        df_orders_like=df_orders,
-        closures=closures,
-        customer_preference=customer_preference,
-        unique_visits=unique_visits,
-        lowest_purchases=DEFAULT_LOWEST_PURCHASES,
-        lowest_ratio=DEFAULT_LOWEST_RATIO,
-        use_set_up_time_matched_control=USE_SET_UP_TIME_MATCHED_CONTROL,
-        min_group_size=MIN_GROUP_SIZE,
-        min_ctrl_treat_ratio=MIN_CTRL_TREAT_RATIO,
-        output_path=PAIR_REGISTRY_CSV,
+    n_total = len(reg)
+    reg = reg[reg["status"] == "kept"].copy()
+    log_print(
+        logger,
+        f"Loaded closure pair registry from CSV: {PAIR_REGISTRY_CSV} "
+        f"(kept rows: {len(reg):,}/{n_total:,})",
     )
     return reg
 
