@@ -5,7 +5,8 @@
     "output_dir": "outputs/displacement_effect_estimation"
   },
   "spec": {
-    "window_days": 14,
+    "window_days": 28,
+    "t_horizon": 4,
     "outcome": "n_purchases",
     "thresholds": [0.5],
     "cluster_col": "member_id"

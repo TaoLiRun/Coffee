@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
 from data import build_estimation_sample, get_project_root, load_config
 from report import save_outputs
-from specs import fit_score_spec, fit_threshold_specs
+from specs import fit_event_study_specs, fit_score_spec, fit_threshold_specs
 
 
 def _parse_thresholds(text: str) -> list[float]:
@@ -20,7 +19,8 @@ def main() -> None:
     defaults = cfg["spec"]
 
     parser = argparse.ArgumentParser(description="Run parallel causal specs for displacement effect.")
-    parser.add_argument("--window", type=int, default=defaults["window_days"])
+    parser.add_argument("--window", type=int, default=defaults["window_days"], help="Length (days) of each pre/post event-study bin.")
+    parser.add_argument("--t-horizon", type=int, default=defaults.get("t_horizon", 4), help="Number of pre/post bins to include (excluding t=0).")
     parser.add_argument("--outcome", type=str, default=defaults["outcome"])
     parser.add_argument("--thresholds", type=str, default=",".join(str(x) for x in defaults["thresholds"]))
     parser.add_argument("--cluster-col", type=str, default=defaults["cluster_col"])
@@ -32,6 +32,7 @@ def main() -> None:
         outcome=args.outcome,
         thresholds=thresholds,
         cfg=cfg,
+        t_horizon=args.t_horizon,
     )
 
     threshold_terms, threshold_fit = fit_threshold_specs(
@@ -45,6 +46,12 @@ def main() -> None:
         outcome=args.outcome,
         cluster_col=args.cluster_col,
     )
+    event_terms, event_fit = fit_event_study_specs(
+        sample,
+        outcome=args.outcome,
+        thresholds=thresholds,
+        cluster_col=args.cluster_col,
+    )
 
     out_dir = get_project_root() / cfg["paths"]["output_dir"]
     save_outputs(
@@ -54,6 +61,8 @@ def main() -> None:
         threshold_fit=threshold_fit,
         score_terms=score_terms,
         score_fit=score_fit,
+        event_terms=event_terms,
+        event_fit=event_fit,
     )
 
     print(f"Saved outputs to: {out_dir}")

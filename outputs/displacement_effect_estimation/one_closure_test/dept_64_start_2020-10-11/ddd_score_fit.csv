@@ -1,0 +1,2 @@
+spec,formula,n,r2
+score_continuous,n_purchases ~ post + treated + displacement_prob + post:treated + post:displacement_prob + treated:displacement_prob + post:treated:displacement_prob + C(event_fe_id) + C(rel_t),7296,0.5310799110375637

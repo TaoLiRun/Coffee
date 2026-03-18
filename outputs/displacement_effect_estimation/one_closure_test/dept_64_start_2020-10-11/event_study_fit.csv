@@ -1,0 +1,4 @@
+spec,formula,n,r2
+event_att,"n_purchases ~ C(rel_t, Treatment(reference=-1)):treated + C(event_fe_id) + C(rel_t)",7296,0.5275397325875727
+event_threshold_0.5,"n_purchases ~ C(rel_t, Treatment(reference=-1)):treated + C(rel_t, Treatment(reference=-1)):treated:disp_05 + C(rel_t, Treatment(reference=-1)):disp_05 + C(rel_t, Treatment(reference=-1)):treated:disp_05:closure_duration_days + C(event_fe_id) + C(rel_t)",7296,0.5366255538523026
+event_score_continuous,"n_purchases ~ C(rel_t, Treatment(reference=-1)):treated + C(rel_t, Treatment(reference=-1)):treated:displacement_prob + C(rel_t, Treatment(reference=-1)):displacement_prob + C(event_fe_id) + C(rel_t)",7296,0.5400850162935047
