@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Impact of Habit Breaking: Store Closures and Consumer Purchasing at Luckin</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="impact_of_habit_breaking_files/libs/clipboard/clipboard.min.js"></script>
+<script src="impact_of_habit_breaking_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="impact_of_habit_breaking_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="impact_of_habit_breaking_files/libs/quarto-html/popper.min.js"></script>
+<script src="impact_of_habit_breaking_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="impact_of_habit_breaking_files/libs/quarto-html/anchor.min.js"></script>
+<link href="impact_of_habit_breaking_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="impact_of_habit_breaking_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="impact_of_habit_breaking_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="impact_of_habit_breaking_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="impact_of_habit_breaking_files/libs/bootstrap/bootstrap-63f82f26eef69e6696545d38b4f13cbd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#impact-of-habit-breaking-store-closures-and-consumer-purchasing-at-luckin" id="toc-impact-of-habit-breaking-store-closures-and-consumer-purchasing-at-luckin" class="nav-link active" data-scroll-target="#impact-of-habit-breaking-store-closures-and-consumer-purchasing-at-luckin"><span class="header-section-number">1</span> Impact of Habit Breaking: Store Closures and Consumer Purchasing at Luckin</a>
+  <ul class="collapse">
+  <li><a href="#context-and-research-question" id="toc-context-and-research-question" class="nav-link" data-scroll-target="#context-and-research-question"><span class="header-section-number">1.1</span> 1. Context and Research Question</a>
+  <ul class="collapse">
+  <li><a href="#setting" id="toc-setting" class="nav-link" data-scroll-target="#setting"><span class="header-section-number">1.1.1</span> 1.1 Setting</a></li>
+  <li><a href="#economic-question" id="toc-economic-question" class="nav-link" data-scroll-target="#economic-question"><span class="header-section-number">1.1.2</span> 1.2 Economic Question</a></li>
+  <li><a href="#why-this-differs-from-paper-2" id="toc-why-this-differs-from-paper-2" class="nav-link" data-scroll-target="#why-this-differs-from-paper-2"><span class="header-section-number">1.1.3</span> 1.3 Why This Differs from Paper 2</a></li>
+  </ul></li>
+  <li><a href="#identification" id="toc-identification" class="nav-link" data-scroll-target="#identification"><span class="header-section-number">1.2</span> 2. Identification</a>
+  <ul class="collapse">
+  <li><a href="#treatment-and-control-conceptual" id="toc-treatment-and-control-conceptual" class="nav-link" data-scroll-target="#treatment-and-control-conceptual"><span class="header-section-number">1.2.1</span> 2.1 Treatment and Control (Conceptual)</a></li>
+  <li><a href="#displacement-unobservable-for-treated" id="toc-displacement-unobservable-for-treated" class="nav-link" data-scroll-target="#displacement-unobservable-for-treated"><span class="header-section-number">1.2.2</span> 2.2 Displacement (Unobservable for Treated)</a></li>
+  <li><a href="#regression-framework" id="toc-regression-framework" class="nav-link" data-scroll-target="#regression-framework"><span class="header-section-number">1.2.3</span> 2.3 Regression Framework</a></li>
+  <li><a href="#identifying-assumptions-paper-2-logic" id="toc-identifying-assumptions-paper-2-logic" class="nav-link" data-scroll-target="#identifying-assumptions-paper-2-logic"><span class="header-section-number">1.2.4</span> 2.4 Identifying Assumptions (Paper 2 Logic)</a></li>
+  </ul></li>
+  <li><a href="#what-has-been-done" id="toc-what-has-been-done" class="nav-link" data-scroll-target="#what-has-been-done"><span class="header-section-number">1.3</span> 3. What Has Been Done</a>
+  <ul class="collapse">
+  <li><a href="#data-and-sample" id="toc-data-and-sample" class="nav-link" data-scroll-target="#data-and-sample"><span class="header-section-number">1.3.1</span> 3.1 Data and Sample</a></li>
+  <li><a href="#treatment-and-control" id="toc-treatment-and-control" class="nav-link" data-scroll-target="#treatment-and-control"><span class="header-section-number">1.3.2</span> 3.2 Treatment and Control</a></li>
+  <li><a href="#time-windows" id="toc-time-windows" class="nav-link" data-scroll-target="#time-windows"><span class="header-section-number">1.3.3</span> 3.3 Time Windows</a></li>
+  <li><a href="#outcomes-and-behavior" id="toc-outcomes-and-behavior" class="nav-link" data-scroll-target="#outcomes-and-behavior"><span class="header-section-number">1.3.4</span> 3.4 Outcomes and Behavior</a></li>
+  <li><a href="#descriptive-and-visual" id="toc-descriptive-and-visual" class="nav-link" data-scroll-target="#descriptive-and-visual"><span class="header-section-number">1.3.5</span> 3.5 Descriptive and Visual</a></li>
+  <li><a href="#inference-current" id="toc-inference-current" class="nav-link" data-scroll-target="#inference-current"><span class="header-section-number">1.3.6</span> 3.6 Inference (Current)</a></li>
+  <li><a href="#outputs" id="toc-outputs" class="nav-link" data-scroll-target="#outputs"><span class="header-section-number">1.3.7</span> 3.7 Outputs</a></li>
+  <li><a href="#displacement-classification-model" id="toc-displacement-classification-model" class="nav-link" data-scroll-target="#displacement-classification-model"><span class="header-section-number">1.3.8</span> 3.8 Displacement Classification Model</a></li>
+  </ul></li>
+  <li><a href="#what-has-not-been-done-to-do" id="toc-what-has-not-been-done-to-do" class="nav-link" data-scroll-target="#what-has-not-been-done-to-do"><span class="header-section-number">1.4</span> 4. What Has Not Been Done (To-Do)</a>
+  <ul class="collapse">
+  <li><a href="#step-3-construct-the-estimation-sample" id="toc-step-3-construct-the-estimation-sample" class="nav-link" data-scroll-target="#step-3-construct-the-estimation-sample"><span class="header-section-number">1.4.1</span> Step 3: Construct the Estimation Sample</a></li>
+  <li><a href="#step-4-estimate-the-displacement-effect" id="toc-step-4-estimate-the-displacement-effect" class="nav-link" data-scroll-target="#step-4-estimate-the-displacement-effect"><span class="header-section-number">1.4.2</span> Step 4: Estimate the Displacement Effect</a></li>
+  <li><a href="#step-5-robustness-checks" id="toc-step-5-robustness-checks" class="nav-link" data-scroll-target="#step-5-robustness-checks"><span class="header-section-number">1.4.3</span> Step 5: Robustness Checks</a></li>
+  <li><a href="#step-6-heterogeneity-analysis" id="toc-step-6-heterogeneity-analysis" class="nav-link" data-scroll-target="#step-6-heterogeneity-analysis"><span class="header-section-number">1.4.4</span> Step 6: Heterogeneity Analysis</a></li>
+  </ul></li>
+  <li><a href="#summary-table" id="toc-summary-table" class="nav-link" data-scroll-target="#summary-table"><span class="header-section-number">1.5</span> 5. Summary Table</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Impact of Habit Breaking: Store Closures and Consumer Purchasing at Luckin</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="impact-of-habit-breaking-store-closures-and-consumer-purchasing-at-luckin" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Impact of Habit Breaking: Store Closures and Consumer Purchasing at Luckin</h1>
+<p>This document describes the analysis of how temporary store closures affect consumer purchasing behavior at Luckin Coffee, in the direction of the identification and decomposition approach in Levine &amp; Hristakeva (2026), <em>“Stopping Shopping at Stop and Shop? How Temporary Disruptions Affect Store Choice”</em> (Paper 2). It summarizes <strong>context and identification</strong>, <strong>what has been done</strong>, and <strong>what remains to be done</strong>.</p>
+<hr>
+<section id="context-and-research-question" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="context-and-research-question"><span class="header-section-number">1.1</span> 1. Context and Research Question</h2>
+<section id="setting" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="setting"><span class="header-section-number">1.1.1</span> 1.1 Setting</h3>
+<ul>
+<li><strong>Focal firm:</strong> Luckin Coffee (store-level transactions in the data).</li>
+<li><strong>Shock:</strong> Temporary store closures (e.g., campus/store renovations, operational closures). There are on the order of <strong>~100 closure events</strong> in the sample, with <strong>varying geography, timing, and duration</strong> (e.g., from roughly two weeks to several months).</li>
+<li><strong>Outcome of interest:</strong> Consumer purchasing at Luckin—frequency, level, and persistence of purchases before, during, and after a closure.</li>
+</ul>
+</section>
+<section id="economic-question" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="economic-question"><span class="header-section-number">1.1.2</span> 1.2 Economic Question</h3>
+<p>We want to understand:</p>
+<ol type="1">
+<li><strong>Overall effect:</strong> Do consumers who lose access to their usual Luckin store reduce purchases during the closure, and do they return to previous levels after reopening?</li>
+<li><strong>Mechanism:</strong> Can we separate:
+<ul>
+<li><strong>Displacement effect (D):</strong> The effect of <em>forced non-purchase</em>—consumers who would have bought during the closure window but could not, and whose habit or state dependence is disrupted.</li>
+<li><strong>Baseline-demand effect (B):</strong> Any shift in baseline demand for Luckin (e.g., reputation, alternatives discovered, mentally affected by Covid Lockdown) that affects all exposed consumers regardless of whether they were “displaced.”</li>
+</ul></li>
+</ol>
+<p>As in Paper 2, the displacement effect is the object of interest for <strong>habit/state dependence</strong>: it measures the persistent cost of interrupting a planned purchase, over and above any general demand shift.</p>
+</section>
+<section id="why-this-differs-from-paper-2" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="why-this-differs-from-paper-2"><span class="header-section-number">1.1.3</span> 1.3 Why This Differs from Paper 2</h3>
+<ul>
+<li><strong>Multiple closure events:</strong> We have many closures (different stores, dates, lengths) rather than one strike. This allows stacking consumer–closure observations and exploiting <strong>variation in closure length</strong> and <strong>severity</strong> (share of a consumer’s accessible stores closed).</li>
+<li><strong>Forced non-purchase vs.&nbsp;store substitution:</strong> In our setting, “treatment” is often loss of access to Luckin at a location (e.g., campus); the relevant margin is “would have purchased at Luckin during the closure window” vs.&nbsp;“would not have,” rather than switching to another grocery chain. The <strong>counterfactual purchase</strong> during the closure is unobservable for treated consumers, so it must be predicted (displacement classification).</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="identification" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="identification"><span class="header-section-number">1.2</span> 2. Identification</h2>
+<section id="treatment-and-control-conceptual" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="treatment-and-control-conceptual"><span class="header-section-number">1.2.1</span> 2.1 Treatment and Control (Conceptual)</h3>
+<ul>
+<li><strong>Treated:</strong> Consumers who are <strong>regular Luckin purchasers</strong> and whose access to Luckin was <strong>disrupted by a closure</strong> (e.g., their preferred or only accessible store closed).</li>
+<li><strong>Control:</strong> Regular Luckin purchasers who were <strong>not</strong> exposed to any closure in the same calendar window, and who are comparable in geography and behavior so that post-closure comparisons identify the effect of the closure.</li>
+</ul>
+<p>Treatment is defined at the <strong>consumer–closure event</strong> level: each time a consumer is exposed to a closure is one “observation”; consumers with multiple closures contribute multiple observations.</p>
+</section>
+<section id="displacement-unobservable-for-treated" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="displacement-unobservable-for-treated"><span class="header-section-number">1.2.2</span> 2.2 Displacement (Unobservable for Treated)</h3>
+<p>For each consumer–closure pair, define:</p>
+<ul>
+<li><strong>Displaced:</strong> Would have made at least one Luckin purchase during the closure window in the counterfactual where the store remained open.</li>
+<li><strong>Non-displaced:</strong> Would not have made a Luckin purchase in that window even without the closure.</li>
+</ul>
+<p>For <strong>treated</strong> consumers we do not observe this; for <strong>control</strong> consumers we do (their behavior during the same calendar window is the counterfactual). So we <strong>train a classifier</strong> on pre-closure (and control) behavior to predict “would have purchased during closure window,” and then use this predicted displacement status in the regression.</p>
+<p>In addition to hard classification (displaced vs non-displaced), the predicted probability can be used as a <strong>continuous displacement propensity score</strong> to preserve more information from the model output.</p>
+</section>
+<section id="regression-framework" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="regression-framework"><span class="header-section-number">1.2.3</span> 2.3 Regression Framework</h3>
+<p><strong>Time:</strong> For each closure event, define:</p>
+<ul>
+<li><strong>Pre:</strong> ( t &lt; 0 ) (e.g., ( N ) periods before closure onset).</li>
+<li><strong>Closure:</strong> ( t = 0 ) (closure window; length may vary by event).</li>
+<li><strong>Post:</strong> ( t &gt; 0 ) (e.g., ( M ) periods after closure resolution).</li>
+</ul>
+<p>Time can be normalized (e.g., in weeks) so that different closure lengths are comparable.</p>
+<p><strong>Overall ATT (difference-in-differences):</strong></p>
+<p>[ ext{Purchases}<em>{iet} = (t &gt; 0) (</em>{ie}) + _{ie} + <em>t + </em>{iet} ]</p>
+<ul>
+<li>(_i): consumer (or consumer–closure) fixed effects.<br>
+</li>
+<li>(_t): period fixed effects.<br>
+</li>
+<li>Sample excludes (t = 0).<br>
+</li>
+<li>() is the overall ATT (displacement + baseline demand combined).<br>
+</li>
+<li>An <strong>event study</strong> version replaces the single post dummy with dummies for each (t) to trace dynamics and pre-trends.</li>
+</ul>
+<p><strong>Exact implementation target (stacked consumer–closure event panel):</strong></p>
+<p>Let (i) index consumers, (e) index closure events, and (t) index relative event time (with (t=0) the closure window).</p>
+<p><strong>(A) Overall ATT DiD with event-unit FE</strong></p>
+<p>[ ext{Purchases}<em>{iet} = </em>{,,} <em>{},(t=)(</em>{ie}=1) + _{ie} + <em>t + </em>{iet} ]</p>
+<ul>
+<li>(_{ie}): consumer–closure fixed effects (preferred in stacked multi-closure data).</li>
+<li>(_t): relative-time fixed effects common across treated/control.</li>
+<li>Omitted reference period is (t=-1). In a two-period pre/post version, this collapses to one coefficient ().</li>
+</ul>
+<p><strong>(B) Triple-difference (binary displacement) with event-unit FE</strong></p>
+<p>[ ext{Purchases}<em>{iet} = </em>{,,} ^B_{},(t=)(<em>{ie}=1) + </em>{,,} ^D_{},(t=)(<em>{ie}=1)(</em>{ie}=1) + <em>{,,} </em>{},(t=)(<em>{ie}=1) + </em>{ie} + <em>t + </em>{iet} ]</p>
+<ul>
+<li>Single-post (non-event-study) DDD is obtained by replacing all ((t=)) with ((t&gt;0)).</li>
+</ul>
+<p><strong>(C) Triple-difference (continuous displacement score) with event-unit FE</strong></p>
+<p>[ ext{Purchases}<em>{iet} = </em>{,,} ^B_{},(t=)(<em>{ie}=1) + </em>{,,} ^S_{},(t=)(<em>{ie}=1)s</em>{ie} + <em>{,,} ^S</em>{},(t=)s_{ie} + _{ie} + <em>t + </em>{iet} ]</p>
+<ul>
+<li>(s_{ie}): ex-ante displacement propensity from Step 2.</li>
+</ul>
+<p><strong>(D) Closure-length heterogeneity in displacement effect</strong></p>
+<p>[ ext{Purchases}<em>{iet} = + </em>{,,} <em>{},(t=)(</em>{ie}=1)(_{ie}=1)<em>e + </em>{ie} + <em>t + </em>{iet} ]</p>
+<ul>
+<li>(_{}) captures how displacement dynamics vary with closure length.</li>
+</ul>
+<p><strong>Triple-difference to isolate displacement (Paper 2, Equation 9):</strong></p>
+<p>[ _{it} = ^B (t&gt;0) (_i) + ^D (t&gt;0) (_i) (_i) + (t&gt;0) (_i) + _i + <em>t + </em>{it} ]</p>
+<ul>
+<li>(^B): ATT for <strong>non-displaced</strong> treated (baseline-demand effect).<br>
+</li>
+<li>(^D): <strong>displacement effect</strong>—additional post-closure reduction for consumers whose planned purchases were interrupted.<br>
+</li>
+<li>(): main effect of being displaced (allowed to differ for control).<br>
+</li>
+<li>Event-study version: replace single post dummies with (t)-specific dummies in the same way.</li>
+</ul>
+<p><strong>Continuous-score variant (recommended as a complement):</strong></p>
+<p>[ ext{Purchases}<em>{iet} = ^B (t&gt;0)(</em>{ie}) + ^S (t&gt;0)(<em>{ie})s</em>{ie} + ^S (t&gt;0)s_{ie} + _{ie} + <em>t + </em>{iet} ]</p>
+<ul>
+<li>(s_{ie}): predicted purchase propensity during closure (continuous score from Step 2 model).</li>
+<li>(^S): how treatment post-effect scales with displacement propensity.</li>
+<li>This avoids dependence on a single hard threshold and is reported alongside threshold-based DDD.</li>
+</ul>
+<p><strong>Closure-length heterogeneity (unique to our setting):</strong></p>
+<p>[ ^D() = ^D_0 + ^D_1 ]</p>
+<p>This tests whether longer interruptions lead to larger or more persistent displacement effects, as in habit-formation models where longer gaps erode habits more.</p>
+</section>
+<section id="identifying-assumptions-paper-2-logic" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="identifying-assumptions-paper-2-logic"><span class="header-section-number">1.2.4</span> 2.4 Identifying Assumptions (Paper 2 Logic)</h3>
+<ol type="1">
+<li><strong>Parallel trends:</strong> Within displacement group (displaced / non-displaced), treated and control have the same trend in pre-closure purchases; or the trend difference is the same across displacement groups so that the triple-difference is still identified.</li>
+<li><strong>Equal baseline-demand effects:</strong> The baseline-demand shift (B) is the same for displaced and non-displaced treated consumers.</li>
+<li><strong>Displacement classification:</strong> Misclassification of displacement attenuates (^D) toward zero; we can use control behavior at (t=0) to estimate error rates and apply Paper 2’s correction (e.g., Appendix D) to bound the true displacement effect.</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="what-has-been-done" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="what-has-been-done"><span class="header-section-number">1.3</span> 3. What Has Been Done</h2>
+<p>The current production pipeline (primarily <code>model-free/src/customer-store/analyze_closure_impact.py</code> and <code>model-free/src/displacement_classification/*.py</code>) implements the following.</p>
+<section id="data-and-sample" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="data-and-sample"><span class="header-section-number">1.3.1</span> 3.1 Data and Sample</h3>
+<ul>
+<li><strong>Order data:</strong> <code>order_commodity_result.csv</code>, <code>order_result.csv</code> (commodity-level and order-level, with store <code>dept_id</code>, <code>member_id</code>, date, discount, coupon).</li>
+<li><strong>Closures (constructed):</strong> <code>model-free/src/store/identify_closures.py</code> identifies closures from daily store demand as <strong>≥10 consecutive zero-demand days</strong>, requiring <strong>non-zero demand both before and after</strong> the zero-demand spell. It then merges geocoded store metadata and keeps stores with valid coordinates within Nanjing bounds.</li>
+<li><strong>Analysis closure input:</strong> <code>outputs/store/non_uni_store_closures.csv</code> (derived from <code>outputs/store/store_closures.csv</code> by excluding stores whose <code>address</code> contains <code>大学</code> or <code>学院</code>).</li>
+<li><strong>Thresholds:</strong> “Regular” customer: at least <strong>5</strong> pre-closure purchases (<code>DEFAULT_LOWEST_PURCHASES</code>) and preferred-store loyalty ratio <strong>≥ 0.8</strong> (<code>DEFAULT_LOWEST_RATIO</code>). The script includes <strong>threshold justification</strong> (coverage at different purchase and ratio cutoffs).</li>
+</ul>
+</section>
+<section id="treatment-and-control" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="treatment-and-control"><span class="header-section-number">1.3.2</span> 3.2 Treatment and Control</h3>
+<ul>
+<li><strong>Default mode (enabled): set-up-time–matched control (<code>USE_SET_UP_TIME_MATCHED_CONTROL=True</code>).</strong>
+<ul>
+<li><strong>Treatment (per closure):</strong> Using only visits <strong>before closure start</strong>, customers whose pre-closure preferred store is the closed store, with pre-closure <code>total_purchases ≥ 5</code> and <code>preferred_ratio ≥ 0.8</code>.</li>
+<li><strong>Control stores (per closure):</strong> Up to <code>SET_UP_TIME_NEAREST_N=5</code> stores chosen by nearest <code>set_up_time</code> to the closed store, restricted to non-treated stores; each control store is used at most once across closures (processed in closure-start order).</li>
+<li><strong>Control members (per closure):</strong> Customers whose pre-closure preferred store is in that closure’s matched control-store set, with the same pre-closure thresholds (<code>≥5</code> purchases and ratio <code>≥0.8</code>).</li>
+</ul></li>
+<li><strong>Alternative mode (disabled by default): never-treated closure-specific control.</strong>
+<ul>
+<li>Never-treated pool = qualified loyal customers whose preferred store never appears in closures.</li>
+<li>For each closure, keep pool members who were qualified at that closure date (<code>≥5</code> purchases before closure start and max single-store share <code>≥0.8</code>).</li>
+</ul></li>
+</ul>
+<p>In both modes, one observation unit remains the <strong>consumer–closure event</strong>, and the same consumer can appear in multiple closures.</p>
+<ul>
+<li><strong>Boundary consumer rule in production selection:</strong> Treatment assignment is based on <strong>pre-closure preferred store = closed store</strong> (no additional distance-based override is applied).</li>
+<li><strong>Cross-pipeline consistency:</strong> Closure-specific matched controls are persisted in <code>outputs/customer-store/closure_pair_registry.csv</code>, and displacement training loads the same kept-closure registry.</li>
+<li><strong>Comparability diagnostics captured in outputs:</strong> Closure timing/duration and treatment-control pairing metadata are persisted in registry fields (e.g., closure dates, <code>closure_duration_days</code>, matched control stores, status/skip reason), with closure-event covariates (<code>closure_start_month</code>, <code>closure_start_weekday</code>, <code>closure_start_season</code>, <code>share_visited_stores_closed</code>) carried into displacement panels.</li>
+</ul>
+</section>
+<section id="time-windows" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="time-windows"><span class="header-section-number">1.3.3</span> 3.3 Time Windows</h3>
+<ul>
+<li><strong>Pre / during / post</strong> defined per closure using a configurable <strong>window</strong> (default 14 days, robustness 28 days):
+<ul>
+<li>Pre: <code>window_days</code> before closure start.<br>
+</li>
+<li>During: closure start to closure end.<br>
+</li>
+<li>Post: <code>window_days</code> after closure end.<br>
+</li>
+</ul></li>
+<li>Period lengths are used to normalize metrics (e.g., purchases per day).</li>
+</ul>
+</section>
+<section id="outcomes-and-behavior" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="outcomes-and-behavior"><span class="header-section-number">1.3.4</span> 3.4 Outcomes and Behavior</h3>
+<ul>
+<li><strong>Behavior metrics</strong> (per customer, per period):
+<ul>
+<li><code>n_purchases</code>: purchase days per day in the period.<br>
+</li>
+<li><code>new_product_ratio</code>, <code>total_discount</code>, <code>coupon_usage_rate</code>.<br>
+</li>
+</ul></li>
+<li><strong>Panel:</strong> One row per (closure, group, period, member_id) in <code>period_df</code>.</li>
+</ul>
+</section>
+<section id="descriptive-and-visual" class="level3" data-number="1.3.5">
+<h3 data-number="1.3.5" class="anchored" data-anchor-id="descriptive-and-visual"><span class="header-section-number">1.3.5</span> 3.5 Descriptive and Visual</h3>
+<ul>
+<li><strong>Threshold justification:</strong> Distribution of purchase counts and preferred-store ratio; fraction qualifying at different cutoffs.</li>
+<li><strong>Unique stores:</strong> Histogram of number of distinct stores per customer (among qualified).</li>
+<li><strong>Closure impact summary:</strong> Per-closure counts of treatment/control, purchase rates during closure, selectivity ratio.</li>
+<li><strong>Plots:</strong>
+<ul>
+<li>Treatment vs control, pre / during / post, for the four behavior metrics (with significance brackets).<br>
+</li>
+<li><strong>Duration split:</strong> Short vs long closures (e.g., &lt; 30 vs ≥ 30 days).<br>
+</li>
+<li><strong>Push split:</strong> Treatment subdivided into no-push vs with-push (using <code>no_push_members.csv</code>), vs control.</li>
+</ul></li>
+</ul>
+</section>
+<section id="inference-current" class="level3" data-number="1.3.6">
+<h3 data-number="1.3.6" class="anchored" data-anchor-id="inference-current"><span class="header-section-number">1.3.6</span> 3.6 Inference (Current)</h3>
+<ul>
+<li><strong>Paired t-tests:</strong> Treatment and control, pre vs post (per customer, control deduplicated across closures).</li>
+<li><strong>Two-sample t-tests:</strong> Treatment vs control in pre and in post.</li>
+<li><strong>Closure-level inclusion filters in analysis:</strong>
+<ul>
+<li>Skip closure if either group size is below <code>MIN_GROUP_SIZE=50</code>.</li>
+<li>Skip closure if control during-closure purchase rate is too low: <code>control_rate &lt; 2.0 × treatment_rate</code> (<code>MIN_CTRL_TREAT_RATIO=2.0</code>).</li>
+<li>The retained subset is exported as <code>outputs/customer-store/closures_used.csv</code>.</li>
+</ul></li>
+<li>No regression-based DiD or triple-difference yet; no displacement classification; no event-study or formal pre-trend tests.</li>
+</ul>
+</section>
+<section id="outputs" class="level3" data-number="1.3.7">
+<h3 data-number="1.3.7" class="anchored" data-anchor-id="outputs"><span class="header-section-number">1.3.7</span> 3.7 Outputs</h3>
+<ul>
+<li>Summary CSV per closure (treatment/control sizes, purchase rates during closure).<br>
+</li>
+<li>Period-level behavior CSV.<br>
+</li>
+<li>Statistical test results CSV.<br>
+</li>
+<li>PDFs: behavior comparison (main, robustness window), duration-split, push-split.</li>
+</ul>
+</section>
+<section id="displacement-classification-model" class="level3" data-number="1.3.8">
+<h3 data-number="1.3.8" class="anchored" data-anchor-id="displacement-classification-model"><span class="header-section-number">1.3.8</span> 3.8 Displacement Classification Model</h3>
+<p><strong>3.8.1 Prediction target and panel construction</strong></p>
+<ul>
+<li>Label = whether a consumer made <strong>at least one Luckin purchase</strong> in a given consumer–closure–period row.</li>
+<li>Training panel uses periods <code>-4, -3, -2, -1</code> for treatment/control and period <code>0</code> for control evaluation.</li>
+<li>Period length equals closure duration <code>D = closure_duration_days</code>.</li>
+<li>History guardrails are enforced at closure and member levels (<code>closure_start ≥ earliest_order_date + 4D + 8 days</code>; first purchase before earliest pre-period start).</li>
+<li>Train/eval split is implemented as: train <code>period &lt;= -2</code>, eval-pre <code>period = -1</code>, eval-during <code>period = 0 &amp; group=control</code>.</li>
+</ul>
+<p><strong>3.8.2 Features</strong></p>
+<ul>
+<li>Uses <code>order_result.csv</code> for behavioral/order features and <code>member_result.csv</code> for demographics.</li>
+<li>Builds 46 consumer-level features from history strictly prior to <code>period_start</code> (frequency/recency, regularity, DOW patterns, basket breadth, loyalty, order-level behavior, demographics).</li>
+<li>Stores additional closure-event covariates in panel outputs for downstream DiD/DDD estimation.</li>
+</ul>
+<p><strong>3.8.3 Model training and evaluation</strong></p>
+<ul>
+<li>Trains XGBoost (<code>binary:logistic</code>, <code>max_depth=6</code>, <code>eta=0.1</code>, <code>tree_method=hist</code>, 500 rounds), using CUDA when available and CPU otherwise.</li>
+<li>Trains <strong>one model per closure duration <code>D</code></strong>.</li>
+<li>Evaluates with group-period slices: Treatment-Pre (<code>t=-1</code>), Control-Pre (<code>t=-1</code>), Control-During (<code>t=0</code>), including FPR/FNR.</li>
+<li>Produces gain-based variable importance and label-balance audits by duration/split.</li>
+</ul>
+<p><strong>3.8.4 Outputs and displacement classification</strong></p>
+<ul>
+<li>Duration-suffixed artifacts are generated: <code>displacement_model_D.json</code>, <code>variable_importance_D.csv</code>, <code>prediction_accuracy_D.csv</code>, <code>panel_with_scores_D.parquet</code>, <code>displacement_scores_D.csv</code>.</li>
+<li>Run-level artifacts include <code>label_balance_audit.csv</code> and training logs in <code>outputs/displacement_classification/logs/</code>.</li>
+<li>Binary displacement classification uses <code>predicted probability ≥ decision_threshold</code> (default 0.5), and continuous displacement scores are saved for score-based specifications.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="what-has-not-been-done-to-do" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="what-has-not-been-done-to-do"><span class="header-section-number">1.4</span> 4. What Has Not Been Done (To-Do)</h2>
+<p>The following steps align the remaining analysis with Paper 2 and exploit our multi-closure, varying-length structure.</p>
+<hr>
+<section id="step-3-construct-the-estimation-sample" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="step-3-construct-the-estimation-sample"><span class="header-section-number">1.4.1</span> Step 3: Construct the Estimation Sample</h3>
+<p><strong>3a. Time window.</strong></p>
+<ul>
+<li>Pre: (N) periods before closure onset (e.g., 9).<br>
+</li>
+<li>Closure: t = 0 (possibly normalized to one “period” or expressed in common time units).<br>
+</li>
+<li>Post: (M) periods after resolution.<br>
+</li>
+<li>Given varying closure length, consider normalizing “during” to one period and expressing pre/post in consistent units (e.g., weeks) relative to onset/resolution.</li>
+</ul>
+<p><strong>3b. Outcome.</strong></p>
+<ul>
+<li><strong>Primary:</strong> Number of Luckin purchases per period (or binary “any purchase”) at consumer–period level.</li>
+</ul>
+<p><strong>3c. Stack observations.</strong></p>
+<ul>
+<li>Stack <strong>consumer–closure event</strong> observations (as in Paper 1 with multiple hurricanes).<br>
+</li>
+<li>Time index relative to each closure.<br>
+</li>
+<li>Account for multiple closures per consumer in <strong>standard errors</strong> (e.g., cluster at consumer or consumer–closure).</li>
+</ul>
+<hr>
+</section>
+<section id="step-4-estimate-the-displacement-effect" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="step-4-estimate-the-displacement-effect"><span class="header-section-number">1.4.2</span> Step 4: Estimate the Displacement Effect</h3>
+<p><strong>4a. Overall ATT.</strong></p>
+<ul>
+<li>Run DiD: post vs pre, treated vs control (excluding t = 0).<br>
+</li>
+<li>Present as <strong>event study</strong> (e.g.&nbsp;(_l) by period (l)): check no pre-trend, drop at t = 1, gradual recovery.</li>
+</ul>
+<p><strong>4b. Triple-difference.</strong></p>
+<ul>
+<li>Estimate Equation 9 (or event-study version): (^B), (^D), ().<br>
+</li>
+<li>Present event study for displacement effect over time.</li>
+<li>Also estimate a <strong>continuous-score DDD</strong> using predicted displacement propensity to avoid threshold arbitrariness and test monotonic dose-response.</li>
+</ul>
+<p><strong>4c. Closure-length interaction.</strong></p>
+<ul>
+<li>Add (^D_1 ) (and possibly level) to test whether longer closures increase or prolong displacement effects.</li>
+</ul>
+<hr>
+</section>
+<section id="step-5-robustness-checks" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="step-5-robustness-checks"><span class="header-section-number">1.4.3</span> Step 5: Robustness Checks</h3>
+<p><strong>5a. Parallel pre-trends.</strong></p>
+<ul>
+<li>Event study by displaced vs non-displaced; test formally (e.g.&nbsp;Paper 2 Appendix C) whether pre-trend slope differs by treatment within displacement group and whether any violation is equal across displacement groups.</li>
+</ul>
+<p><strong>5b. Matched subsample.</strong></p>
+<ul>
+<li>Match displaced to non-displaced on pre-closure purchase frequency (e.g.&nbsp;share of periods with a purchase) and revisit probability; re-estimate triple-difference on matched sample.</li>
+</ul>
+<p><strong>5c. Classification threshold.</strong></p>
+<ul>
+<li>Try thresholds for “displaced” (e.g.&nbsp;predicted probability &gt; 0.4, 0.5, 0.6); show displacement effect stability.</li>
+<li>Add score calibration and functional-form robustness for continuous-score specification (e.g., linear vs binned/spline score effects).</li>
+</ul>
+<p><strong>5d. Subsample by closure severity.</strong></p>
+<ul>
+<li>Full vs partial closure (all vs some of consumer’s accessible stores closed); compare estimates.</li>
+</ul>
+<p><strong>5e. Attenuation bound.</strong></p>
+<ul>
+<li>Use control-based µ and λ (Step 2e) and Paper 2 Appendix D–style correction to derive a <strong>lower bound</strong> on the true displacement effect.</li>
+</ul>
+<hr>
+</section>
+<section id="step-6-heterogeneity-analysis" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="step-6-heterogeneity-analysis"><span class="header-section-number">1.4.4</span> Step 6: Heterogeneity Analysis</h3>
+<p><strong>6a. Competitor.</strong><br>
+If data allow: number of competitors near the store; test whether displacement effect varies with competition.</p>
+<p><strong>6b. Closure length.</strong><br>
+Already in Step 4c; interpret as main novel heterogeneity.</p>
+<p><strong>6c. Habit strength.</strong><br>
+Split by pre-closure regularity (e.g.&nbsp;daily vs weekly vs occasional). Test whether displacement effect is larger for stronger habits (habit capital depreciates) or smaller (entrenched preferences, quick return).</p>
+<p><strong>6d. Demographics.</strong><br>
+By age, income, city tier (analogous to Paper 2 Table 6).</p>
+<p><strong>6e. Privacy / push.</strong><br>
+Compare displacement effect between <strong>push0</strong> (opted out of push at first use) and <strong>push1</strong>; interpret as proxy for privacy sensitivity or engagement with the app.</p>
+<hr>
+</section>
+</section>
+<section id="summary-table" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="summary-table"><span class="header-section-number">1.5</span> 5. Summary Table</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 27%">
+<col style="width: 45%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>Done</th>
+<th>Not done</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Treatment/control</strong></td>
+<td>Pre-closure preferred-store-based treatment; default set-up-time–matched closure-specific control (with one-time control-store assignment); threshold justification; boundary rule under preferred-store assignment; multi-closure consumer–event handling; closure-level screening (<code>MIN_GROUP_SIZE</code>, control/treatment rate filter); pairing registry (<code>closure_pair_registry.csv</code>) shared across pipelines; comparability metadata captured in registry/panel covariates</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>Displacement</strong></td>
+<td>Registry-aligned panel (periods −4…−1 + control t=0, with period length = closure duration <code>D</code>); 46 behavioral/demographic features from <code>order_result.csv</code>; train/eval split (<code>&lt;=-2</code>, <code>-1</code>, <code>0-control</code>); XGBoost trained per duration <code>D</code> (500 rounds, gain importance); duration-suffixed outputs (<code>displacement_model_D.json</code>, <code>variable_importance_D.csv</code>, <code>prediction_accuracy_D.csv</code>, <code>displacement_scores_D.csv</code>) plus <code>label_balance_audit.csv</code>; binary and continuous displacement scores persisted for downstream estimation</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td><strong>Sample</strong></td>
+<td>Pre/during/post windows; period-level behavior panel</td>
+<td>Normalized time units; stacked consumer–closure; clustering design</td>
+</tr>
+<tr class="even">
+<td><strong>Estimation</strong></td>
+<td>Descriptive stats, t-tests, visual comparison</td>
+<td>DiD ATT; triple-difference; event study; closure-length interaction</td>
+</tr>
+<tr class="odd">
+<td><strong>Robustness</strong></td>
+<td>14 vs 28 day window; duration-split and push-split plots; model evaluation by pre/during groups and duration</td>
+<td>Parallel trends test; matching; threshold sensitivity; severity subsample; attenuation bound; continuous-score calibration robustness</td>
+</tr>
+<tr class="even">
+<td><strong>Heterogeneity</strong></td>
+<td>Duration-split, push-split (visual)</td>
+<td>Competitor, habit strength, demographics, push0 vs push1 (regression)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><em>References:</em><br>
+- Levine, J., &amp; Hristakeva, S. (2026). <em>Stopping Shopping at Stop and Shop? How Temporary Disruptions Affect Store Choice.</em> Draft January 5, 2026 (Paper 2).<br>
+- Script: <code>model-free/src/customer-store/analyze_closure_impact.py</code><br>
+- Closure construction: <code>model-free/src/store/identify_closures.py</code><br>
+- Closures used for analysis: <code>model-free/outputs/store/non_uni_store_closures.csv</code></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

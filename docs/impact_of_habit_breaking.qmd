@@ -1,0 +1,11 @@
+---
+title: "Impact of Habit Breaking: Store Closures and Consumer Purchasing at Luckin"
+format:
+  html:
+    toc: true
+    number-sections: true
+execute:
+  echo: false
+---
+
+{{< include impact_of_habit_breaking.md >}}

@@ -54,50 +54,94 @@ In addition to hard classification (displaced vs non-displaced), the predicted p
 
 **Time:** For each closure event, define:
 
-- **Pre:** \( t < 0 \) (e.g., \( N \) periods before closure onset).
-- **Closure:** \( t = 0 \) (closure window; length may vary by event).
-- **Post:** \( t > 0 \) (e.g., \( M \) periods after closure resolution).
+- **Pre:** $ t < 0 $ (e.g., $ N $ periods before closure onset).
+- **Closure:** $ t = 0 $ (closure window; length may vary by event).
+- **Post:** $ t > 0 $ (e.g., $ M $ periods after closure resolution).
 
 Time can be normalized (e.g., in weeks) so that different closure lengths are comparable.
 
 **Overall ATT (difference-in-differences):**
 
-\[
-\text{Purchases}_{it} = \delta \cdot \mathbb{1}(t > 0) \times \mathbb{1}(\text{Treated}_i) + \phi_i + \omega_t + \nu_{it}
-\]
+$$
+  \text{Purchases}_{iet} = \delta \cdot \mathbb{1}(t > 0) \times \mathbb{1}(\text{Treated}_{ie}) + \phi_{ie} + \omega_t + \nu_{iet}
+$$
 
-- \(\phi_i\): consumer (or consumer–closure) fixed effects.  
-- \(\omega_t\): period fixed effects.  
-- Sample excludes \(t = 0\).  
-- \(\delta\) is the overall ATT (displacement + baseline demand combined).  
-- An **event study** version replaces the single post dummy with dummies for each \(t\) to trace dynamics and pre-trends.
+- $\phi_i$: consumer (or consumer–closure) fixed effects.  
+- $\omega_t$: period fixed effects.  
+- Sample excludes $t = 0$.  
+- $\delta$ is the overall ATT (displacement + baseline demand combined).  
+- An **event study** version replaces the single post dummy with dummies for each $t$ to trace dynamics and pre-trends.
+
+**Exact implementation target (stacked consumer–closure event panel):**
+
+Let $i$ index consumers, $e$ index closure events, and $t$ index relative event time (with $t=0$ the closure window).
+
+**(A) Overall ATT DiD with event-unit FE**
+
+$$
+  \text{Purchases}_{iet} = \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \delta_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie}=1) + \phi_{ie} + \omega_t + \nu_{iet}
+$$
+
+- $\phi_{ie}$: consumer–closure fixed effects (preferred in stacked multi-closure data).
+- $\omega_t$: relative-time fixed effects common across treated/control.
+- Omitted reference period is $t=-1$. In a two-period pre/post version, this collapses to one coefficient $\delta$.
+
+**(B) Triple-difference (binary displacement) with event-unit FE**
+
+$$
+  \text{Purchases}_{iet} = \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \delta^B_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie}=1)
++ \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \delta^D_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie}=1)\times\mathbb{1}(\text{Displaced}_{ie}=1)
++ \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \beta_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Displaced}_{ie}=1)
++ \phi_{ie} + \omega_t + \nu_{iet}
+$$
+
+- Single-post (non-event-study) DDD is obtained by replacing all $\mathbb{1}(t=\ell)$ with $\mathbb{1}(t>0)$.
+
+**(C) Triple-difference (continuous displacement score) with event-unit FE**
+
+$$
+  \text{Purchases}_{iet} = \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \delta^B_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie}=1)
++ \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \delta^S_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie}=1)\times s_{ie}
++ \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \beta^S_{\ell}\,\mathbb{1}(t=\ell)\times s_{ie}
++ \phi_{ie} + \omega_t + \nu_{iet}
+$$
+
+- $s_{ie}$: ex-ante displacement propensity from Step 2.
+
+**(D) Closure-length heterogeneity in displacement effect**
+
+$$
+  \text{Purchases}_{iet} = \cdots + \sum_{\ell \in \mathcal{T},\,\ell\neq -1} \theta_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie}=1)\times\mathbb{1}(\text{Displaced}_{ie}=1)\times \text{ClosureLength}_e + \phi_{ie} + \omega_t + \nu_{iet}
+$$
+
+- $\theta_{\ell}$ captures how displacement dynamics vary with closure length.
 
 **Triple-difference to isolate displacement (Paper 2, Equation 9):**
 
-\[
+$$
 \text{Purchases}_{it} = \delta^B \cdot \mathbb{1}(t>0) \times \mathbb{1}(\text{Treated}_i) + \delta^D \cdot \mathbb{1}(t>0) \times \mathbb{1}(\text{Treated}_i) \times \mathbb{1}(\text{Displaced}_i) + \beta \cdot \mathbb{1}(t>0) \times \mathbb{1}(\text{Displaced}_i) + \phi_i + \omega_t + \nu_{it}
-\]
+$$
 
-- \(\delta^B\): ATT for **non-displaced** treated (baseline-demand effect).  
-- \(\delta^D\): **displacement effect**—additional post-closure reduction for consumers whose planned purchases were interrupted.  
-- \(\beta\): main effect of being displaced (allowed to differ for control).  
-- Event-study version: replace single post dummies with \(t\)-specific dummies in the same way.
+- $\delta^B$: ATT for **non-displaced** treated (baseline-demand effect).  
+- $\delta^D$: **displacement effect**—additional post-closure reduction for consumers whose planned purchases were interrupted.  
+- $\beta$: main effect of being displaced (allowed to differ for control).  
+- Event-study version: replace single post dummies with $t$-specific dummies in the same way.
 
 **Continuous-score variant (recommended as a complement):**
 
-\[
-	ext{Purchases}_{it} = \delta^B \cdot \mathbb{1}(t>0)\times\mathbb{1}(\text{Treated}_i) + \delta^S \cdot \mathbb{1}(t>0)\times\mathbb{1}(\text{Treated}_i)\times s_i + \beta^S \cdot \mathbb{1}(t>0)\times s_i + \phi_i + \omega_t + \nu_{it}
-\]
+$$
+	\text{Purchases}_{iet} = \delta^B \cdot \mathbb{1}(t>0)\times\mathbb{1}(\text{Treated}_{ie}) + \delta^S \cdot \mathbb{1}(t>0)\times\mathbb{1}(\text{Treated}_{ie})\times s_{ie} + \beta^S \cdot \mathbb{1}(t>0)\times s_{ie} + \phi_{ie} + \omega_t + \nu_{iet}
+$$
 
-- \(s_i\): predicted purchase propensity during closure (continuous score from Step 2 model).
-- \(\delta^S\): how treatment post-effect scales with displacement propensity.
+- $s_{ie}$: predicted purchase propensity during closure (continuous score from Step 2 model).
+- $\delta^S$: how treatment post-effect scales with displacement propensity.
 - This avoids dependence on a single hard threshold and is reported alongside threshold-based DDD.
 
 **Closure-length heterogeneity (unique to our setting):**
 
-\[
+$$
 \delta^D(\text{length}) = \delta^D_0 + \delta^D_1 \times \text{ClosureLength}
-\]
+$$
 
 This tests whether longer interruptions lead to larger or more persistent displacement effects, as in habit-formation models where longer gaps erode habits more.
 
@@ -105,7 +149,6 @@ This tests whether longer interruptions lead to larger or more persistent displa
 
 1. **Parallel trends:** Within displacement group (displaced / non-displaced), treated and control have the same trend in pre-closure purchases; or the trend difference is the same across displacement groups so that the triple-difference is still identified.
 2. **Equal baseline-demand effects:** The baseline-demand shift (B) is the same for displaced and non-displaced treated consumers.
-3. **Displacement classification:** Misclassification of displacement attenuates \(\delta^D\) toward zero; we can use control behavior at \(t=0\) to estimate error rates and apply Paper 2’s correction (e.g., Appendix D) to bound the true displacement effect.
 
 ---
 
@@ -219,9 +262,9 @@ The following steps align the remaining analysis with Paper 2 and exploit our mu
 
 **3a. Time window.**
 
-- Pre: \(N\) periods before closure onset (e.g., 9).  
+- Pre: $N$ periods before closure onset (e.g., 9).  
 - Closure: t = 0 (possibly normalized to one “period” or expressed in common time units).  
-- Post: \(M\) periods after resolution.  
+- Post: $M$ periods after resolution.  
 - Given varying closure length, consider normalizing “during” to one period and expressing pre/post in consistent units (e.g., weeks) relative to onset/resolution.
 
 **3b. Outcome.**
@@ -241,17 +284,17 @@ The following steps align the remaining analysis with Paper 2 and exploit our mu
 **4a. Overall ATT.**
 
 - Run DiD: post vs pre, treated vs control (excluding t = 0).  
-- Present as **event study** (e.g. \(\delta_l\) by period \(l\)): check no pre-trend, drop at t = 1, gradual recovery.
+- Present as **event study** (e.g. $\delta_l$ by period $l$): check no pre-trend, drop at t = 1, gradual recovery.
 
 **4b. Triple-difference.**
 
-- Estimate Equation 9 (or event-study version): \(\delta^B\), \(\delta^D\), \(\beta\).  
+- Estimate Equation 9 (or event-study version): $\delta^B$, $\delta^D$, $\beta$.  
 - Present event study for displacement effect over time.
 - Also estimate a **continuous-score DDD** using predicted displacement propensity to avoid threshold arbitrariness and test monotonic dose-response.
 
 **4c. Closure-length interaction.**
 
-- Add \(\delta^D_1 \times \text{ClosureLength}\) (and possibly level) to test whether longer closures increase or prolong displacement effects.
+- Add $\delta^D_1 \times \text{ClosureLength}$ (and possibly level) to test whether longer closures increase or prolong displacement effects.
 
 ---
 
