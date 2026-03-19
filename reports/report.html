@@ -251,11 +251,11 @@ OUTPUTS:
 </tr>
 <tr class="odd">
 <td>Control customers</td>
-<td>~45,000</td>
+<td>~35,000</td>
 </tr>
 <tr class="even">
 <td>4-week panel observations</td>
-<td>420,453</td>
+<td>358,864</td>
 </tr>
 <tr class="odd">
 <td>8-week panel observations</td>
@@ -313,18 +313,18 @@ FOR each closure:
 Binary model:
     Y = α + β1*treated + β2*post + β3*disp
         + β4*treated*post + β5*post*disp + β6*treated*post*disp
-        + week_FE + closure_FE + customer_FE + ε
+        + period_FE + event_FE + calendar_month_FE + ε
 
 Score model:
     Y = α + β1*treated + β2*post + β3*score
         + β4*treated*post + β5*post*score + β6*treated*post*score
-        + week_FE + closure_FE + customer_FE + ε
+        + period_FE + event_FE + calendar_month_FE + ε
 
 Event study:
     Y = α + Σ γ_t*I(rel_t=t)*treated
         + Σ δ_t*I(rel_t=t)*disp
         + Σ θ_t*I(rel_t=t)*treated*disp
-        + week_FE + closure_FE + customer_FE + ε</code></pre>
+        + period_FE + event_FE + calendar_month_FE + ε</code></pre>
 </section>
 </section>
 <section id="results-summary-1" class="level1">
@@ -393,15 +393,15 @@ Event study:
 <tbody>
 <tr class="odd">
 <td>Unique closures analyzed</td>
-<td>29 (kept out of 34 identified)</td>
+<td>22</td>
 </tr>
 <tr class="even">
-<td>Total customers in panel</td>
-<td>54,823</td>
+<td>Unique customers in panel</td>
+<td>44,858</td>
 </tr>
 <tr class="odd">
 <td>Total observations</td>
-<td>440,904</td>
+<td>358,864</td>
 </tr>
 <tr class="even">
 <td>Treatment customers</td>
@@ -540,26 +540,26 @@ Event study:
 <tbody>
 <tr class="odd">
 <td>post × treated</td>
-<td>0.00153** (0.00062)</td>
+<td>0.00081 (0.00064)</td>
 </tr>
 <tr class="even">
 <td>post × disp</td>
-<td>-0.03392*** (0.00096)</td>
+<td>-0.03353*** (0.00107)</td>
 </tr>
 <tr class="odd">
 <td>post × treated × disp</td>
-<td>0.00182 (0.00227)</td>
+<td>0.00517** (0.00241)</td>
 </tr>
 <tr class="even">
-<td>Week FE</td>
+<td>Period FE</td>
 <td>Yes</td>
 </tr>
 <tr class="odd">
-<td>Closure FE</td>
+<td>Event FE</td>
 <td>Yes</td>
 </tr>
 <tr class="even">
-<td>Customer FE</td>
+<td>Calendar-month FE</td>
 <td>Yes</td>
 </tr>
 <tr class="odd">
@@ -568,11 +568,11 @@ Event study:
 </tr>
 <tr class="even">
 <td>Observations</td>
-<td>440,904</td>
+<td>358,864</td>
 </tr>
 <tr class="odd">
 <td>R²</td>
-<td>0.013</td>
+<td>0.012</td>
 </tr>
 </tbody>
 </table>
@@ -590,26 +590,26 @@ Event study:
 <tbody>
 <tr class="odd">
 <td>post × treated</td>
-<td>0.00207** (0.00076)</td>
+<td>0.00205*** (0.00078)</td>
 </tr>
 <tr class="even">
 <td>post × score</td>
-<td>-0.05914*** (0.00145)</td>
+<td>-0.05787*** (0.00161)</td>
 </tr>
 <tr class="odd">
 <td>post × treated × score</td>
-<td>0.00290 (0.00346)</td>
+<td>0.00719** (0.00363)</td>
 </tr>
 <tr class="even">
-<td>Week FE</td>
+<td>Period FE</td>
 <td>Yes</td>
 </tr>
 <tr class="odd">
-<td>Closure FE</td>
+<td>Event FE</td>
 <td>Yes</td>
 </tr>
 <tr class="even">
-<td>Customer FE</td>
+<td>Calendar-month FE</td>
 <td>Yes</td>
 </tr>
 <tr class="odd">
@@ -618,11 +618,11 @@ Event study:
 </tr>
 <tr class="even">
 <td>Observations</td>
-<td>440,904</td>
+<td>358,864</td>
 </tr>
 <tr class="odd">
 <td>R²</td>
-<td>0.019</td>
+<td>0.018</td>
 </tr>
 </tbody>
 </table>
@@ -644,55 +644,55 @@ Event study:
 <tbody>
 <tr class="odd">
 <td>-4</td>
-<td>0.00198</td>
-<td>0.081</td>
+<td>0.00043</td>
+<td>0.720</td>
 <td>No significant pre-trend</td>
 </tr>
 <tr class="even">
 <td>-3</td>
-<td>0.00068</td>
-<td>0.522</td>
+<td>-0.00028</td>
+<td>0.809</td>
 <td>No significant pre-trend</td>
 </tr>
 <tr class="odd">
 <td>-2</td>
-<td>-0.00027</td>
-<td>0.778</td>
+<td>-0.00031</td>
+<td>0.759</td>
 <td>No significant pre-trend</td>
 </tr>
 <tr class="even">
 <td>1</td>
-<td>0.00262</td>
-<td>0.008</td>
+<td>0.00254**</td>
+<td>0.014</td>
 <td>Small positive effect week 1</td>
 </tr>
 <tr class="odd">
 <td>2</td>
-<td>0.00054</td>
-<td>0.617</td>
+<td>0.00016</td>
+<td>0.884</td>
 <td>No effect week 2</td>
 </tr>
 <tr class="even">
 <td>3</td>
-<td>0.00608</td>
+<td>0.00623***</td>
 <td>&lt;0.001</td>
 <td>Positive effect week 3</td>
 </tr>
 <tr class="odd">
 <td>4</td>
-<td>0.00225</td>
-<td>0.046</td>
-<td>Positive effect week 4</td>
+<td>0.00175</td>
+<td>0.130</td>
+<td>No significant effect week 4</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Displacement interaction effects:</strong> - Displaced customers show significantly reduced purchases (-0.03 to -0.04) post-closure - The effect persists across all 4 post-closure weeks - No significant pre-trend violations (pretrend_joint_test p=0.204)</p>
+<p><strong>Displacement interaction effects:</strong> - Displaced customers show significantly reduced purchases (-0.03 to -0.04) post-closure - The effect persists across all 4 post-closure weeks - Pre-trend tests show mixed results: the baseline ATT specification passes (p=0.907), but some displacement and score-based specifications show potential violations (see Pre-trend Tests table)</p>
 </section>
 <section id="pre-trend-testing-methodology" class="level2">
 <h2 class="anchored" data-anchor-id="pre-trend-testing-methodology">Pre-trend Testing Methodology</h2>
 <p>The parallel trends assumption is fundamental to the DiD/DDD methodology, requiring that treatment and control groups would have followed similar trajectories absent the treatment. We test this assumption using a joint F-test approach.</p>
 <p>For each event study specification, we estimate the event study regression:</p>
-<p><span class="math display">\[Y_{ict} = \alpha + \sum_{t=-4}^{4} \gamma_t \cdot I(rel_t = t) \cdot treated_i + \sum_{t=-4}^{4} \delta_t \cdot I(rel_t = t) \cdot disp_i + \sum_{t=-4}^{4} \theta_t \cdot I(rel_t = t) \cdot treated_i \cdot disp_i + FE + \epsilon_{ict}\]</span></p>
+<p><span class="math display">\[Y_{ict} = \alpha + \sum_{t=-4}^{4} \gamma_t \cdot I(rel_t = t) \cdot treated_i + FE + \epsilon_{ict}\]</span></p>
 <p>Then we test the null hypothesis that all pre-treatment coefficients are jointly zero:</p>
 <p><span class="math display">\[H_0: \gamma_{-4} = \gamma_{-3} = \gamma_{-2} = 0\]</span></p>
 <p>A high p-value (&gt; 0.05) indicates no evidence against the parallel trends assumption.</p>
@@ -718,32 +718,44 @@ Event study:
 <tbody>
 <tr class="odd">
 <td>event_att</td>
-<td>pretrend_joint_zero</td>
-<td>0.204</td>
+<td>pretrend_att_joint_zero</td>
+<td>0.907</td>
 <td>Parallel trends ✓</td>
 </tr>
 <tr class="even">
 <td>event_binary_B</td>
 <td>pretrend_baseline_joint_zero</td>
-<td>0.287</td>
+<td>0.065</td>
 <td>Parallel trends ✓</td>
 </tr>
 <tr class="odd">
 <td>event_binary_B</td>
 <td>pretrend_displacement_joint_zero</td>
-<td>0.003</td>
+<td>0.004</td>
+<td>Potential violation ⚠</td>
+</tr>
+<tr class="even">
+<td>event_binary_D</td>
+<td>pretrend_length_displacement_joint_zero</td>
+<td>0.387</td>
+<td>Parallel trends ✓</td>
+</tr>
+<tr class="odd">
+<td>event_binary_D</td>
+<td>pretrend_length_baseline_joint_zero</td>
+<td>&lt;0.001</td>
 <td>Potential violation ⚠</td>
 </tr>
 <tr class="even">
 <td>event_score_C</td>
 <td>pretrend_score_baseline_joint_zero</td>
-<td>0.278</td>
+<td>0.849</td>
 <td>Parallel trends ✓</td>
 </tr>
 <tr class="odd">
 <td>event_score_C</td>
 <td>pretrend_score_slope_joint_zero</td>
-<td>&lt;0.001</td>
+<td>0.004</td>
 <td>Potential violation ⚠</td>
 </tr>
 </tbody>
@@ -809,7 +821,7 @@ Event study:
 <li><p><strong>Displacement is the primary response</strong>: Most affected customers do not reduce overall purchases but switch to alternative stores in the network.</p></li>
 <li><p><strong>Closure duration matters</strong>: Longer closures lead to higher displacement probabilities (33% → 49%).</p></li>
 <li><p><strong>Convergence over time</strong>: After 4-8 weeks, treated customers’ purchase levels converge with control customers, indicating successful displacement.</p></li>
-<li><p><strong>Triple difference not significant</strong>: The DDD interaction term (treated × post × displacement) is not statistically significant, suggesting the displacement effect is not heterogeneous across displaced vs.&nbsp;non-displaced customers.</p></li>
+<li><p><strong>Triple difference is significant</strong>: The DDD interaction term (treated × post × displacement) is statistically significant (p&lt;0.05), suggesting heterogeneous displacement effects across customers with different displacement propensity.</p></li>
 <li><p><strong>Event study shows delayed effects</strong>: The most significant positive effect appears in week 3 after closure, suggesting an adjustment period.</p></li>
 </ol>
 </section>

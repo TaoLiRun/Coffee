@@ -113,8 +113,8 @@ OUTPUTS:
 |--------|-------|
 | Closures analyzed | 22 (kept out of 34 identified) |
 | Treatment customers | ~10,000 |
-| Control customers | ~45,000 |
-| 4-week panel observations | 420,453 |
+| Control customers | ~35,000 |
+| 4-week panel observations | 358,864 |
 | 8-week panel observations | 794,189 |
 | Date range | 2020-06-01 to 2021-12-31 |
 
@@ -171,18 +171,18 @@ FOR each closure:
 Binary model:
     Y = α + β1*treated + β2*post + β3*disp
         + β4*treated*post + β5*post*disp + β6*treated*post*disp
-        + week_FE + closure_FE + customer_FE + ε
+        + period_FE + event_FE + calendar_month_FE + ε
 
 Score model:
     Y = α + β1*treated + β2*post + β3*score
         + β4*treated*post + β5*post*score + β6*treated*post*score
-        + week_FE + closure_FE + customer_FE + ε
+        + period_FE + event_FE + calendar_month_FE + ε
 
 Event study:
     Y = α + Σ γ_t*I(rel_t=t)*treated
         + Σ δ_t*I(rel_t=t)*disp
         + Σ θ_t*I(rel_t=t)*treated*disp
-        + week_FE + closure_FE + customer_FE + ε
+        + period_FE + event_FE + calendar_month_FE + ε
 ```
 
 # Results Summary
@@ -202,9 +202,9 @@ Event study:
 
 | Metric | Value |
 |--------|-------|
-| Unique closures analyzed | 29 (kept out of 34 identified) |
-| Total customers in panel | 54,823 |
-| Total observations | 440,904 |
+| Unique closures analyzed | 22 |
+| Unique customers in panel | 44,858 |
+| Total observations | 358,864 |
 | Treatment customers | ~10,000 |
 | Control customers | ~45,000 |
 | Date range | 2020-06-01 to 2021-12-31 |
@@ -246,15 +246,15 @@ The ML model successfully classifies customers likely to switch stores during cl
 
 | Variable | n_purchases |
 |----------|--------------|
-| post × treated | 0.00153** (0.00062) |
-| post × disp | -0.03392*** (0.00096) |
-| post × treated × disp | 0.00182 (0.00227) |
-| Week FE | Yes |
-| Closure FE | Yes |
-| Customer FE | Yes |
+| post × treated | 0.00081 (0.00064) |
+| post × disp | -0.03353*** (0.00107) |
+| post × treated × disp | 0.00517** (0.00241) |
+| Period FE | Yes |
+| Event FE | Yes |
+| Calendar-month FE | Yes |
 | ---------- | ----- |
-| Observations | 440,904 |
-| R² | 0.013 |
+| Observations | 358,864 |
+| R² | 0.012 |
 
 Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixed Effects.
 
@@ -262,15 +262,15 @@ Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixe
 
 | Variable | n_purchases |
 |----------|--------------|
-| post × treated | 0.00207** (0.00076) |
-| post × score | -0.05914*** (0.00145) |
-| post × treated × score | 0.00290 (0.00346) |
-| Week FE | Yes |
-| Closure FE | Yes |
-| Customer FE | Yes |
+| post × treated | 0.00205*** (0.00078) |
+| post × score | -0.05787*** (0.00161) |
+| post × treated × score | 0.00719** (0.00363) |
+| Period FE | Yes |
+| Event FE | Yes |
+| Calendar-month FE | Yes |
 | ---------- | ----- |
-| Observations | 440,904 |
-| R² | 0.019 |
+| Observations | 358,864 |
+| R² | 0.018 |
 
 Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixed Effects.
 
@@ -280,18 +280,18 @@ Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixe
 
 | Relative Week | Coefficient | P-value | Interpretation |
 |---------------|-------------|---------|----------------|
-| -4 | 0.00198 | 0.081 | No significant pre-trend |
-| -3 | 0.00068 | 0.522 | No significant pre-trend |
-| -2 | -0.00027 | 0.778 | No significant pre-trend |
-| 1 | 0.00262 | 0.008 | Small positive effect week 1 |
-| 2 | 0.00054 | 0.617 | No effect week 2 |
-| 3 | 0.00608 | <0.001 | Positive effect week 3 |
-| 4 | 0.00225 | 0.046 | Positive effect week 4 |
+| -4 | 0.00043 | 0.720 | No significant pre-trend |
+| -3 | -0.00028 | 0.809 | No significant pre-trend |
+| -2 | -0.00031 | 0.759 | No significant pre-trend |
+| 1 | 0.00254** | 0.014 | Small positive effect week 1 |
+| 2 | 0.00016 | 0.884 | No effect week 2 |
+| 3 | 0.00623*** | <0.001 | Positive effect week 3 |
+| 4 | 0.00175 | 0.130 | No significant effect week 4 |
 
 **Displacement interaction effects:**
 - Displaced customers show significantly reduced purchases (-0.03 to -0.04) post-closure
 - The effect persists across all 4 post-closure weeks
-- No significant pre-trend violations (pretrend_joint_test p=0.204)
+- Pre-trend tests show mixed results: the baseline ATT specification passes (p=0.907), but some displacement and score-based specifications show potential violations (see Pre-trend Tests table)
 
 ## Pre-trend Testing Methodology
 
@@ -299,7 +299,7 @@ The parallel trends assumption is fundamental to the DiD/DDD methodology, requir
 
 For each event study specification, we estimate the event study regression:
 
-$$Y_{ict} = \alpha + \sum_{t=-4}^{4} \gamma_t \cdot I(rel_t = t) \cdot treated_i + \sum_{t=-4}^{4} \delta_t \cdot I(rel_t = t) \cdot disp_i + \sum_{t=-4}^{4} \theta_t \cdot I(rel_t = t) \cdot treated_i \cdot disp_i + FE + \epsilon_{ict}$$
+$$Y_{ict} = \alpha + \sum_{t=-4}^{4} \gamma_t \cdot I(rel_t = t) \cdot treated_i + FE + \epsilon_{ict}$$
 
 Then we test the null hypothesis that all pre-treatment coefficients are jointly zero:
 
@@ -315,11 +315,13 @@ A high p-value (> 0.05) indicates no evidence against the parallel trends assump
 
 | Specification | Test | P-value | Result |
 |---------------|------|---------|--------|
-| event_att | pretrend_joint_zero | 0.204 | Parallel trends ✓ |
-| event_binary_B | pretrend_baseline_joint_zero | 0.287 | Parallel trends ✓ |
-| event_binary_B | pretrend_displacement_joint_zero | 0.003 | Potential violation ⚠ |
-| event_score_C | pretrend_score_baseline_joint_zero | 0.278 | Parallel trends ✓ |
-| event_score_C | pretrend_score_slope_joint_zero | <0.001 | Potential violation ⚠ |
+| event_att | pretrend_att_joint_zero | 0.907 | Parallel trends ✓ |
+| event_binary_B | pretrend_baseline_joint_zero | 0.065 | Parallel trends ✓ |
+| event_binary_B | pretrend_displacement_joint_zero | 0.004 | Potential violation ⚠ |
+| event_binary_D | pretrend_length_displacement_joint_zero | 0.387 | Parallel trends ✓ |
+| event_binary_D | pretrend_length_baseline_joint_zero | <0.001 | Potential violation ⚠ |
+| event_score_C | pretrend_score_baseline_joint_zero | 0.849 | Parallel trends ✓ |
+| event_score_C | pretrend_score_slope_joint_zero | 0.004 | Potential violation ⚠ |
 
 ## Customer-Store DiD Results
 
@@ -342,7 +344,7 @@ A high p-value (> 0.05) indicates no evidence against the parallel trends assump
 
 3. **Convergence over time**: After 4-8 weeks, treated customers' purchase levels converge with control customers, indicating successful displacement.
 
-4. **Triple difference not significant**: The DDD interaction term (treated × post × displacement) is not statistically significant, suggesting the displacement effect is not heterogeneous across displaced vs. non-displaced customers.
+4. **Triple difference is significant**: The DDD interaction term (treated × post × displacement) is statistically significant (p<0.05), suggesting heterogeneous displacement effects across customers with different displacement propensity.
 
 5. **Event study shows delayed effects**: The most significant positive effect appears in week 3 after closure, suggesting an adjustment period.
 
