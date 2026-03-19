@@ -1,5 +1,5 @@
 spec,formula,n,r2,r2_within
-event_att,"n_purchases ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",440904,0.5613110136836202,0.0001265389867848299
-event_binary_B,"n_purchases ~ i(rel_t, treated,       ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,   ref=-1) | event_fe_id + rel_t + calendar_month",440904,0.5681087709235375,0.01562019684146787
-event_binary_D,"n_purchases ~ i(rel_t, treated,        ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,    ref=-1) + i(rel_t, treated_X_len,  ref=-1) + i(rel_t, disp_X_len,     ref=-1) + i(rel_t, tXdXlen,        ref=-1) | event_fe_id + rel_t + calendar_month",440904,0.5687244548860626,0.017023482708453996
-event_score_C,"n_purchases ~ i(rel_t, treated,                   ref=-1) + i(rel_t, treated_X_score,           ref=-1) + i(rel_t, displacement_prob_centered, ref=-1) | event_fe_id + rel_t + calendar_month",440904,0.5707899162568129,0.02173114593634251
+event_att,"n_purchases ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",358864,0.5604243985206272,0.00015281872351002868
+event_binary_B,"n_purchases ~ i(rel_t, treated,       ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,   ref=-1) | event_fe_id + rel_t + calendar_month",358864,0.5671781990903382,0.01551483708804835
+event_binary_D,"n_purchases ~ i(rel_t, treated,        ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,    ref=-1) + i(rel_t, treated_X_len,  ref=-1) + i(rel_t, disp_X_len,     ref=-1) + i(rel_t, tXdXlen,        ref=-1) | event_fe_id + rel_t + calendar_month",358864,0.5681386053956872,0.017699352184090134
+event_score_C,"n_purchases ~ i(rel_t, treated,                   ref=-1) + i(rel_t, treated_X_score,           ref=-1) + i(rel_t, displacement_prob_centered, ref=-1) | event_fe_id + rel_t + calendar_month",358864,0.5697354614539052,0.021331519263746546

@@ -40,10 +40,16 @@ def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
     cfg = cfg or load_config()
     project_root = get_project_root()
     score_path = project_root / cfg["paths"]["score_file"]
+    closure_registry_path = project_root / "outputs" / "customer-store" / "closure_pair_registry.csv"
     if not score_path.exists():
         raise FileNotFoundError(
             f"Ex-ante score file not found: {score_path}. "
             "Run displacement_classification/main.py first to generate displacement_scores_t0_ex_ante.csv."
+        )
+    if not closure_registry_path.exists():
+        raise FileNotFoundError(
+            f"Closure registry not found: {closure_registry_path}. "
+            "Run customer-store/main_customer_store.py first to generate closure_pair_registry.csv."
         )
 
     score_df = pd.read_csv(score_path, encoding="utf-8-sig")
@@ -84,6 +90,46 @@ def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
             ],
         ]
     )
+
+    registry_df = pd.read_csv(closure_registry_path, encoding="utf-8-sig")
+    registry_required = {"dept_id", "closure_start", "closure_end"}
+    registry_missing = registry_required - set(registry_df.columns)
+    if registry_missing:
+        raise ValueError(
+            f"Missing required columns in {closure_registry_path.name}: {sorted(registry_missing)}"
+        )
+
+    closure_scope = (
+        registry_df.assign(
+            closure_start=_normalize_closure_start(registry_df["closure_start"]),
+            closure_end=pd.to_datetime(registry_df["closure_end"], errors="coerce").dt.strftime("%Y-%m-%d"),
+            _dept_key=registry_df["dept_id"].astype(str),
+        )[["_dept_key", "closure_start", "closure_end"]]
+        .dropna(subset=["_dept_key", "closure_start", "closure_end"])
+        .drop_duplicates()
+    )
+
+    closure_count_before = score_df[["dept_id", "closure_start", "closure_end"]].drop_duplicates().shape[0]
+    score_df = score_df.assign(_dept_key=score_df["dept_id"].astype(str)).merge(
+        closure_scope,
+        on=["_dept_key", "closure_start", "closure_end"],
+        how="inner",
+    )
+    score_df = score_df.drop(columns=["_dept_key"])
+    closure_count_after = score_df[["dept_id", "closure_start", "closure_end"]].drop_duplicates().shape[0]
+    LOGGER.info(
+        "Applied closure registry filter using %s: closures %s -> %s (dropped=%s)",
+        closure_registry_path,
+        closure_count_before,
+        closure_count_after,
+        closure_count_before - closure_count_after,
+    )
+    if closure_count_after == 0:
+        raise ValueError(
+            "Closure registry filter removed all displacement score closures. "
+            "Check key consistency between displacement scores and closure_pair_registry.csv."
+        )
+
     score_df["treated"] = score_df["is_treated"].astype(int)
     score_df["closure_duration_days"] = score_df["closure_duration_days"].astype(int)
     score_df["disp_binary"] = score_df["predicted_displaced_t0_ex_ante"].astype(int)
