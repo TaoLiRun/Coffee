@@ -1,6 +1,12 @@
 # Data folder - contains large data files
 data/
 
+# Large generated analysis artifacts (GitHub >100MB blocks)
+plots/customer_store_analysis/period_behavior_p5_r80_w14.csv
+plots/customer_store_analysis/period_behavior_p5_r80_w28.csv
+outputs/displacement_classification/displacement_scores.csv
+outputs/displacement_classification/panel_with_scores.parquet
+
 # Python cache
 __pycache__/
 *.py[cod]
