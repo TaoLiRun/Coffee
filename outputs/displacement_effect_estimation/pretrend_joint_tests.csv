@@ -1,0 +1,8 @@
+spec,test,n_restrictions,statistic,pvalue,n
+event_att,pretrend_att_joint_zero,3,4.58896266341137,0.20449096745974762,440904
+event_binary_B,pretrend_baseline_joint_zero,3,3.773416438758713,0.28699342364547814,440904
+event_binary_B,pretrend_displacement_joint_zero,3,14.219495681905597,0.0026211066901171303,440904
+event_binary_D,pretrend_length_displacement_joint_zero,3,3.0484640430218217,0.38421316521702154,440904
+event_binary_D,pretrend_length_baseline_joint_zero,3,12.715850007665303,0.005293183566455179,440904
+event_score_C,pretrend_score_baseline_joint_zero,3,3.8495186800018026,0.2781785800581417,440904
+event_score_C,pretrend_score_slope_joint_zero,3,17.63563217011296,0.000522895685579527,440904

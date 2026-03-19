@@ -1,2 +1,0 @@
-spec,formula,n,r2
-threshold_0.5,n_purchases ~ post + treated + disp_05 + post:treated + post:disp_05 + treated:disp_05 + post:treated:disp_05 + C(event_fe_id) + C(rel_t),7296,0.5300563059687888

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import logging
+import time
 from pathlib import Path
-from typing import Iterable
-
 import numpy as np
 import pandas as pd
+
+
+LOGGER = logging.getLogger("displacement_effect_estimation")
 
 
 def get_project_root() -> Path:
@@ -33,25 +36,6 @@ def _detect_data_dir(project_root: Path) -> Path:
     return candidates[0]
 
 
-def load_period_behavior(window_days: int, cfg: dict | None = None) -> pd.DataFrame:
-    cfg = cfg or load_config()
-    project_root = get_project_root()
-    pattern = cfg["paths"]["period_behavior_pattern"].format(window=window_days)
-    path = project_root / pattern
-    if not path.exists():
-        raise FileNotFoundError(f"Period behavior file not found: {path}")
-
-    df = pd.read_csv(path, encoding="utf-8-sig")
-    required = {"member_id", "dept_id", "closure_start", "group", "period"}
-    missing = required - set(df.columns)
-    if missing:
-        raise ValueError(f"Missing required columns in {path}: {sorted(missing)}")
-
-    df = df.copy()
-    df["closure_start"] = _normalize_closure_start(df["closure_start"])
-    return df
-
-
 def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
     cfg = cfg or load_config()
     project_root = get_project_root()
@@ -72,6 +56,7 @@ def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
         "group",
         "is_treated",
         "displacement_prob_t0_ex_ante",
+        "predicted_displaced_t0_ex_ante",
     }
     missing = required - set(score_df.columns)
     if missing:
@@ -95,11 +80,13 @@ def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
                 "group",
                 "is_treated",
                 "displacement_prob",
+                "predicted_displaced_t0_ex_ante",
             ],
         ]
     )
     score_df["treated"] = score_df["is_treated"].astype(int)
     score_df["closure_duration_days"] = score_df["closure_duration_days"].astype(int)
+    score_df["disp_binary"] = score_df["predicted_displaced_t0_ex_ante"].astype(int)
     return score_df
 
 
@@ -116,6 +103,40 @@ def load_orders_for_behavior(cfg: dict | None = None) -> pd.DataFrame:
     df = df.dropna(subset=["dt"]).copy()
     df["date"] = df["dt"].dt.normalize()
     df = df[["member_id", "date"]].drop_duplicates()
+    return df.sort_values("date").reset_index(drop=True)
+
+
+def load_orders_for_behavior_members(
+    member_ids: set,
+    cfg: dict | None = None,
+    chunksize: int = 1_000_000,
+) -> pd.DataFrame:
+    cfg = cfg or load_config()
+    project_root = get_project_root()
+    data_dir = _detect_data_dir(project_root)
+    path = data_dir / "order_result.csv"
+    if not path.exists():
+        raise FileNotFoundError(f"order_result.csv not found: {path}")
+
+    frames: list[pd.DataFrame] = []
+    for chunk in pd.read_csv(
+        path,
+        encoding="utf-8-sig",
+        usecols=["member_id", "create_hour"],
+        chunksize=chunksize,
+    ):
+        chunk = chunk[chunk["member_id"].isin(member_ids)]
+        if chunk.empty:
+            continue
+        chunk["dt"] = pd.to_datetime(chunk["create_hour"], errors="coerce")
+        chunk = chunk.dropna(subset=["dt"])
+        if chunk.empty:
+            continue
+        chunk["date"] = chunk["dt"].dt.normalize()
+        frames.append(chunk[["member_id", "date"]])
+
+    df = pd.concat(frames, ignore_index=True)
+    df = df.drop_duplicates()
     return df.sort_values("date").reset_index(drop=True)
 
 
@@ -141,9 +162,7 @@ def _window_bounds(closure_start: pd.Timestamp, closure_end: pd.Timestamp, rel_t
 
 
 def build_estimation_sample(
-    window_days: int,
     outcome: str,
-    thresholds: Iterable[float],
     cfg: dict | None = None,
     t_horizon: int | None = None,
 ) -> pd.DataFrame:
@@ -154,7 +173,8 @@ def build_estimation_sample(
         )
 
     scores = load_displacement_scores(cfg=cfg)
-    orders = load_orders_for_behavior(cfg=cfg)
+    scoped_member_ids = set(scores["member_id"].dropna().tolist())
+    orders = load_orders_for_behavior_members(member_ids=scoped_member_ids, cfg=cfg)
 
     if t_horizon is None:
         t_horizon = int(cfg.get("spec", {}).get("t_horizon", 4))
@@ -169,9 +189,26 @@ def build_estimation_sample(
 
     out_parts: list[pd.DataFrame] = []
     group_cols = ["dept_id", "closure_start", "closure_end"]
-    for (dept_id, closure_start, closure_end), closure_cohort in scores.groupby(group_cols, sort=False):
+    grouped_closures = list(scores.groupby(group_cols, sort=False))
+    total_closures = len(grouped_closures)
+    loop_start = time.perf_counter()
+    LOGGER.info("Starting closure loop: total_closures=%s", total_closures)
+
+    for closure_idx, ((dept_id, closure_start, closure_end), closure_cohort) in enumerate(grouped_closures, start=1):
+        closure_start_time = time.perf_counter()
         closure_start_dt = pd.to_datetime(closure_start)
         closure_end_dt = pd.to_datetime(closure_end)
+        closure_bin_days = int(closure_cohort["closure_duration_days"].iloc[0])
+        if closure_bin_days < 1:
+            LOGGER.info(
+                "Closure %s/%s skipped: dept_id=%s closure_start=%s invalid_duration=%s",
+                closure_idx,
+                total_closures,
+                dept_id,
+                closure_start,
+                closure_bin_days,
+            )
+            continue
 
         member_frame = closure_cohort[
             [
@@ -183,12 +220,14 @@ def build_estimation_sample(
                 "group",
                 "treated",
                 "displacement_prob",
+                "disp_binary",
             ]
         ].drop_duplicates()
         members = set(member_frame["member_id"].tolist())
+        closure_rows = 0
 
         for rel_t in rel_t_values:
-            start_dt, end_dt = _window_bounds(closure_start_dt, closure_end_dt, rel_t, window_days)
+            start_dt, end_dt = _window_bounds(closure_start_dt, closure_end_dt, rel_t, closure_bin_days)
             win_orders = _slice_by_date(orders, start_dt, end_dt)
             if not win_orders.empty:
                 win_orders = win_orders[win_orders["member_id"].isin(members)]
@@ -200,9 +239,11 @@ def build_estimation_sample(
 
             block = member_frame.merge(counts, on="member_id", how="left")
             block["_purchase_days"] = block["_purchase_days"].fillna(0)
-            block["n_purchases"] = block["_purchase_days"] / float(window_days)
+            block["n_purchases"] = block["_purchase_days"] / float(closure_bin_days)
             block["rel_t"] = int(rel_t)
             block["post"] = (block["rel_t"] > 0).astype(int)
+            block["period_start"] = start_dt
+            block["calendar_month"] = start_dt.strftime("%Y-%m")
             out_parts.append(
                 block[
                     [
@@ -214,12 +255,30 @@ def build_estimation_sample(
                         "group",
                         "treated",
                         "displacement_prob",
+                        "disp_binary",
+                        "period_start",
+                        "calendar_month",
                         "rel_t",
                         "post",
                         "n_purchases",
                     ]
                 ]
             )
+            closure_rows += len(block)
+
+        LOGGER.info(
+            "Closure %s/%s done: dept_id=%s closure_start=%s members=%s rows=%s duration_days=%s elapsed=%.2fs",
+            closure_idx,
+            total_closures,
+            dept_id,
+            closure_start,
+            len(members),
+            closure_rows,
+            closure_bin_days,
+            time.perf_counter() - closure_start_time,
+        )
+
+    LOGGER.info("Closure loop completed in %.2fs", time.perf_counter() - loop_start)
 
     if not out_parts:
         raise ValueError("No estimation rows were constructed from score cohort and orders.")
@@ -233,10 +292,15 @@ def build_estimation_sample(
         + merged["closure_start"].astype(str)
     )
     merged["treated"] = merged["treated"].astype(int)
+    merged["disp_binary"] = merged["disp_binary"].astype(int)
     merged["closure_duration_days"] = merged["closure_duration_days"].astype(int)
+    merged["displacement_prob_centered"] = merged["displacement_prob"] - float(merged["displacement_prob"].mean())
 
-    for tau in thresholds:
-        tag = str(tau).replace(".", "")
-        merged[f"disp_{tag}"] = (merged["displacement_prob"] >= tau).astype(int)
+    len_mean = float(merged["closure_duration_days"].mean())
+    len_std = float(merged["closure_duration_days"].std(ddof=0))
+    if len_std == 0.0:
+        merged["closure_length_std"] = 0.0
+    else:
+        merged["closure_length_std"] = (merged["closure_duration_days"] - len_mean) / len_std
 
     return merged

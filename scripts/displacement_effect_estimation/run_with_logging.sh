@@ -7,5 +7,5 @@ LOG_DIR="$PROJECT_ROOT/outputs/displacement_effect_estimation/logs"
 mkdir -p "$LOG_DIR"
 
 cd "$SRC_DIR"
-python run.py "$@" > "$LOG_DIR/run.log" 2>&1
+conda run -n JAX-py python run.py "$@" > "$LOG_DIR/run.log" 2>&1
 echo "Done. Log: $LOG_DIR/run.log"
