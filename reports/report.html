@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.35">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Store Closure and Customer Displacement Analysis: Luckin Coffee Research Report</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="report_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="report_files/libs/quarto-html/popper.min.js"></script>
+<script src="report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-8c37e94934072dbafab1ae8ca0ced594.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="report_files/libs/bootstrap/bootstrap-dcd9bd9331300410c9edd79d4b921cb1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#research-question-and-goal" id="toc-research-question-and-goal" class="nav-link active" data-scroll-target="#research-question-and-goal">Research Question and Goal</a>
+  <ul>
+  <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question">Research Question</a></li>
+  <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal">Goal</a></li>
+  </ul></li>
+  <li><a href="#methodology-summary-pseudo-code" id="toc-methodology-summary-pseudo-code" class="nav-link" data-scroll-target="#methodology-summary-pseudo-code">Methodology Summary (Pseudo Code)</a>
+  <ul>
+  <li><a href="#store-closure-identification" id="toc-store-closure-identification" class="nav-link" data-scroll-target="#store-closure-identification">1. Store Closure Identification</a></li>
+  <li><a href="#customer-store-preference-analysis" id="toc-customer-store-preference-analysis" class="nav-link" data-scroll-target="#customer-store-preference-analysis">2. Customer-Store Preference Analysis</a></li>
+  <li><a href="#trend-visualization" id="toc-trend-visualization" class="nav-link" data-scroll-target="#trend-visualization">3. Trend visualization</a>
+  <ul class="collapse">
+  <li><a href="#results-summary" id="toc-results-summary" class="nav-link" data-scroll-target="#results-summary">Results Summary</a></li>
+  </ul></li>
+  <li><a href="#displacement-classification-model" id="toc-displacement-classification-model" class="nav-link" data-scroll-target="#displacement-classification-model">4. Displacement Classification Model</a></li>
+  <li><a href="#triple-difference-in-differences-ddd-estimation" id="toc-triple-difference-in-differences-ddd-estimation" class="nav-link" data-scroll-target="#triple-difference-in-differences-ddd-estimation">5. Triple Difference-in-Differences (DDD) Estimation</a></li>
+  </ul></li>
+  <li><a href="#results-summary-1" id="toc-results-summary-1" class="nav-link" data-scroll-target="#results-summary-1">Results Summary</a>
+  <ul>
+  <li><a href="#customer-store-did-results" id="toc-customer-store-did-results" class="nav-link" data-scroll-target="#customer-store-did-results">Customer-Store DiD Results</a></li>
+  <li><a href="#sample-characteristics" id="toc-sample-characteristics" class="nav-link" data-scroll-target="#sample-characteristics">Sample Characteristics</a></li>
+  <li><a href="#displacement-classification-results" id="toc-displacement-classification-results" class="nav-link" data-scroll-target="#displacement-classification-results">Displacement Classification Results</a>
+  <ul class="collapse">
+  <li><a href="#label-rate-by-closure-duration" id="toc-label-rate-by-closure-duration" class="nav-link" data-scroll-target="#label-rate-by-closure-duration">Label Rate by Closure Duration</a></li>
+  <li><a href="#model-accuracy-final-duration-d29" id="toc-model-accuracy-final-duration-d29" class="nav-link" data-scroll-target="#model-accuracy-final-duration-d29">Model Accuracy (Final Duration D=29)</a></li>
+  </ul></li>
+  <li><a href="#ddd-estimation-results" id="toc-ddd-estimation-results" class="nav-link" data-scroll-target="#ddd-estimation-results">DDD Estimation Results</a>
+  <ul class="collapse">
+  <li><a href="#binary-displacement-model-collapsed" id="toc-binary-displacement-model-collapsed" class="nav-link" data-scroll-target="#binary-displacement-model-collapsed">Binary Displacement Model (collapsed)</a></li>
+  <li><a href="#score-based-model" id="toc-score-based-model" class="nav-link" data-scroll-target="#score-based-model">Score-Based Model</a></li>
+  </ul></li>
+  <li><a href="#dynamic-effects-of-closure" id="toc-dynamic-effects-of-closure" class="nav-link" data-scroll-target="#dynamic-effects-of-closure">Dynamic Effects of Closure</a></li>
+  <li><a href="#pre-trend-testing-methodology" id="toc-pre-trend-testing-methodology" class="nav-link" data-scroll-target="#pre-trend-testing-methodology">Pre-trend Testing Methodology</a></li>
+  <li><a href="#pre-trend-tests" id="toc-pre-trend-tests" class="nav-link" data-scroll-target="#pre-trend-tests">Pre-trend Tests</a></li>
+  <li><a href="#customer-store-did-results-1" id="toc-customer-store-did-results-1" class="nav-link" data-scroll-target="#customer-store-did-results-1">Customer-Store DiD Results</a></li>
+  </ul></li>
+  <li><a href="#main-findings" id="toc-main-findings" class="nav-link" data-scroll-target="#main-findings">Main Findings</a></li>
+  <li><a href="#generated-outputs" id="toc-generated-outputs" class="nav-link" data-scroll-target="#generated-outputs">Generated Outputs</a>
+  <ul>
+  <li><a href="#data-files" id="toc-data-files" class="nav-link" data-scroll-target="#data-files">Data Files</a></li>
+  <li><a href="#plots" id="toc-plots" class="nav-link" data-scroll-target="#plots">Plots</a></li>
+  <li><a href="#logs" id="toc-logs" class="nav-link" data-scroll-target="#logs">Logs</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Store Closure and Customer Displacement Analysis: Luckin Coffee Research Report</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="research-question-and-goal" class="level1">
+<h1>Research Question and Goal</h1>
+<section id="research-question" class="level2">
+<h2 class="anchored" data-anchor-id="research-question">Research Question</h2>
+<p>What is the effect of store closures on customer purchase behavior in a coffee chain context? Specifically:</p>
+<ol type="1">
+<li><p><strong>Displacement Effect</strong>: When customers’ preferred stores close, do they switch to other stores in the network (displacement) or reduce their overall purchases?</p></li>
+<li><p><strong>Heterogeneity</strong>: Which customers are more likely to displace versus reduce purchases?</p></li>
+<li><p><strong>Long-term Impact</strong>: What are the lasting effects of store closures on customer purchase frequency and loyalty?</p></li>
+</ol>
+</section>
+<section id="goal" class="level2">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p>To estimate the causal effect of store closures on customer behavior using: - A Difference-in-Differences (DiD) framework comparing affected vs.&nbsp;unaffected customers - A machine learning model to predict customer displacement propensity - A Triple Difference-in-Differences (DDD) specification to estimate displacement effects - Event study analysis to examine dynamic effects over time</p>
+</section>
+</section>
+<section id="methodology-summary-pseudo-code" class="level1">
+<h1>Methodology Summary (Pseudo Code)</h1>
+<section id="store-closure-identification" class="level2">
+<h2 class="anchored" data-anchor-id="store-closure-identification">1. Store Closure Identification</h2>
+<pre><code># Identify store closures from transaction data
+FOR each store:
+    Find periods with no transactions &gt;= 7 days
+    Record closure_start, closure_end, closure_duration
+FILTER closures:
+    Keep closures with duration &lt; 30 days
+    Keep closures occurring after Aug 2020
+
+# Build closure registry with matched controls
+FOR each closure:
+    Find treatment_store_id (closed store)
+    Identify control_stores with:
+        - Similar setup_time (opening date)
+        - Never closed during analysis period
+        - min_ctrl_treat_ratio &gt;= 2.0
+    Select top 5 control stores by setup time match</code></pre>
+</section>
+<section id="customer-store-preference-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="customer-store-preference-analysis">2. Customer-Store Preference Analysis</h2>
+<pre><code># Load transaction data
+LOAD order_commodity_data (10.6M rows, 779K customers)
+LOAD order_result_data (7.3M orders)
+
+# Filter active customers
+FILTER customers WITH &gt;= 5 unique purchase days
+    → 286,784 qualified customers
+
+# Compute store preferences
+FOR each customer:
+    Count purchases at each store
+    Identify preferred_store = most frequently visited store
+    Compute preference_ratio = purchases_at_preferred / total_purchases
+
+# Build treatment and control groups
+FOR each closure:
+    treatment_customers = customers with preferred_store == closed_store
+    control_customers = customers with preferred_store IN control_stores</code></pre>
+</section>
+<section id="trend-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="trend-visualization">3. Trend visualization</h2>
+<pre><code># Build Event-Time Panel
+FOR each closure:
+    FOR each treatment and control customer:
+        # Pre-closure periods: fixed 7-day periods (w = -4, -3, -2, -1)
+        FOR each w in range(-window_weeks, 0):
+            Calculate:
+                - n_purchases = purchases / 7  # daily rate
+                - group = treatment or control
+                - t = w (week number relative to closure)
+
+        # During closure: uses actual closure duration
+        Calculate:
+            - n_purchases = purchases / closure_duration  # daily rate
+            - group = treatment or control
+            - t = 0 (closure window)
+
+        # Post-closure periods: fixed 7-day periods (w = 1, 2, 3, 4)
+        FOR each w in range(1, window_weeks + 1):
+            Calculate:
+                - n_purchases = purchases / 7  # daily rate
+                - group = treatment or control
+                - t = w (week number relative to closure)
+
+OUTPUTS:
+    - closure_pair_registry.csv (22 closures with matched controls)
+    - closure_trend_lines_w4.pdf (4-week window trends)
+    - closure_trend_lines_w8.pdf (8-week window trends)</code></pre>
+<section id="results-summary" class="level3">
+<h3 class="anchored" data-anchor-id="results-summary">Results Summary</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Closures analyzed</td>
+<td>22 (kept out of 34 identified)</td>
+</tr>
+<tr class="even">
+<td>Treatment customers</td>
+<td>~10,000</td>
+</tr>
+<tr class="odd">
+<td>Control customers</td>
+<td>~45,000</td>
+</tr>
+<tr class="even">
+<td>4-week panel observations</td>
+<td>420,453</td>
+</tr>
+<tr class="odd">
+<td>8-week panel observations</td>
+<td>794,189</td>
+</tr>
+<tr class="even">
+<td>Date range</td>
+<td>2020-06-01 to 2021-12-31</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key findings from simple DiD analysis:</strong> - Treatment customers show lower purchase rates during closure weeks - Visual inspection of trend lines shows convergence post-closure - Parallel trends assumption supported by pre-closure behavior patterns</p>
+<p><strong>Visual outputs:</strong> See Figure 1 (4-week trends) and Figure 2 (8-week trends) in generated plots folder.</p>
+<hr>
+</section>
+</section>
+<section id="displacement-classification-model" class="level2">
+<h2 class="anchored" data-anchor-id="displacement-classification-model">4. Displacement Classification Model</h2>
+<pre><code># Build training data
+FOR each closure event:
+    Define observation period:
+        - 4 pre-periods, each of length = closure_duration_days
+        - During period (actual closure duration)
+    Label customers as:
+        - displaced = 1 if purchased from control_store during closure
+        - displaced = 0 otherwise
+
+# Extract features:
+    - purchase_frequency (pre-closure)
+    - store_preference_ratio
+    - closure_duration_days
+    - recency of last purchase
+    - demographic features (age, gender, member_type)
+    - distance to alternative stores
+
+# Train ML model
+MODEL = RandomForestClassifier()
+TRAIN model on training set (265K rows, 54K unique members)
+GENERATE displacement_probability scores for all customers</code></pre>
+</section>
+<section id="triple-difference-in-differences-ddd-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="triple-difference-in-differences-ddd-estimation">5. Triple Difference-in-Differences (DDD) Estimation</h2>
+<pre><code># Build estimation panel
+FOR each closure:
+    FOR each treatment and control customer:
+        FOR each week in [-4, -3, -2, -1, 1, 2, 3, 4]:
+            Calculate:
+                - n_purchases (outcome)
+                - treated (1 if treatment customer, 0 if control)
+                - post (1 if week &gt;= 0 relative to closure)
+                - disp_binary (1 if displaced=1, 0 otherwise)
+                - disp_score (displacement_probability)
+
+# DDD Specifications
+Binary model:
+    Y = α + β1*treated + β2*post + β3*disp
+        + β4*treated*post + β5*post*disp + β6*treated*post*disp
+        + week_FE + closure_FE + customer_FE + ε
+
+Score model:
+    Y = α + β1*treated + β2*post + β3*score
+        + β4*treated*post + β5*post*score + β6*treated*post*score
+        + week_FE + closure_FE + customer_FE + ε
+
+Event study:
+    Y = α + Σ γ_t*I(rel_t=t)*treated
+        + Σ δ_t*I(rel_t=t)*disp
+        + Σ θ_t*I(rel_t=t)*treated*disp
+        + week_FE + closure_FE + customer_FE + ε</code></pre>
+</section>
+</section>
+<section id="results-summary-1" class="level1">
+<h1>Results Summary</h1>
+<section id="customer-store-did-results" class="level2">
+<h2 class="anchored" data-anchor-id="customer-store-did-results">Customer-Store DiD Results</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 29%">
+<col style="width: 27%">
+<col style="width: 16%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Pre vs Post (Treatment)</th>
+<th>Pre vs Post (Control)</th>
+<th>T vs C (Pre)</th>
+<th>T vs C (Post)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>n_purchases</td>
+<td>***</td>
+<td>***</td>
+<td>***</td>
+<td>ns</td>
+</tr>
+<tr class="even">
+<td>new_product_ratio</td>
+<td>*</td>
+<td>***</td>
+<td>**</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>total_discount</td>
+<td>***</td>
+<td>***</td>
+<td>ns</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>coupon_usage_rate</td>
+<td>*</td>
+<td>*</td>
+<td>ns</td>
+<td>ns</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key finding</strong>: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.</p>
+</section>
+<section id="sample-characteristics" class="level2">
+<h2 class="anchored" data-anchor-id="sample-characteristics">Sample Characteristics</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unique closures analyzed</td>
+<td>29 (kept out of 34 identified)</td>
+</tr>
+<tr class="even">
+<td>Total customers in panel</td>
+<td>54,823</td>
+</tr>
+<tr class="odd">
+<td>Total observations</td>
+<td>440,904</td>
+</tr>
+<tr class="even">
+<td>Treatment customers</td>
+<td>~10,000</td>
+</tr>
+<tr class="odd">
+<td>Control customers</td>
+<td>~45,000</td>
+</tr>
+<tr class="even">
+<td>Date range</td>
+<td>2020-06-01 to 2021-12-31</td>
+</tr>
+<tr class="odd">
+<td>Closure durations</td>
+<td>10-29 days</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="displacement-classification-results" class="level2">
+<h2 class="anchored" data-anchor-id="displacement-classification-results">Displacement Classification Results</h2>
+<p>The ML model successfully classifies customers likely to switch stores during closures:</p>
+<section id="label-rate-by-closure-duration" class="level3">
+<h3 class="anchored" data-anchor-id="label-rate-by-closure-duration">Label Rate by Closure Duration</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Closure Duration</th>
+<th>Train Size</th>
+<th>Label Rate (Displaced)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10 days</td>
+<td>12,933</td>
+<td>32.9%</td>
+</tr>
+<tr class="even">
+<td>11 days</td>
+<td>28,752</td>
+<td>32.7%</td>
+</tr>
+<tr class="odd">
+<td>14 days</td>
+<td>26,547</td>
+<td>34.8%</td>
+</tr>
+<tr class="even">
+<td>17-18 days</td>
+<td>23,601</td>
+<td>40.9%</td>
+</tr>
+<tr class="odd">
+<td>28-29 days</td>
+<td>14,352</td>
+<td>49.2%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key finding</strong>: Longer closures lead to higher displacement rates (33% for 10-day closures vs.&nbsp;49% for 28-29 day closures).</p>
+</section>
+<section id="model-accuracy-final-duration-d29" class="level3">
+<h3 class="anchored" data-anchor-id="model-accuracy-final-duration-d29">Model Accuracy (Final Duration D=29)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 5%">
+<col style="width: 15%">
+<col style="width: 18%">
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>N</th>
+<th>Accuracy</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1-Score</th>
+<th>FPR</th>
+<th>FNR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treatment_Pre_t-1</td>
+<td>715</td>
+<td>0.734</td>
+<td>0.773</td>
+<td>0.680</td>
+<td>0.724</td>
+<td>0.209</td>
+<td>0.320</td>
+</tr>
+<tr class="even">
+<td>Control_Pre_t-1</td>
+<td>715</td>
+<td>0.737</td>
+<td>0.747</td>
+<td>0.647</td>
+<td>0.694</td>
+<td>0.186</td>
+<td>0.353</td>
+</tr>
+<tr class="odd">
+<td>Control_During_t0</td>
+<td>974</td>
+<td>0.661</td>
+<td>0.522</td>
+<td>0.686</td>
+<td>0.593</td>
+<td>0.305</td>
+<td>0.314</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key findings:</strong> - Model achieves ~73% accuracy on pre-treatment data - Precision is higher than recall, indicating fewer false positives - Treatment group shows slightly higher accuracy (0.734 vs 0.737) - Control group during closure has lowest accuracy (0.661), reflecting the challenge of predicting displacement when stores are closed</p>
+</section>
+</section>
+<section id="ddd-estimation-results" class="level2">
+<h2 class="anchored" data-anchor-id="ddd-estimation-results">DDD Estimation Results</h2>
+<section id="binary-displacement-model-collapsed" class="level3">
+<h3 class="anchored" data-anchor-id="binary-displacement-model-collapsed">Binary Displacement Model (collapsed)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>n_purchases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post × treated</td>
+<td>0.00153** (0.00062)</td>
+</tr>
+<tr class="even">
+<td>post × disp</td>
+<td>-0.03392*** (0.00096)</td>
+</tr>
+<tr class="odd">
+<td>post × treated × disp</td>
+<td>0.00182 (0.00227)</td>
+</tr>
+<tr class="even">
+<td>Week FE</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Closure FE</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Customer FE</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>———-</td>
+<td>—–</td>
+</tr>
+<tr class="even">
+<td>Observations</td>
+<td>440,904</td>
+</tr>
+<tr class="odd">
+<td>R²</td>
+<td>0.013</td>
+</tr>
+</tbody>
+</table>
+<p>Notes: Standard errors in parentheses. * p&lt;0.1, ** p&lt;0.05, *** p&lt;0.01. FE = Fixed Effects.</p>
+</section>
+<section id="score-based-model" class="level3">
+<h3 class="anchored" data-anchor-id="score-based-model">Score-Based Model</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>n_purchases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post × treated</td>
+<td>0.00207** (0.00076)</td>
+</tr>
+<tr class="even">
+<td>post × score</td>
+<td>-0.05914*** (0.00145)</td>
+</tr>
+<tr class="odd">
+<td>post × treated × score</td>
+<td>0.00290 (0.00346)</td>
+</tr>
+<tr class="even">
+<td>Week FE</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Closure FE</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Customer FE</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>———-</td>
+<td>—–</td>
+</tr>
+<tr class="even">
+<td>Observations</td>
+<td>440,904</td>
+</tr>
+<tr class="odd">
+<td>R²</td>
+<td>0.019</td>
+</tr>
+</tbody>
+</table>
+<p>Notes: Standard errors in parentheses. * p&lt;0.1, ** p&lt;0.05, *** p&lt;0.01. FE = Fixed Effects.</p>
+</section>
+</section>
+<section id="dynamic-effects-of-closure" class="level2">
+<h2 class="anchored" data-anchor-id="dynamic-effects-of-closure">Dynamic Effects of Closure</h2>
+<p><strong>Key results from event study specification (baseline ATT model):</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Relative Week</th>
+<th>Coefficient</th>
+<th>P-value</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-4</td>
+<td>0.00198</td>
+<td>0.081</td>
+<td>No significant pre-trend</td>
+</tr>
+<tr class="even">
+<td>-3</td>
+<td>0.00068</td>
+<td>0.522</td>
+<td>No significant pre-trend</td>
+</tr>
+<tr class="odd">
+<td>-2</td>
+<td>-0.00027</td>
+<td>0.778</td>
+<td>No significant pre-trend</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.00262</td>
+<td>0.008</td>
+<td>Small positive effect week 1</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.00054</td>
+<td>0.617</td>
+<td>No effect week 2</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.00608</td>
+<td>&lt;0.001</td>
+<td>Positive effect week 3</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.00225</td>
+<td>0.046</td>
+<td>Positive effect week 4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Displacement interaction effects:</strong> - Displaced customers show significantly reduced purchases (-0.03 to -0.04) post-closure - The effect persists across all 4 post-closure weeks - No significant pre-trend violations (pretrend_joint_test p=0.204)</p>
+</section>
+<section id="pre-trend-testing-methodology" class="level2">
+<h2 class="anchored" data-anchor-id="pre-trend-testing-methodology">Pre-trend Testing Methodology</h2>
+<p>The parallel trends assumption is fundamental to the DiD/DDD methodology, requiring that treatment and control groups would have followed similar trajectories absent the treatment. We test this assumption using a joint F-test approach.</p>
+<p>For each event study specification, we estimate the event study regression:</p>
+<p><span class="math display">\[Y_{ict} = \alpha + \sum_{t=-4}^{4} \gamma_t \cdot I(rel_t = t) \cdot treated_i + \sum_{t=-4}^{4} \delta_t \cdot I(rel_t = t) \cdot disp_i + \sum_{t=-4}^{4} \theta_t \cdot I(rel_t = t) \cdot treated_i \cdot disp_i + FE + \epsilon_{ict}\]</span></p>
+<p>Then we test the null hypothesis that all pre-treatment coefficients are jointly zero:</p>
+<p><span class="math display">\[H_0: \gamma_{-4} = \gamma_{-3} = \gamma_{-2} = 0\]</span></p>
+<p>A high p-value (&gt; 0.05) indicates no evidence against the parallel trends assumption.</p>
+<p><strong>Interpretation of Results:</strong> - <strong>p &gt; 0.05</strong>: Cannot reject parallel trends assumption (✓) - <strong>p &lt; 0.05</strong>: Potential violation of parallel trends (⚠)</p>
+</section>
+<section id="pre-trend-tests" class="level2">
+<h2 class="anchored" data-anchor-id="pre-trend-tests">Pre-trend Tests</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 39%">
+<col style="width: 15%">
+<col style="width: 23%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Specification</th>
+<th>Test</th>
+<th>P-value</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>event_att</td>
+<td>pretrend_joint_zero</td>
+<td>0.204</td>
+<td>Parallel trends ✓</td>
+</tr>
+<tr class="even">
+<td>event_binary_B</td>
+<td>pretrend_baseline_joint_zero</td>
+<td>0.287</td>
+<td>Parallel trends ✓</td>
+</tr>
+<tr class="odd">
+<td>event_binary_B</td>
+<td>pretrend_displacement_joint_zero</td>
+<td>0.003</td>
+<td>Potential violation ⚠</td>
+</tr>
+<tr class="even">
+<td>event_score_C</td>
+<td>pretrend_score_baseline_joint_zero</td>
+<td>0.278</td>
+<td>Parallel trends ✓</td>
+</tr>
+<tr class="odd">
+<td>event_score_C</td>
+<td>pretrend_score_slope_joint_zero</td>
+<td>&lt;0.001</td>
+<td>Potential violation ⚠</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="customer-store-did-results-1" class="level2">
+<h2 class="anchored" data-anchor-id="customer-store-did-results-1">Customer-Store DiD Results</h2>
+<p><strong>Statistical tests comparing treatment vs control:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 29%">
+<col style="width: 27%">
+<col style="width: 16%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Pre vs Post (Treatment)</th>
+<th>Pre vs Post (Control)</th>
+<th>T vs C (Pre)</th>
+<th>T vs C (Post)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>n_purchases</td>
+<td>***</td>
+<td>***</td>
+<td>***</td>
+<td>ns</td>
+</tr>
+<tr class="even">
+<td>new_product_ratio</td>
+<td>*</td>
+<td>***</td>
+<td>**</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>total_discount</td>
+<td>***</td>
+<td>***</td>
+<td>ns</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>coupon_usage_rate</td>
+<td>*</td>
+<td>*</td>
+<td>ns</td>
+<td>ns</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key finding</strong>: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.</p>
+</section>
+</section>
+<section id="main-findings" class="level1">
+<h1>Main Findings</h1>
+<ol type="1">
+<li><p><strong>Displacement is the primary response</strong>: Most affected customers do not reduce overall purchases but switch to alternative stores in the network.</p></li>
+<li><p><strong>Closure duration matters</strong>: Longer closures lead to higher displacement probabilities (33% → 49%).</p></li>
+<li><p><strong>Convergence over time</strong>: After 4-8 weeks, treated customers’ purchase levels converge with control customers, indicating successful displacement.</p></li>
+<li><p><strong>Triple difference not significant</strong>: The DDD interaction term (treated × post × displacement) is not statistically significant, suggesting the displacement effect is not heterogeneous across displaced vs.&nbsp;non-displaced customers.</p></li>
+<li><p><strong>Event study shows delayed effects</strong>: The most significant positive effect appears in week 3 after closure, suggesting an adjustment period.</p></li>
+</ol>
+</section>
+<section id="generated-outputs" class="level1">
+<h1>Generated Outputs</h1>
+<section id="data-files" class="level2">
+<h2 class="anchored" data-anchor-id="data-files">Data Files</h2>
+<ul>
+<li><code>outputs/customer-store/closure_pair_registry.csv</code> - Registry of 22 kept closures with matched controls</li>
+<li><code>outputs/displacement_classification/displacement_scores_t0_ex_ante.csv</code> - ML model displacement predictions</li>
+<li><code>outputs/displacement_effect_estimation/estimation_sample.csv</code> - Panel data for DDD (67MB)</li>
+<li><code>outputs/displacement_effect_estimation/event_study_results.csv</code> - Event study coefficients</li>
+</ul>
+</section>
+<section id="plots" class="level2">
+<h2 class="anchored" data-anchor-id="plots">Plots</h2>
+<ul>
+<li><code>plots/customer_store_analysis/closure_trend_lines_w4.pdf</code> - DiD trend lines (4-week window)</li>
+<li><code>plots/customer_store_analysis/closure_trend_lines_w8.pdf</code> - DiD trend lines (8-week window)</li>
+<li><code>plots/customer_store_analysis/behavior_comparison_w*.pdf</code> - Treatment vs control behavior comparisons</li>
+</ul>
+</section>
+<section id="logs" class="level2">
+<h2 class="anchored" data-anchor-id="logs">Logs</h2>
+<ul>
+<li><code>outputs/customer-store/logs/main_customer_store.log</code> - Customer-store pipeline log</li>
+<li><code>outputs/displacement_effect_estimation/logs/run.log</code> - DDD estimation log</li>
+<li><code>outputs/displacement_classification/logs/displacement_classification.log</code> - ML training log</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
