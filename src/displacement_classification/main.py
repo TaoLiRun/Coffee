@@ -50,7 +50,6 @@ from data_loading_feature_constructing import (
 from model import (
     check_gpu,
     print_variable_statistics,
-    save_model_artifacts,
 )
 
 
@@ -257,16 +256,7 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
             )
 
             log_print(logger, f"\n  Duration D={D}: train n={len(train_df):,}, eval_pre n={len(eval_pre):,}, eval_during n={len(eval_during):,}")
-            save_model_artifacts(
-                model=model,
-                features_df=sub,
-                feature_cols=feature_cols,
-                eval_pre=eval_pre,
-                eval_during=eval_during,
-                output_dir=OUTPUT_DIR,
-                logger=logger,
-                model_suffix=str(D),
-            )
+            log_print(logger, "  Skip saving per-duration artifacts by configuration (keep only t0 ex-ante scores).")
 
             if not t0_sub.empty:
                 dt0 = xgb.DMatrix(t0_sub[feature_cols], feature_names=feature_cols)

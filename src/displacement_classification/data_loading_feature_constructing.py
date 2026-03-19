@@ -85,7 +85,7 @@ NUM_PRE_PERIODS = CONFIG["data"]["num_pre_periods"]
 # ---------------------------------------------------------------------------
 sys.path.insert(0, str(PROJECT_ROOT / "src" / "customer-store"))
 
-from analyze_closure_impact import (           # noqa: E402
+from data_processing import (           # noqa: E402
     DEFAULT_LOWEST_PURCHASES,
     DEFAULT_LOWEST_RATIO,
     MIN_CTRL_TREAT_RATIO,
@@ -99,7 +99,7 @@ from analyze_closure_impact import (           # noqa: E402
     get_treatment_and_control_members_for_closure,
     get_never_treated_members,
 )
-from analyze_closure_impact import (           # noqa: E402
+from data_processing import (           # noqa: E402
     _get_treated_members_for_store,
     _slice_by_date,
 )

@@ -1,0 +1,51 @@
+======================================================================
+Customer-Store Unified Pipeline
+======================================================================
+Loading order commodity data from: /home/litao/Coffee/data/data1031/order_commodity_result.csv
+  Total records: 10,631,250
+  Unique customers: 779,744
+  Unique stores: 260
+  Date range: 2020-06-01 to 2021-12-31
+Loading order result data from: /home/litao/Coffee/data/data1031/order_result.csv
+  Total orders: 7,312,498
+
+Customer pre-filter (>= 5 unique purchase days): members 779,744 -> 286,784; commodity rows 10,631,250 -> 9,127,784; order rows 7,312,498 -> 6,386,790
+  [main_shared] Filtered out 7 closure(s) with closure_duration_days >= 30.
+
+Calculating customer store preferences (min 5 purchases)...
+  Qualified customers: 286,784
+
+======================================================================
+Build Kept-Only Closure Registry
+======================================================================
+  Closure pair registry saved to: /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv (34 rows)
+  Kept closures in registry: 22 / 34
+  Kept-only closure registry saved to: /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv (22 rows)
+
+======================================================================
+Build Shared Event-Time Panel (max_weeks=8)
+======================================================================
+    Processing closure 1/34...
+    Processing closure 20/34...
+  Registry with merged DiD summaries saved to: /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv
+
+======================================================================
+Run Weekly Trend Analysis
+======================================================================
+
+Loaded 34 closures for trend analysis.
+  Control: use_set_up_time_matched_control=True
+
+--- Using shared panel for 4-week window ---
+  Panel rows: 420,453
+  (group, t) combinations: 18
+  Saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_trend_lines_w4.pdf
+
+--- Using shared panel for 8-week window ---
+  Panel rows: 794,189
+  (group, t) combinations: 34
+  Saved: /home/litao/Coffee/model-free/plots/customer_store_analysis/closure_trend_lines_w8.pdf
+
+======================================================================
+Unified pipeline complete
+======================================================================
