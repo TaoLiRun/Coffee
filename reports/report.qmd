@@ -2,6 +2,7 @@
 title: "Store Closure and Customer Displacement Analysis: Luckin Coffee Research Report"
 format:
   html:
+    embed-resources: true
     toc: true
     toc-float: true
     toc-depth: 4
@@ -228,6 +229,10 @@ Y = sum_{l != -1} delta_B_l * I(t=l) * treated
 
 ## Customer-Store DiD Results
 
+[Download DiD plots 2 weeks](../plots/customer_store_analysis/behavior_comparison_w14.pdf)
+
+[Download DiD plots 4 weeks](../plots/customer_store_analysis/behavior_comparison_w28_robustness.pdf)
+
 | Metric | Pre vs Post (Treatment) | Pre vs Post (Control) | T vs C (Pre) | T vs C (Post) |
 |--------|-------------------------|-----------------------|--------------|---------------|
 | n_purchases | *** | *** | *** | ns |
@@ -238,6 +243,10 @@ Y = sum_{l != -1} delta_B_l * I(t=l) * treated
 **Key finding**: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.
 
 ## Dynamic Effects of Closure
+
+[Download trend plots 4 weeks](../plots/customer_store_analysis/closure_trend_lines_w4.pdf)
+
+[Download trend plots 8 weeks](../plots/customer_store_analysis/closure_trend_lines_w8.pdf)
 
 $$
 \begin{align*}
