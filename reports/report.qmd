@@ -13,21 +13,21 @@ format:
 
 ## Research Question
 
-What is the effect of store closures on customer purchase behavior in a coffee chain context? Specifically:
+What is the causal effect of a forced interruption in purchasing on future consumer demand at Luckin Coffee? Specifically, we study whether temporary store closures that prevent consumers from making planned purchases — what we call displacement — cause a persistent reduction in post-closure purchasing through habit disruption (state dependence), or whether consumers fully return to their pre-closure purchase trajectories once the store reopens. We decompose the overall effect of closures into two channels:
 
-1. **Displacement Effect**: When customers' preferred stores close, do they switch to other stores in the network (displacement) or reduce their overall purchases?
+1.  A **displacement effect**: the causal impact of the missed purchase itself on future behavior
 
-2. **Heterogeneity**: Which customers are more likely to displace versus reduce purchases?
-
-3. **Long-term Impact**: What are the lasting effects of store closures on customer purchase frequency and loyalty?
+2. A baseline-demand effect: any shift in underlying demand unrelated to the missed purchase (e.g., discovering alternatives, or Luckin's post-closure promotions)
 
 ## Goal
 
 To estimate the causal effect of store closures on customer behavior using:
+
 - A Difference-in-Differences (DiD) framework comparing affected vs. unaffected customers
-- A machine learning model to predict customer displacement propensity
+
+- A machine learning model to classify consumers into those who would have purchased during the closure in the counterfactual (displaced) versus those who would not (non-displaced)
+
 - A Triple Difference-in-Differences (DDD) specification to estimate displacement effects
-- Event study analysis to examine dynamic effects over time
 
 # Methodology Summary (Pseudo Code)
 
@@ -107,26 +107,6 @@ OUTPUTS:
     - closure_trend_lines_w8.pdf (8-week window trends)
 ```
 
-### Results Summary
-
-| Metric | Value |
-|--------|-------|
-| Closures analyzed | 22 (kept out of 34 identified) |
-| Treatment customers | ~10,000 |
-| Control customers | ~35,000 |
-| 4-week panel observations | 358,864 |
-| 8-week panel observations | 794,189 |
-| Date range | 2020-06-01 to 2021-12-31 |
-
-**Key findings from simple DiD analysis:**
-- Treatment customers show lower purchase rates during closure weeks
-- Visual inspection of trend lines shows convergence post-closure
-- Parallel trends assumption supported by pre-closure behavior patterns
-
-**Visual outputs:** See Figure 1 (4-week trends) and Figure 2 (8-week trends) in generated plots folder.
-
----
-
 ## 4. Displacement Classification Model
 
 ```
@@ -136,8 +116,10 @@ FOR each closure event:
         - 4 pre-periods, each of length = closure_duration_days
         - During period (actual closure duration)
     Label customers as:
-        - displaced = 1 if purchased from control_store during closure
-        - displaced = 0 otherwise
+        displaced = 1 if predicted to have made at least one Luckin purchase
+                    during the closure window (counterfactual without closure)
+        displaced = 0 otherwise
+Note: label is unobservable for treated customers; model trained on pre-closure periods where label IS observed.
 
 # Extract features:
     - purchase_frequency (pre-closure)
@@ -148,7 +130,7 @@ FOR each closure event:
     - distance to alternative stores
 
 # Train ML model
-MODEL = RandomForestClassifier()
+MODEL = XGBoostClassifier(binary:logistic, max_depth=6, eta=0.1, 500 rounds)
 TRAIN model on training set (265K rows, 54K unique members)
 GENERATE displacement_probability scores for all customers
 ```
@@ -156,47 +138,81 @@ GENERATE displacement_probability scores for all customers
 ## 5. Triple Difference-in-Differences (DDD) Estimation
 
 ```
-# Build estimation panel
-FOR each closure:
-    FOR each treatment and control customer:
-        FOR each week in [-4, -3, -2, -1, 1, 2, 3, 4]:
-            Calculate:
-                - n_purchases (outcome)
-                - treated (1 if treatment customer, 0 if control)
-                - post (1 if week >= 0 relative to closure)
-                - disp_binary (1 if displaced=1, 0 otherwise)
-                - disp_score (displacement_probability)
-
 # DDD Specifications
-Binary model:
-    Y = α + β1*treated + β2*post + β3*disp
-        + β4*treated*post + β5*post*disp + β6*treated*post*disp
-        + period_FE + event_FE + calendar_month_FE + ε
+# Note: t=0 (closure window) is EXCLUDED from all regressions.
+# All pre-closure and post-closure periods are included.
+# Reference period is t = -1 in event-study specs.
 
-Score model:
-    Y = α + β1*treated + β2*post + β3*score
-        + β4*treated*post + β5*post*score + β6*treated*post*score
-        + period_FE + event_FE + calendar_month_FE + ε
+# Fixed effects absorbed in all specs:
+#   event_fe_id     : consumer-closure FE (phi_{ie})
+#                     absorbs time-invariant terms including main effects
+#                     of `treated`, `disp_binary`, `displacement_prob_centered`,
+#                     and `closure_length_std` — do NOT include these as
+#                     separate regressors
+#   rel_t           : relative-time FE (omega_t)
+#   calendar_month  : calendar-month FE (gamma_m)
 
-Event study:
-    Y = α + Σ γ_t*I(rel_t=t)*treated
-        + Σ δ_t*I(rel_t=t)*disp
-        + Σ θ_t*I(rel_t=t)*treated*disp
-        + period_FE + event_FE + calendar_month_FE + ε
+# Pre-compute interaction columns (all vary within the consumer-closure panel):
+post_X_treated           = post * treated
+post_X_disp              = post * disp_binary
+post_X_treated_X_disp    = post * treated * disp_binary
+post_X_score             = post * displacement_prob_centered
+post_X_treated_X_score   = post * treated * displacement_prob_centered
+
+# Spec B — Collapsed binary DDD:
+Y = delta_B * post_X_treated
+  + beta    * post_X_disp
+  + delta_D * post_X_treated_X_disp
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+
+# Identifies:
+#   delta_B  (post_X_treated):        baseline-demand effect
+#                                     ATT for non-displaced treated consumers
+#   delta_D  (post_X_treated_X_disp): displacement effect
+#                                     additional post-closure change for
+#                                     displaced treated vs non-displaced treated,
+#                                     net of the same gap in control
+#   beta     (post_X_disp):           natural level-shift for displaced consumers
+#                                     (present in both treated and control;
+#                                      reflects mean-reversion of frequent buyers)
+
+# Spec C — Collapsed continuous-score DDD:
+Y = delta_B * post_X_treated
+  + beta_S  * post_X_score
+  + delta_S * post_X_treated_X_score
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+
+# Identifies:
+#   delta_B  (post_X_treated):         baseline effect at mean propensity
+#   delta_S  (post_X_treated_X_score): marginal displacement effect per unit
+#                                      of centered propensity score
+#   beta_S   (post_X_score):           propensity-purchase relationship,
+#                                      pooled across treated and control
+
+# Event-study specs (Specs A, B, C, D):
+# Replace single post dummy with period-by-period dummies using
+# i(rel_t, <var>, ref=-1) syntax:
+
+# Spec A — Overall ATT:
+Y = sum_{l != -1} delta_l * I(t=l) * treated
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+# delta_l for l < -1: pre-trend test (should be jointly zero)
+# delta_l for l > 0:  overall ATT combining both channels
+
+# Spec B — Binary DDD event-study:
+Y = sum_{l != -1} delta_B_l * I(t=l) * treated
+  + sum_{l != -1} delta_D_l * I(t=l) * treated_X_disp
+  + sum_{l != -1} beta_l   * I(t=l) * disp_binary
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+
+# Spec D — Adds closure-length heterogeneity (augments Spec B):
+# + sum_{l != -1} kappa_l * I(t=l) * treated_X_len
+# + sum_{l != -1} theta_l * I(t=l) * treated_X_disp_X_len  (tXdXlen)
+# + sum_{l != -1}         * I(t=l) * disp_X_len             (lower order)
+# closure_length_std main effect absorbed by event_FE
 ```
 
 # Results Summary
-
-## Customer-Store DiD Results
-
-| Metric | Pre vs Post (Treatment) | Pre vs Post (Control) | T vs C (Pre) | T vs C (Post) |
-|--------|-------------------------|-----------------------|--------------|---------------|
-| n_purchases | *** | *** | *** | ns |
-| new_product_ratio | * | *** | ** | *** |
-| total_discount | *** | *** | ns | *** |
-| coupon_usage_rate | * | * | ns | ns |
-
-**Key finding**: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.
 
 ## Sample Characteristics
 
@@ -209,6 +225,37 @@ Event study:
 | Control customers | ~45,000 |
 | Date range | 2020-06-01 to 2021-12-31 |
 | Closure durations | 10-29 days |
+
+## Customer-Store DiD Results
+
+| Metric | Pre vs Post (Treatment) | Pre vs Post (Control) | T vs C (Pre) | T vs C (Post) |
+|--------|-------------------------|-----------------------|--------------|---------------|
+| n_purchases | *** | *** | *** | ns |
+| new_product_ratio | * | *** | ** | *** |
+| total_discount | *** | *** | ns | *** |
+| coupon_usage_rate | * | * | ns | ns |
+
+**Key finding**: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.
+
+## Dynamic Effects of Closure
+
+$$
+\begin{align*}
+Y_{iet} = \sum_{\ell \in \mathcal{L}} \delta_{\ell}
+           \cdot \mathbf{1}(t = \ell) \times \mathbf{1}(\text{Treated}_{ie})
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align*}
+$$
+
+| Relative Week | $\delta_\ell$ | P-value | Interpretation |
+|---------------|-------------|---------|----------------|
+| -4 | 0.00043 | 0.720 | No significant pre-trend |
+| -3 | -0.00028 | 0.809 | No significant pre-trend |
+| -2 | -0.00031 | 0.759 | No significant pre-trend |
+| 1 | 0.00254** | 0.014 | Treated consumers buy slightly more than control in first post-closure period |
+| 2 | 0.00016 | 0.884 | No significant difference in period 2 |
+| 3 | 0.00623*** | <0.001 | Treated consumers buy noticeably more than control in period 3 |
+| 4 | 0.00175 | 0.130 | Effect fades, no longer significant |
 
 ## Displacement Classification Results
 
@@ -224,7 +271,7 @@ The ML model successfully classifies customers likely to switch stores during cl
 | 17-18 days | 23,601 | 40.9% |
 | 28-29 days | 14,352 | 49.2% |
 
-**Key finding**: Longer closures lead to higher displacement rates (33% for 10-day closures vs. 49% for 28-29 day closures).
+**Key finding**: The predicted purchase base rate rises with closure duration (33% for D=10 to 49% for D=28–29 days), reflecting the mechanical relationship between window length and purchase probability for consumers with weekly or bi-weekly purchase cycles..
 
 ### Model Accuracy (Final Duration D=29)
 
@@ -244,7 +291,17 @@ The ML model successfully classifies customers likely to switch stores during cl
 
 ### Binary Displacement Model (collapsed)
 
-| Variable | n_purchases |
+$$
+\begin{align}
+Y_{iet} &= \delta^B \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
+         + \beta \cdot \mathbf{1}(\text{post}_{t}) \times D_{ie} \\
+        &\quad + \delta^D \cdot \mathbf{1}(\text{post}_{t})
+           \times \mathbf{1}(\text{Treated}_{ie}) \times D_{ie}
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align}
+$$
+
+| Variable | n_purchases (daily) |
 |----------|--------------|
 | post × treated | 0.00081 (0.00064) |
 | post × disp | -0.03353*** (0.00107) |
@@ -257,6 +314,17 @@ The ML model successfully classifies customers likely to switch stores during cl
 | R² | 0.012 |
 
 Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixed Effects.
+
+The regression coefficients correspond to the following four-group comparison,
+where each cell shows the predicted post-closure change in purchases per day
+(relative to the reference period t = −1, after absorbing fixed effects):
+
+|                        | Non-displaced (D = 0) | Displaced (D = 1)                          |
+|------------------------|-----------------------|--------------------------------------------|
+| **Control (T = 0)**    | 0                     | $\beta$= −0.034                     |
+| **Treated (T = 1)**    | $\delta^B$= +0.0008 (ns) |  $\delta^B$ + $\beta$+ $\delta^D$ = 0.0008 − 0.034 + 0.005 = −0.028 |
+
+The displacement effect is small in magnitude and positive in sign (+0.005, p=0.032), indicating that displaced treated consumers recovered slightly faster after reopening than displaced control consumers — inconsistent with habit disruption and more likely reflecting Luckin's targeted post-reopening promotions — though this estimate should be interpreted cautiously given the displacement pre-trend failure (p=0.004).
 
 ### Score-Based Model
 
@@ -272,26 +340,37 @@ Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixe
 | Observations | 358,864 |
 | R² | 0.018 |
 
-Notes: Standard errors in parentheses. * p<0.1, ** p<0.05, *** p<0.01. FE = Fixed Effects.
+The marginal displacement effect scales with predicted purchase propensity ($\delta^S$ = post × treated × score), but the pre-trend test for this specification fails (p < 0.001), suggesting the score captures pre-existing purchase dynamics rather than a clean displacement signal.
 
-## Dynamic Effects of Closure
+### Dynamic Effects of Closure
 
-**Key results from event study specification (baseline ATT model):**
+The event-study triple-difference (Spec B) estimates the baseline-demand
+effect $\delta^B_\ell$ and displacement effect $\delta^D_\ell$ at each
+relative period separately:
 
-| Relative Week | Coefficient | P-value | Interpretation |
-|---------------|-------------|---------|----------------|
-| -4 | 0.00043 | 0.720 | No significant pre-trend |
-| -3 | -0.00028 | 0.809 | No significant pre-trend |
-| -2 | -0.00031 | 0.759 | No significant pre-trend |
-| 1 | 0.00254** | 0.014 | Small positive effect week 1 |
-| 2 | 0.00016 | 0.884 | No effect week 2 |
-| 3 | 0.00623*** | <0.001 | Positive effect week 3 |
-| 4 | 0.00175 | 0.130 | No significant effect week 4 |
+$$
+\begin{align*}
+Y_{iet} &= \sum_{\ell \in \mathcal{L}} \delta^B_{\ell}
+             \cdot \mathbf{1}(t = \ell) \times \mathbf{1}(\text{Treated}_{ie})
+         + \sum_{\ell \in \mathcal{L}} \delta^D_{\ell}
+             \cdot \mathbf{1}(t = \ell)
+             \times \mathbf{1}(\text{Treated}_{ie}) \times D_{ie} \\
+        &\quad
+         + \sum_{\ell \in \mathcal{L}} \beta_{\ell}
+             \cdot \mathbf{1}(t = \ell) \times D_{ie}
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align*}
+$$
 
-**Displacement interaction effects:**
-- Displaced customers show significantly reduced purchases (-0.03 to -0.04) post-closure
-- The effect persists across all 4 post-closure weeks
-- Pre-trend tests show mixed results: the baseline ATT specification passes (p=0.907), but some displacement and score-based specifications show potential violations (see Pre-trend Tests table)
+| Period | $\delta^B_\ell$ (SE) | p | $\delta^D_\ell$ (SE) | p |
+|---|---|---|---|---|
+| −4 | −0.00104 (0.00102) | 0.305 | +0.00495 (0.00362) | 0.172 |
+| −3 | +0.00004 (0.00093) | 0.968 | −0.00227 (0.00353) | 0.520 |
+| −2 | +0.00167 (0.00080) | 0.037 | −0.00651 (0.00311) | 0.036 |
+| 1 | +0.00046 (0.00081) | 0.573 | **+0.00627 (0.00313)** | 0.045 |
+| 2 | +0.00009 (0.00092) | 0.925 | −0.00105 (0.00332) | 0.753 |
+| 3 | **+0.00344 (0.00097)** | <0.001 | +0.00839 (0.00346) | 0.015 |
+| 4 | +0.00012 (0.00092) | 0.896 | +0.00359 (0.00347) | 0.302 |
 
 ## Pre-trend Testing Methodology
 
@@ -323,30 +402,13 @@ A high p-value (> 0.05) indicates no evidence against the parallel trends assump
 | event_score_C | pretrend_score_baseline_joint_zero | 0.849 | Parallel trends ✓ |
 | event_score_C | pretrend_score_slope_joint_zero | 0.004 | Potential violation ⚠ |
 
-## Customer-Store DiD Results
-
-**Statistical tests comparing treatment vs control:**
-
-| Metric | Pre vs Post (Treatment) | Pre vs Post (Control) | T vs C (Pre) | T vs C (Post) |
-|--------|-------------------------|-----------------------|--------------|---------------|
-| n_purchases | *** | *** | *** | ns |
-| new_product_ratio | * | *** | ** | *** |
-| total_discount | *** | *** | ns | *** |
-| coupon_usage_rate | * | * | ns | ns |
-
-**Key finding**: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.
-
 # Main Findings
 
-1. **Displacement is the primary response**: Most affected customers do not reduce overall purchases but switch to alternative stores in the network.
+1. **No evidence of habit disruption (state dependence)**
 
-2. **Closure duration matters**: Longer closures lead to higher displacement probabilities (33% → 49%).
+2. **Small positive baseline-demand effect**
 
-3. **Convergence over time**: After 4-8 weeks, treated customers' purchase levels converge with control customers, indicating successful displacement.
-
-4. **Triple difference is significant**: The DDD interaction term (treated × post × displacement) is statistically significant (p<0.05), suggesting heterogeneous displacement effects across customers with different displacement propensity.
-
-5. **Event study shows delayed effects**: The most significant positive effect appears in week 3 after closure, suggesting an adjustment period.
+3. **Pre-trend concern for the displacement channel**
 
 # Generated Outputs
 

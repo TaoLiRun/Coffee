@@ -87,17 +87,15 @@ window.Quarto = {
   <ul>
   <li><a href="#store-closure-identification" id="toc-store-closure-identification" class="nav-link" data-scroll-target="#store-closure-identification">1. Store Closure Identification</a></li>
   <li><a href="#customer-store-preference-analysis" id="toc-customer-store-preference-analysis" class="nav-link" data-scroll-target="#customer-store-preference-analysis">2. Customer-Store Preference Analysis</a></li>
-  <li><a href="#trend-visualization" id="toc-trend-visualization" class="nav-link" data-scroll-target="#trend-visualization">3. Trend visualization</a>
-  <ul class="collapse">
-  <li><a href="#results-summary" id="toc-results-summary" class="nav-link" data-scroll-target="#results-summary">Results Summary</a></li>
-  </ul></li>
+  <li><a href="#trend-visualization" id="toc-trend-visualization" class="nav-link" data-scroll-target="#trend-visualization">3. Trend visualization</a></li>
   <li><a href="#displacement-classification-model" id="toc-displacement-classification-model" class="nav-link" data-scroll-target="#displacement-classification-model">4. Displacement Classification Model</a></li>
   <li><a href="#triple-difference-in-differences-ddd-estimation" id="toc-triple-difference-in-differences-ddd-estimation" class="nav-link" data-scroll-target="#triple-difference-in-differences-ddd-estimation">5. Triple Difference-in-Differences (DDD) Estimation</a></li>
   </ul></li>
-  <li><a href="#results-summary-1" id="toc-results-summary-1" class="nav-link" data-scroll-target="#results-summary-1">Results Summary</a>
+  <li><a href="#results-summary" id="toc-results-summary" class="nav-link" data-scroll-target="#results-summary">Results Summary</a>
   <ul>
-  <li><a href="#customer-store-did-results" id="toc-customer-store-did-results" class="nav-link" data-scroll-target="#customer-store-did-results">Customer-Store DiD Results</a></li>
   <li><a href="#sample-characteristics" id="toc-sample-characteristics" class="nav-link" data-scroll-target="#sample-characteristics">Sample Characteristics</a></li>
+  <li><a href="#customer-store-did-results" id="toc-customer-store-did-results" class="nav-link" data-scroll-target="#customer-store-did-results">Customer-Store DiD Results</a></li>
+  <li><a href="#dynamic-effects-of-closure" id="toc-dynamic-effects-of-closure" class="nav-link" data-scroll-target="#dynamic-effects-of-closure">Dynamic Effects of Closure</a></li>
   <li><a href="#displacement-classification-results" id="toc-displacement-classification-results" class="nav-link" data-scroll-target="#displacement-classification-results">Displacement Classification Results</a>
   <ul class="collapse">
   <li><a href="#label-rate-by-closure-duration" id="toc-label-rate-by-closure-duration" class="nav-link" data-scroll-target="#label-rate-by-closure-duration">Label Rate by Closure Duration</a></li>
@@ -107,11 +105,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#binary-displacement-model-collapsed" id="toc-binary-displacement-model-collapsed" class="nav-link" data-scroll-target="#binary-displacement-model-collapsed">Binary Displacement Model (collapsed)</a></li>
   <li><a href="#score-based-model" id="toc-score-based-model" class="nav-link" data-scroll-target="#score-based-model">Score-Based Model</a></li>
+  <li><a href="#dynamic-effects-of-closure-1" id="toc-dynamic-effects-of-closure-1" class="nav-link" data-scroll-target="#dynamic-effects-of-closure-1">Dynamic Effects of Closure</a></li>
   </ul></li>
-  <li><a href="#dynamic-effects-of-closure" id="toc-dynamic-effects-of-closure" class="nav-link" data-scroll-target="#dynamic-effects-of-closure">Dynamic Effects of Closure</a></li>
   <li><a href="#pre-trend-testing-methodology" id="toc-pre-trend-testing-methodology" class="nav-link" data-scroll-target="#pre-trend-testing-methodology">Pre-trend Testing Methodology</a></li>
   <li><a href="#pre-trend-tests" id="toc-pre-trend-tests" class="nav-link" data-scroll-target="#pre-trend-tests">Pre-trend Tests</a></li>
-  <li><a href="#customer-store-did-results-1" id="toc-customer-store-did-results-1" class="nav-link" data-scroll-target="#customer-store-did-results-1">Customer-Store DiD Results</a></li>
   </ul></li>
   <li><a href="#main-findings" id="toc-main-findings" class="nav-link" data-scroll-target="#main-findings">Main Findings</a></li>
   <li><a href="#generated-outputs" id="toc-generated-outputs" class="nav-link" data-scroll-target="#generated-outputs">Generated Outputs</a>
@@ -148,16 +145,20 @@ window.Quarto = {
 <h1>Research Question and Goal</h1>
 <section id="research-question" class="level2">
 <h2 class="anchored" data-anchor-id="research-question">Research Question</h2>
-<p>What is the effect of store closures on customer purchase behavior in a coffee chain context? Specifically:</p>
+<p>What is the causal effect of a forced interruption in purchasing on future consumer demand at Luckin Coffee? Specifically, we study whether temporary store closures that prevent consumers from making planned purchases — what we call displacement — cause a persistent reduction in post-closure purchasing through habit disruption (state dependence), or whether consumers fully return to their pre-closure purchase trajectories once the store reopens. We decompose the overall effect of closures into two channels:</p>
 <ol type="1">
-<li><p><strong>Displacement Effect</strong>: When customers’ preferred stores close, do they switch to other stores in the network (displacement) or reduce their overall purchases?</p></li>
-<li><p><strong>Heterogeneity</strong>: Which customers are more likely to displace versus reduce purchases?</p></li>
-<li><p><strong>Long-term Impact</strong>: What are the lasting effects of store closures on customer purchase frequency and loyalty?</p></li>
+<li><p>A <strong>displacement effect</strong>: the causal impact of the missed purchase itself on future behavior</p></li>
+<li><p>A baseline-demand effect: any shift in underlying demand unrelated to the missed purchase (e.g., discovering alternatives, or Luckin’s post-closure promotions)</p></li>
 </ol>
 </section>
 <section id="goal" class="level2">
 <h2 class="anchored" data-anchor-id="goal">Goal</h2>
-<p>To estimate the causal effect of store closures on customer behavior using: - A Difference-in-Differences (DiD) framework comparing affected vs.&nbsp;unaffected customers - A machine learning model to predict customer displacement propensity - A Triple Difference-in-Differences (DDD) specification to estimate displacement effects - Event study analysis to examine dynamic effects over time</p>
+<p>To estimate the causal effect of store closures on customer behavior using:</p>
+<ul>
+<li><p>A Difference-in-Differences (DiD) framework comparing affected vs.&nbsp;unaffected customers</p></li>
+<li><p>A machine learning model to classify consumers into those who would have purchased during the closure in the counterfactual (displaced) versus those who would not (non-displaced)</p></li>
+<li><p>A Triple Difference-in-Differences (DDD) specification to estimate displacement effects</p></li>
+</ul>
 </section>
 </section>
 <section id="methodology-summary-pseudo-code" class="level1">
@@ -231,46 +232,6 @@ OUTPUTS:
     - closure_pair_registry.csv (22 closures with matched controls)
     - closure_trend_lines_w4.pdf (4-week window trends)
     - closure_trend_lines_w8.pdf (8-week window trends)</code></pre>
-<section id="results-summary" class="level3">
-<h3 class="anchored" data-anchor-id="results-summary">Results Summary</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Metric</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Closures analyzed</td>
-<td>22 (kept out of 34 identified)</td>
-</tr>
-<tr class="even">
-<td>Treatment customers</td>
-<td>~10,000</td>
-</tr>
-<tr class="odd">
-<td>Control customers</td>
-<td>~35,000</td>
-</tr>
-<tr class="even">
-<td>4-week panel observations</td>
-<td>358,864</td>
-</tr>
-<tr class="odd">
-<td>8-week panel observations</td>
-<td>794,189</td>
-</tr>
-<tr class="even">
-<td>Date range</td>
-<td>2020-06-01 to 2021-12-31</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Key findings from simple DiD analysis:</strong> - Treatment customers show lower purchase rates during closure weeks - Visual inspection of trend lines shows convergence post-closure - Parallel trends assumption supported by pre-closure behavior patterns</p>
-<p><strong>Visual outputs:</strong> See Figure 1 (4-week trends) and Figure 2 (8-week trends) in generated plots folder.</p>
-<hr>
-</section>
 </section>
 <section id="displacement-classification-model" class="level2">
 <h2 class="anchored" data-anchor-id="displacement-classification-model">4. Displacement Classification Model</h2>
@@ -280,8 +241,10 @@ FOR each closure event:
         - 4 pre-periods, each of length = closure_duration_days
         - During period (actual closure duration)
     Label customers as:
-        - displaced = 1 if purchased from control_store during closure
-        - displaced = 0 otherwise
+        displaced = 1 if predicted to have made at least one Luckin purchase
+                    during the closure window (counterfactual without closure)
+        displaced = 0 otherwise
+Note: label is unobservable for treated customers; model trained on pre-closure periods where label IS observed.
 
 # Extract features:
     - purchase_frequency (pre-closure)
@@ -292,43 +255,129 @@ FOR each closure event:
     - distance to alternative stores
 
 # Train ML model
-MODEL = RandomForestClassifier()
+MODEL = XGBoostClassifier(binary:logistic, max_depth=6, eta=0.1, 500 rounds)
 TRAIN model on training set (265K rows, 54K unique members)
 GENERATE displacement_probability scores for all customers</code></pre>
 </section>
 <section id="triple-difference-in-differences-ddd-estimation" class="level2">
 <h2 class="anchored" data-anchor-id="triple-difference-in-differences-ddd-estimation">5. Triple Difference-in-Differences (DDD) Estimation</h2>
-<pre><code># Build estimation panel
-FOR each closure:
-    FOR each treatment and control customer:
-        FOR each week in [-4, -3, -2, -1, 1, 2, 3, 4]:
-            Calculate:
-                - n_purchases (outcome)
-                - treated (1 if treatment customer, 0 if control)
-                - post (1 if week &gt;= 0 relative to closure)
-                - disp_binary (1 if displaced=1, 0 otherwise)
-                - disp_score (displacement_probability)
+<pre><code># DDD Specifications
+# Note: t=0 (closure window) is EXCLUDED from all regressions.
+# All pre-closure and post-closure periods are included.
+# Reference period is t = -1 in event-study specs.
 
-# DDD Specifications
-Binary model:
-    Y = α + β1*treated + β2*post + β3*disp
-        + β4*treated*post + β5*post*disp + β6*treated*post*disp
-        + period_FE + event_FE + calendar_month_FE + ε
+# Fixed effects absorbed in all specs:
+#   event_fe_id     : consumer-closure FE (phi_{ie})
+#                     absorbs time-invariant terms including main effects
+#                     of `treated`, `disp_binary`, `displacement_prob_centered`,
+#                     and `closure_length_std` — do NOT include these as
+#                     separate regressors
+#   rel_t           : relative-time FE (omega_t)
+#   calendar_month  : calendar-month FE (gamma_m)
 
-Score model:
-    Y = α + β1*treated + β2*post + β3*score
-        + β4*treated*post + β5*post*score + β6*treated*post*score
-        + period_FE + event_FE + calendar_month_FE + ε
+# Pre-compute interaction columns (all vary within the consumer-closure panel):
+post_X_treated           = post * treated
+post_X_disp              = post * disp_binary
+post_X_treated_X_disp    = post * treated * disp_binary
+post_X_score             = post * displacement_prob_centered
+post_X_treated_X_score   = post * treated * displacement_prob_centered
 
-Event study:
-    Y = α + Σ γ_t*I(rel_t=t)*treated
-        + Σ δ_t*I(rel_t=t)*disp
-        + Σ θ_t*I(rel_t=t)*treated*disp
-        + period_FE + event_FE + calendar_month_FE + ε</code></pre>
+# Spec B — Collapsed binary DDD:
+Y = delta_B * post_X_treated
+  + beta    * post_X_disp
+  + delta_D * post_X_treated_X_disp
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+
+# Identifies:
+#   delta_B  (post_X_treated):        baseline-demand effect
+#                                     ATT for non-displaced treated consumers
+#   delta_D  (post_X_treated_X_disp): displacement effect
+#                                     additional post-closure change for
+#                                     displaced treated vs non-displaced treated,
+#                                     net of the same gap in control
+#   beta     (post_X_disp):           natural level-shift for displaced consumers
+#                                     (present in both treated and control;
+#                                      reflects mean-reversion of frequent buyers)
+
+# Spec C — Collapsed continuous-score DDD:
+Y = delta_B * post_X_treated
+  + beta_S  * post_X_score
+  + delta_S * post_X_treated_X_score
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+
+# Identifies:
+#   delta_B  (post_X_treated):         baseline effect at mean propensity
+#   delta_S  (post_X_treated_X_score): marginal displacement effect per unit
+#                                      of centered propensity score
+#   beta_S   (post_X_score):           propensity-purchase relationship,
+#                                      pooled across treated and control
+
+# Event-study specs (Specs A, B, C, D):
+# Replace single post dummy with period-by-period dummies using
+# i(rel_t, &lt;var&gt;, ref=-1) syntax:
+
+# Spec A — Overall ATT:
+Y = sum_{l != -1} delta_l * I(t=l) * treated
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+# delta_l for l &lt; -1: pre-trend test (should be jointly zero)
+# delta_l for l &gt; 0:  overall ATT combining both channels
+
+# Spec B — Binary DDD event-study:
+Y = sum_{l != -1} delta_B_l * I(t=l) * treated
+  + sum_{l != -1} delta_D_l * I(t=l) * treated_X_disp
+  + sum_{l != -1} beta_l   * I(t=l) * disp_binary
+  + event_FE + rel_t_FE + calendar_month_FE + epsilon
+
+# Spec D — Adds closure-length heterogeneity (augments Spec B):
+# + sum_{l != -1} kappa_l * I(t=l) * treated_X_len
+# + sum_{l != -1} theta_l * I(t=l) * treated_X_disp_X_len  (tXdXlen)
+# + sum_{l != -1}         * I(t=l) * disp_X_len             (lower order)
+# closure_length_std main effect absorbed by event_FE</code></pre>
 </section>
 </section>
-<section id="results-summary-1" class="level1">
+<section id="results-summary" class="level1">
 <h1>Results Summary</h1>
+<section id="sample-characteristics" class="level2">
+<h2 class="anchored" data-anchor-id="sample-characteristics">Sample Characteristics</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unique closures analyzed</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>Unique customers in panel</td>
+<td>44,858</td>
+</tr>
+<tr class="odd">
+<td>Total observations</td>
+<td>358,864</td>
+</tr>
+<tr class="even">
+<td>Treatment customers</td>
+<td>~10,000</td>
+</tr>
+<tr class="odd">
+<td>Control customers</td>
+<td>~45,000</td>
+</tr>
+<tr class="even">
+<td>Date range</td>
+<td>2020-06-01 to 2021-12-31</td>
+</tr>
+<tr class="odd">
+<td>Closure durations</td>
+<td>10-29 days</td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="customer-store-did-results" class="level2">
 <h2 class="anchored" data-anchor-id="customer-store-did-results">Customer-Store DiD Results</h2>
 <table class="caption-top table">
@@ -381,43 +430,72 @@ Event study:
 </table>
 <p><strong>Key finding</strong>: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.</p>
 </section>
-<section id="sample-characteristics" class="level2">
-<h2 class="anchored" data-anchor-id="sample-characteristics">Sample Characteristics</h2>
+<section id="dynamic-effects-of-closure" class="level2">
+<h2 class="anchored" data-anchor-id="dynamic-effects-of-closure">Dynamic Effects of Closure</h2>
+<p><span class="math display">\[
+\begin{align*}
+Y_{iet} = \sum_{\ell \in \mathcal{L}} \delta_{\ell}
+           \cdot \mathbf{1}(t = \ell) \times \mathbf{1}(\text{Treated}_{ie})
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align*}
+\]</span></p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 24%">
+<col style="width: 16%">
+<col style="width: 30%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Metric</th>
-<th>Value</th>
+<th>Relative Week</th>
+<th><span class="math inline">\(\delta_\ell\)</span></th>
+<th>P-value</th>
+<th>Interpretation</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Unique closures analyzed</td>
-<td>22</td>
+<td>-4</td>
+<td>0.00043</td>
+<td>0.720</td>
+<td>No significant pre-trend</td>
 </tr>
 <tr class="even">
-<td>Unique customers in panel</td>
-<td>44,858</td>
+<td>-3</td>
+<td>-0.00028</td>
+<td>0.809</td>
+<td>No significant pre-trend</td>
 </tr>
 <tr class="odd">
-<td>Total observations</td>
-<td>358,864</td>
+<td>-2</td>
+<td>-0.00031</td>
+<td>0.759</td>
+<td>No significant pre-trend</td>
 </tr>
 <tr class="even">
-<td>Treatment customers</td>
-<td>~10,000</td>
+<td>1</td>
+<td>0.00254**</td>
+<td>0.014</td>
+<td>Treated consumers buy slightly more than control in first post-closure period</td>
 </tr>
 <tr class="odd">
-<td>Control customers</td>
-<td>~45,000</td>
+<td>2</td>
+<td>0.00016</td>
+<td>0.884</td>
+<td>No significant difference in period 2</td>
 </tr>
 <tr class="even">
-<td>Date range</td>
-<td>2020-06-01 to 2021-12-31</td>
+<td>3</td>
+<td>0.00623***</td>
+<td>&lt;0.001</td>
+<td>Treated consumers buy noticeably more than control in period 3</td>
 </tr>
 <tr class="odd">
-<td>Closure durations</td>
-<td>10-29 days</td>
+<td>4</td>
+<td>0.00175</td>
+<td>0.130</td>
+<td>Effect fades, no longer significant</td>
 </tr>
 </tbody>
 </table>
@@ -463,7 +541,7 @@ Event study:
 </tr>
 </tbody>
 </table>
-<p><strong>Key finding</strong>: Longer closures lead to higher displacement rates (33% for 10-day closures vs.&nbsp;49% for 28-29 day closures).</p>
+<p><strong>Key finding</strong>: The predicted purchase base rate rises with closure duration (33% for D=10 to 49% for D=28–29 days), reflecting the mechanical relationship between window length and purchase probability for consumers with weekly or bi-weekly purchase cycles..</p>
 </section>
 <section id="model-accuracy-final-duration-d29" class="level3">
 <h3 class="anchored" data-anchor-id="model-accuracy-final-duration-d29">Model Accuracy (Final Duration D=29)</h3>
@@ -530,11 +608,20 @@ Event study:
 <h2 class="anchored" data-anchor-id="ddd-estimation-results">DDD Estimation Results</h2>
 <section id="binary-displacement-model-collapsed" class="level3">
 <h3 class="anchored" data-anchor-id="binary-displacement-model-collapsed">Binary Displacement Model (collapsed)</h3>
+<p><span class="math display">\[
+\begin{align}
+Y_{iet} &amp;= \delta^B \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
+         + \beta \cdot \mathbf{1}(\text{post}_{t}) \times D_{ie} \\
+        &amp;\quad + \delta^D \cdot \mathbf{1}(\text{post}_{t})
+           \times \mathbf{1}(\text{Treated}_{ie}) \times D_{ie}
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align}
+\]</span></p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Variable</th>
-<th>n_purchases</th>
+<th>n_purchases (daily)</th>
 </tr>
 </thead>
 <tbody>
@@ -577,6 +664,34 @@ Event study:
 </tbody>
 </table>
 <p>Notes: Standard errors in parentheses. * p&lt;0.1, ** p&lt;0.05, *** p&lt;0.01. FE = Fixed Effects.</p>
+<p>The regression coefficients correspond to the following four-group comparison, where each cell shows the predicted post-closure change in purchases per day (relative to the reference period t = −1, after absorbing fixed effects):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 25%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Non-displaced (D = 0)</th>
+<th>Displaced (D = 1)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Control (T = 0)</strong></td>
+<td>0</td>
+<td><span class="math inline">\(\beta\)</span>= −0.034</td>
+</tr>
+<tr class="even">
+<td><strong>Treated (T = 1)</strong></td>
+<td><span class="math inline">\(\delta^B\)</span>= +0.0008 (ns)</td>
+<td><span class="math inline">\(\delta^B\)</span> + <span class="math inline">\(\beta\)</span>+ <span class="math inline">\(\delta^D\)</span> = 0.0008 − 0.034 + 0.005 = −0.028</td>
+</tr>
+</tbody>
+</table>
+<p>The displacement effect is small in magnitude and positive in sign (+0.005, p=0.032), indicating that displaced treated consumers recovered slightly faster after reopening than displaced control consumers — inconsistent with habit disruption and more likely reflecting Luckin’s targeted post-reopening promotions — though this estimate should be interpreted cautiously given the displacement pre-trend failure (p=0.004).</p>
 </section>
 <section id="score-based-model" class="level3">
 <h3 class="anchored" data-anchor-id="score-based-model">Score-Based Model</h3>
@@ -626,67 +741,87 @@ Event study:
 </tr>
 </tbody>
 </table>
-<p>Notes: Standard errors in parentheses. * p&lt;0.1, ** p&lt;0.05, *** p&lt;0.01. FE = Fixed Effects.</p>
+<p>The marginal displacement effect scales with predicted purchase propensity (<span class="math inline">\(\delta^S\)</span> = post × treated × score), but the pre-trend test for this specification fails (p &lt; 0.001), suggesting the score captures pre-existing purchase dynamics rather than a clean displacement signal.</p>
 </section>
-</section>
-<section id="dynamic-effects-of-closure" class="level2">
-<h2 class="anchored" data-anchor-id="dynamic-effects-of-closure">Dynamic Effects of Closure</h2>
-<p><strong>Key results from event study specification (baseline ATT model):</strong></p>
+<section id="dynamic-effects-of-closure-1" class="level3">
+<h3 class="anchored" data-anchor-id="dynamic-effects-of-closure-1">Dynamic Effects of Closure</h3>
+<p>The event-study triple-difference (Spec B) estimates the baseline-demand effect <span class="math inline">\(\delta^B_\ell\)</span> and displacement effect <span class="math inline">\(\delta^D_\ell\)</span> at each relative period separately:</p>
+<p><span class="math display">\[
+\begin{align*}
+Y_{iet} &amp;= \sum_{\ell \in \mathcal{L}} \delta^B_{\ell}
+             \cdot \mathbf{1}(t = \ell) \times \mathbf{1}(\text{Treated}_{ie})
+         + \sum_{\ell \in \mathcal{L}} \delta^D_{\ell}
+             \cdot \mathbf{1}(t = \ell)
+             \times \mathbf{1}(\text{Treated}_{ie}) \times D_{ie} \\
+        &amp;\quad
+         + \sum_{\ell \in \mathcal{L}} \beta_{\ell}
+             \cdot \mathbf{1}(t = \ell) \times D_{ie}
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align*}
+\]</span></p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Relative Week</th>
-<th>Coefficient</th>
-<th>P-value</th>
-<th>Interpretation</th>
+<th>Period</th>
+<th><span class="math inline">\(\delta^B_\ell\)</span> (SE)</th>
+<th>p</th>
+<th><span class="math inline">\(\delta^D_\ell\)</span> (SE)</th>
+<th>p</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>-4</td>
-<td>0.00043</td>
-<td>0.720</td>
-<td>No significant pre-trend</td>
+<td>−4</td>
+<td>−0.00104 (0.00102)</td>
+<td>0.305</td>
+<td>+0.00495 (0.00362)</td>
+<td>0.172</td>
 </tr>
 <tr class="even">
-<td>-3</td>
-<td>-0.00028</td>
-<td>0.809</td>
-<td>No significant pre-trend</td>
+<td>−3</td>
+<td>+0.00004 (0.00093)</td>
+<td>0.968</td>
+<td>−0.00227 (0.00353)</td>
+<td>0.520</td>
 </tr>
 <tr class="odd">
-<td>-2</td>
-<td>-0.00031</td>
-<td>0.759</td>
-<td>No significant pre-trend</td>
+<td>−2</td>
+<td>+0.00167 (0.00080)</td>
+<td>0.037</td>
+<td>−0.00651 (0.00311)</td>
+<td>0.036</td>
 </tr>
 <tr class="even">
 <td>1</td>
-<td>0.00254**</td>
-<td>0.014</td>
-<td>Small positive effect week 1</td>
+<td>+0.00046 (0.00081)</td>
+<td>0.573</td>
+<td><strong>+0.00627 (0.00313)</strong></td>
+<td>0.045</td>
 </tr>
 <tr class="odd">
 <td>2</td>
-<td>0.00016</td>
-<td>0.884</td>
-<td>No effect week 2</td>
+<td>+0.00009 (0.00092)</td>
+<td>0.925</td>
+<td>−0.00105 (0.00332)</td>
+<td>0.753</td>
 </tr>
 <tr class="even">
 <td>3</td>
-<td>0.00623***</td>
+<td><strong>+0.00344 (0.00097)</strong></td>
 <td>&lt;0.001</td>
-<td>Positive effect week 3</td>
+<td>+0.00839 (0.00346)</td>
+<td>0.015</td>
 </tr>
 <tr class="odd">
 <td>4</td>
-<td>0.00175</td>
-<td>0.130</td>
-<td>No significant effect week 4</td>
+<td>+0.00012 (0.00092)</td>
+<td>0.896</td>
+<td>+0.00359 (0.00347)</td>
+<td>0.302</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Displacement interaction effects:</strong> - Displaced customers show significantly reduced purchases (-0.03 to -0.04) post-closure - The effect persists across all 4 post-closure weeks - Pre-trend tests show mixed results: the baseline ATT specification passes (p=0.907), but some displacement and score-based specifications show potential violations (see Pre-trend Tests table)</p>
+</section>
 </section>
 <section id="pre-trend-testing-methodology" class="level2">
 <h2 class="anchored" data-anchor-id="pre-trend-testing-methodology">Pre-trend Testing Methodology</h2>
@@ -761,68 +896,13 @@ Event study:
 </tbody>
 </table>
 </section>
-<section id="customer-store-did-results-1" class="level2">
-<h2 class="anchored" data-anchor-id="customer-store-did-results-1">Customer-Store DiD Results</h2>
-<p><strong>Statistical tests comparing treatment vs control:</strong></p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 9%">
-<col style="width: 29%">
-<col style="width: 27%">
-<col style="width: 16%">
-<col style="width: 17%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Metric</th>
-<th>Pre vs Post (Treatment)</th>
-<th>Pre vs Post (Control)</th>
-<th>T vs C (Pre)</th>
-<th>T vs C (Post)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>n_purchases</td>
-<td>***</td>
-<td>***</td>
-<td>***</td>
-<td>ns</td>
-</tr>
-<tr class="even">
-<td>new_product_ratio</td>
-<td>*</td>
-<td>***</td>
-<td>**</td>
-<td>***</td>
-</tr>
-<tr class="odd">
-<td>total_discount</td>
-<td>***</td>
-<td>***</td>
-<td>ns</td>
-<td>***</td>
-</tr>
-<tr class="even">
-<td>coupon_usage_rate</td>
-<td>*</td>
-<td>*</td>
-<td>ns</td>
-<td>ns</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Key finding</strong>: By the post-closure period, treatment and control customers show no significant difference in total purchases (p=0.342), suggesting convergence and displacement to other stores.</p>
-</section>
 </section>
 <section id="main-findings" class="level1">
 <h1>Main Findings</h1>
 <ol type="1">
-<li><p><strong>Displacement is the primary response</strong>: Most affected customers do not reduce overall purchases but switch to alternative stores in the network.</p></li>
-<li><p><strong>Closure duration matters</strong>: Longer closures lead to higher displacement probabilities (33% → 49%).</p></li>
-<li><p><strong>Convergence over time</strong>: After 4-8 weeks, treated customers’ purchase levels converge with control customers, indicating successful displacement.</p></li>
-<li><p><strong>Triple difference is significant</strong>: The DDD interaction term (treated × post × displacement) is statistically significant (p&lt;0.05), suggesting heterogeneous displacement effects across customers with different displacement propensity.</p></li>
-<li><p><strong>Event study shows delayed effects</strong>: The most significant positive effect appears in week 3 after closure, suggesting an adjustment period.</p></li>
+<li><p><strong>No evidence of habit disruption (state dependence)</strong></p></li>
+<li><p><strong>Small positive baseline-demand effect</strong></p></li>
+<li><p><strong>Pre-trend concern for the displacement channel</strong></p></li>
 </ol>
 </section>
 <section id="generated-outputs" class="level1">
