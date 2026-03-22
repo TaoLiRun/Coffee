@@ -5,6 +5,17 @@
     "min_store_ratio": 0.8,
     "closure_filter_start": "2020-09-01"
   },
+  "push_features": {
+    "enabled": true,
+    "glob_pattern": "sleep_push_result_*.csv",
+    "cache_relative_dir": "outputs/displacement_classification/cache",
+    "windows_days": [7, 14, 28],
+    "response_horizon_days": 7
+  },
+  "feature_matrix_cache": {
+    "enabled": true,
+    "cache_relative_dir": "outputs/displacement_classification/cache"
+  },
   "model": {
     "xgb_params": {
       "max_depth": 6,
