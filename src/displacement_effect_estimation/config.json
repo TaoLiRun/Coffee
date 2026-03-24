@@ -6,6 +6,8 @@
   "spec": {
     "t_horizon": 4,
     "outcome": "n_purchases",
-    "cluster_col": "member_id"
+    "cluster_col": "member_id",
+    "separate_effect": false,
+    "select_recency_consumers": false
   }
 }

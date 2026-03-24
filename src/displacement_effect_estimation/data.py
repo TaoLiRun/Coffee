@@ -164,6 +164,9 @@ def load_orders_for_behavior_members(
     if not path.exists():
         raise FileNotFoundError(f"order_result.csv not found: {path}")
 
+    if not member_ids:
+        return pd.DataFrame(columns=["member_id", "date"])
+
     frames: list[pd.DataFrame] = []
     for chunk in pd.read_csv(
         path,
@@ -180,6 +183,9 @@ def load_orders_for_behavior_members(
             continue
         chunk["date"] = chunk["dt"].dt.normalize()
         frames.append(chunk[["member_id", "date"]])
+
+    if not frames:
+        return pd.DataFrame(columns=["member_id", "date"])
 
     df = pd.concat(frames, ignore_index=True)
     df = df.drop_duplicates()
@@ -207,16 +213,77 @@ def _window_bounds(closure_start: pd.Timestamp, closure_end: pd.Timestamp, rel_t
     return start, end
 
 
+def _resolve_recency_days(
+    *,
+    separate_effect: bool,
+    select_recency_consumers: bool | int,
+) -> int | None:
+    if isinstance(select_recency_consumers, bool):
+        if select_recency_consumers:
+            raise ValueError("select_recency_consumers must be a positive integer or false.")
+        return None
+
+    recency_days = int(select_recency_consumers)
+    if recency_days < 1:
+        raise ValueError("select_recency_consumers must be >= 1 when provided.")
+    if not separate_effect:
+        raise ValueError("select_recency_consumers can only be set when separate_effect=true.")
+    return recency_days
+
+
+def _filter_members_by_recency(
+    *,
+    member_frame: pd.DataFrame,
+    orders: pd.DataFrame,
+    closure_start_dt: pd.Timestamp,
+    recency_days: int | None,
+) -> pd.DataFrame:
+    if recency_days is None:
+        return member_frame
+
+    start_dt = closure_start_dt - pd.Timedelta(days=recency_days)
+    recent_orders = _slice_by_date(
+        sorted_df=orders,
+        start_date=start_dt,
+        end_date=closure_start_dt - pd.Timedelta(days=1),
+    )
+    if recent_orders.empty:
+        return member_frame.iloc[0:0].copy()
+
+    recent_member_ids = set(
+        recent_orders.loc[recent_orders["date"] > start_dt, "member_id"].drop_duplicates().tolist()
+    )
+    if not recent_member_ids:
+        return member_frame.iloc[0:0].copy()
+    return member_frame[member_frame["member_id"].isin(recent_member_ids)].copy()
+
+
+def _build_closure_event_id(*, dept_id: object, closure_start: object) -> str:
+    return f"dept_{dept_id}_closure_{closure_start}"
+
+
 def build_estimation_sample(
     outcome: str,
     cfg: dict | None = None,
     t_horizon: int | None = None,
+    separate_effect: bool | None = None,
+    select_recency_consumers: bool | int | None = None,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
     if outcome != "n_purchases":
         raise ValueError(
             f"Only outcome='n_purchases' is currently supported for event-time construction; got '{outcome}'."
         )
+
+    spec_cfg = cfg.get("spec", {})
+    if separate_effect is None:
+        separate_effect = bool(spec_cfg.get("separate_effect", False))
+    if select_recency_consumers is None:
+        select_recency_consumers = spec_cfg.get("select_recency_consumers", False)
+    recency_days = _resolve_recency_days(
+        separate_effect=separate_effect,
+        select_recency_consumers=select_recency_consumers,
+    )
 
     scores = load_displacement_scores(cfg=cfg)
     scoped_member_ids = set(scores["member_id"].dropna().tolist())
@@ -269,6 +336,26 @@ def build_estimation_sample(
                 "disp_binary",
             ]
         ].drop_duplicates()
+        member_frame = _filter_members_by_recency(
+            member_frame=member_frame,
+            orders=orders,
+            closure_start_dt=closure_start_dt,
+            recency_days=recency_days,
+        )
+        if member_frame.empty:
+            LOGGER.info(
+                "Closure %s/%s skipped: dept_id=%s closure_start=%s recency_days=%s selected_members=0",
+                closure_idx,
+                total_closures,
+                dept_id,
+                closure_start,
+                recency_days,
+            )
+            continue
+
+        member_frame = member_frame.assign(
+            closure_event_id=_build_closure_event_id(dept_id=dept_id, closure_start=closure_start)
+        )
         members = set(member_frame["member_id"].tolist())
         closure_rows = 0
 
@@ -302,6 +389,7 @@ def build_estimation_sample(
                         "treated",
                         "displacement_prob",
                         "disp_binary",
+                        "closure_event_id",
                         "period_start",
                         "calendar_month",
                         "rel_t",
