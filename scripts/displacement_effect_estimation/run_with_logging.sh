@@ -11,6 +11,12 @@
 # a purchase in (closure_start - 10, closure_start):
 #   ./run_with_logging.sh --separate-effect --select-recency-consumers 10
 #
+# Separate effect for 10-day closures only, with recency filter, saved to
+# a custom output directory:
+#   ./run_with_logging.sh --separate-effect --closure-duration-days 10 \
+#       --select-recency-consumers 10 \
+#       --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
+#
 # Invalid:
 #   ./run_with_logging.sh --select-recency-consumers 10
 # because --select-recency-consumers is only allowed with --separate-effect.

@@ -4,6 +4,7 @@ import json
 import logging
 import time
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -34,6 +35,50 @@ def _detect_data_dir(project_root: Path) -> Path:
         if (p / "order_result.csv").exists():
             return p
     return candidates[0]
+
+
+def load_t0_feature_recency(cfg: dict | None = None) -> pd.DataFrame:
+    cfg = cfg or load_config()
+    project_root = get_project_root()
+    paths_cfg = cfg["paths"]
+    cache_dir = project_root / paths_cfg["feature_t0_cache_dir"]
+    cache_key = paths_cfg["feature_cache_key"]
+    cache_path = cache_dir / f"features_t0_{cache_key}.parquet"
+    if not cache_path.exists():
+        raise FileNotFoundError(
+            f"T0 feature cache not found: {cache_path}. "
+            "Update paths.feature_cache_key in displacement_effect_estimation/config.json."
+        )
+
+    recency_df = pd.read_parquet(
+        cache_path,
+        columns=["member_id", "dept_id", "closure_start", "period", "days_since_last_purchase"],
+    )
+    required = {"member_id", "dept_id", "closure_start", "period", "days_since_last_purchase"}
+    missing = required - set(recency_df.columns)
+    if missing:
+        raise ValueError(
+            f"Missing required columns in {cache_path.name}: {sorted(missing)}"
+        )
+
+    recency_df = recency_df[recency_df["period"] == 0].copy()
+    if recency_df.empty:
+        raise ValueError(
+            f"No period=0 rows found in {cache_path.name}. "
+            "Expected ex-ante t0 feature cache rows."
+        )
+
+    key_cols = ["member_id", "dept_id", "closure_start"]
+    recency_df = (
+        recency_df.assign(
+            closure_start=_normalize_closure_start(recency_df["closure_start"]),
+            days_since_last_purchase=recency_df["days_since_last_purchase"].astype(int),
+        )
+        .sort_values(key_cols)
+        .drop_duplicates(subset=key_cols, keep="first")
+        .loc[:, key_cols + ["days_since_last_purchase"]]
+    )
+    return recency_df
 
 
 def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
@@ -130,9 +175,20 @@ def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
             "Check key consistency between displacement scores and closure_pair_registry.csv."
         )
 
+    recency_df = load_t0_feature_recency(cfg=cfg)
+    score_df = score_df.merge(recency_df, on=key_cols, how="left", validate="one_to_one")
+    missing_recency = score_df[score_df["days_since_last_purchase"].isna()]
+    if not missing_recency.empty:
+        raise ValueError(
+            f"Missing days_since_last_purchase for {len(missing_recency)} scored rows after "
+            f"merging feature cache {cfg['paths']['feature_cache_key']}. "
+            "Check that the score file and feature cache come from the same classification run."
+        )
+
     score_df["treated"] = score_df["is_treated"].astype(int)
     score_df["closure_duration_days"] = score_df["closure_duration_days"].astype(int)
     score_df["disp_binary"] = score_df["predicted_displaced_t0_ex_ante"].astype(int)
+    score_df["days_since_last_purchase"] = score_df["days_since_last_purchase"].astype(int)
     return score_df
 
 
@@ -231,31 +287,35 @@ def _resolve_recency_days(
     return recency_days
 
 
+def _resolve_closure_duration_days(
+    *,
+    closure_duration_days: bool | int,
+) -> int | None:
+    if isinstance(closure_duration_days, bool):
+        if closure_duration_days:
+            raise ValueError("closure_duration_days must be a positive integer or false.")
+        return None
+
+    duration_days = int(closure_duration_days)
+    if duration_days < 1:
+        raise ValueError("closure_duration_days must be >= 1 when provided.")
+    return duration_days
+
+
 def _filter_members_by_recency(
     *,
     member_frame: pd.DataFrame,
-    orders: pd.DataFrame,
-    closure_start_dt: pd.Timestamp,
     recency_days: int | None,
 ) -> pd.DataFrame:
     if recency_days is None:
         return member_frame
 
-    start_dt = closure_start_dt - pd.Timedelta(days=recency_days)
-    recent_orders = _slice_by_date(
-        sorted_df=orders,
-        start_date=start_dt,
-        end_date=closure_start_dt - pd.Timedelta(days=1),
-    )
-    if recent_orders.empty:
-        return member_frame.iloc[0:0].copy()
-
-    recent_member_ids = set(
-        recent_orders.loc[recent_orders["date"] > start_dt, "member_id"].drop_duplicates().tolist()
-    )
-    if not recent_member_ids:
-        return member_frame.iloc[0:0].copy()
-    return member_frame[member_frame["member_id"].isin(recent_member_ids)].copy()
+    if "days_since_last_purchase" not in member_frame.columns:
+        raise ValueError(
+            "member_frame is missing days_since_last_purchase. "
+            "Merge t0 feature-cache recency fields before applying recency filtering."
+        )
+    return member_frame[member_frame["days_since_last_purchase"] < recency_days].copy()
 
 
 def _build_closure_event_id(*, dept_id: object, closure_start: object) -> str:
@@ -266,6 +326,7 @@ def build_estimation_sample(
     outcome: str,
     cfg: dict | None = None,
     t_horizon: int | None = None,
+    closure_duration_days: bool | int | None = None,
     separate_effect: bool | None = None,
     select_recency_consumers: bool | int | None = None,
 ) -> pd.DataFrame:
@@ -276,17 +337,33 @@ def build_estimation_sample(
         )
 
     spec_cfg = cfg.get("spec", {})
+    if closure_duration_days is None:
+        closure_duration_days = spec_cfg.get("closure_duration_days", False)
     if separate_effect is None:
         separate_effect = bool(spec_cfg.get("separate_effect", False))
     if select_recency_consumers is None:
         select_recency_consumers = spec_cfg.get("select_recency_consumers", False)
+    duration_days_filter = _resolve_closure_duration_days(
+        closure_duration_days=closure_duration_days,
+    )
     recency_days = _resolve_recency_days(
         separate_effect=separate_effect,
         select_recency_consumers=select_recency_consumers,
     )
 
     scores = load_displacement_scores(cfg=cfg)
-    scoped_member_ids = set(scores["member_id"].dropna().tolist())
+    if duration_days_filter is not None:
+        scores = scores[scores["closure_duration_days"] == duration_days_filter].copy()
+        if scores.empty:
+            raise ValueError(
+                f"No scored rows remain after filtering closure_duration_days == {duration_days_filter}."
+            )
+    if recency_days is None:
+        scoped_member_ids = set(scores["member_id"].dropna().tolist())
+    else:
+        scoped_member_ids = set(
+            scores.loc[scores["days_since_last_purchase"] < recency_days, "member_id"].dropna().tolist()
+        )
     orders = load_orders_for_behavior_members(member_ids=scoped_member_ids, cfg=cfg)
 
     if t_horizon is None:
@@ -305,7 +382,11 @@ def build_estimation_sample(
     grouped_closures = list(scores.groupby(group_cols, sort=False))
     total_closures = len(grouped_closures)
     loop_start = time.perf_counter()
-    LOGGER.info("Starting closure loop: total_closures=%s", total_closures)
+    LOGGER.info(
+        "Starting closure loop: total_closures=%s closure_duration_days=%s",
+        total_closures,
+        duration_days_filter if duration_days_filter is not None else "all",
+    )
 
     for closure_idx, ((dept_id, closure_start, closure_end), closure_cohort) in enumerate(grouped_closures, start=1):
         closure_start_time = time.perf_counter()
@@ -334,22 +415,22 @@ def build_estimation_sample(
                 "treated",
                 "displacement_prob",
                 "disp_binary",
+                "days_since_last_purchase",
             ]
         ].drop_duplicates()
         member_frame = _filter_members_by_recency(
             member_frame=member_frame,
-            orders=orders,
-            closure_start_dt=closure_start_dt,
             recency_days=recency_days,
         )
         if member_frame.empty:
             LOGGER.info(
-                "Closure %s/%s skipped: dept_id=%s closure_start=%s recency_days=%s selected_members=0",
+                "Closure %s/%s skipped: dept_id=%s closure_start=%s recency_days=%s selected_members=%s",
                 closure_idx,
                 total_closures,
                 dept_id,
                 closure_start,
                 recency_days,
+                0,
             )
             continue
 
@@ -360,8 +441,13 @@ def build_estimation_sample(
         closure_rows = 0
 
         for rel_t in rel_t_values:
-            start_dt, end_dt = _window_bounds(closure_start_dt, closure_end_dt, rel_t, closure_bin_days)
-            win_orders = _slice_by_date(orders, start_dt, end_dt)
+            start_dt, end_dt = _window_bounds(
+                closure_start=closure_start_dt,
+                closure_end=closure_end_dt,
+                rel_t=rel_t,
+                bin_days=closure_bin_days,
+            )
+            win_orders = _slice_by_date(sorted_df=orders, start_date=start_dt, end_date=end_dt)
             if not win_orders.empty:
                 win_orders = win_orders[win_orders["member_id"].isin(members)]
                 counts = (

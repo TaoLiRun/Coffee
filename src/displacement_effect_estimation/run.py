@@ -70,12 +70,18 @@ def main() -> None:
     cfg = load_config()
     defaults = cfg["spec"]
     project_root = get_project_root()
-    default_log_file = project_root / cfg["paths"]["output_dir"] / "logs" / "run.log"
+    default_output_dir = cfg["paths"]["output_dir"]
 
     parser = argparse.ArgumentParser(description="Run parallel causal specs for displacement effect.")
     parser.add_argument("--t-horizon", type=int, default=defaults.get("t_horizon", 4), help="Number of pre/post bins to include (excluding t=0).")
     parser.add_argument("--outcome", type=str, default=defaults["outcome"])
     parser.add_argument("--cluster-col", type=str, default=defaults["cluster_col"])
+    parser.add_argument(
+        "--closure-duration-days",
+        type=int,
+        default=None,
+        help="Restrict estimation to closures with this exact duration in days.",
+    )
     parser.add_argument(
         "--separate-effect",
         action="store_true",
@@ -88,10 +94,21 @@ def main() -> None:
         default=None,
         help="Keep only consumers with a purchase in (closure_start - N, closure_start). Only valid with --separate-effect.",
     )
-    parser.add_argument("--log-file", type=str, default=str(default_log_file), help="Path to log file.")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=default_output_dir,
+        help="Directory, relative to project root, where estimation outputs are saved.",
+    )
+    parser.add_argument("--log-file", type=str, default=None, help="Path to log file.")
     parser.add_argument("--log-level", type=str, default="INFO", help="Logging level (DEBUG, INFO, WARNING, ERROR).")
     args = parser.parse_args()
 
+    closure_duration_days = (
+        args.closure_duration_days
+        if args.closure_duration_days is not None
+        else defaults.get("closure_duration_days", False)
+    )
     separate_effect = (
         args.separate_effect if args.separate_effect is not None else bool(defaults.get("separate_effect", False))
     )
@@ -100,28 +117,32 @@ def main() -> None:
         if args.select_recency_consumers is not None
         else defaults.get("select_recency_consumers", False)
     )
+    out_dir = project_root / args.output_dir
+    log_file = Path(args.log_file) if args.log_file else out_dir / "logs" / "run.log"
 
-    logger = setup_logging(Path(args.log_file), args.log_level)
+    logger = setup_logging(log_file=log_file, log_level=args.log_level)
     logger.info("Starting displacement effect estimation run")
     logger.info(
-        "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, separate_effect=%s, select_recency_consumers=%s",
+        "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, closure_duration_days=%s, separate_effect=%s, select_recency_consumers=%s, output_dir=%s",
         args.outcome,
         args.t_horizon,
         args.cluster_col,
+        closure_duration_days,
         separate_effect,
         select_recency_consumers,
+        args.output_dir,
     )
 
     sample = build_estimation_sample(
         outcome=args.outcome,
         cfg=cfg,
         t_horizon=args.t_horizon,
+        closure_duration_days=closure_duration_days,
         separate_effect=separate_effect,
         select_recency_consumers=select_recency_consumers,
     )
     logger.info("Built estimation sample: %s rows", f"{len(sample):,}")
 
-    out_dir = project_root / cfg["paths"]["output_dir"]
     if separate_effect:
         separate_dir = out_dir / "separate_effect"
         separate_dir.mkdir(parents=True, exist_ok=True)
@@ -161,6 +182,7 @@ def main() -> None:
                 summary_notes=[
                     "- Estimation mode: separate_effect=true",
                     f"- Closure event: `{closure_event_id}`",
+                    f"- Closure duration filter days: {closure_duration_days}",
                     f"- Recency filter days: {select_recency_consumers}",
                     "- Length-heterogeneity event-study spec skipped: true",
                 ],
@@ -171,6 +193,7 @@ def main() -> None:
                     "dept_id": dept_id,
                     "closure_start": closure_start,
                     "closure_end": closure_end,
+                    "closure_duration_days": int(event_sample["closure_duration_days"].iloc[0]),
                     "members": event_sample["member_id"].nunique(),
                     "rows": len(event_sample),
                     "output_dir": str(event_output_dir.relative_to(project_root)),
@@ -199,7 +222,8 @@ def main() -> None:
             pretrend_tests=results["pretrend_tests"],
             summary_notes=[
                 "- Estimation mode: separate_effect=false",
-                "- Recency filter days: false",
+                f"- Closure duration filter days: {closure_duration_days}",
+                f"- Recency filter days: {select_recency_consumers}",
             ],
         )
         logger.info("Saved outputs to: %s", out_dir)
