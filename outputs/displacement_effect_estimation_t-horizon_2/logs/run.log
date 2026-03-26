@@ -26,3 +26,6 @@
 2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 22/22 done: dept_id=228 closure_start=2021-02-04 members=886 rows=3544 duration_days=17 elapsed=0.03s
 2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure loop completed in 0.68s
 2026-03-26 16:08:24 | INFO | displacement_effect_estimation | Built estimation sample: 179,432 rows
+2026-03-26 16:09:50 | INFO | displacement_effect_estimation | Fitted aggregate collapsed/event-study specs
+2026-03-26 16:09:51 | INFO | displacement_effect_estimation | Saved outputs to: /home/litao/Coffee/model-free/outputs/displacement_effect_estimation_t-horizon_2
+2026-03-26 16:09:51 | INFO | displacement_effect_estimation | Rows in estimation sample: 179,432
