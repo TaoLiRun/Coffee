@@ -1,0 +1,6 @@
+spec,test,n_restrictions,statistic,pvalue,n
+event_att,pretrend_att_joint_zero,0,,,6602
+event_binary_B,pretrend_baseline_joint_zero,0,,,6602
+event_binary_B,pretrend_displacement_joint_zero,0,,,6602
+event_score_C,pretrend_score_baseline_joint_zero,0,,,6602
+event_score_C,pretrend_score_slope_joint_zero,0,,,6602

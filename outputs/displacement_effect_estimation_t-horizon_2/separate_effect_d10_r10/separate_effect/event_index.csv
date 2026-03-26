@@ -1,0 +1,3 @@
+closure_event_id,dept_id,closure_start,closure_end,closure_duration_days,members,rows,output_dir
+dept_225_closure_2021-02-09,225,2021-02-09,2021-02-18,10,767,3068,outputs/displacement_effect_estimation_t-horizon_2/separate_effect_d10_r10/separate_effect/dept_225_closure_2021-02-09
+dept_220_closure_2021-08-03,220,2021-08-03,2021-08-12,10,258,1032,outputs/displacement_effect_estimation_t-horizon_2/separate_effect_d10_r10/separate_effect/dept_220_closure_2021-08-03
