@@ -1,0 +1,6 @@
+spec,test,n_restrictions,statistic,pvalue,n
+event_att,pretrend_att_joint_zero,1,0.5033929981531478,0.4780130500933384,9908
+event_binary_B,pretrend_baseline_joint_zero,1,0.2640288668289714,0.6073656819101223,9908
+event_binary_B,pretrend_displacement_joint_zero,1,0.002712979527975373,0.9584599530268798,9908
+event_score_C,pretrend_score_baseline_joint_zero,1,0.07402737352245348,0.7855607233517097,9908
+event_score_C,pretrend_score_slope_joint_zero,1,0.3068649767909625,0.5796103627946263,9908

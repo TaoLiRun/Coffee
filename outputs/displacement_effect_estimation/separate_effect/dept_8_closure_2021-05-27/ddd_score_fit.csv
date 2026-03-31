@@ -1,0 +1,2 @@
+spec,formula,n,r2,r2_within
+score_collapsed,n_purchases ~ post_X_treated + post_X_score + post_X_treated_X_score | event_fe_id + rel_t + calendar_month,5392,0.6060863860211358,0.012216910243504575

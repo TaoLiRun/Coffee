@@ -7,6 +7,7 @@ Usage
     python main.py --max-closures 20
     python main.py --tail-closures 20
     python main.py --sample 50000 --max-closures 5
+    python main.py --max-closures 1 --max-members 10   # smoke test (registry-kept closure + 10 members)
 
 See --help for all options.
 """
@@ -19,6 +20,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 
 # ---------------------------------------------------------------------------
@@ -35,9 +37,11 @@ from data_loading_feature_constructing import (
     build_t0_ex_ante_panel,
     compute_features_for_panel,
     load_or_build_closure_pair_registry,
+    filter_closures_to_registry_kept,
     parse_control_store_ids,
     USE_SET_UP_TIME_MATCHED_CONTROL,
     get_treatment_and_control_members_for_closure,
+    USE_SET_UP_TIME_MATCHED_CONTROL,
     # Constants
     CLOSURES_CSV,
     OUTPUT_DIR,
@@ -50,6 +54,13 @@ from data_loading_feature_constructing import (
 from model import (
     check_gpu,
     print_variable_statistics,
+    save_model_artifacts,
+)
+from push_event_cache import load_or_build_push_events_cache
+from feature_matrix_cache import (
+    feature_matrix_cache_key,
+    save_feature_matrix_cache,
+    try_load_feature_matrix_cache,
 )
 
 
@@ -58,7 +69,14 @@ from model import (
 # ---------------------------------------------------------------------------
 
 
-def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None) -> None:
+def main(
+    max_closures: Optional[int] = None,
+    tail_closures: Optional[int] = None,
+    *,
+    max_members: Optional[int] = None,
+    rebuild_push_cache: bool = False,
+    rebuild_feature_cache: bool = False,
+) -> None:
     logger = setup_logging()
     log_print(logger, "=" * 80)
     log_print(logger, "Displacement Classification Model Training")
@@ -81,6 +99,8 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     log_print(logger, f"  Closures after Aug-2020 filter: {len(closures)}")
     if closures.empty:
         raise ValueError("No closures remain after Aug-2020 filter.")
+
+    closures = filter_closures_to_registry_kept(logger, closures)
 
     if tail_closures is not None:
         closures = closures.tail(tail_closures).reset_index(drop=True)
@@ -149,18 +169,81 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
     panel = build_training_panel(
         logger, df_order_full, closures, customer_preference, unique_visits,
     )
-    features_df = compute_features_for_panel(
-        logger, panel, df_order_full, member_demographics,
-    )
     t0_panel = build_t0_ex_ante_panel(
         logger, df_order_full, closures, customer_preference, unique_visits,
     )
-    if t0_panel.empty:
-        log_print(logger, "  Ex-ante t0 panel is empty; no t0 scores will be generated.", level="warning")
-        t0_features_df = pd.DataFrame()
+
+    if max_members is not None:
+        mids = panel["member_id"].unique()
+        if len(mids) > max_members:
+            rng = np.random.RandomState(42)
+            keep = set(rng.choice(mids, size=max_members, replace=False).tolist())
+            panel = panel[panel["member_id"].isin(keep)].copy()
+            if not t0_panel.empty:
+                t0_panel = t0_panel[t0_panel["member_id"].isin(keep)].copy()
+            df_order_full = df_order_full[df_order_full["member_id"].isin(keep)].copy()
+            log_print(logger, f"  [DEBUG] Limited to {max_members} member(s) for testing")
+
+    members_for_push = set(panel["member_id"].unique())
+    if not t0_panel.empty:
+        members_for_push |= set(t0_panel["member_id"].unique())
+    earliest_date = pd.Timestamp(df_order_full["date"].min())
+    period_max = pd.Timestamp(panel["period_start"].max())
+    if not t0_panel.empty:
+        period_max = max(period_max, pd.Timestamp(t0_panel["period_start"].max()))
+    t_max = period_max - pd.Timedelta(days=1)
+
+    run_flags = {
+        "displacement_sample": os.environ.get("DISPLACEMENT_SAMPLE"),
+        "max_closures": max_closures,
+        "tail_closures": tail_closures,
+        "max_members": max_members,
+    }
+    fm_key = feature_matrix_cache_key(
+        closures=closures,
+        members_for_push=members_for_push,
+        earliest_date=earliest_date,
+        t_max=t_max,
+        run_flags=run_flags,
+        use_set_up_time_matched_control=USE_SET_UP_TIME_MATCHED_CONTROL,
+    )
+
+    cached = None
+    if not rebuild_feature_cache:
+        cached = try_load_feature_matrix_cache(logger=logger, cache_key=fm_key)
+
+    if cached is not None:
+        features_df, t0_features_df = cached
+        log_print(
+            logger,
+            "\nUsing cached feature matrices (skipping push load and compute_features_for_panel).",
+        )
     else:
-        t0_features_df = compute_features_for_panel(
-            logger, t0_panel, df_order_full, member_demographics,
+        df_push = load_or_build_push_events_cache(
+            logger,
+            members_for_push=members_for_push,
+            earliest_date=earliest_date,
+            t_max=t_max,
+            rebuild=rebuild_push_cache,
+        )
+
+        features_df = compute_features_for_panel(
+            logger, panel, df_order_full, member_demographics,
+            df_push_events=df_push,
+        )
+        if t0_panel.empty:
+            log_print(logger, "  Ex-ante t0 panel is empty; no t0 scores will be generated.", level="warning")
+            t0_features_df = pd.DataFrame()
+        else:
+            t0_features_df = compute_features_for_panel(
+                logger, t0_panel, df_order_full, member_demographics,
+                df_push_events=df_push,
+            )
+        save_feature_matrix_cache(
+            logger=logger,
+            features_df=features_df,
+            t0_features_df=t0_features_df,
+            cache_key=fm_key,
         )
 
     # Feature columns: exclude identifiers, label, and closure-specific columns.
@@ -256,7 +339,16 @@ def main(max_closures: Optional[int] = None, tail_closures: Optional[int] = None
             )
 
             log_print(logger, f"\n  Duration D={D}: train n={len(train_df):,}, eval_pre n={len(eval_pre):,}, eval_during n={len(eval_during):,}")
-            log_print(logger, "  Skip saving per-duration artifacts by configuration (keep only t0 ex-ante scores).")
+            save_model_artifacts(
+                model=model,
+                features_df=sub,
+                feature_cols=feature_cols,
+                eval_pre=eval_pre,
+                eval_during=eval_during,
+                output_dir=OUTPUT_DIR,
+                logger=logger,
+                model_suffix=str(D),
+            )
 
             if not t0_sub.empty:
                 dt0 = xgb.DMatrix(t0_sub[feature_cols], feature_names=feature_cols)
@@ -323,9 +415,31 @@ if __name__ == "__main__":
         "--tail-closures", type=int, default=None,
         help="Use the last N closures from store_closures.csv (e.g. 20).",
     )
+    parser.add_argument(
+        "--rebuild-push-cache",
+        action="store_true",
+        help="Rebuild filtered push-event parquet even if cache exists.",
+    )
+    parser.add_argument(
+        "--rebuild-feature-cache",
+        action="store_true",
+        help="Ignore cached feature-matrix parquet(s) and recompute (still uses push cache unless --rebuild-push-cache).",
+    )
+    parser.add_argument(
+        "--max-members",
+        type=int,
+        default=None,
+        help="Keep at most this many distinct member_ids (random subset; for smoke tests).",
+    )
     args = parser.parse_args()
 
     if args.sample:
         os.environ["DISPLACEMENT_SAMPLE"] = str(args.sample)
 
-    main(max_closures=args.max_closures, tail_closures=args.tail_closures)
+    main(
+        max_closures=args.max_closures,
+        tail_closures=args.tail_closures,
+        max_members=args.max_members,
+        rebuild_push_cache=args.rebuild_push_cache,
+        rebuild_feature_cache=args.rebuild_feature_cache,
+    )

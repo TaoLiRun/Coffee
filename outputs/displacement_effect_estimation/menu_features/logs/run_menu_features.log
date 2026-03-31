@@ -1,0 +1,14 @@
+2026-03-26 16:18:17 | INFO | displacement_effect_estimation.menu_features | Starting menu-feature construction
+2026-03-26 16:18:17 | INFO | displacement_effect_estimation.menu_features | Using closure registry: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\outputs\customer-store\closure_pair_registry.csv
+2026-03-26 16:18:17 | INFO | displacement_effect_estimation.menu_features | Using product orders: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\data\processed\order_commodity_result_processed.csv
+2026-03-26 16:18:17 | INFO | displacement_effect_estimation.menu_features | Using product mapping: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\data\processed\product_mapping.csv
+2026-03-26 16:18:17 | INFO | displacement_effect_estimation.menu_features | Arguments: t_horizon=4, output_dir=E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\outputs\displacement_effect_estimation\menu_features, chunksize=1000000, kept_closures=22
+2026-03-26 16:18:54 | INFO | displacement_effect_estimation.menu_features | Starting menu-feature construction
+2026-03-26 16:18:54 | INFO | displacement_effect_estimation.menu_features | Using closure registry: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\outputs\customer-store\closure_pair_registry.csv
+2026-03-26 16:18:54 | INFO | displacement_effect_estimation.menu_features | Using product orders: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\data\processed\order_commodity_result_processed.csv
+2026-03-26 16:18:54 | INFO | displacement_effect_estimation.menu_features | Using product mapping: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\data\processed\product_mapping.csv
+2026-03-26 16:18:54 | INFO | displacement_effect_estimation.menu_features | Arguments: t_horizon=4, output_dir=E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\outputs\displacement_effect_estimation\menu_features, chunksize=1000000, kept_closures=22
+2026-03-26 16:19:03 | INFO | displacement_effect_estimation.menu_features | Saved long output: 88 rows
+2026-03-26 16:19:03 | INFO | displacement_effect_estimation.menu_features | Saved wide output: 22 rows
+2026-03-26 16:19:03 | INFO | displacement_effect_estimation.menu_features | Saved detail output: 88 rows
+2026-03-26 16:19:03 | INFO | displacement_effect_estimation.menu_features | Outputs written to: E:\Dropbox\Reaserch@HKUST\Luckin\Coffee_code\Coffee\outputs\displacement_effect_estimation\menu_features

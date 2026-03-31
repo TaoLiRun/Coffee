@@ -309,6 +309,7 @@ def fit_event_study_specs(
     df:          pd.DataFrame,
     outcome:     str,
     cluster_col: str = "member_id",
+    include_length_heterogeneity: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Event-study versions of Specs A, B, C, D (identification_rewrite.md
@@ -342,6 +343,10 @@ def fit_event_study_specs(
              delta^S_l       for l < -1  (score-slope falsification)
     Spec D : theta_l         for l < -1  (length x displacement falsification)
              kappa_l         for l < -1  (length x baseline falsification)
+
+    When `include_length_heterogeneity` is false, Spec D is skipped. This is
+    useful for per-event estimation because closure length is constant within
+    a single event and the length interactions become unidentified.
 
     Returns
     -------
@@ -445,66 +450,67 @@ def fit_event_study_specs(
         test_name = "pretrend_displacement_joint_zero",
     ))
 
-    # ------------------------------------------------------------------
-    # Spec D: Closure-length heterogeneity
-    #
-    # Augments Spec B with interactions involving L_tilde_e:
-    #
-    # y_{iet} = [Spec B terms]
-    #         + sum_{l!=-1} kappa_l * 1(t=l) * treated_{ie} * L_tilde_e
-    #         + sum_{l!=-1} theta_l * 1(t=l) * treated_{ie} * D_{ie} * L_tilde_e
-    #         + [lower-order: l * disp * len]
-    #         + phi_{ie} + omega_t + gamma_m + nu_{iet}
-    #
-    # All lower-order interactions involving L_tilde_e are included:
-    #   i(rel_t, disp_X_len,    ref=-1)  : 1(t=l) x D x L_tilde
-    #   i(rel_t, treated_X_len, ref=-1)  : 1(t=l) x treated x L_tilde  (kappa)
-    #   i(rel_t, tXdXlen,       ref=-1)  : 1(t=l) x treated x D x L_tilde (theta)
-    #
-    # The main effects of L_tilde_e and treated*L_tilde_e are absorbed by
-    # event_fe_id; theta_l and kappa_l are identified only through their
-    # interaction with the time-varying rel_t dummies.
-    #
-    # Interpretation:
-    #   delta^D_l : displacement effect at mean closure length (L_tilde=0)
-    #   theta_l   : change in displacement effect per 1-SD longer closure
-    #   kappa_l   : change in baseline effect per 1-SD longer closure
-    #
-    # Pre-trend tests:
-    #   theta_l = 0 for l < -1  ->  length x displacement falsification
-    #   kappa_l = 0 for l < -1  ->  length x baseline falsification
-    # ------------------------------------------------------------------
-    spec    = "event_binary_D"
-    formula = (
-        f"{outcome} ~ "
-        f"i(rel_t, treated,        ref=-1) + "
-        f"i(rel_t, treated_X_disp, ref=-1) + "
-        f"i(rel_t, disp_binary,    ref=-1) + "
-        f"i(rel_t, treated_X_len,  ref=-1) + "
-        f"i(rel_t, disp_X_len,     ref=-1) + "
-        f"i(rel_t, tXdXlen,        ref=-1) "
-        f"| {fe_str}"
-    )
-    fit = pf.feols(formula, data=df, vcov=vcov)
-    fit_rows.append(_fit_row(fit, spec, formula))
-    rows.extend(_tidy_rows_suffix(fit, ":treated",        spec))   # delta^B_l
-    rows.extend(_tidy_rows_suffix(fit, ":treated_X_disp", spec))   # delta^D_l
-    rows.extend(_tidy_rows_suffix(fit, ":disp_binary",    spec))   # beta_l
-    rows.extend(_tidy_rows_suffix(fit, ":treated_X_len",  spec))   # kappa_l
-    rows.extend(_tidy_rows_suffix(fit, ":disp_X_len",     spec))   # lower-order
-    rows.extend(_tidy_rows_suffix(fit, ":tXdXlen",        spec))   # theta_l
-    pre_rows.append(_joint_zero_test(
-        fit       = fit,
-        terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":tXdXlen"),
-        spec      = spec,
-        test_name = "pretrend_length_displacement_joint_zero",
-    ))
-    pre_rows.append(_joint_zero_test(
-        fit       = fit,
-        terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":treated_X_len"),
-        spec      = spec,
-        test_name = "pretrend_length_baseline_joint_zero",
-    ))
+    if include_length_heterogeneity:
+        # ------------------------------------------------------------------
+        # Spec D: Closure-length heterogeneity
+        #
+        # Augments Spec B with interactions involving L_tilde_e:
+        #
+        # y_{iet} = [Spec B terms]
+        #         + sum_{l!=-1} kappa_l * 1(t=l) * treated_{ie} * L_tilde_e
+        #         + sum_{l!=-1} theta_l * 1(t=l) * treated_{ie} * D_{ie} * L_tilde_e
+        #         + [lower-order: l * disp * len]
+        #         + phi_{ie} + omega_t + gamma_m + nu_{iet}
+        #
+        # All lower-order interactions involving L_tilde_e are included:
+        #   i(rel_t, disp_X_len,    ref=-1)  : 1(t=l) x D x L_tilde
+        #   i(rel_t, treated_X_len, ref=-1)  : 1(t=l) x treated x L_tilde  (kappa)
+        #   i(rel_t, tXdXlen,       ref=-1)  : 1(t=l) x treated x D x L_tilde (theta)
+        #
+        # The main effects of L_tilde_e and treated*L_tilde_e are absorbed by
+        # event_fe_id; theta_l and kappa_l are identified only through their
+        # interaction with the time-varying rel_t dummies.
+        #
+        # Interpretation:
+        #   delta^D_l : displacement effect at mean closure length (L_tilde=0)
+        #   theta_l   : change in displacement effect per 1-SD longer closure
+        #   kappa_l   : change in baseline effect per 1-SD longer closure
+        #
+        # Pre-trend tests:
+        #   theta_l = 0 for l < -1  ->  length x displacement falsification
+        #   kappa_l = 0 for l < -1  ->  length x baseline falsification
+        # ------------------------------------------------------------------
+        spec    = "event_binary_D"
+        formula = (
+            f"{outcome} ~ "
+            f"i(rel_t, treated,        ref=-1) + "
+            f"i(rel_t, treated_X_disp, ref=-1) + "
+            f"i(rel_t, disp_binary,    ref=-1) + "
+            f"i(rel_t, treated_X_len,  ref=-1) + "
+            f"i(rel_t, disp_X_len,     ref=-1) + "
+            f"i(rel_t, tXdXlen,        ref=-1) "
+            f"| {fe_str}"
+        )
+        fit = pf.feols(formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(fit, spec, formula))
+        rows.extend(_tidy_rows_suffix(fit, ":treated",        spec))   # delta^B_l
+        rows.extend(_tidy_rows_suffix(fit, ":treated_X_disp", spec))   # delta^D_l
+        rows.extend(_tidy_rows_suffix(fit, ":disp_binary",    spec))   # beta_l
+        rows.extend(_tidy_rows_suffix(fit, ":treated_X_len",  spec))   # kappa_l
+        rows.extend(_tidy_rows_suffix(fit, ":disp_X_len",     spec))   # lower-order
+        rows.extend(_tidy_rows_suffix(fit, ":tXdXlen",        spec))   # theta_l
+        pre_rows.append(_joint_zero_test(
+            fit       = fit,
+            terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":tXdXlen"),
+            spec      = spec,
+            test_name = "pretrend_length_displacement_joint_zero",
+        ))
+        pre_rows.append(_joint_zero_test(
+            fit       = fit,
+            terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":treated_X_len"),
+            spec      = spec,
+            test_name = "pretrend_length_baseline_joint_zero",
+        ))
 
     # ------------------------------------------------------------------
     # Spec C: Continuous displacement-score DDD

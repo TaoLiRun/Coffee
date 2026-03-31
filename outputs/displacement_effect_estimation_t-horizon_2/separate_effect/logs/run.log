@@ -1,0 +1,53 @@
+2026-03-26 16:08:13 | INFO | displacement_effect_estimation | Starting displacement effect estimation run
+2026-03-26 16:08:13 | INFO | displacement_effect_estimation | Arguments: outcome=n_purchases, t_horizon=2, cluster_col=member_id, closure_duration_days=False, separate_effect=True, select_recency_consumers=False, output_dir=outputs/displacement_effect_estimation_t-horizon_2/separate_effect
+2026-03-26 16:08:13 | INFO | displacement_effect_estimation | Applied closure registry filter using /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv: closures 22 -> 22 (dropped=0)
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Starting closure loop: total_closures=22 closure_duration_days=all
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Closure 1/22 done: dept_id=225 closure_start=2021-02-09 members=2477 rows=9908 duration_days=10 elapsed=0.04s
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Closure 2/22 done: dept_id=46 closure_start=2021-08-04 members=2720 rows=10880 duration_days=16 elapsed=0.04s
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Closure 3/22 done: dept_id=59 closure_start=2021-08-03 members=3186 rows=12744 duration_days=17 elapsed=0.04s
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Closure 4/22 done: dept_id=124 closure_start=2021-07-22 members=3095 rows=12380 duration_days=28 elapsed=0.04s
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Closure 5/22 done: dept_id=133 closure_start=2021-07-28 members=2194 rows=8776 duration_days=26 elapsed=0.04s
+2026-03-26 16:08:22 | INFO | displacement_effect_estimation | Closure 6/22 done: dept_id=121 closure_start=2021-08-03 members=2218 rows=8872 duration_days=18 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 7/22 done: dept_id=62 closure_start=2021-08-04 members=2644 rows=10576 duration_days=14 elapsed=0.04s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 8/22 done: dept_id=47 closure_start=2021-07-30 members=3384 rows=13536 duration_days=12 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 9/22 done: dept_id=220 closure_start=2021-08-03 members=1834 rows=7336 duration_days=10 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 10/22 done: dept_id=5 closure_start=2021-08-18 members=2439 rows=9756 duration_days=14 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 11/22 done: dept_id=19 closure_start=2021-07-15 members=3301 rows=13204 duration_days=11 elapsed=0.04s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 12/22 done: dept_id=3 closure_start=2021-08-09 members=1486 rows=5944 duration_days=14 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 13/22 done: dept_id=39 closure_start=2021-07-25 members=2891 rows=11564 duration_days=26 elapsed=0.04s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 14/22 done: dept_id=182 closure_start=2021-08-03 members=1577 rows=6308 duration_days=18 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 15/22 done: dept_id=181 closure_start=2021-02-11 members=441 rows=1764 duration_days=15 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 16/22 done: dept_id=44 closure_start=2021-07-24 members=1563 rows=6252 duration_days=13 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 17/22 done: dept_id=8 closure_start=2021-05-27 members=674 rows=2696 duration_days=15 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 18/22 done: dept_id=254 closure_start=2021-01-30 members=906 rows=3624 duration_days=23 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 19/22 done: dept_id=131 closure_start=2021-08-29 members=2713 rows=10852 duration_days=11 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 20/22 done: dept_id=238 closure_start=2021-07-24 members=1689 rows=6756 duration_days=29 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 21/22 done: dept_id=246 closure_start=2021-07-27 members=540 rows=2160 duration_days=13 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure 22/22 done: dept_id=228 closure_start=2021-02-04 members=886 rows=3544 duration_days=17 elapsed=0.03s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Closure loop completed in 0.76s
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Built estimation sample: 179,432 rows
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Running separate estimation for 22 closure events
+2026-03-26 16:08:23 | INFO | displacement_effect_estimation | Fitting event 1/22: closure_event_id=dept_225_closure_2021-02-09 rows=9,908 members=2,477
+2026-03-26 16:08:43 | INFO | displacement_effect_estimation | Fitting event 2/22: closure_event_id=dept_46_closure_2021-08-04 rows=10,880 members=2,720
+2026-03-26 16:08:44 | INFO | displacement_effect_estimation | Fitting event 3/22: closure_event_id=dept_59_closure_2021-08-03 rows=12,744 members=3,186
+2026-03-26 16:08:46 | INFO | displacement_effect_estimation | Fitting event 4/22: closure_event_id=dept_124_closure_2021-07-22 rows=12,380 members=3,095
+2026-03-26 16:08:48 | INFO | displacement_effect_estimation | Fitting event 5/22: closure_event_id=dept_133_closure_2021-07-28 rows=8,776 members=2,194
+2026-03-26 16:08:50 | INFO | displacement_effect_estimation | Fitting event 6/22: closure_event_id=dept_121_closure_2021-08-03 rows=8,872 members=2,218
+2026-03-26 16:08:52 | INFO | displacement_effect_estimation | Fitting event 7/22: closure_event_id=dept_62_closure_2021-08-04 rows=10,576 members=2,644
+2026-03-26 16:08:53 | INFO | displacement_effect_estimation | Fitting event 8/22: closure_event_id=dept_47_closure_2021-07-30 rows=13,536 members=3,384
+2026-03-26 16:08:56 | INFO | displacement_effect_estimation | Fitting event 9/22: closure_event_id=dept_220_closure_2021-08-03 rows=7,336 members=1,834
+2026-03-26 16:08:57 | INFO | displacement_effect_estimation | Fitting event 10/22: closure_event_id=dept_5_closure_2021-08-18 rows=9,756 members=2,439
+2026-03-26 16:08:58 | INFO | displacement_effect_estimation | Fitting event 11/22: closure_event_id=dept_19_closure_2021-07-15 rows=13,204 members=3,301
+2026-03-26 16:09:00 | INFO | displacement_effect_estimation | Fitting event 12/22: closure_event_id=dept_3_closure_2021-08-09 rows=5,944 members=1,486
+2026-03-26 16:09:01 | INFO | displacement_effect_estimation | Fitting event 13/22: closure_event_id=dept_39_closure_2021-07-25 rows=11,564 members=2,891
+2026-03-26 16:09:03 | INFO | displacement_effect_estimation | Fitting event 14/22: closure_event_id=dept_182_closure_2021-08-03 rows=6,308 members=1,577
+2026-03-26 16:09:04 | INFO | displacement_effect_estimation | Fitting event 15/22: closure_event_id=dept_181_closure_2021-02-11 rows=1,764 members=441
+2026-03-26 16:09:06 | INFO | displacement_effect_estimation | Fitting event 16/22: closure_event_id=dept_44_closure_2021-07-24 rows=6,252 members=1,563
+2026-03-26 16:09:07 | INFO | displacement_effect_estimation | Fitting event 17/22: closure_event_id=dept_8_closure_2021-05-27 rows=2,696 members=674
+2026-03-26 16:09:08 | INFO | displacement_effect_estimation | Fitting event 18/22: closure_event_id=dept_254_closure_2021-01-30 rows=3,624 members=906
+2026-03-26 16:09:09 | INFO | displacement_effect_estimation | Fitting event 19/22: closure_event_id=dept_131_closure_2021-08-29 rows=10,852 members=2,713
+2026-03-26 16:09:10 | INFO | displacement_effect_estimation | Fitting event 20/22: closure_event_id=dept_238_closure_2021-07-24 rows=6,756 members=1,689
+2026-03-26 16:09:12 | INFO | displacement_effect_estimation | Fitting event 21/22: closure_event_id=dept_246_closure_2021-07-27 rows=2,160 members=540
+2026-03-26 16:09:13 | INFO | displacement_effect_estimation | Fitting event 22/22: closure_event_id=dept_228_closure_2021-02-04 rows=3,544 members=886
+2026-03-26 16:09:14 | INFO | displacement_effect_estimation | Saved separate-event outputs to: /home/litao/Coffee/model-free/outputs/displacement_effect_estimation_t-horizon_2/separate_effect/separate_effect
+2026-03-26 16:09:14 | INFO | displacement_effect_estimation | Rows in estimation sample: 179,432
