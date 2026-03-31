@@ -11,6 +11,23 @@ import pandas as pd
 
 LOGGER = logging.getLogger("displacement_effect_estimation")
 
+_BASE_OUTPUT_COLS = [
+    "member_id",
+    "dept_id",
+    "closure_start",
+    "closure_end",
+    "closure_duration_days",
+    "group",
+    "treated",
+    "displacement_prob",
+    "disp_binary",
+    "closure_event_id",
+    "period_start",
+    "calendar_month",
+    "rel_t",
+    "post",
+]
+
 
 def get_project_root() -> Path:
     return Path(__file__).resolve().parents[2]
@@ -248,6 +265,121 @@ def load_orders_for_behavior_members(
     return df.sort_values("date").reset_index(drop=True)
 
 
+def load_commodity_orders_for_members(
+    member_ids: set,
+    cfg: dict | None = None,
+    chunksize: int = 1_000_000,
+) -> pd.DataFrame:
+    """Load order_commodity_result_processed.csv for the given member IDs.
+
+    Returns a DataFrame with columns [member_id, date, product_id], sorted by date.
+    Covers the full date range in the file (all historical purchases).
+    """
+    cfg = cfg or load_config()
+    project_root = get_project_root()
+    rel_path = cfg.get("paths", {}).get(
+        "commodity_processed_file",
+        "data/processed/order_commodity_result_processed.csv",
+    )
+    path = project_root / rel_path
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Processed commodity file not found: {path}. "
+            "Expected columns: member_id, dt, product_id."
+        )
+    if not member_ids:
+        return pd.DataFrame(columns=["member_id", "date", "product_id"])
+
+    frames: list[pd.DataFrame] = []
+    for chunk in pd.read_csv(
+        path,
+        encoding="utf-8-sig",
+        usecols=["member_id", "dt", "product_id"],
+        chunksize=chunksize,
+    ):
+        chunk = chunk[chunk["member_id"].isin(member_ids)]
+        if chunk.empty:
+            continue
+        chunk["date"] = pd.to_datetime(chunk["dt"], errors="coerce").dt.normalize()
+        chunk = chunk.dropna(subset=["date"])
+        if chunk.empty:
+            continue
+        frames.append(chunk[["member_id", "date", "product_id"]].dropna())
+
+    if not frames:
+        return pd.DataFrame(columns=["member_id", "date", "product_id"])
+
+    df = pd.concat(frames, ignore_index=True)
+    df["product_id"] = df["product_id"].astype(int)
+    return df.sort_values("date").reset_index(drop=True)
+
+
+def _compute_first_purchase_dates(commodity_df: pd.DataFrame) -> pd.DataFrame:
+    """Return (member_id, product_id, first_date): the earliest purchase date per member-product pair."""
+    return (
+        commodity_df.groupby(["member_id", "product_id"], sort=False)["date"]
+        .min()
+        .reset_index()
+        .rename(columns={"date": "first_date"})
+    )
+
+
+def _compute_variety_seeking_for_window(
+    commodity_df: pd.DataFrame,
+    first_purchase_df: pd.DataFrame,
+    members: set,
+    start_dt: pd.Timestamp,
+    end_dt: pd.Timestamp,
+    mode: str = "distinct",
+) -> pd.DataFrame:
+    """Compute variety_seeking for all members in one period window.
+
+    variety_seeking = |new products in window| / |products in window|,
+    where a product is "new" if the member's first-ever purchase of it is on or
+    after start_dt (i.e., never seen before this period).
+
+    mode="distinct" (default):
+        Both numerator and denominator use set cardinality — each product_id
+        counted once per member per window regardless of purchase frequency.
+    mode="instance":
+        Both numerator and denominator count individual purchase rows — buying
+        the same product k times contributes k to both numerator and denominator.
+
+    Returns DataFrame[member_id, variety_seeking].
+    Members with no purchases in the window receive NaN.
+    """
+    if mode not in ("distinct", "instance"):
+        raise ValueError(f"variety_seeking_mode must be 'distinct' or 'instance'; got '{mode}'.")
+
+    win = _slice_by_date(commodity_df, start_dt, end_dt)
+    if not win.empty:
+        win = win[win["member_id"].isin(members)]
+
+    all_members = pd.DataFrame({"member_id": list(members)})
+
+    if win.empty:
+        all_members["variety_seeking"] = np.nan
+        return all_members
+
+    win_prods = win[["member_id", "product_id"]].copy()
+    if mode == "distinct":
+        # Each product counted once per member — set cardinality
+        win_prods = win_prods.drop_duplicates()
+
+    # Join with global first-purchase dates; flag as new when first_date >= start_dt
+    win_prods = win_prods.merge(first_purchase_df, on=["member_id", "product_id"], how="left")
+    win_prods["is_new"] = (win_prods["first_date"] >= start_dt).astype(int)
+
+    agg = (
+        win_prods.groupby("member_id", sort=False)
+        .agg(total_prods=("product_id", "count"), new_prods=("is_new", "sum"))
+        .reset_index()
+    )
+    agg["variety_seeking"] = agg["new_prods"] / agg["total_prods"]
+
+    return all_members.merge(agg[["member_id", "variety_seeking"]], on="member_id", how="left")
+
+
 def _slice_by_date(sorted_df: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp) -> pd.DataFrame:
     if end_date < start_date:
         return sorted_df.iloc[0:0]
@@ -329,12 +461,21 @@ def build_estimation_sample(
     closure_duration_days: bool | int | None = None,
     separate_effect: bool | None = None,
     select_recency_consumers: bool | int | None = None,
+    require_balanced_panel: bool | None = None,
+    variety_seeking_mode: str = "distinct",
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
-    if outcome != "n_purchases":
+    _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "variety_seeking"})
+    if outcome not in _SUPPORTED_OUTCOMES:
         raise ValueError(
-            f"Only outcome='n_purchases' is currently supported for event-time construction; got '{outcome}'."
+            f"Unsupported outcome '{outcome}'. Must be one of {sorted(_SUPPORTED_OUTCOMES)}."
         )
+    # For variety_seeking the balanced-panel filter (drop members missing any period) is the
+    # default; pass require_balanced_panel=False to keep NaN rows instead.
+    if require_balanced_panel is None:
+        _require_balanced_panel = outcome == "variety_seeking"
+    else:
+        _require_balanced_panel = bool(require_balanced_panel)
 
     spec_cfg = cfg.get("spec", {})
     if closure_duration_days is None:
@@ -364,7 +505,24 @@ def build_estimation_sample(
         scoped_member_ids = set(
             scores.loc[scores["days_since_last_purchase"] < recency_days, "member_id"].dropna().tolist()
         )
-    orders = load_orders_for_behavior_members(member_ids=scoped_member_ids, cfg=cfg)
+    if outcome == "n_purchases":
+        orders = load_orders_for_behavior_members(member_ids=scoped_member_ids, cfg=cfg)
+        commodity_df: pd.DataFrame | None = None
+        first_purchase_df: pd.DataFrame | None = None
+    else:  # variety_seeking
+        orders = None
+        commodity_df = load_commodity_orders_for_members(member_ids=scoped_member_ids, cfg=cfg)
+        first_purchase_df = _compute_first_purchase_dates(commodity_df)
+        if variety_seeking_mode not in ("distinct", "instance"):
+            raise ValueError(
+                f"variety_seeking_mode must be 'distinct' or 'instance'; got '{variety_seeking_mode}'."
+            )
+        LOGGER.info(
+            "Loaded commodity orders: %s rows, %s member-product pairs, variety_seeking_mode=%s",
+            f"{len(commodity_df):,}",
+            f"{len(first_purchase_df):,}",
+            variety_seeking_mode,
+        )
 
     if t_horizon is None:
         t_horizon = int(cfg.get("spec", {}).get("t_horizon", 4))
@@ -438,7 +596,7 @@ def build_estimation_sample(
             closure_event_id=_build_closure_event_id(dept_id=dept_id, closure_start=closure_start)
         )
         members = set(member_frame["member_id"].tolist())
-        closure_rows = 0
+        closure_parts: list[pd.DataFrame] = []
 
         for rel_t in rel_t_values:
             start_dt, end_dt = _window_bounds(
@@ -447,44 +605,49 @@ def build_estimation_sample(
                 rel_t=rel_t,
                 bin_days=closure_bin_days,
             )
-            win_orders = _slice_by_date(sorted_df=orders, start_date=start_dt, end_date=end_dt)
-            if not win_orders.empty:
-                win_orders = win_orders[win_orders["member_id"].isin(members)]
-                counts = (
-                    win_orders.groupby("member_id")["date"].nunique().rename("_purchase_days").reset_index()
-                )
-            else:
-                counts = pd.DataFrame(columns=["member_id", "_purchase_days"])
 
-            block = member_frame.merge(counts, on="member_id", how="left")
-            block["_purchase_days"] = block["_purchase_days"].fillna(0)
-            block["n_purchases"] = block["_purchase_days"] / float(closure_bin_days)
+            if outcome == "n_purchases":
+                win_orders = _slice_by_date(sorted_df=orders, start_date=start_dt, end_date=end_dt)
+                if not win_orders.empty:
+                    win_orders = win_orders[win_orders["member_id"].isin(members)]
+                    counts = (
+                        win_orders.groupby("member_id")["date"].nunique().rename("_purchase_days").reset_index()
+                    )
+                else:
+                    counts = pd.DataFrame(columns=["member_id", "_purchase_days"])
+                block = member_frame.merge(counts, on="member_id", how="left")
+                block["_purchase_days"] = block["_purchase_days"].fillna(0)
+                block["n_purchases"] = block["_purchase_days"] / float(closure_bin_days)
+            else:  # variety_seeking
+                vs_result = _compute_variety_seeking_for_window(
+                    commodity_df=commodity_df,
+                    first_purchase_df=first_purchase_df,
+                    members=members,
+                    start_dt=start_dt,
+                    end_dt=end_dt,
+                    mode=variety_seeking_mode,
+                )
+                block = member_frame.merge(vs_result, on="member_id", how="left")
+
             block["rel_t"] = int(rel_t)
             block["post"] = (block["rel_t"] > 0).astype(int)
             block["period_start"] = start_dt
             block["calendar_month"] = start_dt.strftime("%Y-%m")
-            out_parts.append(
-                block[
-                    [
-                        "member_id",
-                        "dept_id",
-                        "closure_start",
-                        "closure_end",
-                        "closure_duration_days",
-                        "group",
-                        "treated",
-                        "displacement_prob",
-                        "disp_binary",
-                        "closure_event_id",
-                        "period_start",
-                        "calendar_month",
-                        "rel_t",
-                        "post",
-                        "n_purchases",
-                    ]
-                ]
+            closure_parts.append(block[_BASE_OUTPUT_COLS + [outcome]])
+
+        # Balanced-panel filter: drop member-closure pairs missing any period.
+        if outcome == "variety_seeking" and _require_balanced_panel and closure_parts:
+            closure_df = pd.concat(closure_parts, ignore_index=True)
+            has_all_periods = closure_df.groupby("member_id")[outcome].transform(
+                lambda x: x.notna().all()
             )
-            closure_rows += len(block)
+            closure_df = closure_df[has_all_periods]
+            closure_rows = len(closure_df)
+            if not closure_df.empty:
+                out_parts.append(closure_df)
+        else:
+            out_parts.extend(closure_parts)
+            closure_rows = sum(len(p) for p in closure_parts)
 
         LOGGER.info(
             "Closure %s/%s done: dept_id=%s closure_start=%s members=%s rows=%s duration_days=%s elapsed=%.2fs",

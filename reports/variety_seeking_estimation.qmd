@@ -1,0 +1,318 @@
+---
+title: "Variety-Seeking Estimation: Method and Key Variables"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-float: true
+    toc-depth: 4
+    theme: united
+    highlight-style: tango
+---
+
+# Motivation
+
+## Why Variety Seeking?
+
+A temporary store closure not only interrupts a consumer's purchasing routine — it may also change *what* they purchase. When displaced customers are forced to explore alternative stores or products during a closure, they may discover new items they would not otherwise have tried. Conversely, the habitual return to familiar products could signal strong state dependence in product choice (not just in purchase frequency).
+
+The **variety-seeking** outcome measures the degree to which a consumer's product portfolio in a given period is composed of products they have never bought before. Estimating how variety seeking evolves around a closure event allows us to test:
+
+1. Whether closures trigger product exploration (increased variety in post-closure periods).
+2. Whether the displacement effect documented for purchase *frequency* has a parallel effect on product *novelty*.
+3. Whether displaced versus non-displaced consumers differ in their product exploration patterns.
+
+This complements the purchase-frequency (`n_purchases`) analysis by shifting focus from *how much* consumers buy to *what* they buy.
+
+---
+
+# Outcome Variable Definition
+
+## Variety-Seeking Ratio
+
+For member $i$ in event-time period $t$ with window $[s_t,\ e_t]$, the pipeline supports two counting modes selectable via `--variety-seeking-mode`.
+
+### Mode: `distinct` (default)
+
+$$
+\text{variety\_seeking}_{it}
+= \frac{\#\{\text{products purchased in } [s_t, e_t] \text{ that were never bought before } s_t\}}
+       {\#\{\text{products purchased in } [s_t, e_t]\}}
+$$
+
+The $\#\{\cdot\}$ operator denotes set cardinality — each `product_id` is counted **once** per member per window regardless of how many times it was purchased. Repeated buys of the same product within a window do not affect the ratio.
+
+### Mode: `instance`
+
+$$
+\text{variety\_seeking}_{it}
+= \frac{\sum_{j \,:\, t_j \in [s_t,\, e_t]} \mathbf{1}\bigl[\text{first\_date}(i,\, p_j) \geq s_t\bigr]}
+       {\#\{j \,:\, t_j \in [s_t,\, e_t]\}}
+$$
+
+where $j$ indexes individual purchase rows and $p_j$ is the product of row $j$. Buying the same product $k$ times within the window contributes $k$ to both numerator and denominator. A product that is new but purchased $k$ times therefore counts $k$ toward the numerator.
+
+### Comparison
+
+| | `distinct` (default) | `instance` |
+|---|---|---|
+| Same product bought 3× in window | counts as 1 | counts as 3 |
+| Emphasises | breadth of product portfolio | purchase-weighted novelty |
+| Unaffected by within-period repurchase? | Yes | No |
+
+The `distinct` mode is the cleaner measure of variety-seeking *behaviour* — it answers "did the consumer try something new?" without rewarding or penalising how much of the new product they then consumed. The `instance` mode can be used as a robustness check or when purchase intensity toward new products is substantively interesting.
+
+**Shared properties (both modes):**
+
+- **Range**: $[0, 1]$.
+- **Undefined**: when the denominator is zero (no purchases in the period), the outcome is `NaN`.
+
+## Worked Example
+
+Suppose the window for period $t = -2$ is `[2022-03-01, 2022-03-07]` and a member made five purchase rows: *Americano* × 2 (first ever bought 2022-01-10), *Latte* × 2 (first ever bought 2022-03-03), *Coconut Latte* × 1 (first ever bought 2022-03-05).
+
+| Product | Purchase rows in window | First purchase date | New in period? |
+|---|---|---|---|
+| Americano | 2 | 2022-01-10 | No |
+| Latte | 2 | 2022-03-03 | **Yes** |
+| Coconut Latte | 1 | 2022-03-05 | **Yes** |
+
+**`distinct` mode** (set cardinality, 3 unique products):
+$$\text{variety\_seeking}_{i,-2} = \frac{2}{3} \approx 0.667$$
+
+**`instance` mode** (5 purchase rows, 3 of which are new products):
+$$\text{variety\_seeking}_{i,-2} = \frac{2+1}{2+2+1} = \frac{3}{5} = 0.600$$
+
+## What Counts as a Product?
+
+The unit of measurement is the integer `product_id` from `order_commodity_result_processed.csv`. Products are counted at the `product_id` level within a period window — multiple purchases of the same product within the same window count as one (set cardinality, not purchase frequency).
+
+---
+
+# Data Source
+
+## `order_commodity_result_processed.csv`
+
+This processed file (located at `data/processed/order_commodity_result_processed.csv` relative to the project root) contains one row per product-level purchase event with the following columns:
+
+| Column | Type | Description |
+|---|---|---|
+| `member_id` | int | Consumer identifier |
+| `dept_id` | int | Store identifier |
+| `dt` | datetime string | Date of purchase |
+| `product_id` | int | Product identifier (integer code) |
+| `is_top` | float | Whether it is a top-selling product (not used in this analysis) |
+
+Product name mapping is available in `data/processed/product_mapping.csv` (`product_id`, `name`, `first_day`, `last_day`).
+
+The file is loaded **once** before the closure loop, filtered to the set of scoped member IDs, and sorted by date to enable binary-search-based window slicing.
+
+---
+
+# Sample Construction
+
+## Period Windows
+
+Event time follows the same definition as the purchase-frequency analysis. For each closure event (store $e$, closure window $[C_s, C_e]$, duration $L_e$ days):
+
+| Period $t$ | Window start $s_t$ | Window end $e_t$ |
+|---|---|---|
+| $-4$ | $C_s - 4L_e$ | $C_s - 3L_e - 1$ |
+| $-3$ | $C_s - 3L_e$ | $C_s - 2L_e - 1$ |
+| $-2$ | $C_s - 2L_e$ | $C_s - L_e - 1$ |
+| $-1$ | $C_s - L_e$ | $C_s - 1$ |
+| $+1$ | $C_e + 1$ | $C_e + L_e$ |
+| $+2$ | $C_e + L_e + 1$ | $C_e + 2L_e$ |
+| $+3$ | $C_e + 2L_e + 1$ | $C_e + 3L_e$ |
+| $+4$ | $C_e + 3L_e + 1$ | $C_e + 4L_e$ |
+
+Period $t = 0$ (the actual closure window $[C_s, C_e]$) is **excluded** from all regressions.
+
+## "History" Definition
+
+For a period starting at $s_t$, a product is considered **previously known** to member $i$ if it appears anywhere in `order_commodity_result_processed.csv` with $\text{date} < s_t$. There is no truncation: the full available transaction history is used. Formally, for each (member, product) pair, we precompute:
+
+$$\text{first\_date}(i, p) = \min\{d : \text{member } i \text{ purchased product } p \text{ on date } d\}$$
+
+A product $p$ purchased in window $[s_t, e_t]$ is **new** in period $t$ if and only if:
+
+$$\text{first\_date}(i, p) \geq s_t$$
+
+## Balanced-Panel Filter (Default)
+
+For `variety_seeking`, the outcome is undefined (`NaN`) for member-closure pairs where the member has no purchases in a given period. By default, the pipeline applies a **balanced-panel filter**:
+
+> A member-closure pair is included in the estimation sample if and only if the member has at least one purchase in **every** period from $t \in \{-4, -3, -2, -1, +1, +2, +3, +4\}$.
+
+This ensures that the regression does not confound changes in *whether* someone buys with changes in *what* they buy when they do. All periods for dropped member-closure pairs are removed together, preserving the within-unit balanced structure.
+
+To use an unbalanced panel instead (retaining observations even when some periods are NaN), pass `--no-balanced-panel` when invoking the pipeline.
+
+```bash
+# Distinct mode, balanced panel (default):
+./run_with_logging.sh --outcome variety_seeking \
+    --output-dir outputs/displacement_effect_estimation/variety_seeking
+
+# Instance mode:
+./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance \
+    --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
+
+# Unbalanced panel:
+./run_with_logging.sh --outcome variety_seeking --no-balanced-panel \
+    --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced
+```
+
+---
+
+# Estimation Framework
+
+The same triple difference-in-differences (DDD) and event-study specifications used for `n_purchases` are applied to `variety_seeking`. The outcome variable on the left-hand side is simply replaced with `variety_seeking`. All fixed effects, interaction terms, and identification arguments remain unchanged.
+
+## Collapsed (Post-Dummy) Specifications
+
+**Spec B (binary displacement):**
+
+$$
+\text{variety\_seeking}_{iet} = \delta^B \cdot \text{post} \cdot D^B_{ie}
++ \delta^D \cdot \text{post} \cdot D^B_{ie} \cdot D_{ie}
++ \beta \cdot \text{post} \cdot D_{ie}
++ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
+$$
+
+**Spec C (continuous displacement score):**
+
+$$
+\text{variety\_seeking}_{iet} = \delta^B \cdot \text{post} \cdot D^B_{ie}
++ \delta^S \cdot \text{post} \cdot D^B_{ie} \cdot \tilde{s}_{ie}
++ \beta^S \cdot \text{post} \cdot \tilde{s}_{ie}
++ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
+$$
+
+## Event-Study Specifications
+
+**Spec A (overall ATT):**
+
+$$
+\text{variety\_seeking}_{iet} = \sum_{l \neq -1} \delta_l \cdot \mathbf{1}(t=l) \cdot D^B_{ie}
++ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
+$$
+
+**Spec B (event-study triple-difference):**
+
+$$
+\text{variety\_seeking}_{iet} = \sum_{l \neq -1} \delta^B_l \cdot \mathbf{1}(t=l) \cdot D^B_{ie}
++ \sum_{l \neq -1} \delta^D_l \cdot \mathbf{1}(t=l) \cdot D^B_{ie} \cdot D_{ie}
++ \sum_{l \neq -1} \beta_l \cdot \mathbf{1}(t=l) \cdot D_{ie}
++ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
+$$
+
+Reference period is $t = -1$ in all event-study specs.
+
+---
+
+# Key Variables Reference
+
+The table below describes every column in the estimation sample produced by `build_estimation_sample(outcome='variety_seeking')`.
+
+## Outcome
+
+| Variable | Type | Description |
+|---|---|---|
+| `variety_seeking` | float $\in [0,1]$ | Share of products in the period that the member had never previously purchased. Counting unit depends on `--variety-seeking-mode`: `distinct` (default) uses set cardinality (each `product_id` once); `instance` counts every purchase row. `NaN` if the member had no purchases in the period (dropped under the balanced-panel default). |
+
+## Member-Closure Identifiers
+
+| Variable | Type | Description |
+|---|---|---|
+| `member_id` | int | Consumer identifier. Used as the clustering variable for standard errors. |
+| `dept_id` | int | Identifier of the **treated** store (the one that closed). |
+| `closure_start` | str (YYYY-MM-DD) | Calendar date the closure began. |
+| `closure_end` | str (YYYY-MM-DD) | Calendar date the store reopened. |
+| `closure_duration_days` | int | Length of the closure in days; also the bin width $L_e$ for all period windows. |
+| `closure_event_id` | str | Composite key `dept_{dept_id}_closure_{closure_start}`. Uniquely identifies one closure event. |
+| `event_fe_id` | str | Composite key `{member_id}\|{dept_id}\|{closure_start}`. Uniquely identifies one consumer-closure pair; used as the unit of the consumer-closure fixed effect $\phi_{ie}$. |
+| `group` | str | Group label from the displacement classification pipeline (`treated` / `control`). |
+
+## Treatment and Displacement
+
+| Variable | Type | Description |
+|---|---|---|
+| `treated` | int $\{0,1\}$ | 1 if the member's preferred store was the closed store (treatment group); 0 if the preferred store was one of the matched control stores. |
+| `displacement_prob` | float $\in[0,1]$ | Ex-ante displacement probability $s_{ie}$ from the XGBoost classifier. Probability that the member would have made at least one purchase during the closure window in the counterfactual. |
+| `displacement_prob_centered` | float | $\tilde{s}_{ie} = s_{ie} - \bar{s}$, mean-centered version used in Spec C. The centering means $\delta^B$ is interpreted at the average propensity. |
+| `disp_binary` | int $\{0,1\}$ | $D_{ie}$: 1 if predicted displaced ($\hat{p}_{ie} \geq 0.5$), 0 otherwise. |
+
+## Event-Time Variables
+
+| Variable | Type | Description |
+|---|---|---|
+| `rel_t` | int | Relative period $t \in \{-4,-3,-2,-1,+1,+2,+3,+4\}$. Period 0 (the closure window itself) is excluded from the sample. |
+| `post` | int $\{0,1\}$ | 1 if `rel_t` > 0 (post-reopening), 0 if `rel_t` < 0 (pre-closure). Used in collapsed (post-dummy) specifications. |
+| `period_start` | Timestamp | Calendar date of the first day of period $t$'s window. |
+| `calendar_month` | str (YYYY-MM) | Calendar month of `period_start`. Absorbed as fixed effect $\gamma_m$ to remove seasonality. |
+
+## Closure-Length Controls
+
+| Variable | Type | Description |
+|---|---|---|
+| `closure_length_std` | float | $\tilde{L}_e = (L_e - \bar{L}) / \sigma_L$: standardised closure duration. Used in Spec D (length-heterogeneity event study) to allow displacement and baseline effects to vary with closure length. |
+
+---
+
+# Identification and Interpretation
+
+## Fixed Effects
+
+Three sets of fixed effects are absorbed in all specifications:
+
+- **$\phi_{ie}$ (consumer-closure FE)**: absorbs all time-invariant characteristics of the consumer-closure pair, including the main effects of `treated`, `disp_binary`, `displacement_prob_centered`, and `closure_length_std`. Only their products with the time-varying `rel_t` dummies are identified.
+- **$\omega_t$ (relative-period FE)**: absorbs common purchase dynamics shared across all consumer-closure pairs at the same event-time period.
+- **$\gamma_m$ (calendar-month FE)**: absorbs seasonal patterns in product exploration (e.g., new summer menu launches).
+
+## Interpreting Coefficients on `variety_seeking`
+
+- A **positive** $\delta^D_l$ (for $l > 0$) means displaced consumers increase product exploration after the reopening *above* the treated–control gap. This would be consistent with the forced exploration during the closure carrying over into post-closure novelty-seeking.
+- A **negative** $\delta^D_l$ (for $l > 0$) would suggest displaced consumers revert more strongly to familiar products — consistent with habit reinforcement rather than exploration.
+- **Pre-trend tests** ($l < -1$): if variety-seeking trends are parallel between displaced/non-displaced before the closure, the identification assumption holds.
+
+## Balanced Panel and Conditional Estimation
+
+By restricting the sample to members who purchase in every event-time period, the variety-seeking regression conditions on a selected subset of *always-active* consumers. Coefficients should be interpreted as the variety-seeking response **among members who remain consistently active** across the full $\pm 4$-period window. The unbalanced-panel version (`--no-balanced-panel`) is available as a robustness check; differences between the two estimates indicate the extent to which the selection on activity status matters.
+
+---
+
+# Implementation Summary
+
+```python
+# Preprocessing (once, before the closure loop)
+commodity_df = load_commodity_orders_for_members(member_ids=scoped_member_ids)
+# → DataFrame[member_id, date, product_id], sorted by date
+
+first_purchase_df = _compute_first_purchase_dates(commodity_df)
+# → DataFrame[member_id, product_id, first_date]
+# first_date = min(date) across full data history for each (member, product)
+
+# Per closure, per period window [start_dt, end_dt]
+win = binary_search_slice(commodity_df, start_dt, end_dt)
+win_prods = win[["member_id", "product_id"]].copy()
+if mode == "distinct":          # default
+    win_prods = win_prods.drop_duplicates()   # set cardinality
+# mode == "instance": keep all rows (repeated buys count proportionally)
+
+win_prods = win_prods.merge(first_purchase_df, on=["member_id", "product_id"])
+win_prods["is_new"] = (win_prods["first_date"] >= start_dt).astype(int)
+
+agg = win_prods.groupby("member_id").agg(
+    total_prods=("product_id", "count"),
+    new_prods=("is_new", "sum"),
+)
+agg["variety_seeking"] = agg["new_prods"] / agg["total_prods"]
+# → NaN for members not present in win (merged as left join)
+
+# Balanced-panel filter (default, applied per closure after all periods computed)
+closure_df = concat(all_period_blocks_for_this_closure)
+valid = closure_df.groupby("member_id")["variety_seeking"].transform(
+    lambda x: x.notna().all()
+)
+closure_df = closure_df[valid]
+```

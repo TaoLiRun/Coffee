@@ -95,6 +95,26 @@ def main() -> None:
         help="Keep only consumers with a purchase in (closure_start - N, closure_start). Only valid with --separate-effect.",
     )
     parser.add_argument(
+        "--no-balanced-panel",
+        action="store_true",
+        default=False,
+        help=(
+            "For outcome=variety_seeking: keep member-closure pairs that are missing in some "
+            "periods (unbalanced panel). Default is to drop such pairs (balanced panel)."
+        ),
+    )
+    parser.add_argument(
+        "--variety-seeking-mode",
+        type=str,
+        choices=["distinct", "instance"],
+        default="distinct",
+        help=(
+            "For outcome=variety_seeking: 'distinct' (default) counts each product_id once "
+            "per window (set cardinality); 'instance' counts every purchase row so repeated "
+            "buys of the same product contribute proportionally."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=str,
         default=default_output_dir,
@@ -122,14 +142,20 @@ def main() -> None:
 
     logger = setup_logging(log_file=log_file, log_level=args.log_level)
     logger.info("Starting displacement effect estimation run")
+    require_balanced_panel = None if not args.no_balanced_panel else False
+
     logger.info(
-        "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, closure_duration_days=%s, separate_effect=%s, select_recency_consumers=%s, output_dir=%s",
+        "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, closure_duration_days=%s, "
+        "separate_effect=%s, select_recency_consumers=%s, require_balanced_panel=%s, "
+        "variety_seeking_mode=%s, output_dir=%s",
         args.outcome,
         args.t_horizon,
         args.cluster_col,
         closure_duration_days,
         separate_effect,
         select_recency_consumers,
+        require_balanced_panel,
+        args.variety_seeking_mode,
         args.output_dir,
     )
 
@@ -140,6 +166,8 @@ def main() -> None:
         closure_duration_days=closure_duration_days,
         separate_effect=separate_effect,
         select_recency_consumers=select_recency_consumers,
+        require_balanced_panel=require_balanced_panel,
+        variety_seeking_mode=args.variety_seeking_mode,
     )
     logger.info("Built estimation sample: %s rows", f"{len(sample):,}")
 

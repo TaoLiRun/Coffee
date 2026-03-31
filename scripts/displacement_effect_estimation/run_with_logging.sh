@@ -17,6 +17,18 @@
 #       --select-recency-consumers 10 \
 #       --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
 #
+# Variety-seeking, distinct mode (default: each product counted once per window):
+#   ./run_with_logging.sh --outcome variety_seeking \
+#       --output-dir outputs/displacement_effect_estimation/variety_seeking
+#
+# Variety-seeking, instance mode (each purchase row counted separately):
+#   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance \
+#       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
+#
+# Variety-seeking, unbalanced panel (keep members missing in some periods):
+#   ./run_with_logging.sh --outcome variety_seeking --no-balanced-panel \
+#       --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced
+#
 # Invalid:
 #   ./run_with_logging.sh --select-recency-consumers 10
 # because --select-recency-consumers is only allowed with --separate-effect.

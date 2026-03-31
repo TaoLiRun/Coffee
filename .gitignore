@@ -30,6 +30,8 @@ nohup.out
 
 # Temporary files
 *.tmp
+*.py.tmp.*
+*.tmp.*
 *.swp
 *.swo
 *~
