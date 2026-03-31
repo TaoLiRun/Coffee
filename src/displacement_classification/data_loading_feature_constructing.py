@@ -80,6 +80,14 @@ CONFIG = load_config()
 
 NUM_PRE_PERIODS = CONFIG["data"]["num_pre_periods"]
 
+from push_event_cache import (  # noqa: E402
+    build_purchase_day_ordinals_index,
+    compute_push_features_for_batch,
+    prepare_push_feature_metadata,
+    push_end_index_for_history_end,
+    sort_push_and_dt_array,
+)
+
 # ---------------------------------------------------------------------------
 # Imports from customer-store analysis module
 # ---------------------------------------------------------------------------
@@ -272,6 +280,42 @@ def load_or_build_closure_pair_registry(
     return reg
 
 
+def filter_closures_to_registry_kept(logger: logging.Logger, closures: pd.DataFrame) -> pd.DataFrame:
+    """
+    Keep only closures that appear in ``closure_pair_registry.csv`` with ``status == kept``.
+    Ensures ``head(1)`` / ``tail(1)`` debug runs use a closure the pipeline can process.
+    """
+    if not PAIR_REGISTRY_CSV.exists():
+        raise FileNotFoundError(
+            f"Required closure pair registry not found: {PAIR_REGISTRY_CSV}."
+        )
+    reg = pd.read_csv(PAIR_REGISTRY_CSV, encoding="utf-8-sig")
+    if "status" not in reg.columns:
+        raise ValueError(
+            f"closure_pair_registry.csv is missing column 'status': {PAIR_REGISTRY_CSV}"
+        )
+    kept = reg[reg["status"] == "kept"].copy()
+    c = closures.copy()
+    c["_cs"] = pd.to_datetime(c["closure_start"]).dt.normalize()
+    kept["_cs"] = pd.to_datetime(kept["closure_start"]).dt.normalize()
+    merged = c.merge(
+        kept[["dept_id", "_cs"]].drop_duplicates(),
+        on=["dept_id", "_cs"],
+        how="inner",
+    )
+    merged = merged.drop(columns=["_cs"])
+    log_print(
+        logger,
+        f"  Closures with registry status=kept: {len(merged)}/{len(closures)}",
+    )
+    if merged.empty:
+        raise ValueError(
+            "No closures overlap closure_pair_registry with status=kept. "
+            "Check registry and store closure CSV."
+        )
+    return merged
+
+
 # ---------------------------------------------------------------------------
 # Panel construction
 # ---------------------------------------------------------------------------
@@ -426,12 +470,19 @@ def build_training_panel(
 
     if skipped_history > 0:
         log_print(logger, f"  Skipped {skipped_history} closure(s) for insufficient history.")
+    if not rows:
+        raise ValueError(
+            "Training panel has no rows: every closure was skipped (missing registry, "
+            "insufficient history, or no treatment/control members)."
+        )
     panel = pd.DataFrame(rows)
     sample = os.environ.get("DISPLACEMENT_SAMPLE")
     if sample:
         n = int(sample)
         panel = panel.sample(n=min(n, len(panel)), random_state=42)
         log_print(logger, f"  Sampled to {len(panel):,} rows (--sample={n})")
+    if panel.empty:
+        raise ValueError("Training panel is empty after sampling.")
     log_print(logger, f"  Panel: {len(panel):,} rows, {panel['member_id'].nunique():,} unique members")
     log_print(logger, f"  Label distribution: {panel['label'].value_counts().to_dict()}")
     return panel
@@ -577,6 +628,7 @@ def compute_features_for_panel(
     panel: pd.DataFrame,
     df_order_full: pd.DataFrame,
     member_demographics: pd.DataFrame,
+    df_push_events: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """
     Compute behavioral and closure-specific features for each panel row.
@@ -586,11 +638,30 @@ def compute_features_for_panel(
     load_member_demographics().  Hour-level and product-name features are
     intentionally excluded.
 
+    Optional *df_push_events* (filtered push logs) adds push intensity, offer,
+    trigger-mix, and push–purchase history features when ``push_features.enabled``
+    in config and the frame is non-empty.
+
     Iterates once per unique period_start date (instead of once per
     closure × period group) to amortise the cost of large groupby aggregations
     across all closures that share the same history cutoff date.
     """
     log_print(logger, "\nComputing features (vectorized)...")
+
+    do_push = False
+    if (
+        df_push_events is not None
+        and not df_push_events.empty
+        and CONFIG.get("push_features", {}).get("enabled", False)
+    ):
+        do_push = True
+        log_print(logger, "  Push features: sorting push events and building purchase-day index...")
+        df_push_sorted, dt_np = sort_push_and_dt_array(df_push_events)
+        purchase_ordinals_index = build_purchase_day_ordinals_index(df_order_full)
+        tag_to_safe, all_safe_tags = prepare_push_feature_metadata(df_push_events)
+        push_cfg = CONFIG["push_features"]
+        windows_days = push_cfg.get("windows_days", [7, 14, 28])
+        response_horizon_days = push_cfg.get("response_horizon_days", 7)
 
     # ------------------------------------------------------------------
     # 0. Canonicalize types
@@ -976,6 +1047,22 @@ def compute_features_for_panel(
             .rename("take_address_rate")
         )
         member_batch = member_batch.merge(ta_rate, on="member_id", how="left")
+
+        if do_push:
+            history_end = ps - pd.Timedelta(days=1)
+            push_end_idx = push_end_index_for_history_end(dt_np=dt_np, history_end=history_end)
+            member_batch = compute_push_features_for_batch(
+                member_batch=member_batch,
+                df_push_sorted=df_push_sorted,
+                dt_np=dt_np,
+                push_end_idx=push_end_idx,
+                history_end=history_end,
+                purchase_ordinals_index=purchase_ordinals_index,
+                tag_to_safe=tag_to_safe,
+                all_safe_tags=all_safe_tags,
+                windows_days=windows_days,
+                response_horizon_days=response_horizon_days,
+            )
 
         # Drop internal helper columns
         member_batch.drop(

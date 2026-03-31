@@ -5,6 +5,12 @@ from pathlib import Path
 import pandas as pd
 
 
+def _table_to_markdown(df: pd.DataFrame) -> str:
+    if df.empty:
+        return "_No rows produced._"
+    return df.to_markdown(index=False)
+
+
 def save_outputs(
     output_dir: Path,
     sample: pd.DataFrame,
@@ -15,6 +21,8 @@ def save_outputs(
     event_terms: pd.DataFrame,
     event_fit: pd.DataFrame,
     pretrend_tests: pd.DataFrame,
+    summary_title: str = "# Displacement Effect Estimation Summary",
+    summary_notes: list[str] | None = None,
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -38,7 +46,7 @@ def save_outputs(
     comparison.to_csv(output_dir / "spec_comparison.csv", index=False)
 
     lines = [
-        "# Displacement Effect Estimation Summary",
+        summary_title,
         "",
         f"- Sample rows: {len(sample):,}",
         f"- Unique members: {sample['member_id'].nunique():,}",
@@ -47,15 +55,17 @@ def save_outputs(
         f"- Relative periods: {sorted(sample['rel_t'].unique().tolist())}",
         "",
         "## Binary Specs",
-        binary_terms.to_markdown(index=False),
+        _table_to_markdown(binary_terms),
         "",
         "## Score Spec",
-        score_terms.to_markdown(index=False),
+        _table_to_markdown(score_terms),
         "",
         "## Event-study Specs",
-        event_terms.to_markdown(index=False),
+        _table_to_markdown(event_terms),
         "",
         "## Pre-trend Joint Tests",
-        pretrend_tests.to_markdown(index=False),
+        _table_to_markdown(pretrend_tests),
     ]
+    if summary_notes:
+        lines[7:7] = [*summary_notes, ""]
     (output_dir / "summary.md").write_text("\n".join(lines), encoding="utf-8")
