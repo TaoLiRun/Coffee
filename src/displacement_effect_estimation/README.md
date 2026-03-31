@@ -12,6 +12,19 @@ This module implements two parallel causal specifications on top of the existing
 - Ex-ante feature cache: `../outputs/displacement_classification/cache/features_t0_<hash>.parquet`
 - Orders history: `data/data1031/order_result.csv` (auto-detected under workspace)
 
+For `outcome=variety_seeking`, purchase-product history is loaded from
+`data/processed/order_commodity_result_processed.csv`.
+
+### Variety-seeking definition
+
+The formula is implemented in `data.py` (`_compute_variety_seeking_for_window`):
+
+- `variety_seeking = |new products in window| / |products in window|`
+- `distinct` mode (default): each `product_id` is counted once per member per window.
+- `instance` mode: each purchase row is counted (repeated buys increase weight).
+
+`period 0` means the closure window `[closure_start, closure_end]`.
+
 ## Run
 
 From this folder:
@@ -34,6 +47,9 @@ python run.py --outcome n_purchases --t-horizon 4 --separate-effect --select-rec
 
 # Separate effect for 10-day closures only, saved to a custom folder
 python run.py --outcome n_purchases --t-horizon 4 --separate-effect --closure-duration-days 10 --select-recency-consumers 10 --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
+
+# Variety-seeking: keep period-0 purchasers (default behavior is to drop them)
+python run.py --outcome variety_seeking --keep-period0-purchasers
 ```
 
 Behavior is controlled by `config.json`:
@@ -46,6 +62,8 @@ Behavior is controlled by `config.json`:
 - `spec.separate_effect = true` runs one estimation per closure/event and skips the closure-length heterogeneity event-study spec, which is not identified within a single event.
 - `spec.select_recency_consumers = false` keeps the full scored consumer base.
 - `spec.select_recency_consumers = 10` is only valid when `spec.separate_effect = true` and keeps consumers with `days_since_last_purchase < 10` from the cached `features_t0` file, while `order_result.csv` is still used to build event-time outcomes.
+- For `outcome=variety_seeking`, member-closure pairs with purchases in period 0 are dropped by default to keep treatment contrast clean.
+- `--keep-period0-purchasers` overrides that default for a single run.
 - `--output-dir ...` overrides `paths.output_dir` for a single run without changing the config file.
 
 ## Outputs

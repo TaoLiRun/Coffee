@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from data import build_estimation_sample, get_project_root, load_config
-from report import save_outputs
+from report import save_outputs, save_variety_panel_plot
 from specs import fit_collapsed_specs, fit_event_study_specs
 
 
@@ -115,6 +115,16 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--keep-period0-purchasers",
+        action="store_true",
+        default=False,
+        help=(
+            "For outcome=variety_seeking: keep all member-closure pairs regardless of period-0 "
+            "(closure-window) purchases. By default, treated with period-0 purchases are dropped "
+            "and controls without period-0 purchases are dropped."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=str,
         default=default_output_dir,
@@ -143,10 +153,12 @@ def main() -> None:
     logger = setup_logging(log_file=log_file, log_level=args.log_level)
     logger.info("Starting displacement effect estimation run")
     require_balanced_panel = None if not args.no_balanced_panel else False
+    drop_period0_purchasers = args.outcome == "variety_seeking" and not args.keep_period0_purchasers
 
     logger.info(
         "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, closure_duration_days=%s, "
         "separate_effect=%s, select_recency_consumers=%s, require_balanced_panel=%s, "
+        "drop_period0_purchasers=%s, "
         "variety_seeking_mode=%s, output_dir=%s",
         args.outcome,
         args.t_horizon,
@@ -155,6 +167,7 @@ def main() -> None:
         separate_effect,
         select_recency_consumers,
         require_balanced_panel,
+        drop_period0_purchasers,
         args.variety_seeking_mode,
         args.output_dir,
     )
@@ -168,6 +181,7 @@ def main() -> None:
         select_recency_consumers=select_recency_consumers,
         require_balanced_panel=require_balanced_panel,
         variety_seeking_mode=args.variety_seeking_mode,
+        drop_period0_purchasers=drop_period0_purchasers,
     )
     logger.info("Built estimation sample: %s rows", f"{len(sample):,}")
 
@@ -212,9 +226,17 @@ def main() -> None:
                     f"- Closure event: `{closure_event_id}`",
                     f"- Closure duration filter days: {closure_duration_days}",
                     f"- Recency filter days: {select_recency_consumers}",
+                    f"- Drop period-0 purchasers: {drop_period0_purchasers}",
                     "- Length-heterogeneity event-study spec skipped: true",
                 ],
             )
+            if args.outcome == "variety_seeking":
+                save_variety_panel_plot(
+                    output_dir=event_output_dir,
+                    sample=event_sample,
+                    cfg=cfg,
+                    variety_seeking_mode=args.variety_seeking_mode,
+                )
             event_index_rows.append(
                 {
                     "closure_event_id": closure_event_id,
@@ -252,8 +274,16 @@ def main() -> None:
                 "- Estimation mode: separate_effect=false",
                 f"- Closure duration filter days: {closure_duration_days}",
                 f"- Recency filter days: {select_recency_consumers}",
+                f"- Drop period-0 purchasers: {drop_period0_purchasers}",
             ],
         )
+        if args.outcome == "variety_seeking":
+            save_variety_panel_plot(
+                output_dir=out_dir,
+                sample=sample,
+                cfg=cfg,
+                variety_seeking_mode=args.variety_seeking_mode,
+            )
         logger.info("Saved outputs to: %s", out_dir)
 
     logger.info("Rows in estimation sample: %s", f"{len(sample):,}")

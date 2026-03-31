@@ -450,8 +450,111 @@ def _filter_members_by_recency(
     return member_frame[member_frame["days_since_last_purchase"] < recency_days].copy()
 
 
+def _filter_members_with_period0_purchases(
+    *,
+    member_frame: pd.DataFrame,
+    commodity_df: pd.DataFrame,
+    closure_start_dt: pd.Timestamp,
+    closure_end_dt: pd.Timestamp,
+) -> tuple[pd.DataFrame, int, int]:
+    """Apply period-0 selection for clean treatment contrast.
+
+    - Treated members: drop if they purchased during period 0.
+    - Control members: keep only if they purchased during period 0.
+    """
+    period0_orders = _slice_by_date(
+        sorted_df=commodity_df,
+        start_date=closure_start_dt,
+        end_date=closure_end_dt,
+    )
+    if period0_orders.empty:
+        is_control = member_frame["treated"] == 0
+        dropped_control_no_p0 = int(is_control.sum())
+        filtered = member_frame[~is_control].copy()
+        return filtered, 0, dropped_control_no_p0
+
+    period0_member_ids = set(period0_orders["member_id"].dropna().tolist())
+    if not period0_member_ids:
+        is_control = member_frame["treated"] == 0
+        dropped_control_no_p0 = int(is_control.sum())
+        filtered = member_frame[~is_control].copy()
+        return filtered, 0, dropped_control_no_p0
+
+    is_period0_member = member_frame["member_id"].isin(period0_member_ids)
+    is_treated = member_frame["treated"] == 1
+    is_control = ~is_treated
+
+    drop_treated_p0 = is_treated & is_period0_member
+    drop_control_no_p0 = is_control & ~is_period0_member
+
+    dropped_treated_p0 = int(drop_treated_p0.sum())
+    dropped_control_no_p0 = int(drop_control_no_p0.sum())
+    keep_mask = ~(drop_treated_p0 | drop_control_no_p0)
+    return member_frame[keep_mask].copy(), dropped_treated_p0, dropped_control_no_p0
+
+
 def _build_closure_event_id(*, dept_id: object, closure_start: object) -> str:
     return f"dept_{dept_id}_closure_{closure_start}"
+
+
+def build_variety_period0_rows(
+    *,
+    sample: pd.DataFrame,
+    cfg: dict | None = None,
+    variety_seeking_mode: str = "distinct",
+) -> pd.DataFrame:
+    """Compute variety_seeking at rel_t=0 for sample member-closure pairs.
+
+    The estimation panel excludes rel_t=0 by design. This helper reconstructs
+    the period-0 (closure-window) variety outcome for visualization.
+    """
+    cfg = cfg or load_config()
+    required = {
+        "member_id",
+        "dept_id",
+        "closure_start",
+        "closure_end",
+        "group",
+        "treated",
+    }
+    missing = required - set(sample.columns)
+    if missing:
+        raise ValueError(f"sample is missing required columns for period-0 build: {sorted(missing)}")
+
+    event_members = sample[
+        ["member_id", "dept_id", "closure_start", "closure_end", "group", "treated"]
+    ].drop_duplicates()
+    if event_members.empty:
+        return pd.DataFrame(columns=["member_id", "dept_id", "closure_start", "closure_end", "group", "treated", "rel_t", "variety_seeking"])
+
+    scoped_member_ids = set(event_members["member_id"].dropna().tolist())
+    commodity_df = load_commodity_orders_for_members(member_ids=scoped_member_ids, cfg=cfg)
+    first_purchase_df = _compute_first_purchase_dates(commodity_df)
+
+    out_parts: list[pd.DataFrame] = []
+    for (dept_id, closure_start, closure_end), frame in event_members.groupby(
+        ["dept_id", "closure_start", "closure_end"],
+        sort=False,
+    ):
+        closure_start_dt = pd.to_datetime(closure_start)
+        closure_end_dt = pd.to_datetime(closure_end)
+        members = set(frame["member_id"].tolist())
+        vs_result = _compute_variety_seeking_for_window(
+            commodity_df=commodity_df,
+            first_purchase_df=first_purchase_df,
+            members=members,
+            start_dt=closure_start_dt,
+            end_dt=closure_end_dt,
+            mode=variety_seeking_mode,
+        )
+        part = frame.merge(vs_result, on="member_id", how="left")
+        part["rel_t"] = 0
+        out_parts.append(part)
+
+    if not out_parts:
+        return pd.DataFrame(columns=["member_id", "dept_id", "closure_start", "closure_end", "group", "treated", "rel_t", "variety_seeking"])
+
+    return pd.concat(out_parts, ignore_index=True)
 
 
 def build_estimation_sample(
@@ -463,6 +566,7 @@ def build_estimation_sample(
     select_recency_consumers: bool | int | None = None,
     require_balanced_panel: bool | None = None,
     variety_seeking_mode: str = "distinct",
+    drop_period0_purchasers: bool | None = None,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
     _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "variety_seeking"})
@@ -476,6 +580,11 @@ def build_estimation_sample(
         _require_balanced_panel = outcome == "variety_seeking"
     else:
         _require_balanced_panel = bool(require_balanced_panel)
+
+    if drop_period0_purchasers is None:
+        _drop_period0_purchasers = outcome == "variety_seeking"
+    else:
+        _drop_period0_purchasers = bool(drop_period0_purchasers)
 
     spec_cfg = cfg.get("spec", {})
     if closure_duration_days is None:
@@ -580,14 +689,26 @@ def build_estimation_sample(
             member_frame=member_frame,
             recency_days=recency_days,
         )
+        period0_treated_dropped = 0
+        period0_control_no_purchase_dropped = 0
+        if outcome == "variety_seeking" and _drop_period0_purchasers:
+            member_frame, period0_treated_dropped, period0_control_no_purchase_dropped = _filter_members_with_period0_purchases(
+                member_frame=member_frame,
+                commodity_df=commodity_df,
+                closure_start_dt=closure_start_dt,
+                closure_end_dt=closure_end_dt,
+            )
         if member_frame.empty:
             LOGGER.info(
-                "Closure %s/%s skipped: dept_id=%s closure_start=%s recency_days=%s selected_members=%s",
+                "Closure %s/%s skipped: dept_id=%s closure_start=%s recency_days=%s "
+                "period0_treated_dropped=%s period0_control_no_purchase_dropped=%s selected_members=%s",
                 closure_idx,
                 total_closures,
                 dept_id,
                 closure_start,
                 recency_days,
+                period0_treated_dropped,
+                period0_control_no_purchase_dropped,
                 0,
             )
             continue
@@ -650,7 +771,8 @@ def build_estimation_sample(
             closure_rows = sum(len(p) for p in closure_parts)
 
         LOGGER.info(
-            "Closure %s/%s done: dept_id=%s closure_start=%s members=%s rows=%s duration_days=%s elapsed=%.2fs",
+            "Closure %s/%s done: dept_id=%s closure_start=%s members=%s rows=%s duration_days=%s "
+            "period0_treated_dropped=%s period0_control_no_purchase_dropped=%s elapsed=%.2fs",
             closure_idx,
             total_closures,
             dept_id,
@@ -658,6 +780,8 @@ def build_estimation_sample(
             len(members),
             closure_rows,
             closure_bin_days,
+            period0_treated_dropped,
+            period0_control_no_purchase_dropped,
             time.perf_counter() - closure_start_time,
         )
 
