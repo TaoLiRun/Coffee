@@ -208,6 +208,7 @@ def fit_collapsed_specs(
     df:          pd.DataFrame,
     outcome:     str,
     cluster_col: str = "member_id",
+    use_did:     bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Collapsed (post vs. pre) binary and continuous-score DDD specs.
@@ -248,27 +249,35 @@ def fit_collapsed_specs(
     fit_df  : one row per fitted model (formula, n, R2)
     """
     _assert_columns(df, [
-        outcome, "post", "treated", "disp_binary",
-        "displacement_prob_centered",
+        outcome, "post", "treated",
         "event_fe_id", "rel_t", "calendar_month", cluster_col,
     ])
 
-    # Pre-compute interaction columns.
-    # event_fe_id absorbs `treated`, `disp_binary`, and
-    # `displacement_prob_centered` (all time-invariant within a
-    # consumer-closure pair).  Only their products with `post`
-    # (which varies within the pair) survive FE absorption.
     df = df.copy()
-    df["post_X_treated"]         = df["post"] * df["treated"]
-    df["post_X_disp"]            = df["post"] * df["disp_binary"]
-    df["post_X_treated_X_disp"]  = df["post"] * df["treated"] * df["disp_binary"]
-    df["post_X_score"]           = df["post"] * df["displacement_prob_centered"]
-    df["post_X_treated_X_score"] = df["post"] * df["treated"] * df["displacement_prob_centered"]
+    df["post_X_treated"] = df["post"] * df["treated"]
 
     vcov     = {"CRV1": cluster_col}
     fe_str   = "event_fe_id + rel_t + calendar_month"
     rows:     list[dict] = []
     fit_rows: list[dict] = []
+
+    if use_did:
+        # ------------------------------------------------------------------
+        # DiD collapsed: post x treated only (no displacement interactions)
+        # ------------------------------------------------------------------
+        spec    = "did_collapsed"
+        formula = f"{outcome} ~ post_X_treated | {fe_str}"
+        fit = pf.feols(formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(fit, spec, formula))
+        rows.append(_tidy_row(fit, "post_X_treated", spec))
+        return pd.DataFrame(rows), pd.DataFrame(fit_rows)
+
+    # DDD interaction columns (not needed for DiD)
+    _assert_columns(df, ["disp_binary", "displacement_prob_centered"])
+    df["post_X_disp"]            = df["post"] * df["disp_binary"]
+    df["post_X_treated_X_disp"]  = df["post"] * df["treated"] * df["disp_binary"]
+    df["post_X_score"]           = df["post"] * df["displacement_prob_centered"]
+    df["post_X_treated_X_score"] = df["post"] * df["treated"] * df["displacement_prob_centered"]
 
     # ------------------------------------------------------------------
     # Spec B collapsed
@@ -310,6 +319,7 @@ def fit_event_study_specs(
     outcome:     str,
     cluster_col: str = "member_id",
     include_length_heterogeneity: bool = True,
+    use_did:     bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Event-study versions of Specs A, B, C, D (identification_rewrite.md
@@ -355,17 +365,21 @@ def fit_event_study_specs(
     pretrend_df : one row per joint pre-trend F-test
     """
     _assert_columns(df, [
-        outcome, "treated", "disp_binary",
-        "displacement_prob_centered", "closure_length_std",
+        outcome, "treated",
         "event_fe_id", "rel_t", "calendar_month", cluster_col,
     ])
 
     df = df.copy()
-    df["treated_X_disp"]  = df["treated"]  * df["disp_binary"]
-    df["treated_X_len"]   = df["treated"]  * df["closure_length_std"]
-    df["disp_X_len"]      = df["disp_binary"] * df["closure_length_std"]
-    df["tXdXlen"]         = df["treated"]  * df["disp_binary"] * df["closure_length_std"]
-    df["treated_X_score"] = df["treated"]  * df["displacement_prob_centered"]
+    if not use_did:
+        _assert_columns(df, [
+            "disp_binary",
+            "displacement_prob_centered", "closure_length_std",
+        ])
+        df["treated_X_disp"]  = df["treated"]  * df["disp_binary"]
+        df["treated_X_len"]   = df["treated"]  * df["closure_length_std"]
+        df["disp_X_len"]      = df["disp_binary"] * df["closure_length_std"]
+        df["tXdXlen"]         = df["treated"]  * df["disp_binary"] * df["closure_length_std"]
+        df["treated_X_score"] = df["treated"]  * df["displacement_prob_centered"]
 
     pre_periods: list[int] = sorted(int(t) for t in df["rel_t"].unique() if int(t) < -1)
     vcov    = {"CRV1": cluster_col}
@@ -398,6 +412,9 @@ def fit_event_study_specs(
         spec      = spec,
         test_name = "pretrend_att_joint_zero",
     ))
+
+    if use_did:
+        return pd.DataFrame(rows), pd.DataFrame(fit_rows), pd.DataFrame(pre_rows)
 
     # ------------------------------------------------------------------
     # Spec B: Triple-difference, binary displacement

@@ -43,18 +43,31 @@ def fit_spec_bundle(
     outcome: str,
     cluster_col: str,
     include_length_heterogeneity: bool,
+    use_did: bool = False,
 ) -> dict[str, pd.DataFrame]:
     collapsed_terms, collapsed_fit = fit_collapsed_specs(
         df=sample,
         outcome=outcome,
         cluster_col=cluster_col,
+        use_did=use_did,
     )
     event_terms, event_fit, pretrend_tests = fit_event_study_specs(
         df=sample,
         outcome=outcome,
         cluster_col=cluster_col,
         include_length_heterogeneity=include_length_heterogeneity,
+        use_did=use_did,
     )
+    if use_did:
+        return {
+            "binary_terms": collapsed_terms.copy(),
+            "score_terms": pd.DataFrame(columns=collapsed_terms.columns),
+            "binary_fit": collapsed_fit.copy(),
+            "score_fit": pd.DataFrame(columns=collapsed_fit.columns),
+            "event_terms": event_terms.copy(),
+            "event_fit": event_fit.copy(),
+            "pretrend_tests": pretrend_tests.copy(),
+        }
     return {
         "binary_terms": collapsed_terms[collapsed_terms["spec"] == "binary_collapsed"].copy(),
         "score_terms": collapsed_terms[collapsed_terms["spec"] == "score_collapsed"].copy(),
@@ -101,6 +114,16 @@ def main() -> None:
         help=(
             "For outcome=variety_seeking: keep member-closure pairs that are missing in some "
             "periods (unbalanced panel). Default is to drop such pairs (balanced panel)."
+        ),
+    )
+    parser.add_argument(
+        "--no-unbalanced-panel",
+        action="store_true",
+        default=False,
+        help=(
+            "For outcome=n_purchases: restrict to members who purchased in every "
+            "pre-period (balanced panel) and estimate a DiD model. Default is "
+            "unbalanced panel with DDD."
         ),
     )
     parser.add_argument(
@@ -154,12 +177,18 @@ def main() -> None:
     logger.info("Starting displacement effect estimation run")
     require_balanced_panel = None if not args.no_balanced_panel else False
     drop_period0_purchasers = args.outcome == "variety_seeking" and not args.keep_period0_purchasers
+    unbalanced_panel = not args.no_unbalanced_panel
+    # Determine model type: DiD for balanced panels, DDD for unbalanced.
+    if args.outcome == "variety_seeking":
+        use_did = require_balanced_panel is not False
+    else:
+        use_did = not unbalanced_panel
 
     logger.info(
         "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, closure_duration_days=%s, "
         "separate_effect=%s, select_recency_consumers=%s, require_balanced_panel=%s, "
         "drop_period0_purchasers=%s, "
-        "variety_seeking_mode=%s, output_dir=%s",
+        "variety_seeking_mode=%s, unbalanced_panel=%s, use_did=%s, output_dir=%s",
         args.outcome,
         args.t_horizon,
         args.cluster_col,
@@ -169,6 +198,8 @@ def main() -> None:
         require_balanced_panel,
         drop_period0_purchasers,
         args.variety_seeking_mode,
+        unbalanced_panel,
+        use_did,
         args.output_dir,
     )
 
@@ -182,6 +213,7 @@ def main() -> None:
         require_balanced_panel=require_balanced_panel,
         variety_seeking_mode=args.variety_seeking_mode,
         drop_period0_purchasers=drop_period0_purchasers,
+        unbalanced_panel=unbalanced_panel,
     )
     logger.info("Built estimation sample: %s rows", f"{len(sample):,}")
 
@@ -209,6 +241,7 @@ def main() -> None:
                 outcome=args.outcome,
                 cluster_col=args.cluster_col,
                 include_length_heterogeneity=False,
+                use_did=use_did,
             )
             event_output_dir = separate_dir / closure_event_id
             save_outputs(
@@ -228,6 +261,7 @@ def main() -> None:
                     f"- Recency filter days: {select_recency_consumers}",
                     f"- Drop period-0 purchasers: {drop_period0_purchasers}",
                     "- Length-heterogeneity event-study spec skipped: true",
+                    f"- Model type: {'DiD' if use_did else 'DDD'}",
                 ],
             )
             if args.outcome == "variety_seeking":
@@ -258,6 +292,7 @@ def main() -> None:
             outcome=args.outcome,
             cluster_col=args.cluster_col,
             include_length_heterogeneity=True,
+            use_did=use_did,
         )
         logger.info("Fitted aggregate collapsed/event-study specs")
         save_outputs(
@@ -275,6 +310,7 @@ def main() -> None:
                 f"- Closure duration filter days: {closure_duration_days}",
                 f"- Recency filter days: {select_recency_consumers}",
                 f"- Drop period-0 purchasers: {drop_period0_purchasers}",
+                f"- Model type: {'DiD' if use_did else 'DDD'}",
             ],
         )
         if args.outcome == "variety_seeking":

@@ -1,8 +1,31 @@
 #!/bin/bash
 
+# =============================================================================
+# Panel structure and model selection
+# =============================================================================
+# The estimation supports two panel structures that determine the model:
+#
+#   BALANCED panel  -> DiD model (no displacement prediction needed)
+#     Members who purchased in every period (variety_seeking) or every
+#     pre-period (n_purchases) are retained.  A simple DiD is estimated:
+#       y = delta * post * treated + FE
+#
+#   UNBALANCED panel -> DDD model (displacement prediction via classification)
+#     All members are kept.  A triple-difference accounts for selection:
+#       y = delta^B * post * treated + delta^D * post * treated * D + ...
+#
+# The model is chosen automatically based on the panel structure:
+#   variety_seeking  -> balanced by default (DiD); --no-balanced-panel switches to DDD
+#   n_purchases      -> unbalanced by default (DDD); --no-unbalanced-panel switches to DiD
+# =============================================================================
+
 # Examples:
-# Aggregate effect across all closures/events (default):
+# Aggregate DDD effect across all closures/events (default, unbalanced panel):
 #   ./run_with_logging.sh
+#
+# Aggregate DiD effect (balanced panel, only members purchasing in every pre-period):
+#   ./run_with_logging.sh --no-unbalanced-panel \
+#       --output-dir outputs/displacement_effect_estimation/balanced_did
 #
 # Separate effect for each closure/event:
 #   ./run_with_logging.sh --separate-effect
@@ -17,7 +40,7 @@
 #       --select-recency-consumers 10 \
 #       --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
 #
-# Variety-seeking, distinct mode (default: each product counted once per window):
+# Variety-seeking, distinct mode (balanced panel, DiD by default):
 #   ./run_with_logging.sh --outcome variety_seeking \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking
 #
@@ -25,7 +48,7 @@
 #   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
 #
-# Variety-seeking, unbalanced panel (keep members missing in some periods):
+# Variety-seeking, unbalanced panel (switches from DiD to DDD):
 #   ./run_with_logging.sh --outcome variety_seeking --no-balanced-panel \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced
 #

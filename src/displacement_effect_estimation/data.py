@@ -567,6 +567,7 @@ def build_estimation_sample(
     require_balanced_panel: bool | None = None,
     variety_seeking_mode: str = "distinct",
     drop_period0_purchasers: bool | None = None,
+    unbalanced_panel: bool | None = None,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
     _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "variety_seeking"})
@@ -585,6 +586,14 @@ def build_estimation_sample(
         _drop_period0_purchasers = outcome == "variety_seeking"
     else:
         _drop_period0_purchasers = bool(drop_period0_purchasers)
+
+    # unbalanced_panel controls the n_purchases panel structure.
+    # Default True (unbalanced) keeps all members; False restricts to
+    # members who purchased in every pre-period (balanced).
+    if unbalanced_panel is None:
+        _unbalanced_panel = True
+    else:
+        _unbalanced_panel = bool(unbalanced_panel)
 
     spec_cfg = cfg.get("spec", {})
     if closure_duration_days is None:
@@ -756,13 +765,33 @@ def build_estimation_sample(
             block["calendar_month"] = start_dt.strftime("%Y-%m")
             closure_parts.append(block[_BASE_OUTPUT_COLS + [outcome]])
 
-        # Balanced-panel filter: drop member-closure pairs missing any period.
+        # Balanced-panel filter.
+        # variety_seeking + balanced: drop members missing any period (NaN check).
+        # n_purchases + balanced: keep only members with purchases in every pre-period.
+        _apply_filter = False
         if outcome == "variety_seeking" and _require_balanced_panel and closure_parts:
+            _apply_filter = True
+            _filter_kind = "variety_nan"
+        elif outcome == "n_purchases" and not _unbalanced_panel and closure_parts:
+            _apply_filter = True
+            _filter_kind = "purchases_pre"
+
+        if _apply_filter:
             closure_df = pd.concat(closure_parts, ignore_index=True)
-            has_all_periods = closure_df.groupby("member_id")[outcome].transform(
-                lambda x: x.notna().all()
-            )
-            closure_df = closure_df[has_all_periods]
+            if _filter_kind == "variety_nan":
+                has_all_periods = closure_df.groupby("member_id")[outcome].transform(
+                    lambda x: x.notna().all()
+                )
+                closure_df = closure_df[has_all_periods]
+            else:  # purchases_pre: keep members with n_purchases > 0 in every pre-period
+                pre_mask = closure_df["rel_t"] < 0
+                pre_df = closure_df[pre_mask]
+                if not pre_df.empty:
+                    member_valid = pre_df.groupby("member_id")[outcome].apply(
+                        lambda x: (x > 0).all()
+                    )
+                    valid_members = set(member_valid[member_valid].index)
+                    closure_df = closure_df[closure_df["member_id"].isin(valid_members)]
             closure_rows = len(closure_df)
             if not closure_df.empty:
                 out_parts.append(closure_df)
