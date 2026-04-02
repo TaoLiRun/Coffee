@@ -1,46 +1,46 @@
-/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 1816 singleton fixed effect(s) detected. These observations are dropped from the model.
+/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 6895 singleton fixed effect(s) detected. These observations are dropped from the model.
   warnings.warn(
-/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 1816 singleton fixed effect(s) detected. These observations are dropped from the model.
+/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 6895 singleton fixed effect(s) detected. These observations are dropped from the model.
   warnings.warn(
-/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 1816 singleton fixed effect(s) detected. These observations are dropped from the model.
+/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 6895 singleton fixed effect(s) detected. These observations are dropped from the model.
   warnings.warn(
-/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 1816 singleton fixed effect(s) detected. These observations are dropped from the model.
+/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 6895 singleton fixed effect(s) detected. These observations are dropped from the model.
   warnings.warn(
-/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 1816 singleton fixed effect(s) detected. These observations are dropped from the model.
+/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 6895 singleton fixed effect(s) detected. These observations are dropped from the model.
   warnings.warn(
-/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 1816 singleton fixed effect(s) detected. These observations are dropped from the model.
+/home/litao/anaconda3/envs/JAX-py/lib/python3.12/site-packages/pyfixest/estimation/model_matrix_fixest_.py:215: UserWarning: 6895 singleton fixed effect(s) detected. These observations are dropped from the model.
   warnings.warn(
 
-2026-04-02 13:52:56 | INFO | displacement_effect_estimation | Starting displacement effect estimation run
-2026-04-02 13:52:56 | INFO | displacement_effect_estimation | Arguments: outcome=variety_seeking, t_horizon=4, cluster_col=member_id, closure_duration_days=False, separate_effect=False, select_recency_consumers=False, require_balanced_panel=False, drop_period0_purchasers=True, variety_seeking_mode=distinct, unbalanced_panel=True, use_did=False, output_dir=outputs/displacement_effect_estimation/variety_seeking_unbalanced
-2026-04-02 13:52:56 | INFO | displacement_effect_estimation | Applied closure registry filter using /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv: closures 22 -> 22 (dropped=0)
-2026-04-02 13:53:02 | INFO | displacement_effect_estimation | Loaded commodity orders: 1,573,392 rows, 518,455 member-product pairs, variety_seeking_mode=distinct
-2026-04-02 13:53:03 | INFO | displacement_effect_estimation | Starting closure loop: total_closures=22 closure_duration_days=all
-2026-04-02 13:53:03 | INFO | displacement_effect_estimation | Closure 1/22 done: dept_id=225 closure_start=2021-02-09 members=692 rows=5536 duration_days=10 period0_treated_dropped=12 period0_control_no_purchase_dropped=1773 elapsed=0.51s
-2026-04-02 13:53:04 | INFO | displacement_effect_estimation | Closure 2/22 done: dept_id=46 closure_start=2021-08-04 members=1016 rows=8128 duration_days=16 period0_treated_dropped=13 period0_control_no_purchase_dropped=1691 elapsed=0.52s
-2026-04-02 13:53:04 | INFO | displacement_effect_estimation | Closure 3/22 done: dept_id=59 closure_start=2021-08-03 members=1226 rows=9808 duration_days=17 period0_treated_dropped=24 period0_control_no_purchase_dropped=1936 elapsed=0.53s
-2026-04-02 13:53:05 | INFO | displacement_effect_estimation | Closure 4/22 done: dept_id=124 closure_start=2021-07-22 members=1733 rows=13864 duration_days=28 period0_treated_dropped=126 period0_control_no_purchase_dropped=1236 elapsed=0.58s
-2026-04-02 13:53:05 | INFO | displacement_effect_estimation | Closure 5/22 done: dept_id=133 closure_start=2021-07-28 members=845 rows=6760 duration_days=26 period0_treated_dropped=9 period0_control_no_purchase_dropped=1340 elapsed=0.59s
-2026-04-02 13:53:06 | INFO | displacement_effect_estimation | Closure 6/22 done: dept_id=121 closure_start=2021-08-03 members=783 rows=6264 duration_days=18 period0_treated_dropped=32 period0_control_no_purchase_dropped=1403 elapsed=0.62s
-2026-04-02 13:53:06 | INFO | displacement_effect_estimation | Closure 7/22 done: dept_id=62 closure_start=2021-08-04 members=701 rows=5608 duration_days=14 period0_treated_dropped=16 period0_control_no_purchase_dropped=1927 elapsed=0.45s
-2026-04-02 13:53:07 | INFO | displacement_effect_estimation | Closure 8/22 done: dept_id=47 closure_start=2021-07-30 members=818 rows=6544 duration_days=12 period0_treated_dropped=17 period0_control_no_purchase_dropped=2549 elapsed=0.47s
-2026-04-02 13:53:07 | INFO | displacement_effect_estimation | Closure 9/22 done: dept_id=220 closure_start=2021-08-03 members=831 rows=6648 duration_days=10 period0_treated_dropped=19 period0_control_no_purchase_dropped=984 elapsed=0.57s
-2026-04-02 13:53:08 | INFO | displacement_effect_estimation | Closure 10/22 done: dept_id=5 closure_start=2021-08-18 members=980 rows=7840 duration_days=14 period0_treated_dropped=17 period0_control_no_purchase_dropped=1442 elapsed=0.59s
-2026-04-02 13:53:09 | INFO | displacement_effect_estimation | Closure 11/22 done: dept_id=19 closure_start=2021-07-15 members=1197 rows=9576 duration_days=11 period0_treated_dropped=70 period0_control_no_purchase_dropped=2034 elapsed=0.58s
-2026-04-02 13:53:09 | INFO | displacement_effect_estimation | Closure 12/22 done: dept_id=3 closure_start=2021-08-09 members=809 rows=6472 duration_days=14 period0_treated_dropped=9 period0_control_no_purchase_dropped=668 elapsed=0.54s
-2026-04-02 13:53:10 | INFO | displacement_effect_estimation | Closure 13/22 done: dept_id=39 closure_start=2021-07-25 members=941 rows=7528 duration_days=26 period0_treated_dropped=31 period0_control_no_purchase_dropped=1919 elapsed=0.64s
-2026-04-02 13:53:10 | INFO | displacement_effect_estimation | Closure 14/22 done: dept_id=182 closure_start=2021-08-03 members=501 rows=4008 duration_days=18 period0_treated_dropped=14 period0_control_no_purchase_dropped=1062 elapsed=0.62s
-2026-04-02 13:53:11 | INFO | displacement_effect_estimation | Closure 15/22 done: dept_id=181 closure_start=2021-02-11 members=168 rows=1344 duration_days=15 period0_treated_dropped=6 period0_control_no_purchase_dropped=267 elapsed=0.55s
-2026-04-02 13:53:11 | INFO | displacement_effect_estimation | Closure 16/22 done: dept_id=44 closure_start=2021-07-24 members=624 rows=4992 duration_days=13 period0_treated_dropped=27 period0_control_no_purchase_dropped=912 elapsed=0.50s
-2026-04-02 13:53:12 | INFO | displacement_effect_estimation | Closure 17/22 done: dept_id=8 closure_start=2021-05-27 members=316 rows=2528 duration_days=15 period0_treated_dropped=13 period0_control_no_purchase_dropped=345 elapsed=0.64s
-2026-04-02 13:53:13 | INFO | displacement_effect_estimation | Closure 18/22 done: dept_id=254 closure_start=2021-01-30 members=369 rows=2952 duration_days=23 period0_treated_dropped=21 period0_control_no_purchase_dropped=516 elapsed=0.67s
-2026-04-02 13:53:13 | INFO | displacement_effect_estimation | Closure 19/22 done: dept_id=131 closure_start=2021-08-29 members=938 rows=7504 duration_days=11 period0_treated_dropped=24 period0_control_no_purchase_dropped=1751 elapsed=0.65s
-2026-04-02 13:53:14 | INFO | displacement_effect_estimation | Closure 20/22 done: dept_id=238 closure_start=2021-07-24 members=1011 rows=8088 duration_days=29 period0_treated_dropped=53 period0_control_no_purchase_dropped=625 elapsed=0.65s
-2026-04-02 13:53:15 | INFO | displacement_effect_estimation | Closure 21/22 done: dept_id=246 closure_start=2021-07-27 members=182 rows=1456 duration_days=13 period0_treated_dropped=3 period0_control_no_purchase_dropped=355 elapsed=0.61s
-2026-04-02 13:53:15 | INFO | displacement_effect_estimation | Closure 22/22 done: dept_id=228 closure_start=2021-02-04 members=377 rows=3016 duration_days=17 period0_treated_dropped=7 period0_control_no_purchase_dropped=502 elapsed=0.59s
-2026-04-02 13:53:15 | INFO | displacement_effect_estimation | Closure loop completed in 12.68s
-2026-04-02 13:53:15 | INFO | displacement_effect_estimation | Built estimation sample: 136,464 rows
-2026-04-02 13:53:49 | INFO | displacement_effect_estimation | Fitted aggregate collapsed/event-study specs
-2026-04-02 13:53:57 | INFO | displacement_effect_estimation | Saved outputs to: /home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_unbalanced
-2026-04-02 13:53:57 | INFO | displacement_effect_estimation | Rows in estimation sample: 136,464
+2026-04-02 14:21:24 | INFO | displacement_effect_estimation | Starting displacement effect estimation run
+2026-04-02 14:21:24 | INFO | displacement_effect_estimation | Arguments: outcome=variety_seeking, t_horizon=4, cluster_col=member_id, closure_duration_days=False, separate_effect=False, select_recency_consumers=False, require_balanced_panel=False, drop_period0_purchasers=False, variety_seeking_mode=distinct, unbalanced_panel=True, use_did=False, output_dir=outputs/displacement_effect_estimation/variety_seeking_unbalanced
+2026-04-02 14:21:24 | INFO | displacement_effect_estimation | Applied closure registry filter using /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv: closures 22 -> 22 (dropped=0)
+2026-04-02 14:21:31 | INFO | displacement_effect_estimation | Loaded commodity orders: 1,573,392 rows, 518,455 member-product pairs, variety_seeking_mode=distinct
+2026-04-02 14:21:31 | INFO | displacement_effect_estimation | Starting closure loop: total_closures=22 closure_duration_days=all
+2026-04-02 14:21:31 | INFO | displacement_effect_estimation | Closure 1/22 done: dept_id=225 closure_start=2021-02-09 members=2477 rows=19816 duration_days=10 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.74s
+2026-04-02 14:21:32 | INFO | displacement_effect_estimation | Closure 2/22 done: dept_id=46 closure_start=2021-08-04 members=2720 rows=21760 duration_days=16 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.62s
+2026-04-02 14:21:33 | INFO | displacement_effect_estimation | Closure 3/22 done: dept_id=59 closure_start=2021-08-03 members=3186 rows=25488 duration_days=17 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.68s
+2026-04-02 14:21:33 | INFO | displacement_effect_estimation | Closure 4/22 done: dept_id=124 closure_start=2021-07-22 members=3095 rows=24760 duration_days=28 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.65s
+2026-04-02 14:21:34 | INFO | displacement_effect_estimation | Closure 5/22 done: dept_id=133 closure_start=2021-07-28 members=2194 rows=17552 duration_days=26 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.71s
+2026-04-02 14:21:35 | INFO | displacement_effect_estimation | Closure 6/22 done: dept_id=121 closure_start=2021-08-03 members=2218 rows=17744 duration_days=18 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.79s
+2026-04-02 14:21:36 | INFO | displacement_effect_estimation | Closure 7/22 done: dept_id=62 closure_start=2021-08-04 members=2644 rows=21152 duration_days=14 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.86s
+2026-04-02 14:21:37 | INFO | displacement_effect_estimation | Closure 8/22 done: dept_id=47 closure_start=2021-07-30 members=3384 rows=27072 duration_days=12 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.83s
+2026-04-02 14:21:37 | INFO | displacement_effect_estimation | Closure 9/22 done: dept_id=220 closure_start=2021-08-03 members=1834 rows=14672 duration_days=10 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.86s
+2026-04-02 14:21:38 | INFO | displacement_effect_estimation | Closure 10/22 done: dept_id=5 closure_start=2021-08-18 members=2439 rows=19512 duration_days=14 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=1.08s
+2026-04-02 14:21:39 | INFO | displacement_effect_estimation | Closure 11/22 done: dept_id=19 closure_start=2021-07-15 members=3301 rows=26408 duration_days=11 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.76s
+2026-04-02 14:21:40 | INFO | displacement_effect_estimation | Closure 12/22 done: dept_id=3 closure_start=2021-08-09 members=1486 rows=11888 duration_days=14 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.74s
+2026-04-02 14:21:41 | INFO | displacement_effect_estimation | Closure 13/22 done: dept_id=39 closure_start=2021-07-25 members=2891 rows=23128 duration_days=26 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.78s
+2026-04-02 14:21:42 | INFO | displacement_effect_estimation | Closure 14/22 done: dept_id=182 closure_start=2021-08-03 members=1577 rows=12616 duration_days=18 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=1.08s
+2026-04-02 14:21:42 | INFO | displacement_effect_estimation | Closure 15/22 done: dept_id=181 closure_start=2021-02-11 members=441 rows=3528 duration_days=15 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.63s
+2026-04-02 14:21:43 | INFO | displacement_effect_estimation | Closure 16/22 done: dept_id=44 closure_start=2021-07-24 members=1563 rows=12504 duration_days=13 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.66s
+2026-04-02 14:21:44 | INFO | displacement_effect_estimation | Closure 17/22 done: dept_id=8 closure_start=2021-05-27 members=674 rows=5392 duration_days=15 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.62s
+2026-04-02 14:21:44 | INFO | displacement_effect_estimation | Closure 18/22 done: dept_id=254 closure_start=2021-01-30 members=906 rows=7248 duration_days=23 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.63s
+2026-04-02 14:21:45 | INFO | displacement_effect_estimation | Closure 19/22 done: dept_id=131 closure_start=2021-08-29 members=2713 rows=21704 duration_days=11 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.81s
+2026-04-02 14:21:46 | INFO | displacement_effect_estimation | Closure 20/22 done: dept_id=238 closure_start=2021-07-24 members=1689 rows=13512 duration_days=29 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.68s
+2026-04-02 14:21:47 | INFO | displacement_effect_estimation | Closure 21/22 done: dept_id=246 closure_start=2021-07-27 members=540 rows=4320 duration_days=13 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=0.82s
+2026-04-02 14:21:48 | INFO | displacement_effect_estimation | Closure 22/22 done: dept_id=228 closure_start=2021-02-04 members=886 rows=7088 duration_days=17 period0_treated_dropped=0 period0_control_no_purchase_dropped=0 elapsed=1.01s
+2026-04-02 14:21:48 | INFO | displacement_effect_estimation | Closure loop completed in 17.05s
+2026-04-02 14:21:48 | INFO | displacement_effect_estimation | Built estimation sample: 358,864 rows
+2026-04-02 14:22:48 | INFO | displacement_effect_estimation | Fitted aggregate collapsed/event-study specs
+2026-04-02 14:23:00 | INFO | displacement_effect_estimation | Saved outputs to: /home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_unbalanced
+2026-04-02 14:23:00 | INFO | displacement_effect_estimation | Rows in estimation sample: 358,864
 

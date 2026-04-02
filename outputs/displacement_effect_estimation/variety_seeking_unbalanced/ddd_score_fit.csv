@@ -1,2 +1,2 @@
 spec,formula,n,r2,r2_within
-score_collapsed,variety_seeking ~ post_X_treated + post_X_score + post_X_treated_X_score | event_fe_id + rel_t + calendar_month,62835,0.396467335555827,0.0013449708770973956
+score_collapsed,variety_seeking ~ post_X_treated + post_X_score + post_X_treated_X_score | event_fe_id + rel_t + calendar_month,113269,0.4181968680757354,0.00040985681829242004
