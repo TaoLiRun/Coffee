@@ -1,0 +1,2 @@
+spec,formula,n,r2,r2_within
+event_att,"n_purchases ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",41600,0.582142804883119,0.0003057090259654949

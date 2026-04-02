@@ -29,4 +29,3 @@
 2026-04-02 13:13:30 | INFO | displacement_effect_estimation | Fitted aggregate collapsed/event-study specs
 2026-04-02 13:13:30 | INFO | displacement_effect_estimation | Saved outputs to: /home/litao/Coffee/model-free/outputs/displacement_effect_estimation/balanced_did
 2026-04-02 13:13:30 | INFO | displacement_effect_estimation | Rows in estimation sample: 41,600
-
