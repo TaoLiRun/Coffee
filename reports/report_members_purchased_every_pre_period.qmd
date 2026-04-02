@@ -1,0 +1,145 @@
+---
+title: "Store Closure DiD Report: Members Purchased In Every Pre-Period"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-float: true
+    toc-depth: 4
+    theme: united
+    highlight-style: tango
+---
+
+# Research Question and Goal
+
+## Research Question
+
+For members who appear in every pre-closure period (balanced panel), what is the post-closure treatment effect on purchase frequency under a simple Difference-in-Differences design?
+
+## Goal
+
+To estimate a clean DiD treatment effect for purchase frequency on a balanced panel built from:
+
+- `outputs/displacement_effect_estimation/balanced_did/estimation_sample.csv`
+- `outputs/displacement_effect_estimation/balanced_did/ddd_binary_results.csv`
+- `outputs/displacement_effect_estimation/balanced_did/event_study_results.csv`
+- `outputs/displacement_effect_estimation/balanced_did/pretrend_joint_tests.csv`
+
+# Methodology Summary (Pseudo Code)
+
+## 1. Build Balanced Event-Time Panel
+
+```
+LOAD estimation_sample.csv from balanced_did
+KEEP rel_t in {-4,-3,-2,-1,1,2,3,4}
+REQUIRE each member-closure event_fe_id has all 8 periods
+DEFINE post = 1 if rel_t > 0 else 0
+OUTCOME = n_purchases (daily rate)
+```
+
+## 2. Simple DiD Specification (Collapsed)
+
+```
+Y_iet = alpha
+      + delta * post_t * treated_ie
+      + event_fe_id FE
+      + rel_t FE
+      + calendar_month FE
+      + error_iet
+
+Cluster SE by member_id
+```
+
+## 3. Event-Study ATT Specification
+
+```
+Y_iet = sum_{l != -1} delta_l * I(rel_t=l) * treated_ie
+      + event_fe_id FE
+      + rel_t FE
+      + calendar_month FE
+      + error_iet
+
+Reference period: rel_t = -1
+Pre-trend test: H0: delta_-4 = delta_-3 = delta_-2 = 0
+```
+
+# Results Summary
+
+## Sample Characteristics
+
+| Metric | Value |
+|--------|-------|
+| Unique closures analyzed | 22 |
+| Unique members in panel | 5,200 |
+| Treated members | 952 |
+| Control members | 4,248 |
+| Total observations | 41,600 |
+| Relative periods | -4, -3, -2, -1, 1, 2, 3, 4 |
+| Model type | DiD |
+
+## Collapsed DiD Estimate
+
+$$
+\begin{align}
+Y_{iet} &= \delta \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
+       + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align}
+$$
+
+| Variable | n_purchases (daily) |
+|----------|---------------------:|
+| post x treated | 0.00514 (0.00441) |
+| Observations | 41,600 |
+| Within R^2 | 0.00008 |
+| P-value | 0.244 |
+
+Interpretation: the estimated post-closure treatment effect is positive but not statistically significant.
+
+## Dynamic Effects (Event Study)
+
+$$
+\begin{align*}
+Y_{iet} = \sum_{\ell \in \mathcal{L}} \delta_{\ell}
+           \cdot \mathbf{1}(t = \ell) \times \mathbf{1}(\text{Treated}_{ie})
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align*}
+$$
+
+| Relative Period | Coef | SE | P-value |
+|----------------|-----:|---:|--------:|
+| -4 | 0.00247 | 0.00565 | 0.662 |
+| -3 | -0.00089 | 0.00550 | 0.872 |
+| -2 | -0.00551 | 0.00480 | 0.251 |
+| 1 | 0.00760 | 0.00532 | 0.153 |
+| 2 | -0.00028 | 0.00582 | 0.962 |
+| 3 | 0.01097 | 0.00592 | 0.064 |
+| 4 | -0.00164 | 0.00602 | 0.785 |
+
+Post-period effects are mostly small and imprecise, with period 3 only marginal at the 10% level.
+
+## Pre-trend Test
+
+Null hypothesis:
+
+$$
+H_0: \delta_{-4} = \delta_{-3} = \delta_{-2} = 0
+$$
+
+| Test | Statistic | P-value | Conclusion |
+|------|----------:|--------:|------------|
+| pretrend_att_joint_zero | 2.599 | 0.458 | No evidence against parallel trends |
+
+# Main Findings
+
+1. The balanced-panel simple DiD estimate for purchase frequency is not statistically different from zero.
+2. Event-study pre-period coefficients are jointly insignificant, supporting the parallel-trends condition in this specification.
+3. Post-period dynamics do not indicate a persistent or monotonic treatment effect.
+
+# Generated Outputs
+
+- `outputs/displacement_effect_estimation/balanced_did/estimation_sample.csv`
+- `outputs/displacement_effect_estimation/balanced_did/ddd_binary_results.csv`
+- `outputs/displacement_effect_estimation/balanced_did/event_study_results.csv`
+- `outputs/displacement_effect_estimation/balanced_did/pretrend_joint_tests.csv`
+- `outputs/displacement_effect_estimation/balanced_did/spec_comparison.csv`
+- `outputs/displacement_effect_estimation/balanced_did/summary.md`
