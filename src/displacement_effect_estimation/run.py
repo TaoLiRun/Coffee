@@ -176,7 +176,7 @@ def main() -> None:
     logger = setup_logging(log_file=log_file, log_level=args.log_level)
     logger.info("Starting displacement effect estimation run")
     require_balanced_panel = None if not args.no_balanced_panel else False
-    drop_period0_purchasers = args.outcome == "variety_seeking" and not args.keep_period0_purchasers
+    drop_period0_purchasers = args.outcome == "variety_seeking" and not args.keep_period0_purchasers and not args.no_balanced_panel
     unbalanced_panel = not args.no_unbalanced_panel
     # Determine model type: DiD for balanced panels, DDD for unbalanced.
     if args.outcome == "variety_seeking":
