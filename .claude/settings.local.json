@@ -5,7 +5,8 @@
       "Bash(do echo:*)",
       "Read(//e/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/**)",
       "Bash(done)",
-      "Bash(python3 -c \":*)"
+      "Bash(python3 -c \":*)",
+      "Bash(ls:*)"
     ]
   }
 }

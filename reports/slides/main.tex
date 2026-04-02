@@ -1,0 +1,2460 @@
+\documentclass[aspectratio=169]{beamer}  % 16:9 aspect ratio
+
+% Use a clean theme as base
+\usetheme{default}
+\usecolortheme{default}
+\useoutertheme{miniframes}
+\useinnertheme{circles}
+\usepackage{booktabs}
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\addbibresource{ref.bib} 
+\setbeamerfont{footnote}{size=\tiny}
+
+% Custom colors from HKUST logo
+\definecolor{hkustblue}{RGB}{0, 51, 119}    % Navy blue from logo
+\definecolor{hkustgold}{RGB}{180, 141, 61}  % Golden brown from logo
+\definecolor{lightgray}{RGB}{236, 240, 241}
+
+
+% Customize the appearance
+\setbeamercolor{structure}{fg=hkustblue}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=hkustblue}
+\setbeamercolor{frametitle}{fg=hkustblue,bg=white}
+\setbeamercolor{itemize item}{fg=hkustgold}
+\setbeamercolor{itemize subitem}{fg=hkustgold}
+\setbeamercolor{block title}{fg=white,bg=hkustblue}
+\setbeamercolor{block body}{fg=hkustblue,bg=lightgray}
+\setbeamercolor{title}{fg=hkustblue}
+\setbeamercolor{author}{fg=hkustgold}
+
+
+\setbeamertemplate{title page}
+{
+  \begin{centering}
+    \vspace{1cm}
+    {\usebeamercolor[fg]{title}\LARGE\inserttitle\par}
+    \vspace{0.8cm}
+    {\usebeamercolor[fg]{author}\large\insertauthor\par}
+    \vspace{0.8cm}
+    {\usebeamercolor[fg]{institute}\normalsize\insertinstitute\par}
+    \vspace{0.2cm}
+    {\usebeamercolor[fg]{date}\normalsize\insertdate\par}
+    \vfill
+  \end{centering}
+}
+
+% Custom command to show navigation symbols after title and outline pages
+\makeatletter
+\def\shownavigationsymbols{%
+    \ifnum\c@framenumber>2%
+        \setbeamertemplate{navigation symbols}[default]%
+    \else%
+        \setbeamertemplate{navigation symbols}{}%
+    \fi%
+}
+\addtobeamertemplate{footline}{\shownavigationsymbols}{}
+\makeatother
+
+% Customize frame title
+\setbeamertemplate{frametitle}{
+    \insertframetitle
+}
+
+% Customize itemize bullets
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{\textbullet}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{\textbullet}}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{comment}
+
+% Paper details (replace with your information)
+\title{LCoffee}
+%\author{Kamenica \& Gentzkow, AER, 2011}
+%\institute{Presented by \\ Tao LI}
+\date{\today}
+
+
+% Mark the page number (without any other info) in the footer except the title page
+\setbeamertemplate{footline}{%
+    \ifnum\value{framenumber}>1
+    \hfill\insertframenumber\fi
+}
+
+
+\begin{document}
+
+% Title page
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Table of contents
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+% Get a intro page of each section
+% \AtBeginSection[]
+% {
+%     \begin{frame}
+%         \frametitle{Outline}
+%         \tableofcontents[currentsection]
+%     \end{frame}
+% }
+
+% Mark the page number on a specific position
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+
+\section{Data Overview}
+\begin{frame}{Features}
+\begin{itemize}
+    \item \textbf{Time}: 2020/6/1 to 2021/12/31
+    \item \textbf{\#stores}: 260
+    \item \textbf{Unique members}: 779757
+    \begin{itemize}
+        \item Demographics: gender, birth year, phone model
+        \item Allow push or not
+        \item Hierarchical invitation structure (inviter id)
+    \end{itemize}
+    \item \textbf{Products}
+    \begin{itemize}
+        \item Coffee, Non-coffee drinks, food
+        \item Top commodity or not labelled in the data
+        \item New products appearing
+    \end{itemize}
+    \item \textbf{Orders}: time, member, products, money spent, discounts, \#coupons
+    \item \textbf{Pushes}: time, member, type, discount, coupon
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{Messages from the Company}
+\begin{itemize}
+    \item New product introduction across stores should be on roughly the same date
+    \item Product removal date depends on how fast the product runs out of ingredients at different stores
+    \item Different products have different positioning: some are ``base products'', some are ``short-tenure products''
+    \item Product lifecycle is pre-determined
+    \item Mechanism of push notifications
+    \begin{itemize}
+        \item A pool of consumers and a budget are first decided
+        \item An algorithm is used to determine what kind of push to send to which consumer in the pool, depending on the conversion prediction
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\subsection{Products}
+\begin{frame}{}
+\begin{block}{Unique products}
+\begin{table}[h]
+    \centering\small
+\begin{tabular}{|c|c|c|}
+    \hline
+     & \textbf{Coffee} & \textbf{Non-Coffee} \\
+    \hline
+    \textbf{Top} & 19 & 14 \\
+    \hline
+    \textbf{Non-Top} & 78 & 351 \\
+    \hline
+\end{tabular}
+\end{table}
+
+\begin{itemize}    
+    \item ``Top'' is indicated in the data set 
+    \item Example of top coffees: thick milk latte 1, thick milk latte 5, ... (different flavors)
+    \item \#food commodities: 103 (Adds-on)
+\end{itemize}    
+\end{block}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.37\linewidth]{plots/top_vs_non_top_coffee_sales.pdf}
+    \includegraphics[width=0.37\linewidth]{plots/top_vs_non_top_non-coffee_sales.pdf}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{New product appearing, number of products in choice set}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{plots/product_appearing.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{More product-level Statistics}
+\begin{columns}
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+    \item Length of lifecycle ranges from 1 to nearly 560
+    \item Mean Daily Demand per Product (Conditional on there is a purchase)
+\end{itemize}
+\begin{table}[]
+    \centering
+    \scriptsize
+    \begin{tabular}{l c}
+        \toprule
+        Statistic & Demand Value \\
+        \midrule
+        Mean & 168.93 \\
+        Std Dev & 348.34 \\
+        Min & 1 \\
+        Max & 2864.85 \\
+        \bottomrule
+    \end{tabular}
+\end{table}    
+\end{column}
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+    \item Zero-demand days exist: due to ingredients stock-outs or no purchase
+\end{itemize}
+\begin{table}[]
+    \centering
+    \scriptsize
+    \begin{tabular}{c c c c}
+        \toprule
+        \textbf{product\_id} & \textbf{first\_day} & \textbf{lifecycle} & \textbf{zero\_demand\_days} \\
+        \midrule
+        1 & 2020-10-21 & 67 & 2 \\
+        2 & 2020-06-05 & 10 & 6 \\
+        3 & 2020-06-01 & 337 & 7 \\
+        ...&&&\\
+        \bottomrule
+    \end{tabular}
+\end{table}    
+\vspace{-0.3cm}
+\begin{table}[]
+    \centering
+    \scriptsize
+    \begin{tabular}{l c}
+        \toprule
+        Statistic & \textbf{zero\_demand\_days} \\
+        \midrule
+        Mean & 14.41 \\
+        Std Dev & 31.98 \\
+        Min & 0 \\
+        Max & 251 \\
+        \bottomrule
+    \end{tabular}
+\end{table} 
+\end{column}
+\end{columns}  
+\end{frame}
+
+
+\begin{frame}{Product Daily Demand in Lifecycle}
+\begin{columns}
+\begin{column}{0.55\linewidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{plots/demand_trajectories_split_by_mean_daily_demand.pdf}
+\end{figure}    
+\end{column}
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+    \item X-axis: day on the market (1 indicates the 1st day on market)
+    \item Demand data may be censored
+\end{itemize}    
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Product Daily Demand in Lifecycle}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{plots/products_on_market_for_less_than_100_days.pdf}
+\end{figure}
+\begin{itemize}
+    \item Product is removed even if its demand is high!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Product Daily Demand in \textbf{Calendar Time} - Popular Products}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{plots/demand_trajectories_mean_gt_200.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Product Daily Demand in \textbf{Calendar Time} - Regular Products}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{plots/demand_trajectories_mean_100_200.pdf}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Product Daily Demand in \textbf{Calendar Time} - Unpopular Products}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\linewidth]{plots/demand_trajectories_mean_20.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Products Price distribution}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{plots/average_item_prices.pdf}
+\end{figure}
+\end{frame}
+
+\subsection{Orders}
+\begin{frame}{Orders per member}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{plots/order_distribution_by_member.pdf}
+\end{figure}
+\begin{itemize}
+    \item Number of members with 5-50 orders: 273473 (35.07\%)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{New members}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{plots/monthly_new_consumers.pdf}
+\end{figure}
+Here, ``new'' denotes the first time a consumer appears in the 
+\end{frame}
+
+\begin{comment}
+\begin{frame}{Orders per member}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{plots/discount_and_coupon_by_purchase_frequency.pdf}
+\end{figure}
+\end{frame}
+\end{comment}
+
+\begin{frame}{Orders' discount and coupon by order type}
+\begin{columns}
+\begin{column}{0.7\linewidth}
+   \begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{plots/coupon_and_discount_frequency.pdf}
+\end{figure} 
+\end{column}
+\begin{column}{0.3\linewidth}
+    No clear difference between Coffee and Non-coffee drinks
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Time interval between discount usages}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.55\linewidth]{plots/discount_interval_distribution.pdf}
+\end{figure}   
+\begin{itemize}
+    \item Deeper discounts (e.g., 0.3) are harder to get
+\end{itemize}
+\end{frame}
+
+
+%\begin{frame}{Orders by purchase interval}
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=0.7\linewidth]{plots/purchase_interval_frequency.pdf}
+%\end{figure}  
+%\begin{itemize}
+%    \item In the population level, lots of consumers just purchased once
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}{Orders by purchase interval}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{plots/purchase_interval_vs_purchase_index.pdf}
+\end{figure}  
+\begin{itemize}
+    \item Select consumers who made at least 50 orders
+    \item Purchase interval first decrease (habit-formation?) then increase (not enough discounts? fatigue?)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Coffee orders by popularity}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{plots/top_coffee_ratio_over_time.pdf}
+\end{figure}    
+\begin{itemize}
+    \item Hit products: Thick Milk Latte, Raw Coconut Latte, Velvet Latte
+\end{itemize}
+\end{frame}
+
+\subsection{Stores}
+\begin{frame}{Store Information}
+\begin{itemize}
+    \item There are 260 stores in Nanjing in total, and all of them are in our data
+    \item We know
+    \begin{itemize}
+        \item the exact location of each store (accurate to a building/shopping mall)
+        \item the setup time and shutdown time of each store
+    \end{itemize}
+    \item We know which store a specific order happened
+    \begin{itemize}
+        \item Data: consumer-time-store-product
+    \end{itemize}
+    \item Product removal time varies across stores: because of different rates of ingredients consuming
+    \item Note: our data only includes a sub-sample of consumers, who entered as a new consumer during this time period, so we can only analyze the causal effect on this sub-group
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Some Domain Knowledge}
+\begin{itemize}
+    \item There are two types of stores: self-operation (229) and franchise (31)
+    \begin{itemize}
+        \item Headquarters make decisions for self-operation stores, e.g. which products to sell
+        \item Store heads of  franchise stores also only have limited decision rights on new product introduction
+    \end{itemize}
+    \item Different stores have different opening and close time, and are differently affected by covid
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{Basic store-level Statistics}
+    \begin{itemize}
+        \item Total Unique Stores: 260
+        \item \textbf{Daily Demand per Store} (aggregated across all products):
+    \end{itemize}
+    
+    \begin{table}[]
+        \centering
+        \scriptsize
+        \begin{tabular}{l c l c}
+            \toprule
+            Statistic & Value & Statistic & Value \\
+            \midrule
+            Mean & 63.76 &
+            Std Dev & 47.37 \\
+            Min & 0.08 &
+            Max & 268.18 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\begin{figure}
+    \includegraphics[width=0.75\linewidth]{plots/dept_demand_summary_statistics2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Basic store-level Statistics (each line represents a store)}
+\begin{figure}
+    \includegraphics[width=0.45\linewidth]{plots/dept_daily_demand_all.pdf}
+    \includegraphics[width=0.45\linewidth]{plots/dept_week_order_daily_demand.pdf}
+\end{figure}
+\begin{itemize}
+    \item L: aggregated across the subgroup consumers from our data
+    \item R: a more crude data - overall (from all consumers) weekly demand of each store
+    \item Our subgroup consumers contribute to roughly half of the total demand 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Basic store-product-level Statistics}
+    \textbf{1. Total Spatial Reach} (How many stores \textit{ever} sold the product?)
+    \begin{itemize}
+        \item On average, a product appears in \textbf{169} stores during its lifecycle.
+        \item Max coverage: 260 stores (100\% of stores).
+    \end{itemize}
+
+    \vspace{0.3cm}
+    
+    \textbf{2. Daily Active Reach} (How many stores sell the product \textit{on a given day}?)
+    \begin{itemize}
+        \item Significantly lower than total reach.
+        \item On a given day, a product is active in roughly \textbf{59} stores.
+    \end{itemize}
+    
+    \begin{table}[]
+        \centering
+        \footnotesize
+        \begin{tabular}{l c c}
+            \toprule
+            Statistic & Total Reach (Lifecycle) & Daily Active Reach (Per Day) \\
+            \midrule
+            Mean & 169.10 & 58.81 \\
+            Min & 1.00 & 1.00 \\
+            Max & 260.00 & 216.00 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Basic store-product-level Statistics}
+\begin{figure}
+    \centering
+    
+\includegraphics[width=0.45\linewidth]{plots/product_213_first_last_appearance.pdf}
+\includegraphics[width=0.45\linewidth]{plots/product_28_first_last_appearance.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Basic store-product-level Statistics}
+\begin{figure}
+    \centering
+    
+\includegraphics[width=0.48\linewidth]{plots/top5_product_4_213_美式_5.png}
+\includegraphics[width=0.48\linewidth]{plots/top5_product_9_28_加浓美式_1.png}
+\end{figure}
+\begin{itemize}
+    \item Each line represents the daily demand of this product at a specific store 
+\end{itemize}
+\end{frame}
+
+
+% ---------------------------------------------------------
+% SLIDE 2: CONSUMER-STORE LEVEL
+% ---------------------------------------------------------
+\begin{frame}{Basic consumer-store-level Statistics}
+    \begin{itemize}
+        \item Total Unique Consumers: 778,285
+        \item How many unique stores a consumer purchases from?
+        \begin{itemize}
+            \item Highly skewed distribution; the median consumer visits only \textbf{1} store.
+            \item This is because most consumers only purchased once
+            \item For consumers whose number of purchases is between 3 and 8, the 75\% Percentile of \#store is 3
+        \end{itemize}
+    \end{itemize}
+
+    \begin{table}[]
+        \centering
+        \scriptsize
+        \caption{Number of Stores Purchased from per Consumer}
+        \begin{tabular}{l c}
+            \toprule
+            Statistic & Count \\
+            \midrule
+            75\% Percentile & 2.00 \\
+            Max & 132.00 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{More consumer-level Statistics}
+\begin{itemize}
+    \item Single-purchaser: 47\% of them purchased ``top'' product
+    \item []
+    \item Double-purchaser
+    \begin{itemize}
+        \item Only 26.2\% purchase the same product as the first time
+        \item For the 74.8\% of switchers, 41.0\% of them still purchased ``top'' product
+    \end{itemize}
+    \item []
+    \item Triple-purchaser
+    \begin{itemize}
+        \item Only 13.2\% purchase the same product as the previous two times
+        \item For the 86.8\% of switchers, 44.4\% of them still purchased ``top'' product
+    \end{itemize}
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{More consumer-level Statistics}
+What is the probability of purchasing the same product in the previous time?
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{plots/consumer_immediate_repurchase_rate.png}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{More consumer-level Statistics}
+What is the probability of trying a new product that was not purchased before?
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{plots/consumer_new_product_curve.png}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{columns}
+\begin{column}{0.7\linewidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{plots/zero_demand_days_heatmap.pdf}
+\end{figure}       
+\end{column}
+\begin{column}{0.25\linewidth}
+\begin{itemize}
+   \item X-axis: dates; Y-axis: Store index
+   \item Red mask indicates that a \textbf{store is closed} on that day
+   \item Reasons for closure: weekends, holiday, covid
+\end{itemize} 
+\end{column}
+\end{columns} 
+\end{frame}
+
+\begin{frame}{Store Product Line Changes}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{plots/dept_product_changes_multi_panel_excluded_products.pdf}
+\end{figure}    
+\end{frame}
+
+
+\subsection{Pushes}
+\begin{frame}{Five types of pushes}
+    
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{plots/trigger_tag_distribution.pdf}
+\end{figure} 
+\end{frame}
+
+%\begin{frame}{New product notifications: seem to start from 2021-01}
+%    \begin{figure}
+%    \centering
+    %\includegraphics[width=0.6\linewidth]{plots/new_product_notification_pushes_over_time.pdf}
+%\end{figure} 
+%\end{frame}
+
+\begin{frame}{Five types of pushes over time}
+    
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{plots/pushes_by_trigger_type_over_time.pdf}
+\end{figure} 
+\end{frame}
+
+\begin{comment}
+    
+\begin{frame}{New product notifications (blue line is the day with a new product appearing)}
+    
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{plots/pushes_trigger_tag_3_january_2021.pdf}
+\end{figure} 
+\end{frame}
+
+\begin{frame}{}
+    How many \textbf{new users} were receiving the New product notifications?
+    \begin{itemize}
+        \item Yellow bar: number of new users each day
+        \item Blue bar: number of new users receiving the New product notifications
+    \end{itemize}
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{plots/new_users_receiving_trigger_tag_3_push_in_january_2021.pdf}
+\end{figure} 
+\end{frame}
+\end{comment}
+
+\begin{frame}{Pushed coupons and discounts}
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.48\linewidth]{plots/top_10_coupon_distribution.pdf}
+    \includegraphics[width=0.48\linewidth]{plots/top_10_discount_distribution.pdf}
+\end{figure} 
+\end{frame}
+
+
+
+\section{Model-free Evidence}
+\subsection{Push Mechanism}
+
+\begin{frame}{Define ``Dormant'': No Purchase in the previous 30 days}
+\begin{table}[h]
+\centering
+\caption{Member 17 Activity Timeline (Sample)}
+\label{tab:member17_timeline}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Index} & \textbf{Date} & \textbf{Data Source} & \textbf{New} & \textbf{Dormant} \\
+\midrule
+0 & 2020-06-01 & push & 1 & 0 \\
+1 & 2020-06-08 & push & 0 & 1 \\
+2 & 2020-06-09 & push & 0 & 1 \\
+3 & 2020-06-11 & purchase & 0 & 1 \\
+4 & 2020-07-13 & push & 0 & 1 \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+113 & 2021-12-17 & purchase & 0 & 1 \\
+114 & 2021-12-18 & purchase & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Define ``Dormant'': No Purchase in the previous 30 days}
+\begin{itemize}
+    \item Almost all pushes are during the Dormant period (only 0.0018\% are not)
+\end{itemize}
+\begin{columns}
+    \begin{column}{0.62\linewidth}
+        \begin{table}[h]
+\centering
+    \small
+\caption{Dataset Overview and Dormant Status Distribution}
+\label{tab:dataset_overview}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Metric} & \textbf{Count} \\
+\midrule
+Unique Members & 790,038 \\
+Push Records & 56,724,521 \\
+Purchase Records & 7,312,498 \\
+%\addlinespace
+%\textbf{Dormant Status} &  & \\
+%\quad Dormant (1) & 57,903,614 & \\
+%\quad Not Dormant (0) & 6,133,405 & \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Members who ever entered dormant status: 761,592 (96.4\%)
+    \item Average dormant periods per member: 1.71
+\end{itemize}
+
+\end{column}
+    
+\begin{column}{0.38\linewidth}
+\begin{table}[h]
+    \centering
+    \small
+    \caption{Dormant Period Distribution}
+    \label{tab:dormant_periods}
+    \begin{tabular}{lr}
+        \toprule
+        \textbf{Periods} & \textbf{Members} \\
+        \midrule
+        1 & 466,134 (61.2\%) \\
+        2 & 155,895 (20.5\%) \\
+        3 & 73,528 (9.7\%) \\
+        4 & 39,532 (5.2\%) \\
+        5 & 18,355 (2.4\%) \\
+        6,7 & 6,310 (1\%) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+
+
+\begin{frame}{Push Counts by Wake up}
+\begin{itemize}
+    \item Only consider consumers begin with a purchase: 442,699 (56\%)
+    \item Total number of consumer-dormant periods: 975,043
+    \item Total number of wake-up without any push: 135,237
+\end{itemize}
+\begin{table}[h]
+\centering
+\caption{Push Counts by Wake-up Outcome}
+\label{tab:push_count_compact}
+\footnotesize
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Outcome} & \textbf{\#Records} & \multicolumn{4}{c}{\textbf{Push Counts}} \\
+\cmidrule(lr){3-6}
+& & \textbf{Mean} & \textbf{Median} & \textbf{25\%-75\%} & \textbf{Max} \\
+\midrule
+No Wake-up & 327,991 & 52.9 & 42.0 & 17--79 & 208 \\
+Wake-up & 647,052 & 14.7 & 5.0 & 1--19 & 186 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+
+\begin{frame}{Push Timing by Trigger Type}
+\begin{columns}
+    \begin{column}{0.6\linewidth}
+        \begin{table}[h]
+\centering
+\caption{Top Push Timing Patterns}
+\label{tab:push_timing_compact}
+\tiny
+\begin{tabular}{lrl|lrl}
+\toprule
+\textbf{Days} & \textbf{Trigger} & \textbf{Count} & \textbf{Days} & \textbf{Trigger} & \textbf{Count} \\
+\midrule
+31 & 1.0 & 392,901 & 64 & 1.0 & 104,117 \\
+38 & 2.0 & 263,916 & 70 & 2.0 & 102,533 \\
+39 & 1.0 & 263,820 & 95 & 1.0 & 98,546 \\
+47 & 1.0 & 193,209 & 33 & 1.0 & 92,644 \\
+46 & 2.0 & 177,421 & 103 & 1.0 & 90,692 \\
+63 & 1.0 & 173,429 & 72 & 1.0 & 88,369 \\
+55 & 1.0 & 158,805 & 65 & 1.0 & 87,771 \\
+71 & 1.0 & 145,201 & 111 & 1.0 & 85,915 \\
+45 & 4.0 & 143,465 & 39 & 2.0 & 85,457 \\
+54 & 2.0 & 139,894 & 40 & 1.0 & 84,406 \\
+62 & 2.0 & 119,521 & 32 & 2.0 & 84,249 \\
+79 & 1.0 & 118,243 & 78 & 2.0 & 84,143 \\
+32 & 1.0 & 115,839 & 80 & 1.0 & 82,389 \\
+87 & 1.0 & 110,241 & 73 & 1.0 & 82,037 \\
+48 & 1.0 & 76,687 & 119 & 1.0 & 81,659 \\
+\bottomrule
+\end{tabular}
+\end{table}
+    \end{column}
+\hspace{-2cm}
+    
+\begin{column}{0.3\linewidth}
+    \begin{itemize}
+        \item 1: discount/coupon
+        \item 2: expiration
+        \item 3: new product
+        \item 4: special zone
+    \end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Pushed Timing by Trigger Type}
+\begin{table}[h]
+\centering
+\caption{\textbf{Days Since Purchase} Statistics by Trigger Type for Dormant Push Events (N=26,892,431)}
+\label{tab:trigger_stats}
+\small
+\begin{tabular}{lrrrrrrr}
+\toprule
+\textbf{Trigger} & \textbf{Count} & \textbf{Mean} & \textbf{Std} & \textbf{Min} & \textbf{25\%} & \textbf{50\%} & \textbf{75\%} \\
+\midrule
+1.0 & 12,916,790 & 141.5 & 93.7 & 31.0 & 69.0 & 117.0 & 193.0 \\
+2.0 & 8,574,156 & 139.3 & 93.3 & 31.0 & 63.0 & 116.0 & 190.0 \\
+3.0 & 3,838,082 & 229.9 & 128.5 & 31.0 & 123.0 & 219.0 & 324.0 \\
+4.0 & 1,497,214 & 132.3 & 122.6 & 31.0 & 45.0 & 71.0 & 189.0 \\
+5.0 & 66,191 & 164.7 & 135.0 & 59.0 & 63.0 & 99.0 & 211.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Most Frequent Push Sequences (nunique=440,485)}
+\begin{table}[h]
+\centering
+\tiny
+\begin{tabular}{lcccl}
+\toprule
+\textbf{Push Sequence} & \textbf{Total Periods} & \textbf{Wakeups} & \textbf{Wakeup Delay Since last Push} & \textbf{Mean Delay between two Pushes} \\
+\midrule
+(1.0) & 44,902 & 44,049 & 2.0 & -- \\
+(1.0, 2.0) & 14,950 & 14,677 & 1.0 & 4.09 \\
+(1.0, 2.0, 1.0) & 12,458 & 12,279 & 2.0 & 6.09, 2.02 \\
+(2.0) & 9,826 & 9,757 & 1.0 & -- \\
+(2.0, 1.0) & 9,427 & 9,368 & 2.0 & 2.14 \\
+(1.0, 1.0) & 7,451 & 7,216 & 2.0 & 5.76 \\
+(1.0, 4.0) & 6,170 & 2,899 & 1.0 & 2.43 \\
+(1.0, 2.0, 1.0, 2.0, 1.0) & 5,021 & 4,981 & 2.0 & 6.17, 2.04, 6.41, 1.83 \\
+(1.0, 2.0, 2.0, 1.0) & 4,285 & 4,235 & 2.0 & 3.31, 4.49, 2.12 \\
+(1.0, 2.0, 2.0) & 3,993 & 3,956 & 1.0 & 4.23, 4.93 \\
+(1.0, 3.0) & 3,264 & 3,215 & 2.0 & 1.37 \\
+(1.0, 2.0, 1.0, 2.0) & 3,163 & 3,117 & 1.0 & 5.75, 2.93, 5.15 \\
+(2.0, 1.0, 2.0, 1.0) & 3,138 & 3,129 & 2.0 & 2.10, 6.74, 1.83 \\
+(2.0, 2.0) & 2,996 & 2,985 & 2.0 & 6.33 \\
+(1.0, 1.0, 2.0) & 2,937 & 2,890 & 1.0 & 5.31, 3.47 \\
+(1.0, 1.0, 2.0, 1.0) & 2,917 & 2,858 & 2.0 & 5.61, 4.68, 2.29 \\
+(2.0, 1.0, 2.0) & 2,728 & 2,699 & 1.0 & 3.32, 5.26 \\
+(1.0, 2.0, 1.0, 2.0, 1.0, 2.0, 1.0) & 2,422 & 2,409 & 3.0 & 6.10, 1.85, 6.35, 1.63, 6.56, 1.55 \\
+(4.0) & 2,261 & 1,886 & 3.0 & -- \\
+(1.0, 2.0, 4.0) & 1,667 & 537 & 1.0 & 2.66, 2.00 \\
+\bottomrule
+\end{tabular}
+\end{table}    
+\end{frame}
+
+\begin{frame}{Impact of Product Introduction \& Removal on a Store}
+- Two weeks before and after
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{plots/store_8_product_28_total_daily_demand.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Impact of Product Introduction \& Removal on a Store}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\linewidth]{plots/store_8_product_28_demand_ratio.pdf}
+\end{figure}
+\end{frame}
+
+\subsection{Lifetime}
+
+\begin{frame}{}
+\textbf{Research Question}
+\begin{itemize}
+    \item Do push-privacy customers differ from the other in inherent preference?
+    \item How does customer engagement evolve across multiple active/dormant periods?
+    \item Do two groups differ in the evolution?
+\end{itemize}
+
+\textbf{Two types of periods}
+\begin{itemize}
+    \item Active Periods (Maximum 13)
+    \item Dormant Period (Maximum 12)
+\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/0206two-period.png}
+\end{figure}
+
+\textbf{Sample}
+\begin{itemize}
+    \item 779,744 customers, 51.8M records
+    \item Push=0: 119,978 (15.4\%); Push=1: 659,766 (84.6\%)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Active Period 1: Preference Gap}
+\begin{columns}
+\column{0.4\textwidth}
+\textbf{Push=0 (Privacy-Conscious)}
+\begin{itemize}
+    \item Orders: 5.38
+    \item Total Spend: \$213.90
+    \item Order Frequency: 1.18/week
+    \item Active Weeks: 4.63
+\end{itemize}
+
+\column{0.4\textwidth}
+\textbf{Push=1}
+\begin{itemize}
+    \item Orders: 3.40
+    \item Total Spend: \$138.57
+    \item Order Frequency: 1.16/week
+    \item Active Weeks: 3.07
+\end{itemize}
+\end{columns}
+
+\vspace{0.4cm}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lcc}
+\toprule
+Metric & Push=0 & Push=1 \\
+\midrule
+Avg Order Value & \$44.09 & \$45.09 \\
+Coupon Usage Rate & 75\% & 72\% \\
+Avg Discount & 26\% & 26\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Finding}: Push=0 customers stayed active longer and made 58\% more orders in the first active period, where there is no push yet
+\end{frame}
+
+\begin{frame}{Evolution Across Periods: Gap Narrows}
+\textbf{Number of Orders per Active Period}
+\begin{table}
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+Group & Period 1 & Period 2 & Period 3 & Period 4 & Period 5 & Period 6 \\
+\midrule
+Push=0 & 5.38 & 5.47 & 4.91 & 4.45 & 3.95 & 3.41 \\
+Push=1 & 3.40 & 4.04 & 3.98 & 3.78 & 3.51 & 3.10 \\
+\midrule
+Gap & \textbf{+58\%} & +35\% & +23\% & +18\% & +13\% & +10\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Patterns}
+\begin{itemize}
+    \item Both groups show declining orders across periods
+    \item Gap narrows steadily over time
+    \item Is this because information changes push=1-group-customers' behavior, or just because those who have a high preference retain over time?
+\end{itemize}
+
+\vspace{0.2cm}
+\scriptsize{Note: some customers churn across periods}
+\end{frame}
+
+\begin{frame}{Active Period Retention Rate Comparison}
+\textbf{Customer Counts by Period}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lcccccc}
+\toprule
+Group & Period 1 & Period 2 & Period 3 & Period 4 & Period 5 & Period 6 \\
+\midrule
+Push=0 & 119,978 & 77,044 & 54,569 & 36,862 & 22,695 & 12,266 \\
+Push=1 & 659,766 & 310,174 & 189,514 & 116,178 & 66,677 & 34,037 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.2cm}
+
+\textbf{Retention Rate (Period N / Period N-1)}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lccccc}
+\toprule
+Period & 2 & 3 & 4 & 5 & 6 \\
+\midrule
+Push=0 Retention & 64.2\% & 70.8\% & 67.6\% & 61.6\% & 54.1\% \\
+Push=1 Retention & 47.0\% & 61.1\% & 61.3\% & 57.4\% & 51.1\% \\
+\midrule
+Gap (pp) & \textbf{+17.2} & \textbf{+9.7} & \textbf{+6.3} & \textbf{+4.2} & \textbf{+3.0} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Finding}: Push=0 customers show substantially higher retention across all periods
+\end{frame}
+
+\begin{frame}{High-Engagement Customers ($\geq$10 Periods)}
+\textbf{Sample Characteristics}
+\begin{itemize}
+    \item Push=0: 174 customers (0.15\% of push=0 group)
+    \item Push=1: 411 customers (0.06\% of push=1 group)
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{Different Pattern from General Population}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lcccc}
+\toprule
+Period & Push=0 Orders & Push=1 Orders & Push=0 Active Days & Push=1 Active Days \\
+\midrule
+1 & 2.07 & 2.22 & 11.29 & 13.07 \\
+2 & 2.34 & 2.12 & 13.55 & 12.68 \\
+3 & 2.39 & 2.11 & 14.02 & 12.54 \\
+4 & 2.02 & 2.02 & 12.44 & 11.68 \\
+5 & 1.97 & 1.71 & 11.02 & 8.44 \\
+6 & 2.03 & 1.74 & 11.00 & 8.93 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Finding}: Most loyal customers show a small difference between groups
+\end{frame}
+
+\begin{frame}{Dormant Period Behavior}
+\textbf{Dormant Period 1 Comparison}
+\begin{table}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Metric & Push=0 & Push=1 \\
+\midrule
+Dormant Length (days) & 130.60 & 147.19 \\
+Total Pushes & 35.86 & 40.23 \\
+Avg Push Discount & 39\% & 39\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\textbf{Interpretation}
+\begin{itemize}
+    \item Number of pushes per day and discount offers are the same
+    \item Push=0 customers have 11\% shorter dormant periods
+    \item Again, hard to differentiate information effect from inherent preference
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Responsiveness to Push}
+\textbf{A Proxy: Days from Last Push to Purchase}
+
+\begin{table}
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+Group & Period 2 & Period 3 & Period 4 & Period 5 & Period 6 & Period 7 \\
+\midrule
+Push=0 & 6.10 & 4.86 & 4.42 & 4.26 & 3.91 & 3.40 \\
+Push=1 & 6.18 & 5.12 & 4.79 & 4.42 & 3.98 & 3.51 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\textbf{Key Findings}
+\begin{itemize}
+    \item Both groups respond in 4-6 days on average
+    \item Response time decreases over periods
+    \item Minimal differences between push=0 and push=1
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Strategic Behavior of Coupon Usage}
+\textbf{A proxy: Ratio of Orders Using Deeper Discount Than Pushed}
+
+\begin{table}
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+Group & Period 2 & Period 3 & Period 4 & Period 5 & Period 6 & Period 7 \\
+\midrule
+Push=0 & 82.8\% & 84.7\% & 86.0\% & 87.6\% & 89.0\% & 91.2\% \\
+Push=1 & 84.7\% & 86.0\% & 86.9\% & 88.6\% & 89.7\% & 91.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\textbf{Interpretation}
+\begin{itemize}
+    \item 82-91\% use deeper discounts than pushed
+    \item Rate increases across periods: \textbf{customers become more discount-seeking}
+    \item Push=0 groups uses deeper coupon less in the beginning, but more in the end
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary: Lifecycle Insights}
+\textbf{Key Findings}
+\begin{enumerate}
+    \item \textbf{Large Initial Gap}: Push=0 customers show 58\% more orders in first active period
+    \item \textbf{Convergence Over Time}: Gap narrows from 58\% to 10\% by period 6
+    \item \textbf{Similar Push mechanism and Push Response}: Both groups respond in 4-6 days
+    \item \textbf{Parallel Discount Behavior}: Both increase discount-seeking over time
+\end{enumerate}
+
+\end{frame}
+
+
+\section{Research Questions}
+\begin{frame}{}
+\begin{itemize}
+    \item \textbf{Reduced-form analysis}
+    \begin{itemize}
+        \item \textbf{Causal effect of product removal}
+        \begin{itemize}
+            \item New product comes with (unobserved, maybe targeted) advertising
+            \item Product removal is more exogenous to individuals
+        \end{itemize}
+        \item \textbf{Causal effect of push notification: regression discontinuity}
+        \begin{itemize}
+            \item Exploit firm's definition of ``dormant'' - compare day 30 with day 31
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Structural model}
+    \begin{itemize}
+        \item \textbf{Measuring state dependence}
+        \begin{itemize}
+            \item Exploit the shock of covid - some stores closed while some didn't
+        \end{itemize}
+        \item \textbf{How to quantify the impact of the product line change mechanism?}
+        \begin{itemize}
+            \item Need assumptions on supply side decision, the impact (spillover) of product introduction and removing on consumer choice, unobservables (ads, ...)
+            \item Demand: nested logit choice model
+            \item Counterfactual analysis: change the frequency/rule of product switching
+        \end{itemize}
+    \end{itemize}
+\end{itemize}    
+\end{frame}
+
+\begin{comment}
+\begin{frame}{Causal Effect of Push on Day 31 - DiD}
+``Among people on day-since-no-purchase 31, to what extent does receiving a push cause them to wake up, compared with natural wake up?''
+\begin{itemize}
+    \item There are 790,475 consumer-Dormant-Period pairs
+    \begin{itemize}
+        \item Treatment: pairs that received a push on day 31
+        \item Control: pairs that didn't
+        \item Identification: ALG \textbf{randomly} selects a subset of consumers entering day 31 to push
+    \end{itemize}
+    \item See whether they wake up on day 31
+\end{itemize}
+\begin{block}{Example Data}
+\begin{tabular}{lccc}
+\textbf{Member-Period} & \textbf{Treatment} & \textbf{Wake-up} & \textbf{Interpretation} \\
+\hline
+Member 1, Period 1 & Yes (1) & Yes (1) & Pushed and woke up \\
+Member 1, Period 2 & No (0) & No (0) & Not pushed, didn't wake up \\
+Member 2, Period 1 & Yes (1) & Yes (1) & Pushed and woke up \\
+\end{tabular}
+\end{block}
+\end{frame}
+
+\begin{frame}{Causal Effect of Push on Day 31 - DiD}
+``Among people on day-since-no-purchase 31, to what extent does receiving a push cause them to wake up, compared with natural wake up?''
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{Control} & \textbf{Treatment} & \textbf{Effect} \\
+\midrule
+\textbf{Size} & 433,420 & 357,055 & \\
+\textbf{Wake-ups} & 9,321 & 8,393 & \\
+\textbf{Rate} & 2.15\% & 2.35\% & \textbf{+0.2 pp} \\
+ & & & \textbf{(+9\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}    
+\end{frame}
+\end{comment}
+
+\begin{frame}{Causal Effect of Push on Day 31 - RD}
+``Comparing people at risk on day 30 vs day 31, what's the wake-up rate difference?''
+
+\begin{itemize}
+    \item Cutoff: 30 days since last purchase
+    \item Control: Member-Period on day 30 - not dormant
+    \item Treatment: Member-Period on day 31 - dormant + \textbf{potential pushes}
+    \item \textbf{Identification}: Similar features; No intentionally manipulation from members
+\end{itemize}
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+& \textbf{Day 30} & \textbf{Day 31} & \textbf{Difference} \\
+& \textbf{(Control)} & \textbf{(Treatment)} & \\
+\hline
+\#Member-Period & 804,934 & 790,475 & \\
+Purchases & 14,459 & 17,714 & \\
+Wake-up Rate & 1.79\% & 2.24\% & \textbf{+0.45 pp} \\
+Relative Effect & - & - & \textbf{+24.8\%} \\
+\end{tabular}
+\end{table}    
+\end{frame}
+
+\section{Literature}
+\begin{frame}{\textbf{Privacy on Targeting Efficiency} (\textit{WP, 2025})}
+Research Question
+\begin{itemize}
+    \item How do privacy regulations affect consumer purchasing behavior?
+\end{itemize}
+Identification
+\begin{itemize}
+    \item Apple’s App Tracking Transparency (ATT) policy as an exogenous shock
+    \item Treatment group: iPhone users
+    \item Control group: Android users
+    \item Causal forest (for heterogeneity) within DiD
+\end{itemize}
+
+Mechanism
+\begin{itemize}
+    \item Trust-enhancing effect: supported by the fact -\\ customers who enabled fewer privacy permissions, who are likely more privacy-sensitive, experience larger positive treatment effects
+    \item Supply-side responses: ruled out by showing no significant changes in the company’s coupon distribution strategy 
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{\textbf{Recapturing Lost Customers} (\textit{JMR, 2004})}
+
+Research Question
+\begin{itemize}
+    \item How firms should price customers when reacquiring them and how they should price them when they have been reacquired
+\end{itemize}
+
+Data
+\begin{itemize}
+    \item Newspaper subscription
+    \item 566 lapsed customers were targeted, and 416 came back
+    \item Reacquisition prices differ across customers, post-reacquisition prices differ across periods
+    \item Reason and length of time that the customers were lost
+\end{itemize}
+Research Method
+\begin{itemize}
+    \item Probit model for reacquisition process
+    \item Right-censored Tobit model for the second lifetime duration (different price sub-durations)
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{Regaining ``Lost'' Customers: the Predictive Power of First-Lifetime Behavior, the Reason for Defection, and the Nature of the Win-Back Offer} (\textit{JM, 2015})}
+
+Research Question
+\begin{itemize}
+    \item What is the relationship between customer first-lifetime and second-lifetime
+\end{itemize}
+Data
+\begin{itemize}
+    \item Telecommunication product
+    \item A randomized (w.r.t. both the targets and the offers) reacquisition experiment in the 2-6 month window since customers' defection 
+    \item 7 years of customer activities: 3 years before reacquisition
+    \item Reason and length of time that the customers were lost
+\end{itemize}
+Research Method
+\begin{itemize}
+    \item Probit model for reacquisition process
+    \item Right-censored Tobit model for the second lifetime duration
+    \item Regression for profitability per month after reacquisition
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\textbf{Consumer Responses to ``Favorite'' Product Removal:  Evidence from Beverage Vending Machines} (WP, 2025)}
+Data
+\begin{itemize}
+    \item Individual-level Purchases among Vending Machines, Jan to Aug, 2018
+\end{itemize}
+Identification Method: Synthetic Difference-in-Differences
+\begin{itemize}
+    \item Favorite product: most chosen one during Jan to May
+    \item Treatment: In June, those whose favorite product is removed - \textbf{157} consumers
+    \item Heterogeneity: consumers’ variety-seeking tendencies
+\end{itemize}
+\vspace{-0.1cm}
+\begin{table}[h]
+\centering
+\tiny
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{Favorite Machines (\% Change / Units)} & \textbf{Non-Favorite Machines (\% Change / Units)} \\
+\midrule
+\textbf{Overall Daily Demand} & -11.7\% / -0.044 & +55\% / +0.030 \\
+\textbf{Same Category} & +280\% / +0.065 & +110\% / +0.030 \\
+\textbf{Other Categories} & +89\% / +0.050 & +52\% / +0.024 \\
+\midrule
+\textbf{Consumer Experimentation and Learning (Weekly)} & & \\
+\quad New Products & \multicolumn{2}{c}{+56.7\% / +0.182} \\
+\quad Product Switching & \multicolumn{2}{c}{+20.8\% / +0.032} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{plots/VM.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Review}
+\begin{itemize}
+    \item During the one and a half years, there have been 265 drinks
+    \item There is a large variation in their introduction and removal time
+    \item There are 779,757 unique consumers, most of them purchased less than 5 times (median=3, .75Q=8)
+    \item Consumers with no purchase in the past 30 days will be marked as ``dormant'' and start to receive push notifications
+    \item 96.4\% of consumers have ever entered dormant status 
+    \item Todos
+    \begin{itemize}
+        \item Causal effect of new product notification
+        \item[*] Causal effect of product removal (and introduction)
+    \end{itemize}
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{\textbf{Stopping Shopping at Stop \& Shop?} (\textit{WP, 2026})}
+\textbf{Setting:} 11-day labor strike in 240 Stop \& Shop (S\&S) grocery stores, 9 periods before strike, 12 periods after (11-day windows)
+
+\vspace{0.2cm}
+\textbf{Research Question:} Does forcing consumers to forgo planned shopping trips reduce their future purchases, even after the store reopens?
+
+\vspace{0.2cm}
+\textbf{Identification: Triple-differences (D-i-D-i-D)}
+\begin{itemize}
+    \item \textbf{Displacement effect (D):} Consumers who \textit{would have} visited S\&S during the strike in the counterfactual → make \textbf{0.20 fewer trips/period} post-strike ($-9.9\%$). Effect persists $\sim$4 months.
+    \item \textbf{Baseline-demand effect (B):} Non-displaced S\&S shoppers → \textit{positive} post-strike effect (+0.054 trips), consistent with S\&S's promotional response.
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{Mechanism:} Larger effects for households visiting \textit{new} stores → search/learning frictions drive state dependence.
+\end{frame}
+
+\section{Weekly Regression}
+\begin{frame}{Review}
+\begin{itemize}
+    \item Direct impact on a store is small and hard to quantify
+    \item We can study the causal effect of removing ``top'' products on consumer
+    \begin{itemize}
+        \item ``top'' is defined in the data
+        \item Treatment: consumers whose store removed a ``top'' product
+        \item Control: consumers whose store hasn't removed a ``top'' product
+    \end{itemize}
+    \item Identification: staggered DiD
+    \item Potential concerns
+    \begin{enumerate}
+        \item We infer supply from demand. Should we use the stock-out days also as treatment?
+        \item other product changes are happening at the same time
+        \item All units are treated in the end, and most units are treated in the last period
+    \end{enumerate}
+    \item The impact may be small, given that consumers are highly variety-seeking
+\end{itemize}    
+\end{frame}
+
+
+
+\begin{frame}{Takeaway}
+\begin{itemize}
+    \item Some stores closed on weekends because they were located in office buildings
+    \item Stores were affected by covid differently
+    \item Product introduction happens simultaneously across stores, while product removal doesn't
+    \item Multiple products could be introduced at the same time
+    \item Before introduction of new products, product removal always happens
+    \begin{itemize}
+        \item As documented in Bernard, Redding, and Schott (2010)\footfullcite{bernard2010multiple}
+    \end{itemize}
+\end{itemize}    
+\end{frame}
+
+
+% Replace the "Data Panel Construction" frames with these updated versions
+
+\begin{frame}{Data Panel Construction (1/2)}
+    \textbf{Step 1: Customer Data Preparation}
+    \begin{itemize}
+        \item \textbf{Primary Store Identification}:
+        \begin{itemize}
+            \item Identify the store where each customer has the highest order count from \textbf{delivery}.
+            \item Keep only orders associated with the customer's \textbf{primary store} to track exposure to local product changes.
+        \end{itemize}
+        \item \textbf{Panel Creation (Zero-Filling)}:
+        \begin{itemize}
+            \item Aggregate orders at the weekly level
+            \item Consider \textit{Customer} $\times$ \textit{Week} combination starting from the first purchasing week.
+            \item Fill weeks with no transactions as \texttt{orders = 0}.
+            \item Calculate \textbf{Sleep Weeks}: Consecutive weeks with zero orders.
+        \end{itemize}
+        \item \textbf{Customer Filtering}:
+        \begin{itemize}
+            \item Remove single-purchase customers (40.68\% of original sample)
+            \item Remove customers with $>$14 orders in any week (outliers)
+            \item Final sample: 29,054 customers (58.42\% of original)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Data Panel Construction (2/2)}
+    \textbf{Step 2: Store-Product Timeline}
+    \begin{itemize}
+        \item \textbf{Lifecycle Definition}:
+        \begin{itemize}
+            \item Using the complete order database, identify the \textit{First Week} and \textit{Last Week} every product was sold at every store.
+        \end{itemize}
+        \item \textbf{Store-Level Aggregation}:
+        \begin{itemize}
+            \item Count \texttt{new\_products}: Number of products introduced in a store-week.
+            \item Count \texttt{removed}: Number of products removed (last appeared) in a store-week.
+            \item Create lagged variables (Lags 1--3) to measure delayed effects.
+        \end{itemize}
+    \end{itemize}
+    \vspace{0.2cm}
+    \textbf{Step 3: Merging \& Classification}
+    \begin{itemize}
+        \item Merge Customer Panel with Store Panel on \texttt{dept\_id} and \texttt{week\_id}.
+        \item Classify purchases: \textbf{Recent} (intro $\le$ 2 weeks) vs. \textbf{Existing} products.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Basic Statistics}
+    \begin{itemize}
+        \item \textbf{Analysis Period}: for each store, the second month to the second-to-last month.
+        \item \textbf{Scale}: 29,054 Customers across 180 Stores.
+    \end{itemize}
+\begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{l c}
+    \toprule
+    \textbf{Metric} & \textbf{Value} \\
+    \midrule
+    Average Weekly Orders (per customer) & 0.286 \\
+    \midrule
+    \textbf{Customer Activity} & \\
+    Average Sleep Weeks & 10.88 \\
+    Active Customers (0 sleep weeks) & 16.7\% \\
+    Dormant ($>$ 4 weeks) & 55.0\% \\
+    \midrule
+    \textbf{Store Dynamics (Weekly)} & \\
+    Avg. Overall New Products Per Store & 118.9 \\
+    Avg. Overall Product Removals Per Store & 111.7 \\
+    Weeks with Menu Changes & 64.4\% \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Regression Model A: Baseline Impact}
+\begin{columns}
+\begin{column}{0.5\linewidth}
+    \begin{table}[h]
+    \centering
+    \scriptsize
+    \begin{tabular}{lc}
+    \toprule
+     & \textbf{Orders} \\
+    \midrule
+    New Products & 0.0035*** \\
+     & (0.0012) \\
+    New Products (lag 1 week) & 0.0017 \\
+     & (0.0012) \\
+    Removed & 0.0017*** \\
+     & (0.0005) \\
+    \midrule
+    Customer FE & Yes \\
+    Week FE & Yes \\
+    Store FE & Yes \\
+    \midrule
+    Observations & 1,363,176 \\
+    \bottomrule
+    \multicolumn{2}{l}{\scriptsize *** p$<$0.01, ** p$<$0.05, * p$<$0.1} \\
+    \end{tabular}
+    \end{table}
+\end{column}
+\begin{column}{0.5\linewidth}
+    \textbf{Multicollinearity:}
+    \begin{itemize}
+        \item VIF between new\_products and removed: 1.003
+        \item Correlation: 0.0853 (weak correlation)
+    \end{itemize}
+    \textbf{Interpretation:}
+    \begin{itemize}
+        \item Introducing one new product increases weekly orders by 0.0035
+        \item Small positive effect from product removal (likely due to simultaneous new product introduction)
+        \item Lag-1 effect is positive but not statistically significant
+    \end{itemize}
+\end{column}
+\end{columns}    
+\end{frame}
+
+\begin{frame}{Regression Model B: Heterogeneity by Sleep Status}
+\textbf{Interaction with Sleep $>$ 4 weeks}
+\begin{columns}
+\begin{column}{0.5\linewidth}
+    \begin{table}[h]
+    \centering
+    \scriptsize
+    \begin{tabular}{lc}
+    \toprule
+     & \textbf{Orders} \\
+    \midrule
+    New Products & 0.0100*** \\
+     & (0.0013) \\
+    Removed & 0.0020** \\
+     & (0.0007) \\
+    Sleep $>$ 4 & $-$0.1828*** \\
+     & (0.0028) \\
+    New Products $\times$ Sleep $>$ 4 & $-$0.0088*** \\
+     & (0.0008) \\
+    Removed $\times$ Sleep $>$ 4 & $-$0.0005 \\
+     & (0.0007) \\
+    \midrule
+    Customer FE & Yes \\
+    Week FE & Yes \\
+    Store FE & Yes \\
+    \midrule
+    Observations & 1,363,176 \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+\end{column}
+\begin{column}{0.5\linewidth}
+    \textbf{Key Finding:}
+    \begin{itemize}
+        \item Active customers: Strong response to new products (0.0100)
+        \item Dormant customers: Net effect $\approx$ 0.0012 (0.0100 $-$ 0.0088)
+        \item New products attract active users more than they wake dormant customers
+    \end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Regression Model B: Sleep Thresholds Comparison}
+\vspace{-0.2cm}
+\begin{columns}
+\begin{column}{0.7\linewidth}
+    \begin{table}[h]
+    \centering
+    \scriptsize
+    \begin{tabular}{lccc}
+    \toprule
+     & \textbf{Sleep $>$ 4} & \textbf{Sleep $>$ 8} & \textbf{Sleep $>$ 12} \\
+    \midrule
+    New Products & 0.0100*** & 0.0078*** & 0.0066*** \\
+     & (0.0013) & (0.0012) & (0.0012) \\
+    Removed & 0.0020** & 0.0009 & 0.0005 \\
+     & (0.0007) & (0.0006) & (0.0006) \\
+    Sleep $>$ X & $-$0.1828*** & $-$0.1176*** & $-$0.0738*** \\
+     & (0.0029) & (0.0029) & (0.0032) \\
+    New Prod. $\times$ Sleep $>$ X & $-$0.0088*** & $-$0.0086*** & $-$0.0087*** \\
+     & (0.0008) & (0.0008) & (0.0008) \\
+    Removed $\times$ Sleep $>$ X & $-$0.0005 & 0.0014** & 0.0029*** \\
+     & (0.0007) & (0.0007) & (0.0007) \\
+    \midrule
+    Customer FE & Yes & Yes & Yes \\
+    Week FE & Yes & Yes & Yes \\
+    Store FE & Yes & Yes & Yes \\
+    \midrule
+    	extbf{Net effect (New Prod.)} & 0.0012 & $-$0.0009 & $-$0.0021 \\
+    Observations & 1,363,176 & 1,363,176 & 1,363,176 \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+\end{column}
+\begin{column}{0.28\linewidth}
+    \textbf{Insights:}
+    \begin{itemize}
+        \item Longer dormancy periods show stronger negative interaction effects
+        \item Dormant customers become increasingly unresponsive as sleep duration increases
+    \end{itemize}
+\end{column}
+\end{columns}    
+    
+\end{frame}
+
+\begin{frame}{Regression Model B: Active vs. Dormant Subsamples}
+\textbf{Subsample Analysis:}
+    
+Run the baseline model separately for active (sleep $\leq$ 4) and dormant customers.
+\begin{columns}
+\begin{column}{0.6\linewidth}
+    
+
+    \begin{table}[h]
+    \centering
+    \scriptsize
+    \begin{tabular}{l c c c c}
+    \toprule
+     & \multicolumn{2}{c}{\textbf{Active (sleep $\leq$ 4)}} & \multicolumn{2}{c}{\textbf{Dormant (sleep $>$ 4)}} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    \textbf{Variable} & \textbf{Estimate} & \textbf{P-Value} & \textbf{Estimate} & \textbf{P-Value} \\
+    \midrule
+    	new\_products & 0.0146*** & $<$0.001 & 0.0012 & 0.199 \\
+     & (0.0028) & & (0.0009) & \\
+    	new\_prod\_lag1 & 0.0098*** & 0.00033 & 0.0011 & 0.256 \\
+     & (0.0027) & & (0.0009) & \\
+    	removed & 0.0027** & 0.0145 & 0.0013*** & 0.00136 \\
+     & (0.0011) & & (0.0004) & \\
+    \midrule
+    Observations & \multicolumn{2}{c}{562,966} & \multicolumn{2}{c}{800,210} \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+\end{column}
+\begin{column}{0.4\linewidth}    
+    \begin{itemize}
+        \item Active customers show strong, significant responses to new products
+        \item Dormant customers show weak, insignificant responses to new products
+        \item Removals have a small positive effect among dormant users
+    \end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% --- Regression Model B: Continuous Sleep Weeks ---
+\begin{frame}{Regression Model B: Continuous Sleep Weeks}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{table}
+            \centering
+            \scriptsize
+            \begin{tabular}{lc}
+            \toprule
+            \textbf{Variable} & \textbf{Orders} \\
+            \midrule
+            New Products & 0.0072*** \\
+             & (0.0012) \\
+            Removed & $-$0.0034*** \\
+             & (0.0006) \\
+            Sleep Weeks & $-$0.0046*** \\
+             & (0.0001) \\
+            New Prod. $\times$ Sleep Weeks & $-$0.00029*** \\
+             & (0.0000) \\
+            Removed $\times$ Sleep Weeks & 0.00035*** \\
+             & (0.0000) \\
+            \midrule
+            Customer, Week, Store FE & Yes \\
+            Observations & 1,363,176 \\
+            \bottomrule
+            \end{tabular}
+            \end{table}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \vspace{0.5cm}
+            \textbf{Interpretation:}
+            \begin{itemize}
+                \item Each additional week of sleep reduces weekly orders by 0.46 pp.
+                \item The marginal effect of new products decreases by 0.03 pp per sleep week.
+                \item At 24 weeks of sleep: net effect of new products $\approx$ 0.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Regression Model C: Spillovers ---
+\begin{frame}{Regression Model C: Spillovers to Existing Products}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{table}
+            \centering
+            \scriptsize
+            \begin{tabular}{lc}
+            \toprule
+            \textbf{Variable} & \textbf{Purchases Existing} \\
+            \midrule
+            New Products & 0.0014 \\
+             & (0.0011) \\
+            New Prod. (Lag 1) & $-$0.0001 \\
+             & (0.0011) \\
+            Removed & 0.0013*** \\
+             & (0.0005) \\
+            \midrule
+            Customer, Week, Store FE & Yes \\
+            Observations & 1,363,176 \\
+            \bottomrule
+            \end{tabular}
+            \end{table}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \textbf{Key Finding:}
+            \begin{itemize}
+                \item \textbf{No significant cannibalization} of new product on existing products.
+                \item \textbf{Removals slightly increase purchases of remaining items.}
+                \item New products expand the market rather than substitute.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Distributed Lag Models ---
+\begin{frame}{Distributed Lag Models: Time Dynamics}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            \begin{table}
+            \centering
+            \scriptsize
+            \begin{tabular}{lcc}
+            \toprule
+             & \textbf{Orders} & \textbf{Existing} \\
+            \midrule
+            New Prod. (lag0) & 0.0039*** & 0.0017 \\
+             & (0.0012) & (0.0011) \\
+            New Prod. (lag1) & 0.0022* & 0.0002 \\
+             & (0.0012) & (0.0011) \\
+            New Prod. (lag2) & $-$0.0001 & $-$0.0006 \\
+             & (0.0012) & (0.0011) \\
+            \midrule
+            Removed (lag0) & 0.0013** & 0.0010** \\
+             & (0.0005) & (0.0005) \\
+            Removed (lag1) & $-$0.0014*** & $-$0.0011** \\
+             & (0.0005) & (0.0005) \\
+            Removed (lag2) & $-$0.0020*** & $-$0.0014*** \\
+             & (0.0005) & (0.0005) \\
+            \bottomrule
+            \end{tabular}
+            \end{table}
+        \end{column}
+        
+        \begin{column}{0.44\textwidth}
+            \vspace{0.5cm}
+            \textbf{Key Insights:}
+            \begin{itemize}
+                \item \textbf{New products:} Immediate positive effect, weakens by lag 1.
+                \item \textbf{Removals:} Initially neutral, followed by \textbf{persistent negative effects} (lags 1-2).
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\subsection{Comparison: Push=0 vs Push=1}
+\begin{frame}{Sample Split}
+\textbf{Research Question:} How do customers with different privacy concerns respond differently to marketing strategies (new product introduction and push)?
+\vspace{0.3cm}
+
+\begin{columns}
+\begin{column}{0.45\linewidth}
+\textbf{Groups}
+\begin{itemize}
+    \item \textbf{Push=0}: Members marked as no-push in data
+    \item \textbf{Push=1}: Members who received pushes
+\end{itemize}
+\end{column}
+\begin{column}{0.5\linewidth}
+\begin{table}
+\centering\scriptsize
+\begin{tabular}{lrr}
+\toprule
+\textbf{Metric} & \textbf{Push=0} & \textbf{Push=1} \\
+\midrule
+Unique Members & 119,978 & 659,766 \\
+Total Records & 9.3M & 42.5M \\
+\% of Sample & 15.4\% & 84.6\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Metric 1: Pushes Before Order}
+How many pushes precede each purchase? (for those who have made at least two orders)
+\vspace{0.2cm}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Push=0} & \textbf{Push=1} & \textbf{Diff} \\
+\midrule
+Mean pushes before order & 2.21 & 2.69 & +0.48 \\
+Median pushes before order & 0 & 0 & -- \\
+\% purchases with pushes before & 13.8\% & 15.6\% & +1.8 pp \\
+Total purchases & 1.65M & 5.09M & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Push=1 customers receive slightly more pushes before ordering
+    \begin{itemize}
+        \item Could because the algorithm assigned more pushes, or they respond less
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Metric 2: Time in Dormant}
+Days in dormant period before making a purchase (consumer-dormant-period level)
+\vspace{0.2cm}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Push=0} & \textbf{Push=1} & \textbf{Diff} \\
+\midrule
+Mean days in dormant & 86.5 & 92.4 & +5.9 \\
+Median days in dormant & 57 & 61 & +4 \\
+Std dev & 74.3 & 78.4 & -- \\
+Max days & 578 & 578 & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Push=1 customers stay dormant slightly longer before purchasing
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Metric 3: Coupon/Discount Usage}
+Match rate: pushed coupon/discount matches purchase usage
+\vspace{0.2cm}
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Match Type} & \textbf{Push=0} & \textbf{Push=1} & \textbf{Diff} \\
+\midrule
+Overall match rate & 32.9\% & 34.9\% & +2.0 pp \\
+Discount match & 2.6\% & 3.5\% & +0.9 pp \\
+Coupon match & 30.6\% & 31.7\% & +1.1 pp \\
+Mean days (the last push$\to$order) & 3.59 & 3.83 & +0.24 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Periods analyzed: 212K (push=0) vs 739K (push=1)
+    \item Push=1 group shows marginally higher coupon/discount utilization
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary: Push=0 vs Push=1}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Dimension} & \textbf{Push=0} & \textbf{Push=1} & \textbf{Interpretation} \\
+\midrule
+Pushes before order & 2.21 & 2.69 & Push=1 receives more pushes \\
+Days in dormant & 86.5 & 92.4 & Push=1 dormant longer \\
+Coupon match rate & 32.9\% & 34.9\% & Similar utilization \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+\textbf{Takeaways:}
+\begin{itemize}
+    \item Push=0 customers seem to be more active
+    \item Push=1 customers use more coupons/discounts sent from push
+\end{itemize}
+\end{frame}
+
+\subsection{Regression Analysis: Push=0 vs Push=1}
+\begin{frame}{Model A: Baseline Comparison}
+Dependent variable: Weekly orders at customer-store-week level
+\vspace{0.2cm}
+
+\begin{table}
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+\textbf{Variable} & \textbf{Push=0} & \textbf{Push=1} & \textbf{Combined} \\
+\midrule
+New Products (lag 1 week) & 0.00085 & 0.00092** & 0.0011*** \\
+ & (0.00090) & (0.00040) & (0.00037) \\
+Removed (lag 1 week) & $-$0.00072* & $-$0.00075*** & $-$0.00072*** \\
+ & (0.00038) & (0.00017) & (0.00016) \\
+\midrule
+Customer FE & Yes & Yes & Yes \\
+Week FE & Yes & Yes & Yes \\
+Store FE & Yes & Yes & Yes \\
+\midrule
+Observations & 1,746,412 & 6,163,008 & 7,909,420 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item \textbf{Push=1}: Stronger response to new products (significant at 5\% level)
+    \item \textbf{Both groups}: Product removal has negative effect on orders
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model B: Sleep Status Heterogeneity}
+Dependent variable: Weekly orders; Sleep $>$ 4 weeks
+\vspace{0.2cm}
+
+\begin{columns}
+\begin{column}{0.55\linewidth}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lccc}
+\toprule
+\textbf{Variable} & \textbf{Push=0} & \textbf{Push=1} \\
+\midrule
+New Products & 0.0009 & 0.0010** \\
+ & (0.0009) & (0.0004) \\
+Removed & $-$0.0006 & $-$0.0006*** \\
+ & (0.0004) & (0.0002) \\
+Sleep $>$ 4 & $-$0.129*** & $-$0.094*** \\
+ & (0.0022) & (0.0010) \\
+Total Pushes & $-$0.035*** & $-$0.028*** \\
+ & (0.0006) & (0.0003) \\
+Sleep $\times$ New Prod. & $-$0.005*** & $-$0.003*** \\
+ & (0.0006) & (0.0003) \\
+\midrule
+Obs. & 1,746,412 & 6,163,008 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.45\linewidth}
+\textbf{Key Findings:}
+\begin{itemize}
+    \item \textbf{Sleep effect:} Once Push=0 become dormant, they are harder to wake up ($-$13\% vs $-$9\%)
+    \item \textbf{Push effect:} Negative coefficient (Interpretation: Endogeneity)
+    \item \textbf{Interaction:} New products less effective for dormant customers
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Model A: Effect of Push Notifications}
+
+\begin{columns}
+\begin{column}{0.35\linewidth}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+\textbf{Variable} & \textbf{Combined sample} \\
+\midrule
+New Products & 0.0011*** \\
+ & (0.00037) \\
+Removed & $-$0.00072*** \\
+ & (0.00016) \\
+\textbf{Total Pushes} & $\mathbf{-0.044^{***}}$ \\
+ & $\mathbf{(0.00021)}$ \\
+\midrule
+Obs. & 7,909,420 \\
+R$^2$ & 0.223 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+
+\begin{column}{0.65\linewidth}
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lcc}
+\toprule
+\textbf{Trigger Type} & \textbf{Description} & \textbf{Combined sample} \\
+\midrule
+Trigger 1 & Discount/Coupon & $-0.040^{***}$ \\
+ & & (0.00037) \\
+Trigger 2 & Expiration & $-0.062^{***}$ \\
+ & & (0.00054) \\
+Trigger 3 & New Product & $-0.029^{***}$ \\
+ & & (0.00095) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\end{columns}
+
+\textbf{Push Notification Effects}
+\begin{itemize}
+    \item Effect consistent across model specifications
+\end{itemize}
+\end{frame}
+
+\section{Closure Shock}
+\subsection{Store Closure Analysis}
+
+\begin{frame}{RQ: Impact of State-dependence on Future purchasing}
+\textbf{Motivation}
+\begin{itemize}
+    \item Natural experiment: store closures during Covid-19
+    \item No direct closure data available; need to identify closures from demand patterns
+    \item How FORCED disconnection in purchase affects customers' future behavior
+    \item And how notifications/new products can make customers reconnect
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Steps}
+\begin{itemize}
+    \item Identify Covid-forced store closures using demand data as a proxy
+    \item Visualise closures geographically to understand spatial patterns
+    \item Identify treated customers and the control group using historical purchases
+    \item Validate the proxy by examining customer purchase behavior during closures
+    \item \textbf{[New]} Quantify the closure impact using statistical tests
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Methodology (1/2): Identifying Store Closures}
+\textbf{Step 1: Geocode Store Locations}
+\begin{itemize}
+    \item 260 stores in Nanjing with Chinese addresses
+    \item Used Baidu Maps API to convert addresses to coordinates
+    \item Output: \texttt{nanjing\_stores\_geocoded.csv} with latitude/longitude
+    \item 247/260 stores successfully geocoded (95.4\%)
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Step 2: Identify Covid-forced Closures from Demand Data}
+\begin{itemize}
+    \item Create complete grid: all date $\times$ store combinations
+    \item Identify consecutive zero-demand periods $\geq$ 10 days
+    \item Filter: stores must have non-zero demand \textbf{before AND after} closure
+    \item This excludes stores that opened late or closed permanently
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Methodology (2/2): Customer Impact Analysis}
+\textbf{Step 3: Customer-Store Relationship}
+\begin{itemize}
+    \item For each customer, identify their most frequently visited store
+    \item Calculate ratio of purchases at preferred store
+    \item Define ``affected customers'': those with $\geq$ 5 purchases and $\geq$ 80\% at closed store
+\end{itemize}
+
+\vspace{0.2cm}
+
+\textbf{Step 4: Impact Validation}
+\begin{itemize}
+    \item Compare purchase behavior during closure period
+    \item \textbf{Affected group}: customers tied to closed store
+    \item \textbf{Control group}: who meet purchase threshold but not tied to closed store
+    \item Calculate ``selectivity ratio'': affected purchase ratio / control purchase ratio
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Threshold Justification Analysis}
+\textbf{Population Purchase Distribution}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Total customers & 779,744 \\
+Unique purchase days (mean) & 8.70 \\
+Unique purchase days (median) & 3 \\
+Unique purchase days (std) & 18.31 \\
+\midrule
+\multicolumn{2}{l}{\textit{Coverage at different thresholds:}} \\
+$\geq$ 5 purchases & 286,784 customers (36.8\%) \\
+$\geq$ 10 purchases & 169,762 customers (21.8\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Preferred-Store Ratio among Qualified Customers ($\geq$ 5 purchases)}
+\begin{itemize}
+    \item Mean ratio: 0.696, Median: 0.714
+    \item Ratio $\geq$ 0.8: 124,015 customers (43.2\%) are store-loyal
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Results: Store Closures Identified}
+\textbf{Closure Statistics}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Total closures identified & 101 \\
+Unique stores affected & 65 \\
+Date range & 2020-06-20 to 2021-11-21 \\
+\midrule
+Closure duration (days) & \\
+\quad Mean & 48.3 \\
+\quad Median & 44 \\
+\quad Min / Max & 10 / 107 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Pattern}: Two major waves of closures
+\begin{itemize}
+    \item Wave 1: Summer 2020 (Jun-Sep) -- 81 closures, university areas
+    \item Wave 2: Summer 2021 (Jul-Oct) -- 20 closures, broader impact
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Results: Customer-Store Relationship}
+\textbf{Unique Stores per Customer (Qualified: $\geq$ 5 purchases)}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Qualified customers & 286,784 \\
+Unique stores (Min) & 1 \\
+Unique stores (Max) & 132 \\
+Unique stores (Mean) & 3.77 \\
+Unique stores (Median) & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation}
+\begin{itemize}
+    \item Customers tend to visit only 2-4 stores regularly
+    \item Strong loyalty pattern supports the store-closure proxy
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Results: Customer Impact Validation}
+\textbf{Purchase Behavior During Closure Period (14-day window)}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Treatment purchase rate & 0.039 (3.9\%) \\
+Control purchase rate & 0.434 (43.4\%) \\
+\midrule
+Selectivity Ratio & \textbf{0.09} (91\% reduction) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Summary Statistics (101 closures)}
+\begin{itemize}
+    \item Mean \#treatment: 957 customers (median: 830)
+    \item Mean \#control: 237,742 customers (consistent across closures)
+\end{itemize}
+
+\textbf{Interpretation}
+\begin{itemize}
+    \item \textbf{Strong validation}: 91\% reduction in purchases for affected customers
+    \item Control group maintained normal purchase levels (43.4\%)
+    \item The zero-demand proxy effectively captures genuine closures
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Statistical Test Results (14-day Window)}
+\textbf{Customer-level Comparisons}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Metric} & \textbf{T vs C (pre)} & \textbf{T vs C (post)} & \textbf{T (pre vs post)} & \textbf{C (pre vs post)} \\
+\midrule
+Purchase Days/Day & $***$ & $***$ & ns ($p=0.065$) & $*$ ($p=0.018$) \\
+Unique Products/Day & $***$ & $**$ & ns ($p=0.097$) & $*$ ($p=0.028$) \\
+New Product Ratio & $***$ & $***$ & $***$ & $***$ \\
+Mean Total Discount & $***$ & $***$ & $***$ & $***$ \\
+Coupon Usage Rate & $***$ & $***$ & $***$ & $***$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key Findings}
+\begin{itemize}
+    \item Treatment and control groups are different \textit{a priori} (as expected)
+    \item Treatment customers show \textit{no significant change} in purchase patterns (pre vs post)
+    \item Control customers show \textit{significant changes} in purchase behavior over time
+    \item New product behavior, discounts, and coupon usage differ significantly
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Statistical Test Results (28-day Window - Robustness)}
+\textbf{Customer-level Comparisons}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Metric} & \textbf{T vs C (pre)} & \textbf{T vs C (post)} & \textbf{T (pre vs post)} & \textbf{C (pre vs post)} \\
+\midrule
+Purchase Days/Day & $***$ & $***$ & $**$ ($p=0.001$) & ns ($p=0.735$) \\
+Unique Products/Day & $***$ & $***$ & $***$ & $***$ \\
+New Product Ratio & $***$ & $***$ & $***$ & $***$ \\
+Mean Total Discount & $***$ & $***$ & $***$ & $***$ \\
+Coupon Usage Rate & $***$ & $***$ & $***$ & $***$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Robustness Check}
+\begin{itemize}
+    \item Similar pattern with longer 28-day window
+    \item Treatment group shows \textit{significant reduction} in purchase days (pre vs post)
+    \item Control group shows \textit{no significant change} in purchase days over time
+    \item Confirms the closure impact is robust to window specification
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From Closure Detection to Estimation}
+\small
+\textbf{Estimation sample used in the new reports}
+\begin{itemize}
+    \item Keep short closures only: duration $<30$ days and closure date after Aug 2020
+    \item Match each treated store to up to 5 never-closed control stores by setup time
+    \item Treatment: member's preferred store is the closed store
+    \item Control: member's preferred store is one of the matched control stores
+    \item Event-time panel uses $t \in \{-4,-3,-2,-1,1,2,3,4\}$ and excludes $t=0$ from regressions
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{Why this refinement?}
+\begin{itemize}
+    \item Long closures are much more likely to reflect seasonal shutdowns than short disruption shocks
+    \item The matched-control design is what feeds the DiD and DDD specifications in the four updated reports
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Additional Design Updates}
+\small
+\textbf{What changed relative to the earlier closure analysis}
+\begin{itemize}
+    \item Compare multiple horizons ($h=1,2,4$) instead of relying on one pre/post window
+    \item Use XGBoost to classify members likely to purchase during the closure counterfactual
+    \item Pre-period validation accuracy is about 73\% in the purchase-displacement model
+    \item Heterogeneity checks by closure length and push exposure do not reveal stronger habit-disruption effects
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{Key caveat absorbed into the new design}
+\begin{itemize}
+    \item Many long university-store closures are holiday-driven, so the current estimation focuses on short closures
+    \item This is why the updated empirical section emphasizes the 22 retained short closures rather than all 101 raw shutdown spells
+\end{itemize}
+\end{frame}
+
+\section{Updates}
+\begin{frame}{Two Outcome Variables}
+\small
+The four update regressions use two families of outcome variables $Y_{iet}$:
+
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{p{0.22\linewidth} p{0.34\linewidth} p{0.34\linewidth}}
+\toprule
+\textbf{Outcome type} & \textbf{Definition} & \textbf{Used in} \\
+\midrule
+Purchase frequency &
+$n\_purchases =$ purchases in the event-time window divided by window length (daily rate) &
+Updates 1--2 \\
+Variety seeking &
+share of purchases that are ``new'' within the window; measured either by distinct products or by purchase instances &
+Updates 3--4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Purchase-frequency slides ask whether closures change \emph{how much} members buy afterward
+    \item Variety-seeking slides ask whether closures change \emph{what kinds of products} members explore afterward
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Update 1: Matched Purchase DiD}
+Matched panel of members observed in every pre/post period, with
+$Y_{iet}=$ daily purchase rate and $t \in \{-4,-3,-2,-1,1,2,3,4\}$:
+\begingroup
+\small
+\[
+Y_{iet} =
+\delta \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.41\linewidth}
+\textbf{Parameter of interest}
+\[
+\hat{\delta} = 0.00514 \; (0.00441)
+\]
+\end{column}
+\begin{column}{0.56\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item $p=0.244$: insignificant
+    \item Treated / control members: 952 / 4,248
+    \item 22 closures, 5,200 members, 41,600 obs.
+    \item Pre-trend joint test: $p=0.458$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Update 2: Purchase DDD}
+Unmatched-panel DDD for purchase frequency, where $D_{ie}$ is the displacement indicator:
+\begingroup
+\small
+\[
+\begin{aligned}
+Y_{iet} &= \delta^B \bigl(\text{post}_{t} \times \text{Treated}_{ie}\bigr)
++ \beta \bigl(\text{post}_{t} \times D_{ie}\bigr) \\
+&\quad + \delta^D \bigl(\text{post}_{t} \times \text{Treated}_{ie} \times D_{ie}\bigr)
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{aligned}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.42\linewidth}
+\textbf{Estimated parameters}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+Parameter & Estimate (SE) \\
+\midrule
+$\hat{\delta}^B$ & 0.00081 (0.00064) \\
+$\hat{\beta}$ & $-0.03353^{***}$ (0.00107) \\
+$\hat{\delta}^D$ & $0.00517^{**}$ (0.00241) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.57\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item Treated / control members: 8,092 / 36,766
+    \item Baseline effect is near zero
+    \item Displacement effect is small and positive
+    \item Pre-trend didn't pass $p=0.004$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Update 3: Matched Variety-Seeking DiD}
+Matched-panel DiD for variety seeking:
+\begingroup
+\small
+\[
+Y_{iet} =
+\delta \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\textbf{Estimated treatment effect}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+Outcome mode & $\hat{\delta}$ \\
+\midrule
+Distinct products & $0.04066^{***}$ (0.01419) \\
+Purchase instances & $0.02991^{**}$ (0.01435) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.53\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item Treated / control members: 308 / 1,415
+    \item Positive post-closure effect in both outcome constructions
+    \item Pre-trends supported: $p=0.525$ and $0.686$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Update 4: Variety-Seeking DDD}
+Unmatched-panel DDD for distinct-mode variety seeking:
+\begingroup
+\small
+\[
+\begin{aligned}
+Y_{iet} &= \delta^B \bigl(\text{post}_{t} \times \text{Treated}_{ie}\bigr)
++ \beta \bigl(\text{post}_{t} \times D_{ie}\bigr) \\
+&\quad + \delta^D \bigl(\text{post}_{t} \times \text{Treated}_{ie} \times D_{ie}\bigr)
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{aligned}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\textbf{Estimated parameters}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+Parameter & Estimate (SE) \\
+\midrule
+$\hat{\delta}^B$ & $0.031^{***}$ (0.011) \\
+$\hat{\beta}$ & $0.036^{***}$ (0.006) \\
+$\hat{\delta}^D$ & $-0.039^{***}$ (0.014) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.57\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item Treated / control members: 8,092 / 36,766
+    \item Baseline effect is positive for non-displaced treated members
+    \item Displacement effect is negative
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\end{document}
