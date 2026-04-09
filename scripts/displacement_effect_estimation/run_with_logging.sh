@@ -48,6 +48,11 @@
 #   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
 #
+# Variety-seeking, instance-only-old mode (share of purchase rows on products
+# that existed before rel_t=-4):
+#   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance-only-old \
+#       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance_only_old
+#
 # Variety-seeking, unbalanced panel (switches from DiD to DDD):
 #   ./run_with_logging.sh --outcome variety_seeking --no-balanced-panel \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced

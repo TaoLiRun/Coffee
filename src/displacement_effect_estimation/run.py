@@ -129,12 +129,13 @@ def main() -> None:
     parser.add_argument(
         "--variety-seeking-mode",
         type=str,
-        choices=["distinct", "instance"],
+        choices=["distinct", "instance", "instance-only-old"],
         default="distinct",
         help=(
             "For outcome=variety_seeking: 'distinct' (default) counts each product_id once "
             "per window (set cardinality); 'instance' counts every purchase row so repeated "
-            "buys of the same product contribute proportionally."
+            "buys of the same product contribute proportionally; 'instance-only-old' measures "
+            "the share of purchase rows coming from products that existed before rel_t=-4."
         ),
     )
     parser.add_argument(

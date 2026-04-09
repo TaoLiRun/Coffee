@@ -11,6 +11,8 @@ import pandas as pd
 
 LOGGER = logging.getLogger("displacement_effect_estimation")
 
+_VARIETY_SEEKING_MODES = frozenset({"distinct", "instance", "instance-only-old"})
+
 _BASE_OUTPUT_COLS = [
     "member_id",
     "dept_id",
@@ -314,6 +316,53 @@ def load_commodity_orders_for_members(
     return df.sort_values("date").reset_index(drop=True)
 
 
+def load_product_first_seen_dates(
+    cfg: dict | None = None,
+    chunksize: int = 1_000_000,
+) -> pd.DataFrame:
+    """Load earliest observed purchase date per product from the full commodity file."""
+    cfg = cfg or load_config()
+    project_root = get_project_root()
+    rel_path = cfg.get("paths", {}).get(
+        "commodity_processed_file",
+        "data/processed/order_commodity_result_processed.csv",
+    )
+    path = project_root / rel_path
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Processed commodity file not found: {path}. "
+            "Expected columns: dt, product_id."
+        )
+
+    first_seen_by_product: dict[int, pd.Timestamp] = {}
+    for chunk in pd.read_csv(
+        path,
+        encoding="utf-8-sig",
+        usecols=["dt", "product_id"],
+        chunksize=chunksize,
+    ):
+        chunk["date"] = pd.to_datetime(chunk["dt"], errors="coerce").dt.normalize()
+        chunk = chunk.dropna(subset=["date", "product_id"])
+        if chunk.empty:
+            continue
+        chunk["product_id"] = chunk["product_id"].astype(int)
+        chunk_min = chunk.groupby("product_id", sort=False)["date"].min()
+        for product_id, first_seen in chunk_min.items():
+            previous = first_seen_by_product.get(product_id)
+            if previous is None or first_seen < previous:
+                first_seen_by_product[product_id] = first_seen
+
+    if not first_seen_by_product:
+        return pd.DataFrame(columns=["product_id", "product_first_date"])
+
+    return pd.DataFrame(
+        {
+            "product_id": list(first_seen_by_product.keys()),
+            "product_first_date": list(first_seen_by_product.values()),
+        }
+    )
+
+
 def _compute_first_purchase_dates(commodity_df: pd.DataFrame) -> pd.DataFrame:
     """Return (member_id, product_id, first_date): the earliest purchase date per member-product pair."""
     return (
@@ -324,6 +373,16 @@ def _compute_first_purchase_dates(commodity_df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+def _compute_product_first_seen_dates(commodity_df: pd.DataFrame) -> pd.DataFrame:
+    """Return (product_id, product_first_date): earliest observed purchase date per product."""
+    return (
+        commodity_df.groupby("product_id", sort=False)["date"]
+        .min()
+        .reset_index()
+        .rename(columns={"date": "product_first_date"})
+    )
+
+
 def _compute_variety_seeking_for_window(
     commodity_df: pd.DataFrame,
     first_purchase_df: pd.DataFrame,
@@ -331,6 +390,8 @@ def _compute_variety_seeking_for_window(
     start_dt: pd.Timestamp,
     end_dt: pd.Timestamp,
     mode: str = "distinct",
+    product_first_seen_df: pd.DataFrame | None = None,
+    old_product_cutoff_dt: pd.Timestamp | None = None,
 ) -> pd.DataFrame:
     """Compute variety_seeking for all members in one period window.
 
@@ -344,12 +405,17 @@ def _compute_variety_seeking_for_window(
     mode="instance":
         Both numerator and denominator count individual purchase rows — buying
         the same product k times contributes k to both numerator and denominator.
+    mode="instance-only-old":
+        Denominator counts all purchase rows in the window. Numerator counts only
+        rows whose product existed before the event's rel_t=-4 window start.
 
     Returns DataFrame[member_id, variety_seeking].
     Members with no purchases in the window receive NaN.
     """
-    if mode not in ("distinct", "instance"):
-        raise ValueError(f"variety_seeking_mode must be 'distinct' or 'instance'; got '{mode}'.")
+    if mode not in _VARIETY_SEEKING_MODES:
+        raise ValueError(
+            f"variety_seeking_mode must be one of {sorted(_VARIETY_SEEKING_MODES)}; got '{mode}'."
+        )
 
     win = _slice_by_date(commodity_df, start_dt, end_dt)
     if not win.empty:
@@ -360,6 +426,22 @@ def _compute_variety_seeking_for_window(
     if win.empty:
         all_members["variety_seeking"] = np.nan
         return all_members
+
+    if mode == "instance-only-old":
+        if product_first_seen_df is None or old_product_cutoff_dt is None:
+            raise ValueError(
+                "instance-only-old mode requires product_first_seen_df and old_product_cutoff_dt."
+            )
+        win_rows = win[["member_id", "product_id"]].copy()
+        win_rows = win_rows.merge(product_first_seen_df, on="product_id", how="left")
+        win_rows["is_old"] = (win_rows["product_first_date"] < old_product_cutoff_dt).astype(int)
+        agg = (
+            win_rows.groupby("member_id", sort=False)
+            .agg(total_prods=("product_id", "count"), old_prods=("is_old", "sum"))
+            .reset_index()
+        )
+        agg["variety_seeking"] = agg["old_prods"] / agg["total_prods"]
+        return all_members.merge(agg[["member_id", "variety_seeking"]], on="member_id", how="left")
 
     win_prods = win[["member_id", "product_id"]].copy()
     if mode == "distinct":
@@ -514,6 +596,7 @@ def build_variety_period0_rows(
         "dept_id",
         "closure_start",
         "closure_end",
+        "closure_duration_days",
         "group",
         "treated",
     }
@@ -522,7 +605,7 @@ def build_variety_period0_rows(
         raise ValueError(f"sample is missing required columns for period-0 build: {sorted(missing)}")
 
     event_members = sample[
-        ["member_id", "dept_id", "closure_start", "closure_end", "group", "treated"]
+        ["member_id", "dept_id", "closure_start", "closure_end", "closure_duration_days", "group", "treated"]
     ].drop_duplicates()
     if event_members.empty:
         return pd.DataFrame(columns=["member_id", "dept_id", "closure_start", "closure_end", "group", "treated", "rel_t", "variety_seeking"])
@@ -530,6 +613,11 @@ def build_variety_period0_rows(
     scoped_member_ids = set(event_members["member_id"].dropna().tolist())
     commodity_df = load_commodity_orders_for_members(member_ids=scoped_member_ids, cfg=cfg)
     first_purchase_df = _compute_first_purchase_dates(commodity_df)
+    product_first_seen_df = (
+        load_product_first_seen_dates(cfg=cfg)
+        if variety_seeking_mode == "instance-only-old"
+        else _compute_product_first_seen_dates(commodity_df)
+    )
 
     out_parts: list[pd.DataFrame] = []
     for (dept_id, closure_start, closure_end), frame in event_members.groupby(
@@ -538,6 +626,14 @@ def build_variety_period0_rows(
     ):
         closure_start_dt = pd.to_datetime(closure_start)
         closure_end_dt = pd.to_datetime(closure_end)
+        closure_bin_days = int(frame["closure_duration_days"].iloc[0])
+        t_horizon = int(frame["rel_t"].abs().max()) if "rel_t" in frame.columns else int(sample["rel_t"].abs().max())
+        old_product_cutoff_dt, _ = _window_bounds(
+            closure_start=closure_start_dt,
+            closure_end=closure_end_dt,
+            rel_t=-t_horizon,
+            bin_days=closure_bin_days,
+        )
         members = set(frame["member_id"].tolist())
         vs_result = _compute_variety_seeking_for_window(
             commodity_df=commodity_df,
@@ -546,6 +642,8 @@ def build_variety_period0_rows(
             start_dt=closure_start_dt,
             end_dt=closure_end_dt,
             mode=variety_seeking_mode,
+            product_first_seen_df=product_first_seen_df,
+            old_product_cutoff_dt=old_product_cutoff_dt,
         )
         part = frame.merge(vs_result, on="member_id", how="left")
         part["rel_t"] = 0
@@ -631,14 +729,20 @@ def build_estimation_sample(
         orders = None
         commodity_df = load_commodity_orders_for_members(member_ids=scoped_member_ids, cfg=cfg)
         first_purchase_df = _compute_first_purchase_dates(commodity_df)
-        if variety_seeking_mode not in ("distinct", "instance"):
+        product_first_seen_df = (
+            load_product_first_seen_dates(cfg=cfg)
+            if variety_seeking_mode == "instance-only-old"
+            else _compute_product_first_seen_dates(commodity_df)
+        )
+        if variety_seeking_mode not in _VARIETY_SEEKING_MODES:
             raise ValueError(
-                f"variety_seeking_mode must be 'distinct' or 'instance'; got '{variety_seeking_mode}'."
+                f"variety_seeking_mode must be one of {sorted(_VARIETY_SEEKING_MODES)}; got '{variety_seeking_mode}'."
             )
         LOGGER.info(
-            "Loaded commodity orders: %s rows, %s member-product pairs, variety_seeking_mode=%s",
+            "Loaded commodity orders: %s rows, %s member-product pairs, %s products, variety_seeking_mode=%s",
             f"{len(commodity_df):,}",
             f"{len(first_purchase_df):,}",
+            f"{len(product_first_seen_df):,}",
             variety_seeking_mode,
         )
 
@@ -727,6 +831,12 @@ def build_estimation_sample(
         )
         members = set(member_frame["member_id"].tolist())
         closure_parts: list[pd.DataFrame] = []
+        old_product_cutoff_dt, _ = _window_bounds(
+            closure_start=closure_start_dt,
+            closure_end=closure_end_dt,
+            rel_t=-t_horizon,
+            bin_days=closure_bin_days,
+        )
 
         for rel_t in rel_t_values:
             start_dt, end_dt = _window_bounds(
@@ -756,6 +866,8 @@ def build_estimation_sample(
                     start_dt=start_dt,
                     end_dt=end_dt,
                     mode=variety_seeking_mode,
+                    product_first_seen_df=product_first_seen_df,
+                    old_product_cutoff_dt=old_product_cutoff_dt,
                 )
                 block = member_frame.merge(vs_result, on="member_id", how="left")
 

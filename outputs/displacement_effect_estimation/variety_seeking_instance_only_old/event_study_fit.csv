@@ -1,0 +1,2 @@
+spec,formula,n,r2,r2_within
+event_att,"variety_seeking ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",13784,0.5010226022498605,0.0008917875916931717

@@ -22,6 +22,7 @@ The formula is implemented in `data.py` (`_compute_variety_seeking_for_window`):
 - `variety_seeking = |new products in window| / |products in window|`
 - `distinct` mode (default): each `product_id` is counted once per member per window.
 - `instance` mode: each purchase row is counted (repeated buys increase weight).
+- `instance-only-old` mode: each period's outcome is the share of purchase rows whose products already existed before the event's `rel_t=-4` window.
 
 `period 0` means the closure window `[closure_start, closure_end]`.
 
@@ -50,6 +51,10 @@ python run.py --outcome n_purchases --t-horizon 4 --separate-effect --closure-du
 
 # Variety-seeking: keep period-0 purchasers (default behavior is to drop them)
 python run.py --outcome variety_seeking --keep-period0-purchasers
+
+# Variety-seeking: share of purchase instances on products that pre-date rel_t=-4
+python run.py --outcome variety_seeking --variety-seeking-mode instance-only-old \
+  --output-dir outputs/displacement_effect_estimation/variety_seeking_instance_only_old
 ```
 
 Behavior is controlled by `config.json`:
