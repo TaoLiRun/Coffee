@@ -1,38 +1,39 @@
-/home/litao/.config/matplotlib is not a writable directory
-Matplotlib created a temporary cache directory at /tmp/matplotlib-yqdti6y9 because there was an issue with the default path (/home/litao/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
-Fontconfig error: No writable cache directories
-Fontconfig error: No writable cache directories
-
-2026-04-09 17:14:13 | INFO | displacement_effect_estimation | Starting displacement effect estimation run
-2026-04-09 17:14:13 | INFO | displacement_effect_estimation | Arguments: outcome=variety_seeking, t_horizon=4, cluster_col=member_id, closure_duration_days=False, separate_effect=False, select_recency_consumers=False, require_balanced_panel=None, drop_period0_purchasers=True, variety_seeking_mode=instance-only-old, unbalanced_panel=True, use_did=True, output_dir=outputs/displacement_effect_estimation/variety_seeking_instance_only_old
-2026-04-09 17:14:13 | INFO | displacement_effect_estimation | Applied closure registry filter using /home/litao/Coffee/model-free/outputs/customer-store/closure_pair_registry.csv: closures 22 -> 22 (dropped=0)
-2026-04-09 17:14:25 | INFO | displacement_effect_estimation | Loaded commodity orders: 1,573,392 rows, 518,455 member-product pairs, 265 products, variety_seeking_mode=instance-only-old
-2026-04-09 17:14:25 | INFO | displacement_effect_estimation | Starting closure loop: total_closures=22 closure_duration_days=all
-2026-04-09 17:14:25 | INFO | displacement_effect_estimation | Closure 1/22 done: dept_id=225 closure_start=2021-02-09 members=692 rows=568 duration_days=10 period0_treated_dropped=12 period0_control_no_purchase_dropped=1773 elapsed=0.21s
-2026-04-09 17:14:26 | INFO | displacement_effect_estimation | Closure 2/22 done: dept_id=46 closure_start=2021-08-04 members=1016 rows=1096 duration_days=16 period0_treated_dropped=13 period0_control_no_purchase_dropped=1691 elapsed=0.42s
-2026-04-09 17:14:26 | INFO | displacement_effect_estimation | Closure 3/22 done: dept_id=59 closure_start=2021-08-03 members=1226 rows=1040 duration_days=17 period0_treated_dropped=24 period0_control_no_purchase_dropped=1936 elapsed=0.31s
-2026-04-09 17:14:27 | INFO | displacement_effect_estimation | Closure 4/22 done: dept_id=124 closure_start=2021-07-22 members=1733 rows=1824 duration_days=28 period0_treated_dropped=126 period0_control_no_purchase_dropped=1236 elapsed=0.36s
-2026-04-09 17:14:27 | INFO | displacement_effect_estimation | Closure 5/22 done: dept_id=133 closure_start=2021-07-28 members=845 rows=968 duration_days=26 period0_treated_dropped=9 period0_control_no_purchase_dropped=1340 elapsed=0.31s
-2026-04-09 17:14:27 | INFO | displacement_effect_estimation | Closure 6/22 done: dept_id=121 closure_start=2021-08-03 members=783 rows=568 duration_days=18 period0_treated_dropped=32 period0_control_no_purchase_dropped=1403 elapsed=0.22s
-2026-04-09 17:14:27 | INFO | displacement_effect_estimation | Closure 7/22 done: dept_id=62 closure_start=2021-08-04 members=701 rows=480 duration_days=14 period0_treated_dropped=16 period0_control_no_purchase_dropped=1927 elapsed=0.21s
-2026-04-09 17:14:28 | INFO | displacement_effect_estimation | Closure 8/22 done: dept_id=47 closure_start=2021-07-30 members=818 rows=672 duration_days=12 period0_treated_dropped=17 period0_control_no_purchase_dropped=2549 elapsed=0.22s
-2026-04-09 17:14:28 | INFO | displacement_effect_estimation | Closure 9/22 done: dept_id=220 closure_start=2021-08-03 members=831 rows=288 duration_days=10 period0_treated_dropped=19 period0_control_no_purchase_dropped=984 elapsed=0.23s
-2026-04-09 17:14:28 | INFO | displacement_effect_estimation | Closure 10/22 done: dept_id=5 closure_start=2021-08-18 members=980 rows=440 duration_days=14 period0_treated_dropped=17 period0_control_no_purchase_dropped=1442 elapsed=0.37s
-2026-04-09 17:14:28 | INFO | displacement_effect_estimation | Closure 11/22 done: dept_id=19 closure_start=2021-07-15 members=1197 rows=528 duration_days=11 period0_treated_dropped=70 period0_control_no_purchase_dropped=2034 elapsed=0.28s
-2026-04-09 17:14:29 | INFO | displacement_effect_estimation | Closure 12/22 done: dept_id=3 closure_start=2021-08-09 members=809 rows=320 duration_days=14 period0_treated_dropped=9 period0_control_no_purchase_dropped=668 elapsed=0.23s
-2026-04-09 17:14:29 | INFO | displacement_effect_estimation | Closure 13/22 done: dept_id=39 closure_start=2021-07-25 members=941 rows=1264 duration_days=26 period0_treated_dropped=31 period0_control_no_purchase_dropped=1919 elapsed=0.28s
-2026-04-09 17:14:29 | INFO | displacement_effect_estimation | Closure 14/22 done: dept_id=182 closure_start=2021-08-03 members=501 rows=408 duration_days=18 period0_treated_dropped=14 period0_control_no_purchase_dropped=1062 elapsed=0.21s
-2026-04-09 17:14:29 | INFO | displacement_effect_estimation | Closure 15/22 done: dept_id=181 closure_start=2021-02-11 members=168 rows=144 duration_days=15 period0_treated_dropped=6 period0_control_no_purchase_dropped=267 elapsed=0.17s
-2026-04-09 17:14:30 | INFO | displacement_effect_estimation | Closure 16/22 done: dept_id=44 closure_start=2021-07-24 members=624 rows=400 duration_days=13 period0_treated_dropped=27 period0_control_no_purchase_dropped=912 elapsed=0.30s
-2026-04-09 17:14:30 | INFO | displacement_effect_estimation | Closure 17/22 done: dept_id=8 closure_start=2021-05-27 members=316 rows=288 duration_days=15 period0_treated_dropped=13 period0_control_no_purchase_dropped=345 elapsed=0.17s
-2026-04-09 17:14:30 | INFO | displacement_effect_estimation | Closure 18/22 done: dept_id=254 closure_start=2021-01-30 members=369 rows=488 duration_days=23 period0_treated_dropped=21 period0_control_no_purchase_dropped=516 elapsed=0.18s
-2026-04-09 17:14:30 | INFO | displacement_effect_estimation | Closure 19/22 done: dept_id=131 closure_start=2021-08-29 members=938 rows=448 duration_days=11 period0_treated_dropped=24 period0_control_no_purchase_dropped=1751 elapsed=0.23s
-2026-04-09 17:14:30 | INFO | displacement_effect_estimation | Closure 20/22 done: dept_id=238 closure_start=2021-07-24 members=1011 rows=1016 duration_days=29 period0_treated_dropped=53 period0_control_no_purchase_dropped=625 elapsed=0.26s
-2026-04-09 17:14:31 | INFO | displacement_effect_estimation | Closure 21/22 done: dept_id=246 closure_start=2021-07-27 members=182 rows=104 duration_days=13 period0_treated_dropped=3 period0_control_no_purchase_dropped=355 elapsed=0.15s
-2026-04-09 17:14:31 | INFO | displacement_effect_estimation | Closure 22/22 done: dept_id=228 closure_start=2021-02-04 members=377 rows=432 duration_days=17 period0_treated_dropped=7 period0_control_no_purchase_dropped=502 elapsed=0.19s
-2026-04-09 17:14:31 | INFO | displacement_effect_estimation | Closure loop completed in 5.49s
-2026-04-09 17:14:31 | INFO | displacement_effect_estimation | Built estimation sample: 13,784 rows
-2026-04-09 17:14:49 | INFO | displacement_effect_estimation | Fitted aggregate collapsed/event-study specs
-2026-04-09 17:14:59 | INFO | displacement_effect_estimation | Saved outputs to: /home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_instance_only_old
-2026-04-09 17:14:59 | INFO | displacement_effect_estimation | Rows in estimation sample: 13,784
-
+Traceback (most recent call last):
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/src/displacement_effect_estimation/run.py", line 11, in <module>
+    from report import save_outputs, save_variety_panel_plot
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/src/displacement_effect_estimation/report.py", line 5, in <module>
+    import matplotlib.pyplot as plt
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/pyplot.py", line 57, in <module>
+    import matplotlib.image
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/image.py", line 25, in <module>
+    from matplotlib.backend_bases import FigureCanvasBase
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/backend_bases.py", line 49, in <module>
+    from matplotlib import (
+        _api, backend_tools as tools, cbook, colors, _docstring, text,
+        _tight_bbox, transforms, widgets, is_interactive, rcParams)
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/text.py", line 16, in <module>
+    from .font_manager import FontProperties
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 1643, in <module>
+    fontManager = _load_fontmanager()
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 1637, in _load_fontmanager
+    fm = FontManager()
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 1101, in __init__
+    *findSystemFonts(fontext=fontext)]:
+     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 293, in findSystemFonts
+    installed_fonts += _get_macos_fonts()
+                       ~~~~~~~~~~~~~~~~^^
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 269, in _get_macos_fonts
+    subprocess.check_output(["system_profiler", "-xml", "SPFontsDataType"]))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/taoli/.local/share/uv/python/cpython-3.14.3-macos-aarch64-none/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/Users/taoli/.local/share/uv/python/cpython-3.14.3-macos-aarch64-none/lib/python3.14/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/taoli/.local/share/uv/python/cpython-3.14.3-macos-aarch64-none/lib/python3.14/subprocess.py", line 1207, in communicate
+    stdout = self.stdout.read()
+KeyboardInterrupt
