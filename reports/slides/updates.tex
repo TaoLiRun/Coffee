@@ -1,0 +1,529 @@
+\documentclass[aspectratio=169]{beamer}  % 16:9 aspect ratio
+
+% Use a clean theme as base
+\usetheme{default}
+\usecolortheme{default}
+\useoutertheme{miniframes}
+\useinnertheme{circles}
+\usepackage{booktabs}
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\addbibresource{ref.bib} 
+\setbeamerfont{footnote}{size=\tiny}
+
+% Custom colors from HKUST logo
+\definecolor{hkustblue}{RGB}{0, 51, 119}    % Navy blue from logo
+\definecolor{hkustgold}{RGB}{180, 141, 61}  % Golden brown from logo
+\definecolor{lightgray}{RGB}{236, 240, 241}
+
+
+% Customize the appearance
+\setbeamercolor{structure}{fg=hkustblue}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=hkustblue}
+\setbeamercolor{frametitle}{fg=hkustblue,bg=white}
+\setbeamercolor{itemize item}{fg=hkustgold}
+\setbeamercolor{itemize subitem}{fg=hkustgold}
+\setbeamercolor{block title}{fg=white,bg=hkustblue}
+\setbeamercolor{block body}{fg=hkustblue,bg=lightgray}
+\setbeamercolor{title}{fg=hkustblue}
+\setbeamercolor{author}{fg=hkustgold}
+
+
+\setbeamertemplate{title page}
+{
+  \begin{centering}
+    \vspace{1cm}
+    {\usebeamercolor[fg]{title}\LARGE\inserttitle\par}
+    \vspace{0.8cm}
+    {\usebeamercolor[fg]{author}\large\insertauthor\par}
+    \vspace{0.8cm}
+    {\usebeamercolor[fg]{institute}\normalsize\insertinstitute\par}
+    \vspace{0.2cm}
+    {\usebeamercolor[fg]{date}\normalsize\insertdate\par}
+    \vfill
+  \end{centering}
+}
+
+% Custom command to show navigation symbols after title and outline pages
+\makeatletter
+\def\shownavigationsymbols{%
+    \ifnum\c@framenumber>2%
+        \setbeamertemplate{navigation symbols}[default]%
+    \else%
+        \setbeamertemplate{navigation symbols}{}%
+    \fi%
+}
+\addtobeamertemplate{footline}{\shownavigationsymbols}{}
+\makeatother
+
+% Customize frame title
+\setbeamertemplate{frametitle}{
+    \insertframetitle
+}
+
+% Customize itemize bullets
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{\textbullet}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{\textbullet}}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{comment}
+
+% Paper details (replace with your information)
+\title{LCoffee}
+%\author{Kamenica \& Gentzkow, AER, 2011}
+%\institute{Presented by \\ Tao LI}
+\date{\today}
+
+
+% Mark the page number (without any other info) in the footer except the title page
+\setbeamertemplate{footline}{%
+    \ifnum\value{framenumber}>1
+    \hfill\insertframenumber\fi
+}
+
+
+\begin{document}
+
+% Title page
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Table of contents
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+% Get a intro page of each section
+% \AtBeginSection[]
+% {
+%     \begin{frame}
+%         \frametitle{Outline}
+%         \tableofcontents[currentsection]
+%     \end{frame}
+% }
+
+% Mark the page number on a specific position
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+
+\section{Updates}
+\begin{frame}{Two Outcome Variables}
+\small
+The four update regressions use two families of outcome variables $Y_{iet}$:
+
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{p{0.22\linewidth} p{0.64\linewidth}}
+\toprule
+\textbf{Outcome type} & \textbf{Definition} \\
+\midrule
+Purchase frequency &
+$n\_purchases =$ purchases in the event-time window divided by window length (daily rate) \\
+Variety seeking &
+share of purchases that are ``new'' (never purchased before) within the window \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Purchase-frequency slides ask whether closures change \emph{how much} members buy afterward
+    \item Variety-seeking slides ask whether closures change \emph{what kinds of products} members explore afterward
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Results}
+\small
+\begin{itemize}
+    \item Closures do not provide strong evidence of lasting habit disruption in purchase frequency.
+    \begin{itemize}
+        \item The large negative \texttt{post x disp} term indicates the existence of a purchase circle.
+        \item The positive purchase DDD displacement effect indicates a stronger returning intention driven by forced-no-purchase, instead of forgetting.
+    \end{itemize}    
+    \item Closures appear to affect product choice more than total quantity purchased.
+    \begin{itemize}
+        \item In the variety DDD, higher displacement propensity reduces the increase in exploration.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Update 1: Matched Purchase DiD}
+Matched panel of members observed in every pre/post period, with
+$Y_{iet}=$ daily purchase rate and $t \in \{-4,-3,-2,-1,1,2,3,4\}$:
+\begingroup
+\small
+\[
+Y_{iet} =
+\delta \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.41\linewidth}
+\textbf{Parameter of interest}
+\[
+\hat{\delta} = 0.00514 \; (0.00441)
+\]
+\end{column}
+\begin{column}{0.56\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item $p=0.244$: insignificant
+    \item Treated / control members: 952 / 4,248
+    \item 22 closures, 5,200 members, 41,600 obs.
+    \item Pre-trend joint test: $p=0.458$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Update 2: Purchase DDD}
+Unmatched-panel DDD for purchase frequency, where $D_{ie}$ is the displacement indicator:
+\begingroup
+\small
+\[
+\begin{aligned}
+Y_{iet} &= \delta^B \bigl(\text{post}_{t} \times \text{Treated}_{ie}\bigr)
++ \beta \bigl(\text{post}_{t} \times D_{ie}\bigr) \\
+&\quad + \delta^D \bigl(\text{post}_{t} \times \text{Treated}_{ie} \times D_{ie}\bigr)
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{aligned}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.42\linewidth}
+\textbf{Estimated parameters}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+Parameter & Estimate (SE) \\
+\midrule
+$\hat{\delta}^B$ & 0.00081 (0.00064) \\
+$\hat{\beta}$ & $-0.03353^{***}$ (0.00107) \\
+$\hat{\delta}^D$ & $0.00517^{**}$ (0.00241) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.57\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item Treated / control members: 8,092 / 36,766
+    \item Baseline effect is near zero
+    \item Displacement effect is small and positive
+    \item Pre-trend didn't pass $p=0.004$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Update 3: Matched Variety-Seeking DiD}
+Matched-panel DiD for variety seeking:
+\begingroup
+\small
+\[
+Y_{iet} =
+\delta \cdot \mathbf{1}(\text{post}_{t}) \times \mathbf{1}(\text{Treated}_{ie})
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\textbf{Estimated treatment effect}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+Outcome mode & $\hat{\delta}$ \\
+\midrule
+Distinct products & $0.04066^{***}$ (0.01419) \\
+Purchase instances & $0.02991^{**}$ (0.01435) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.53\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item Treated / control members: 308 / 1,415
+    \item Positive post-closure effect in both outcome constructions
+    \item Pre-trends supported: $p=0.525$ and $0.686$
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Update 4: Variety-Seeking DDD}
+Unmatched-panel DDD for distinct-mode variety seeking:
+\begingroup
+\small
+\[
+\begin{aligned}
+Y_{iet} &= \delta^B \bigl(\text{post}_{t} \times \text{Treated}_{ie}\bigr)
++ \beta \bigl(\text{post}_{t} \times D_{ie}\bigr) \\
+&\quad + \delta^D \bigl(\text{post}_{t} \times \text{Treated}_{ie} \times D_{ie}\bigr)
++ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{aligned}
+\]
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\textbf{Estimated parameters}
+\begin{table}[h]
+\centering
+\scriptsize
+\begin{tabular}{lc}
+\toprule
+Parameter & Estimate (SE) \\
+\midrule
+$\hat{\delta}^B$ & $0.031^{***}$ (0.011) \\
+$\hat{\beta}$ & $0.036^{***}$ (0.006) \\
+$\hat{\delta}^D$ & $-0.039^{***}$ (0.014) \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{column}
+\begin{column}{0.57\linewidth}
+\textbf{Result}
+\begin{itemize}
+    \item Treated / control members: 8,092 / 36,766
+    \item Baseline effect is positive for non-displaced treated members
+    \item Displacement effect is negative
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Mechanism}
+\begin{frame}{Mechanism 1: Goal Carryover}
+\footnotesize
+\textbf{Idea}
+\begin{itemize}
+    \item Some customers intended to buy during the closure, but were temporarily blocked.
+    \item After reopening, these unsatisfied purchase goals generate a short-run rebound in purchase prob.
+\end{itemize}
+
+\textbf{Supportive evidence 1}: Positive and significant immediately after reopening
+
+\begin{table}
+\scriptsize
+\centering
+\begin{tabular}{lcc}
+\toprule
+Week & $\delta_\ell$ & $p$ \\
+\midrule
+$-4$ & 0.00043 & 0.720 \\
+$-3$ & -0.00028 & 0.809 \\
+$-2$ & -0.00031 & 0.759 \\
+$1$  & 0.00254$^{**}$ & 0.014 \\
+$2$  & 0.00016 & 0.884 \\
+$3$  & 0.00623$^{***}$ & $<0.001$ \\
+$4$  & 0.00175 & 0.130 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Supportive evidence 2}
+\begin{itemize}
+    \item 7.3\% of selected treatment members purchased at another store during the closure.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mechanism 2: Missed Exposure to New Products}
+\footnotesize
+\textbf{Idea}
+\begin{itemize}
+    \item Control customers keep purchasing during the closure, so they continue to see and try newly introduced products.
+    \item Treated high-intention customers are interrupted and miss this exposure window.
+    \item After reopening, treated customers may be less familiar with the updated assortment and return to safer, previously chosen products.
+    \item This can lower post-closure novelty-seeking for displaced treated customers relative to similarly high-intention controls.
+\end{itemize}
+
+\textbf{Interpretation}
+\begin{itemize}
+    \item The negative variety-seeking DDD effect may partly reflect missed exposure to assortment changes during the closure period.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mechanism 2: Potential Tests}
+\footnotesize
+\textbf{Descriptive evidence}
+\begin{itemize}
+    \item Across 22 closures, the matched control stores introduced on average 7.9 new products per store during the closure.
+    \item The median average is 8.6, with a range from 1.0 to 15.4.
+\end{itemize}
+
+\textbf{Potential tests}
+\begin{itemize}
+    \item Test whether the negative variety-seeking displacement effect is stronger when matched control stores experienced more new-product introductions during the closure.
+    \item Test whether treated customers who purchased at other stores during the closure show a weaker decline in novelty-seeking.
+    \item Use product introduction timing to test whether treated customers are less likely to adopt products first introduced during the closure period.
+\end{itemize}
+\end{frame}
+
+\begin{comment}
+
+% ------ Paper 1: Soysal et al. (2019) ------
+\begin{frame}{\textbf{Store Closure $\rightarrow$ Customer Churn} (\textit{POM, 2019})}
+\footnotesize
+Gonca Soysal, Alejandro Zentner, and Zhiqiang (Eric) Zheng
+\vspace{4pt}
+
+Setting \& Data
+\begin{itemize}
+    \item DVD rental company offering both online-by-mail subscriptions and physical store locations
+    \item Individual-level panel: subscription status, online/offline rental transactions
+    \item Large wave of physical store closures during the study period
+\end{itemize}
+ 
+Identification
+\begin{itemize}
+    \item Store closure treated as exogenous
+    \item Logistic regression
+\end{itemize}
+
+Results
+\begin{itemize}
+    \item Store closure in a zip code increased the churn rate by $\approx 50\%$ for \textbf{heavy} users of physical stores
+    \item Increase in churn was essentially \textbf{zero} for light users
+    \item Physical stores substantially increase loyalty, but only for a fraction of consumers $\Rightarrow$ substantial heterogeneity in how much utility consumers derive from having the physical-store option
+\end{itemize}
+
+\end{frame}
+
+ 
+% ------ Paper 5: Ergin, Gümüş & Yang (2022) ------
+\begin{frame}{\textbf{Intra-Firm Product Substitutability} (\textit{POM, 2022})}
+\footnotesize
+Yang El\c{c}in Ergin, Mehmet G\"{u}m\"{u}\c{s}, Nathan Yang
+\vspace{4pt}
+ 
+Setting \& Data
+\begin{itemize}
+    \item Large fast-fashion retailer with 300+ stores
+    \item Weekly sales and inventory levels for all products across the entire store network
+\end{itemize}
+ 
+Identification
+\begin{itemize}
+    \item Instrumented Difference-in-Differences (DDIV): instruments for stock-outs to address endogeneity
+    \item Exploits within-firm, cross-store variation in product availability
+\end{itemize}
+ 
+Results
+\begin{itemize}
+    \item Sales of an item at a focal store \textbf{increase} when that item stocks out at neighboring stores
+    \item Substitutability \textbf{strongest} at first stock-out observation; \textbf{decays} over time
+    \item More pronounced for \textbf{street} stores vs.\ mall stores
+\end{itemize}
+
+\end{frame}
+ 
+% ------ Paper 2: Tohidi et al. (2022) ------
+\begin{frame}{\textbf{Habits in Consumer Purchases} (\textit{WP, 2022})}
+\footnotesize
+Amir Tohidi, Dean Eckles, Ali Jadbabaie
+\vspace{4pt}
+ 
+Setting \& Data
+\begin{itemize}
+    \item NielsenIQ household panel — purchases across many CPG categories at U.S.\ grocery stores
+    \item Store closures as exogenous shocks disrupting the familiar shopping context
+\end{itemize}
+ 
+Identification
+\begin{itemize}
+    \item DiD: treated = households exposed to a closure, with four exposure groups (E1--E4) based on purchase frequency at the closing store
+\end{itemize}
+ 
+Results
+\begin{itemize}
+    \item Highly exposed households more likely to purchase something \textbf{other than their usual brand}
+    \item Over time, new habits form for a new brand
+    \item Effect driven by the most-exposed group (E4)
+\end{itemize}
+ 
+Mechanism
+\begin{itemize}
+    \item Closure removes contextual cues $\Rightarrow$ more \textbf{deliberative} decision-making $\Rightarrow$ exploration of previously ignored options
+\end{itemize}
+\end{frame}
+ 
+ 
+% ------ Paper 4: "Store Closed" MSI WP ------
+\begin{frame}{\textbf{``Store Closed''} (\textit{WP, 2023})}
+\footnotesize
+Qiaoni Shi, J. Jeffrey Inman, Dinesh Gauri
+\vspace{4pt}
+ 
+Setting \& Data
+\begin{itemize}
+    \item Two closure events: (1) mass merchandiser closing 100+ U.S.\ stores in 2016; (2) warehouse club closing 50+ stores in 2018
+    \item Nielsen household panel: all trips, quantities, prices, store identities; 609 treated households
+\end{itemize}
+ 
+Identification
+\begin{itemize}
+    \item DiD with 20 months of data (10 pre, 10 post)
+    \item Key moderator: distance to the nearest remaining open store of the same chain
+\end{itemize}
+ 
+Results
+\begin{itemize}
+    \item Most households \textbf{stayed with the retailer}
+    \item Consumers bore closure costs via \textbf{greater travel} rather than switching
+    \item \textbf{Distance} strongly moderates: farther households are more likely to switch retailers
+    \item Gap: focuses on \textbf{where} customers shop, not \textbf{what} they buy
+\end{itemize}
+\end{frame}
+ 
+ 
+% ------ Paper 3: Kotschedoff et al. (2025) ------
+\begin{frame}{\textbf{Persistence of Grocery Shopping Behavior} (\textit{QME, 2025})}
+\footnotesize
+Marco J. W. Kotschedoff, Liliana Kowalczyk, and Els Breugelmans
+\vspace{4pt}
+ 
+Setting \& Data
+\begin{itemize}
+    \item European grocery chain: \textbf{one-week strike} $\Rightarrow$ temporary closure of a large fraction of stores
+    \item Household purchase panel data (spending, store visits, category-level)
+\end{itemize}
+ 
+Identification
+\begin{itemize}
+    \item DiD: treated households vs.\ control households
+    \item Calibrated structural simulations to back out implied state dependence
+\end{itemize}
+ 
+Results
+\begin{itemize}
+    \item During closure: consumers shift spending to competing chains
+    \item After reopening: consumers \textbf{quickly revert} to pre-strike behavior $\Rightarrow$ consistent with \textbf{low state dependence}
+    \item Perishable products: brief spending dip post-reopening; non-perishable: no change
+\end{itemize}
+
+\end{frame}
+ 
+\end{comment}
+
+\end{document}

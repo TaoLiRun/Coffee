@@ -1,0 +1,509 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={What Happens When Your Favorite Coffee Store Temporarily Closes?},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{What Happens When Your Favorite Coffee Store Temporarily Closes?}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Evidence from a Large Coffee Chain}
+\author{}
+\date{2026-04-23}
+\begin{document}
+\maketitle
+
+
+\section{The Question}\label{the-question}
+
+When a store closes temporarily, do customers who \emph{wanted} to buy
+but couldn't --- those with a purchase blocked --- break their coffee
+habit? Or do they come back as if nothing happened?
+
+The standard intuition is that \textbf{habits are fragile}: if a planned
+purchase is missed, the routine weakens and you buy less afterward. We
+test this idea using data from a large coffee chain, where 22 stores
+closed unexpectedly for 10--29 days. We focus specifically on customers
+who had a purchase due during the closure --- those for whom the closure
+actually blocked an intended purchase --- and track whether their
+behavior changed after reopening.
+
+We study two behaviors:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{How much they buy} --- did closure reduce purchase frequency?
+\item
+  \textbf{What they buy} --- did closure change whether they try new
+  products?
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Setting and Data}\label{setting-and-data}
+
+The coffee chain is a Chinese quick-service brand with millions of
+customers ordering primarily through a mobile app. Our data cover June
+2020 -- December 2021 and include 10.6 million transactions from 779,000
+customers.
+
+We identify \textbf{22 store closures} (10--29 days long) and assign
+customers to two groups based on which store they visited most before
+the closure:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Treatment group} --- customers whose preferred store closed
+  (\textasciitilde8,000 customers)
+\item
+  \textbf{Control group} --- customers whose preferred store stayed open
+  (\textasciitilde37,000 customers)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{The Key Distinction: Blocked Buyers vs.~Non-Blocked
+Buyers}\label{the-key-distinction-blocked-buyers-vs.-non-blocked-buyers}
+
+Not every treatment customer would have bought during the closure even
+if the store had stayed open. Only frequent buyers --- those with a
+\textbf{purchase due} during the closure window --- were truly blocked
+by the closure. We call these \textbf{blocked buyers}.
+
+We use a machine learning model (XGBoost) trained on pre-closure
+purchasing patterns to classify each treatment and control customer as a
+``blocked buyer'' (would have bought during the closure) or
+``non-blocked buyer'' (would not have bought regardless). The model
+achieves \textasciitilde73\% accuracy.
+
+This distinction is crucial: \textbf{habit disruption, if real, should
+show up most strongly among blocked buyers} --- they are the ones whose
+routine was actually interrupted.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Research Design}\label{research-design}
+
+We use a \textbf{Triple Difference-in-Differences (DDD)} design that
+simultaneously compares:
+
+\begin{itemize}
+\tightlist
+\item
+  Treatment vs.~control customers
+\item
+  Before vs.~after the closure
+\item
+  Blocked buyers vs.~non-blocked buyers
+\end{itemize}
+
+This lets us separately estimate two effects:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Effect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+What it measures
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Baseline effect} (\(\delta^B\)) & Post-closure change for
+\emph{non-blocked} treatment customers relative to control --- captures
+general demand shifts from the closure (e.g., discovering alternatives,
+post-reopening promotions) \\
+\textbf{Blocked-buyer effect} (\(\delta^D\)) & \emph{Additional}
+post-closure change for blocked treatment customers, over and above the
+baseline --- this is the causal effect of having been \textbf{blocked
+from a planned purchase} \\
+\end{longtable}
+}
+
+The regression equation:
+
+\begin{align}
+Y_{iet} &= \delta^B \cdot \text{post} \times \text{Treated}
+         + \beta \cdot \text{post} \times \text{Blocked} \\
+        &\quad + \delta^D \cdot \text{post} \times \text{Treated} \times \text{Blocked}
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align}
+
+where \(\phi_{ie}\) = customer--closure fixed effects, \(\omega_t\) =
+relative-period fixed effects, \(\gamma_m\) = calendar-month fixed
+effects. Standard errors are clustered at the member level.
+
+The four-group prediction (post-closure change in outcome):
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+& Non-blocked & Blocked \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Control} & 0 & \(\beta\) \\
+\textbf{Treatment} & \(\delta^B\) & \(\delta^B + \beta + \delta^D\) \\
+\end{longtable}
+}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Results}\label{results}
+
+\subsection{Purchase Frequency}\label{purchase-frequency}
+
+Did closures reduce how often customers buy at the chain?
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrrl@{}}
+\toprule\noalign{}
+Coefficient & Estimate & SE & \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+post × treated (\(\delta^B\)) & +0.00081 & 0.00064 & \\
+post × blocked (\(\beta\)) & −0.03353 & 0.00107 & *** \\
+post × treated × blocked (\(\delta^D\)) & +0.00517 & 0.00241 & ** \\
+\end{longtable}
+}
+
+\emph{358,864 observations; } p\textless0.1, ** p\textless0.05, ***
+p\textless0.01.*
+
+\textbf{What this means:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{No general habit disruption} (\(\delta^B \approx 0\)):
+  Treatment customers who were \emph{not} blocked buy just as much as
+  before --- the closure itself caused no demand loss.
+\item
+  \textbf{Blocked buyers regress to the mean} (\(\beta = -0.034\)):
+  Blocked buyers (in both treatment and control) are high-frequency
+  purchasers before the closure and naturally buy less afterward. This
+  is \textbf{not} caused by the closure --- it happens equally in the
+  control group and reflects a normal statistical mean-reversion for
+  heavy buyers.
+\item
+  \textbf{No habit disruption for blocked buyers either}
+  (\(\delta^D = +0.005\)): The blocked-buyer effect is small and
+  \emph{positive}, meaning blocked treatment customers recovered at
+  least as fast as blocked control customers. There is no evidence the
+  forced missed purchase reduced future buying.
+\end{itemize}
+
+A dynamic event-study confirms no pre-trends (pre-period joint test:
+\(p = 0.907\)) and shows a \textbf{short-run rebound} in purchase
+frequency immediately after reopening (significant in weeks 1 and 3),
+which then fades --- consistent with pent-up demand being satisfied, not
+with any persistent disruption.
+
+\subsection{Novelty-Seeking}\label{novelty-seeking}
+
+Did closures change what kinds of products customers try?
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lrrl@{}}
+\toprule\noalign{}
+Coefficient & Estimate & SE & \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+post × treated (\(\delta^B\)) & +0.031 & 0.011 & *** \\
+post × blocked (\(\beta\)) & +0.036 & 0.006 & *** \\
+post × treated × blocked (\(\delta^D\)) & −0.039 & 0.014 & *** \\
+\end{longtable}
+}
+
+\emph{358,864 observations; } p\textless0.1, ** p\textless0.05, ***
+p\textless0.01.*
+
+\textbf{What this means:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Non-blocked treatment customers explore more}
+  (\(\delta^B = +0.031\)): When routine is disrupted but no specific
+  purchase was blocked, customers become more adventurous --- they are
+  more likely to try products they have never bought before. Closure
+  breaks the autopilot.
+\item
+  \textbf{Blocked buyers are more exploratory in general}
+  (\(\beta = +0.036\)): Heavy buyers encounter the menu more frequently
+  and naturally try more new items, regardless of closure.
+\item
+  \textbf{Blocked treatment customers explore less}
+  (\(\delta^D = -0.039\)): This is the key finding. Among customers who
+  had a purchase blocked, treatment customers try significantly
+  \emph{fewer} new products after reopening compared to equally-frequent
+  control buyers. The blocked purchase goal narrows their attention:
+  they return to fulfill the specific, familiar purchase they missed ---
+  not to explore.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why Does This Happen? Two
+Mechanisms}\label{why-does-this-happen-two-mechanisms}
+
+\subsection{Mechanism 1: Blocked Goals Create Focused
+Rebound}\label{mechanism-1-blocked-goals-create-focused-rebound}
+
+When a purchase is blocked, the unfulfilled intention does not simply
+disappear. Research in psychology shows that \textbf{unfinished goals
+stay mentally active} and generate motivation to complete them (the
+Zeigarnik effect). Combined with \textbf{psychological reactance} ---
+the desire to reclaim a restricted freedom --- this creates a focused
+drive to return and fulfill the specific original purchase.
+
+This explains both findings simultaneously: - Blocked buyers buy
+\emph{more} immediately after reopening (goal completion drive →
+purchase frequency rebound) - Blocked buyers explore \emph{less}
+(narrowed focus on completing the specific familiar purchase → reduced
+novelty-seeking)
+
+Supporting evidence: 7.3\% of blocked treatment customers purchased at a
+\emph{different} store of the same chain during the closure --- direct
+evidence that the blocked goal was actively pursued through substitution
+rather than abandoned.
+
+\subsection{Mechanism 2: Missed Exposure to New
+Products}\label{mechanism-2-missed-exposure-to-new-products}
+
+During the closure, control customers continue buying and encounter
+newly introduced menu items. Blocked treatment customers miss this
+exposure window entirely. After reopening, they lack familiarity with
+the updated assortment and default to previously known products ---
+reducing their novelty rate relative to control buyers who experienced
+the same menu evolution.
+
+Descriptive evidence: matched control stores introduced an average of
+\textbf{7.9 new products} during each closure window (range: 1.0--15.4).
+Blocked treatment customers missed exposure to all of them.
+
+A direct test: if this mechanism is operating, the negative
+blocked-buyer effect on novelty-seeking (\(\delta^D\)) should be larger
+at closures where control stores introduced more new products. This is a
+planned robustness check.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary}\label{summary}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Finding
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Result
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Did closures reduce purchase frequency for blocked buyers? & \textbf{No}
+--- blocked buyers recover at least as fast as control buyers with
+identical purchase frequency \\
+Did closures increase exploration of new products overall? &
+\textbf{Yes} --- non-blocked treatment customers try more new products
+after reopening \\
+Did blocked buyers explore more or less than equally-frequent control
+buyers? & \textbf{Less} --- their blocked purchase goal narrows
+attention to familiar products \\
+Is the null purchase-frequency result consistent with habit disruption?
+& \textbf{No} --- if anything, blocked buyers bounce back slightly
+faster, not slower \\
+\end{longtable}
+}
+
+\textbf{The big picture:} Among customers who had a purchase blocked by
+the closure, the habit is not eroded --- they return to buying at the
+same rate as equally-frequent buyers whose store never closed. What
+changes is \emph{what} they buy: a blocked purchase goal sends customers
+back on a focused mission to complete the specific purchase they missed,
+leaving them less open to trying new products than comparable buyers who
+were never interrupted. For customers without a blocked purchase goal,
+the effect runs in the opposite direction --- disrupted routine opens
+them up to explore the menu more broadly.
+
+
+
+
+\end{document}

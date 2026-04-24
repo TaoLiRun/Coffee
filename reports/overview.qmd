@@ -1,0 +1,160 @@
+---
+title: "What Happens When Your Favorite Coffee Store Temporarily Closes?"
+subtitle: "Evidence from a Large Coffee Chain"
+date: today
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-float: true
+    toc-depth: 3
+    theme: united
+    highlight-style: tango
+    number-sections: true
+---
+
+# The Question
+
+When a store closes temporarily, do customers who *wanted* to buy but couldn't — those with a purchase blocked — break their coffee habit? Or do they come back as if nothing happened?
+
+The standard intuition is that **habits are fragile**: if a planned purchase is missed, the routine weakens and you buy less afterward. We test this idea using data from a large coffee chain, where 22 stores closed unexpectedly for 10–29 days. We focus specifically on customers who had a purchase due during the closure — those for whom the closure actually blocked an intended purchase — and track whether their behavior changed after reopening.
+
+We study two behaviors:
+
+- **How much they buy** — did closure reduce purchase frequency?
+- **What they buy** — did closure change whether they try new products?
+
+---
+
+# Setting and Data
+
+The coffee chain is a Chinese quick-service brand with millions of customers ordering primarily through a mobile app. Our data cover June 2020 – December 2021 and include 10.6 million transactions from 779,000 customers.
+
+We identify **22 store closures** (10–29 days long) and assign customers to two groups based on which store they visited most before the closure:
+
+- **Treatment group** — customers whose preferred store closed (~8,000 customers)
+- **Control group** — customers whose preferred store stayed open (~37,000 customers)
+
+---
+
+# The Key Distinction: Blocked Buyers vs. Non-Blocked Buyers
+
+Not every treatment customer would have bought during the closure even if the store had stayed open. Only frequent buyers — those with a **purchase due** during the closure window — were truly blocked by the closure. We call these **blocked buyers**.
+
+We use a machine learning model (XGBoost) trained on pre-closure purchasing patterns to classify each treatment and control customer as a "blocked buyer" (would have bought during the closure) or "non-blocked buyer" (would not have bought regardless). The model achieves ~73% accuracy.
+
+This distinction is crucial: **habit disruption, if real, should show up most strongly among blocked buyers** — they are the ones whose routine was actually interrupted.
+
+---
+
+# Research Design
+
+We use a **Triple Difference-in-Differences (DDD)** design that simultaneously compares:
+
+- Treatment vs. control customers
+- Before vs. after the closure
+- Blocked buyers vs. non-blocked buyers
+
+This lets us separately estimate two effects:
+
+| Effect | What it measures |
+|---|---|
+| **Baseline effect** ($\delta^B$) | Post-closure change for *non-blocked* treatment customers relative to control — captures general demand shifts from the closure (e.g., discovering alternatives, post-reopening promotions) |
+| **Blocked-buyer effect** ($\delta^D$) | *Additional* post-closure change for blocked treatment customers, over and above the baseline — this is the causal effect of having been **blocked from a planned purchase** |
+
+The regression equation:
+
+$$
+\begin{align}
+Y_{iet} &= \delta^B \cdot \text{post} \times \text{Treated}
+         + \beta \cdot \text{post} \times \text{Blocked} \\
+        &\quad + \delta^D \cdot \text{post} \times \text{Treated} \times \text{Blocked}
+         + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}
+\end{align}
+$$
+
+where $\phi_{ie}$ = customer–closure fixed effects, $\omega_t$ = relative-period fixed effects, $\gamma_m$ = calendar-month fixed effects. Standard errors are clustered at the member level.
+
+The four-group prediction (post-closure change in outcome):
+
+|  | Non-blocked | Blocked |
+|---|---|---|
+| **Control** | 0 | $\beta$ |
+| **Treatment** | $\delta^B$ | $\delta^B + \beta + \delta^D$ |
+
+---
+
+# Results
+
+## Purchase Frequency
+
+Did closures reduce how often customers buy at the chain?
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.00081 | 0.00064 | |
+| post × blocked ($\beta$) | −0.03353 | 0.00107 | *** |
+| post × treated × blocked ($\delta^D$) | +0.00517 | 0.00241 | ** |
+
+*358,864 observations; * p<0.1, ** p<0.05, *** p<0.01.*
+
+**What this means:**
+
+- **No general habit disruption** ($\delta^B \approx 0$): Treatment customers who were *not* blocked buy just as much as before — the closure itself caused no demand loss.
+- **Blocked buyers regress to the mean** ($\beta = -0.034$): Blocked buyers (in both treatment and control) are high-frequency purchasers before the closure and naturally buy less afterward. This is **not** caused by the closure — it happens equally in the control group and reflects a normal statistical mean-reversion for heavy buyers.
+- **No habit disruption for blocked buyers either** ($\delta^D = +0.005$): The blocked-buyer effect is small and *positive*, meaning blocked treatment customers recovered at least as fast as blocked control customers. There is no evidence the forced missed purchase reduced future buying.
+
+A dynamic event-study confirms no pre-trends (pre-period joint test: $p = 0.907$) and shows a **short-run rebound** in purchase frequency immediately after reopening (significant in weeks 1 and 3), which then fades — consistent with pent-up demand being satisfied, not with any persistent disruption.
+
+## Novelty-Seeking
+
+Did closures change what kinds of products customers try?
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.031 | 0.011 | *** |
+| post × blocked ($\beta$) | +0.036 | 0.006 | *** |
+| post × treated × blocked ($\delta^D$) | −0.039 | 0.014 | *** |
+
+*358,864 observations; * p<0.1, ** p<0.05, *** p<0.01.*
+
+**What this means:**
+
+- **Non-blocked treatment customers explore more** ($\delta^B = +0.031$): When routine is disrupted but no specific purchase was blocked, customers become more adventurous — they are more likely to try products they have never bought before. Closure breaks the autopilot.
+- **Blocked buyers are more exploratory in general** ($\beta = +0.036$): Heavy buyers encounter the menu more frequently and naturally try more new items, regardless of closure.
+- **Blocked treatment customers explore less** ($\delta^D = -0.039$): This is the key finding. Among customers who had a purchase blocked, treatment customers try significantly *fewer* new products after reopening compared to equally-frequent control buyers. The blocked purchase goal narrows their attention: they return to fulfill the specific, familiar purchase they missed — not to explore.
+
+---
+
+# Why Does This Happen? Two Mechanisms
+
+## Mechanism 1: Blocked Goals Create Focused Rebound
+
+When a purchase is blocked, the unfulfilled intention does not simply disappear. Research in psychology shows that **unfinished goals stay mentally active** and generate motivation to complete them (the Zeigarnik effect). Combined with **psychological reactance** — the desire to reclaim a restricted freedom — this creates a focused drive to return and fulfill the specific original purchase.
+
+This explains both findings simultaneously:
+- Blocked buyers buy *more* immediately after reopening (goal completion drive → purchase frequency rebound)
+- Blocked buyers explore *less* (narrowed focus on completing the specific familiar purchase → reduced novelty-seeking)
+
+Supporting evidence: 7.3% of blocked treatment customers purchased at a *different* store of the same chain during the closure — direct evidence that the blocked goal was actively pursued through substitution rather than abandoned.
+
+## Mechanism 2: Missed Exposure to New Products
+
+During the closure, control customers continue buying and encounter newly introduced menu items. Blocked treatment customers miss this exposure window entirely. After reopening, they lack familiarity with the updated assortment and default to previously known products — reducing their novelty rate relative to control buyers who experienced the same menu evolution.
+
+Descriptive evidence: matched control stores introduced an average of **7.9 new products** during each closure window (range: 1.0–15.4). Blocked treatment customers missed exposure to all of them.
+
+A direct test: if this mechanism is operating, the negative blocked-buyer effect on novelty-seeking ($\delta^D$) should be larger at closures where control stores introduced more new products. This is a planned robustness check.
+
+---
+
+# Summary
+
+| Finding | Result |
+|---|---|
+| Did closures reduce purchase frequency for blocked buyers? | **No** — blocked buyers recover at least as fast as control buyers with identical purchase frequency |
+| Did closures increase exploration of new products overall? | **Yes** — non-blocked treatment customers try more new products after reopening |
+| Did blocked buyers explore more or less than equally-frequent control buyers? | **Less** — their blocked purchase goal narrows attention to familiar products |
+| Is the null purchase-frequency result consistent with habit disruption? | **No** — if anything, blocked buyers bounce back slightly faster, not slower |
+
+**The big picture:** Among customers who had a purchase blocked by the closure, the habit is not eroded — they return to buying at the same rate as equally-frequent buyers whose store never closed. What changes is *what* they buy: a blocked purchase goal sends customers back on a focused mission to complete the specific purchase they missed, leaving them less open to trying new products than comparable buyers who were never interrupted. For customers without a blocked purchase goal, the effect runs in the opposite direction — disrupted routine opens them up to explore the menu more broadly.
