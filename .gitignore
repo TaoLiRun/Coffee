@@ -16,6 +16,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
+JAx-py/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/

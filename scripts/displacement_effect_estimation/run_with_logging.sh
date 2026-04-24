@@ -65,8 +65,18 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SRC_DIR="$PROJECT_ROOT/src/displacement_effect_estimation"
 LOG_DIR="$PROJECT_ROOT/outputs/displacement_effect_estimation/logs"
+UV_ENV_PYTHON="$PROJECT_ROOT/JAX-py/bin/python"
 mkdir -p "$LOG_DIR"
 
 cd "$SRC_DIR"
-conda run -n JAX-py python run.py "$@" > "$LOG_DIR/run.log" 2>&1
+
+if command -v conda >/dev/null 2>&1; then
+    conda run -n JAX-py python run.py "$@" > "$LOG_DIR/run.log" 2>&1
+elif [ -x "$UV_ENV_PYTHON" ]; then
+    "$UV_ENV_PYTHON" run.py "$@" > "$LOG_DIR/run.log" 2>&1
+else
+    echo "Error: neither \`conda\` nor $UV_ENV_PYTHON is available." >&2
+    exit 1
+fi
+
 echo "Done. Log: $LOG_DIR/run.log"

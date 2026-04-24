@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 from pathlib import Path
 
@@ -104,7 +105,11 @@ def load_displacement_scores(cfg: dict | None = None) -> pd.DataFrame:
     cfg = cfg or load_config()
     project_root = get_project_root()
     score_path = project_root / cfg["paths"]["score_file"]
-    closure_registry_path = project_root / "outputs" / "customer-store" / "closure_pair_registry.csv"
+    closure_registry_rel = os.environ.get(
+        "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY",
+        cfg["paths"].get("closure_registry_file", "outputs/customer-store/closure_pair_registry.csv"),
+    )
+    closure_registry_path = project_root / closure_registry_rel
     if not score_path.exists():
         raise FileNotFoundError(
             f"Ex-ante score file not found: {score_path}. "
