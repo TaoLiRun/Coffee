@@ -673,7 +673,7 @@ def build_estimation_sample(
     unbalanced_panel: bool | None = None,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
-    _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "variety_seeking"})
+    _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "purchase_incidence_binary", "variety_seeking"})
     if outcome not in _SUPPORTED_OUTCOMES:
         raise ValueError(
             f"Unsupported outcome '{outcome}'. Must be one of {sorted(_SUPPORTED_OUTCOMES)}."
@@ -726,7 +726,7 @@ def build_estimation_sample(
         scoped_member_ids = set(
             scores.loc[scores["days_since_last_purchase"] < recency_days, "member_id"].dropna().tolist()
         )
-    if outcome == "n_purchases":
+    if outcome in {"n_purchases", "purchase_incidence_binary"}:
         orders = load_orders_for_behavior_members(member_ids=scoped_member_ids, cfg=cfg)
         commodity_df: pd.DataFrame | None = None
         first_purchase_df: pd.DataFrame | None = None
@@ -851,7 +851,7 @@ def build_estimation_sample(
                 bin_days=closure_bin_days,
             )
 
-            if outcome == "n_purchases":
+            if outcome in {"n_purchases", "purchase_incidence_binary"}:
                 win_orders = _slice_by_date(sorted_df=orders, start_date=start_dt, end_date=end_dt)
                 if not win_orders.empty:
                     win_orders = win_orders[win_orders["member_id"].isin(members)]
@@ -862,7 +862,10 @@ def build_estimation_sample(
                     counts = pd.DataFrame(columns=["member_id", "_purchase_days"])
                 block = member_frame.merge(counts, on="member_id", how="left")
                 block["_purchase_days"] = block["_purchase_days"].fillna(0)
-                block["n_purchases"] = block["_purchase_days"] / float(closure_bin_days)
+                if outcome == "n_purchases":
+                    block["n_purchases"] = block["_purchase_days"] / float(closure_bin_days)
+                else:
+                    block["purchase_incidence_binary"] = (block["_purchase_days"] > 0).astype(int)
             else:  # variety_seeking
                 vs_result = _compute_variety_seeking_for_window(
                     commodity_df=commodity_df,
