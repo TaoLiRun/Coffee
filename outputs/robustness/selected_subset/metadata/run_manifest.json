@@ -1,0 +1,17 @@
+{
+  "generated_at_utc": "2026-04-25T14:56:17.296496+00:00",
+  "source_registry_path": "outputs/customer-store/closure_pair_registry_selected.csv",
+  "registry_snapshot_path": "outputs/robustness/selected_subset/metadata/closure_pair_registry_selected.csv",
+  "baseline_purchase_result_path": "outputs/displacement_effect_estimation",
+  "baseline_purchase_binary_result_path": "outputs/displacement_effect_estimation/purchase_incidence_binary",
+  "baseline_novelty_result_path": "outputs/displacement_effect_estimation/variety_seeking_unbalanced",
+  "expected_selected_closure_count": 18,
+  "excluded_closure_count": 4,
+  "executed_commands": [
+    "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY=outputs/customer-store/closure_pair_registry_selected.csv conda run -n JAX-py python src/displacement_effect_estimation/run.py --output-dir outputs/robustness/selected_subset/n_purchases --log-file outputs/robustness/selected_subset/n_purchases/logs/run.log",
+    "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY=outputs/customer-store/closure_pair_registry_selected.csv conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --output-dir outputs/robustness/selected_subset/purchase_incidence_binary --log-file outputs/robustness/selected_subset/purchase_incidence_binary/logs/run.log",
+    "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY=outputs/customer-store/closure_pair_registry_selected.csv conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome variety_seeking --no-balanced-panel --output-dir outputs/robustness/selected_subset/variety_seeking_unbalanced --log-file outputs/robustness/selected_subset/variety_seeking_unbalanced/logs/run.log"
+  ],
+  "git_branch": "issue-4/further-selection",
+  "git_commit": "a626c5ef8e62939cd7eafeacaf220513823e80b7"
+}
