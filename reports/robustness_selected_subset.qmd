@@ -1,0 +1,14 @@
+---
+title: "Selected-Subset Robustness Check"
+subtitle: "Headline Results Re-estimated on the 18-Closure Selected Registry"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-float: true
+    toc-depth: 2
+    theme: united
+    highlight-style: tango
+---
+
+{{< include robustness_selected_subset_body.md >}}
