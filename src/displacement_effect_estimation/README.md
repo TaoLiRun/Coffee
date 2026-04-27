@@ -40,6 +40,10 @@ CLI examples:
 # Aggregate effect across all closures/events
 python run.py --outcome n_purchases --t-horizon 4
 
+# Aggregate binary purchase-incidence outcome with supplementary logit in collapsed DDD
+python run.py --outcome purchase_incidence_binary --t-horizon 4 \
+  --output-dir outputs/displacement_effect_estimation/purchase_incidence_binary
+
 # Separate effect for each closure/event
 python run.py --outcome n_purchases --t-horizon 4 --separate-effect
 

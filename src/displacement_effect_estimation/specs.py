@@ -71,6 +71,8 @@ from typing import Sequence
 import numpy as np
 import pandas as pd
 import pyfixest as pf
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 
 # ---------------------------------------------------------------------------
@@ -306,6 +308,47 @@ def fit_collapsed_specs(
     fit_rows.append(_fit_row(fit, spec, formula))
     for term in ("post_X_treated", "post_X_score", "post_X_treated_X_score"):
         rows.append(_tidy_row(fit, term, spec))
+
+    # ------------------------------------------------------------------
+    # Supplementary logit for binary purchase incidence outcome
+    # ------------------------------------------------------------------
+    if outcome == "purchase_incidence_binary":
+        logit_spec = "binary_collapsed_logit"
+        logit_formula = (
+            f"{outcome} ~ "
+            f"post_X_treated + post_X_disp + post_X_treated_X_disp + "
+            "C(rel_t) + C(calendar_month)"
+        )
+        logit_fit = smf.glm(
+            formula=logit_formula,
+            data=df,
+            family=sm.families.Binomial(),
+        ).fit(
+            cov_type="cluster",
+            cov_kwds={"groups": df[cluster_col]},
+        )
+        fit_rows.append(
+            {
+                "spec": logit_spec,
+                "formula": logit_formula,
+                "n": int(logit_fit.nobs),
+                "r2": float("nan"),
+                "r2_within": float("nan"),
+            }
+        )
+        for term in ("post_X_treated", "post_X_disp", "post_X_treated_X_disp"):
+            if term in logit_fit.params.index:
+                rows.append(
+                    {
+                        "spec": logit_spec,
+                        "term": term,
+                        "coef": float(logit_fit.params[term]),
+                        "se": float(logit_fit.bse[term]),
+                        "pvalue": float(logit_fit.pvalues[term]),
+                        "n": int(logit_fit.nobs),
+                        "r2_within": float("nan"),
+                    }
+                )
 
     return pd.DataFrame(rows), pd.DataFrame(fit_rows)
 

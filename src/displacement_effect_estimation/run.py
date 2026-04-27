@@ -69,9 +69,13 @@ def fit_spec_bundle(
             "pretrend_tests": pretrend_tests.copy(),
         }
     return {
-        "binary_terms": collapsed_terms[collapsed_terms["spec"] == "binary_collapsed"].copy(),
+        "binary_terms": collapsed_terms[
+            collapsed_terms["spec"].isin(["binary_collapsed", "binary_collapsed_logit"])
+        ].copy(),
         "score_terms": collapsed_terms[collapsed_terms["spec"] == "score_collapsed"].copy(),
-        "binary_fit": collapsed_fit[collapsed_fit["spec"] == "binary_collapsed"].copy(),
+        "binary_fit": collapsed_fit[
+            collapsed_fit["spec"].isin(["binary_collapsed", "binary_collapsed_logit"])
+        ].copy(),
         "score_fit": collapsed_fit[collapsed_fit["spec"] == "score_collapsed"].copy(),
         "event_terms": event_terms.copy(),
         "event_fit": event_fit.copy(),
