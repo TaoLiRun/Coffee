@@ -1,0 +1,11 @@
+{
+  "source_registry_path": "outputs/customer-store/closure_pair_registry_selected.csv",
+  "menu_feature_output_dir": "outputs/robustness/selected_subset_missing_new_products/menu_features",
+  "separate_effect_output_root": "outputs/robustness/selected_subset_missing_new_products/separate_effects",
+  "comparison_output_dir": "outputs/robustness/selected_subset_missing_new_products/effect_vs_introductions",
+  "t_horizon": 4,
+  "outcomes": [
+    "n_purchases",
+    "variety_seeking_unbalanced"
+  ]
+}

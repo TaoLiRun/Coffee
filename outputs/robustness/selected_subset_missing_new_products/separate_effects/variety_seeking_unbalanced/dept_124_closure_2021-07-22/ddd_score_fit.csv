@@ -1,0 +1,2 @@
+spec,formula,n,r2,r2_within
+score_collapsed,variety_seeking ~ post_X_treated + post_X_score + post_X_treated_X_score | event_fe_id + rel_t + calendar_month,10821,0.38513131229885245,4.3692251949667416e-05

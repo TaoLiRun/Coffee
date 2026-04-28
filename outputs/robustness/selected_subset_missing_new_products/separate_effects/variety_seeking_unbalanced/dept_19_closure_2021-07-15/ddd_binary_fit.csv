@@ -1,0 +1,2 @@
+spec,formula,n,r2,r2_within
+binary_collapsed,variety_seeking ~ post_X_treated + post_X_disp + post_X_treated_X_disp | event_fe_id + rel_t + calendar_month,6476,0.4653744533101217,0.0007007293080234511

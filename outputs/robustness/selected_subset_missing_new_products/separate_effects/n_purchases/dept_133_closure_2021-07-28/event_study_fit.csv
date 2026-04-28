@@ -1,0 +1,4 @@
+spec,formula,n,r2,r2_within
+event_att,"n_purchases ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",17552,0.5929118520818406,0.0016051714472304912
+event_binary_B,"n_purchases ~ i(rel_t, treated,       ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,   ref=-1) | event_fe_id + rel_t + calendar_month",17552,0.6009204402500419,0.021246453199183057
+event_score_C,"n_purchases ~ i(rel_t, treated,                   ref=-1) + i(rel_t, treated_X_score,           ref=-1) + i(rel_t, displacement_prob_centered, ref=-1) | event_fe_id + rel_t + calendar_month",17552,0.6040291946600487,0.028870758505205485

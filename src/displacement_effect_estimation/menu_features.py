@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -26,7 +27,11 @@ def _build_closure_event_id(*, dept_id: object, closure_start: object) -> str:
 def detect_menu_feature_paths(project_root: Path | None = None) -> MenuFeaturePaths:
     project_root = project_root or get_project_root()
 
-    closure_registry = project_root / "outputs" / "customer-store" / "closure_pair_registry.csv"
+    closure_registry_rel = os.environ.get(
+        "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY",
+        "outputs/customer-store/closure_pair_registry.csv",
+    )
+    closure_registry = project_root / closure_registry_rel
 
     product_candidates = [
         project_root / "processed_data" / "order_commodity_result_processed.csv",
