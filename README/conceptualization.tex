@@ -1,0 +1,193 @@
+\documentclass[aspectratio=169]{beamer}  % 16:9 aspect ratio
+
+% Use a clean theme as base
+\usetheme{default}
+\usecolortheme{default}
+\useoutertheme{miniframes}
+\useinnertheme{circles}
+\usepackage{booktabs}
+\usepackage[backend=bibtex,sorting=none]{biblatex}
+\addbibresource{ref.bib} 
+\setbeamerfont{footnote}{size=\tiny}
+
+% Custom colors from HKUST logo
+\definecolor{hkustblue}{RGB}{0, 51, 119}    % Navy blue from logo
+\definecolor{hkustgold}{RGB}{180, 141, 61}  % Golden brown from logo
+\definecolor{lightgray}{RGB}{236, 240, 241}
+
+
+% Customize the appearance
+\setbeamercolor{structure}{fg=hkustblue}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{fg=hkustblue}
+\setbeamercolor{frametitle}{fg=hkustblue,bg=white}
+\setbeamercolor{itemize item}{fg=hkustgold}
+\setbeamercolor{itemize subitem}{fg=hkustgold}
+\setbeamercolor{block title}{fg=white,bg=hkustblue}
+\setbeamercolor{block body}{fg=hkustblue,bg=lightgray}
+\setbeamercolor{title}{fg=hkustblue}
+\setbeamercolor{author}{fg=hkustgold}
+
+
+\setbeamertemplate{title page}
+{
+  \begin{centering}
+    \vspace{1cm}
+    {\usebeamercolor[fg]{title}\LARGE\inserttitle\par}
+    \vspace{0.8cm}
+    {\usebeamercolor[fg]{author}\large\insertauthor\par}
+    \vspace{0.8cm}
+    {\usebeamercolor[fg]{institute}\normalsize\insertinstitute\par}
+    \vspace{0.2cm}
+    {\usebeamercolor[fg]{date}\normalsize\insertdate\par}
+    \vfill
+  \end{centering}
+}
+
+% Custom command to show navigation symbols after title and outline pages
+\makeatletter
+\def\shownavigationsymbols{%
+    \ifnum\c@framenumber>2%
+        \setbeamertemplate{navigation symbols}[default]%
+    \else%
+        \setbeamertemplate{navigation symbols}{}%
+    \fi%
+}
+\addtobeamertemplate{footline}{\shownavigationsymbols}{}
+\makeatother
+
+% Customize frame title
+\setbeamertemplate{frametitle}{
+    \insertframetitle
+}
+
+% Customize itemize bullets
+\setbeamertemplate{itemize item}{\small\raise0.5pt\hbox{\textbullet}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{\textbullet}}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{comment}
+
+% Paper details (replace with your information)
+\title{Coffee}
+\date{\today}
+
+
+% Mark the page number (without any other info) in the footer except the title page
+\setbeamertemplate{footline}{%
+    \ifnum\value{framenumber}>1
+    \hfill\insertframenumber\fi
+}
+
+
+\begin{document}
+
+% Title page
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% ============================================================
+%  Frame 1: Conceptualizing "Displacement"
+% ============================================================
+\begin{frame}{Conceptualizing Displacement: Active Purchase Goal}
+\footnotesize
+
+\textbf{Core Idea.}
+The displacement indicator $D_{ie}$ is a \emph{revealed-preference proxy} for an
+\textbf{active purchase goal}---a chronically activated consumption intention
+made visible by customers' purchasing pattern.
+
+\vspace{0.5cm}
+
+\medskip
+\tiny
+\begin{tabular}{@{} p{0.30\linewidth} p{0.64\linewidth} @{}}
+\toprule
+\textbf{Concept} & \textbf{Key Statement \& Citation} \\
+\midrule
+Habitual goal pursuit &
+Habitual behavior is fundamentally goal-driven; recurring
+purchase routines reflect a chronically active consumption goal,
+not mere inertia.
+\newline
+\textit{Kruglanski \& Szumowska (2020, Perspectives on Psychological Science)} \\
+\addlinespace[4pt]
+ &
+Goals are mental representations that, once activated,
+remain accessible and direct behavior through a network
+of means--ends associations.
+\newline
+\textit{Kruglanski et al.\ (2002, Advances in Experimental Social Psychology)} \\
+\addlinespace[4pt]
+Implemental mindset &
+An initial purchase shifts the consumer from a deliberative
+to an implemental mindset, making subsequent purchases more
+likely---consecutively purchasing customers are already in
+this action-oriented state.
+\newline
+\textit{Dhar, Huber \& Khan (2007, Journal of Marketing Research);
+Gollwitzer (1990)} \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+
+% ============================================================
+%  Frame 2: Why Closure Affects Displaced Customers
+% ============================================================
+\begin{frame}{Conceptualize Closure Impact on Displaced Customers}
+\footnotesize
+
+\textbf{Core Idea.}
+When a store closure blocks an active purchase goal, the goal
+persists cognitively and intensifies, producing a narrowly-targeted
+rebound upon reopening.
+
+\vspace{0.5cm}
+
+\medskip
+\tiny
+\begin{tabular}{@{} p{0.26\linewidth} p{0.68\linewidth} @{}}
+\toprule
+\textbf{Mechanism} & \textbf{Key Statement \& Citation} \\
+\midrule
+Goal persistence (Zeigarnik effect) &
+Unfulfilled goals remain mentally active---causing intrusive
+thoughts and heightened accessibility---until they are completed
+or a concrete plan is formed.
+\newline
+\textit{Masicampo \& Baumeister (2011, JPSP)} \\
+\addlinespace[4pt]
+Mental simulation \& counterfactual thinking &
+Blocked goals trigger counterfactual and prefactual thinking
+(``I would be buying\ldots''), which is closely connected to
+goal cognition and regulates subsequent behavior via both
+content-specific and motivational pathways.
+\newline
+\textit{Epstude \& Roese (2008, PSPR);
+Kappes (2016, SPPC)} \\
+\addlinespace[4pt]
+Psychological reactance &
+Restricting consumers' freedom to choose triggers reactance---a
+motivational state that intensifies desire for the restricted
+option and drives efforts to restore the threatened freedom.
+\newline
+\textit{Brehm (1966); Clee \& Wicklund (1980, JCR)} \\
+\addlinespace[4pt]
+Consumer response to unavailability &
+As personal commitment to an unavailable option increases,
+consumers react more negatively and are more motivated
+to fulfill the thwarted purchase.
+\newline
+\textit{Fitzsimons (2000, JCR)} \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\end{document}
