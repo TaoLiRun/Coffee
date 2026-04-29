@@ -97,27 +97,67 @@ $$
 
 where a product is "new" if the member's first-ever purchase of that product occurs in that window. Members with no purchases in a window have missing novelty outcomes for that period.
 
-## Two Economic Channels
+## Conceptual Framework
 
-The specification separates two channels through which a closure can matter after reopening.
+In this setting, a temporary store closure can affect post-reopening behavior through **baseline demand** and through **blocking a planned purchase**. Here, the planned choice is a coffee purchase from the chain during the closure window.
 
-First, there is a **baseline-demand channel**. A closure can change demand even for customers who were not due to buy during the closure window, for example because they discover substitutes, receive reopening promotions, or rethink convenience.
+### Purchase Frequency
 
-Second, there is a **blocked-purchase channel**. For customers with an active purchase goal, the closure interrupts the realized purchase path. In a simple state-dependence representation,
-
-$$
-U^P_{iet} = \alpha^P_{et} + \mu^P_{ie} + \gamma^P C_{ie,t-1} + \epsilon^P_{iet},
-$$
-
-so missing a due purchase changes recent purchase history and can carry forward if $\gamma^P \neq 0$.
-
-Conditional on purchasing, closures may also affect what customers buy:
+Let $C_{iet} \in \{0,1\}$ indicate whether member $i$ makes at least one purchase from the chain in event period $t$ for closure event $e$. We write the latent utility of buying from the chain as:
 
 $$
-U^V_{iet} = \alpha^V_{et} + \mu^V_{ie} + \gamma^V H_{ie,t-1} + \xi G_{ie} + \eta M_{ie} + \epsilon^V_{iet},
+U^P_{iet} = \alpha^P_{et} + \mu^P_{ie} + \gamma^P C_{ie,t-1} + \epsilon^P_{iet}.
 $$
 
-where $G_{ie}$ captures the lingering blocked purchase goal and $M_{ie}$ captures missed exposure to menu changes during the closure. These two forces can both push blocked customers back toward familiar products after reopening.
+The notation is:
+
+- $\alpha^P_{et}$: baseline demand for the chain in event $e$ at time $t$;
+- $\mu^P_{ie}$: member-event fixed demand heterogeneity;
+- $C_{ie,t-1}$: whether the member bought from the chain in the previous event period;
+- $\gamma^P$: the effect of the previous purchase on the current purchase;
+- $\epsilon^P_{iet}$: an idiosyncratic shock.
+
+The key dynamic term is $\gamma^P C_{ie,t-1}$.
+
+- If $\gamma^P > 0$, buying from the chain in the previous period makes buying again more likely.
+- If $\gamma^P = 0$, there is no dynamic carryover from the previous purchase.
+
+The closure can affect post-reopening purchases in **two distinct ways**:
+
+- **Baseline-demand effect ($B$)**: the closure may change $\alpha^P_{et}$ after reopening, for example because customers discover substitutes, update beliefs about convenience, or respond to reopening promotions.
+- **Blocked-purchase effect ($D$)**: for customers who would have bought during the closure, the disruption changes their realized purchase history $C_{ie0}$, which can matter later when $\gamma^P \neq 0$.
+
+If a blocked customer would have bought during the closure absent disruption, then the closure lowers the recent-purchase term entering post-reopening utility. In the stark case with no same-chain substitution during the closure:
+
+$$
+C_{ie0}(0) = 1, \qquad C_{ie0}(1) = 0,
+$$
+
+so at reopening the customer's purchase utility is lower by $\gamma^P$ relative to the no-closure counterfactual. If the customer substitutes to another store of the same chain during the closure, this gap is smaller. Accordingly, our blocked-purchase effect should be interpreted as the average effect of having a planned purchase opportunity disrupted.
+
+### Novelty-Seeking
+
+Conditional on purchasing, the closure may also affect what the customer buys. Let $N_{iet} \in \{0,1\}$ indicate whether member $i$ chooses a new-to-them product in period $t$ of event $e$. We summarize that latent tendency as:
+
+$$
+U^V_{iet} = \alpha^V_{et} + \mu^V_{ie} + \lambda^V H_{ie,t-1} + \xi G_{ie} + \eta M_{ie} + \epsilon^V_{iet}.
+$$
+
+Here:
+
+- $\alpha^V_{et}$: baseline tendency to explore new products;
+- $\mu^V_{ie}$: member-event heterogeneity in exploration;
+- $H_{ie,t-1}$: recent product-choice history;
+- $G_{ie}$: a lingering blocked purchase goal after the closure;
+- $M_{ie}$: missed exposure to menu changes during the closure;
+- $\epsilon^V_{iet}$: an idiosyncratic shock.
+
+This notation helps separate two novelty mechanisms:
+
+- **Focused goal completion**: if the blocked purchase goal remains active, then $G_{ie}$ pushes customers back toward familiar products after reopening.
+- **Missed menu exposure**: if customers miss newly introduced items during the closure, then $M_{ie}$ can also lower subsequent novelty-seeking.
+
+The empirical goal is to separate a **baseline post-reopening shift** from the **additional effect of having a planned purchase blocked**.
 
 ## Triple Difference-in-Differences
 
