@@ -291,8 +291,8 @@ Across the 18 closures, matched control stores introduced an average of **9.344*
 
 If missed exposure to new products were the dominant explanation, closures with more control-store introductions should show a more negative novelty effect. That is not what the closure-level evidence shows.
 
-%- For purchase frequency, the correlation between introductions and the closure-level blocked-buyer effect is **0.088**, which is very weak.
-%- For novelty-seeking, the correlation is **0.050**, also very weak and not in the predicted direction overall.
+- For purchase frequency, the correlation between introductions and the closure-level blocked-buyer effect is **0.088**, which is very weak.
+- For novelty-seeking, the correlation is **0.050**, also very weak and not in the predicted direction overall.
 - Above-median introduction closures have an average novelty effect of **−0.0255**, whereas below-median introduction closures have a more negative average effect of **−0.0650**.
 
 Some closure-specific results:
