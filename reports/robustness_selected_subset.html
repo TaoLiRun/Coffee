@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-04-28">
+<meta name="dcterms.date" content="2026-04-29">
 
-<title>What Happens When Your Favorite Coffee Store Temporarily Closes?</title>
+<title>What Happens After Customers’ Purchase Intention is Blocked: Evidence from a Large Coffee Chain</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2190,6 +2190,7 @@ window.Quarto = {
   <li><a href="#outcomes" id="toc-outcomes" class="nav-link" data-scroll-target="#outcomes"><span class="header-section-number">4.1</span> Outcomes</a></li>
   <li><a href="#two-economic-channels" id="toc-two-economic-channels" class="nav-link" data-scroll-target="#two-economic-channels"><span class="header-section-number">4.2</span> Two Economic Channels</a></li>
   <li><a href="#triple-difference-in-differences" id="toc-triple-difference-in-differences" class="nav-link" data-scroll-target="#triple-difference-in-differences"><span class="header-section-number">4.3</span> Triple Difference-in-Differences</a></li>
+  <li><a href="#identification-assumptions" id="toc-identification-assumptions" class="nav-link" data-scroll-target="#identification-assumptions"><span class="header-section-number">4.4</span> Identification Assumptions</a></li>
   </ul></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">5</span> Results</a>
   <ul class="collapse">
@@ -2217,8 +2218,8 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">What Happens When Your Favorite Coffee Store Temporarily Closes?</h1>
-<p class="subtitle lead">Evidence from a Large Coffee Chain</p>
+<h1 class="title">What Happens After Customers’ Purchase Intention is Blocked: Evidence from a Large Coffee Chain</h1>
+<p class="subtitle lead">Temporary Store Closures and Consumer Response</p>
 </div>
 
 
@@ -2229,7 +2230,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 28, 2026</p>
+      <p class="date">April 29, 2026</p>
     </div>
   </div>
   
@@ -2259,7 +2260,175 @@ window.Quarto = {
 <li><strong>Treatment group</strong> — customers whose preferred store closed</li>
 <li><strong>Control group</strong> — customers whose preferred matched store remained open</li>
 </ul>
+<p>The matching comes from the customer-store pipeline launched by <code>scripts/customer-store/run_with_logging.sh</code>, which runs <code>src/customer-store/main_customer_store.py</code>. In that pipeline, each closure is paired with <strong>five control stores</strong> chosen as the nearest untreated stores in <strong>store set-up time</strong>. Control stores are assigned <strong>without replacement across closures</strong>, and stores flagged by excluded address keywords are removed from the control candidate pool. Within each closure, treatment customers are members whose pre-closure preferred store is the closing store, and control customers are members whose pre-closure preferred store is one of the matched control stores. In both groups, customers must have at least <strong>5</strong> pre-closure purchase days and a preferred-store purchase share of at least <strong>0.8</strong>. A closure is kept in the registry only if both groups have at least <strong>50</strong> customers and the control group’s during-closure purchase rate is at least <strong>twice</strong> the treatment group’s during-closure purchase rate.</p>
 <p>The resulting panel contains <strong>40,148 member-event pairs</strong> and <strong>321,184 member-event-period observations</strong> for purchase frequency. For novelty-seeking, the estimation sample is smaller (<strong>99,644 observations</strong>) because the outcome is defined only in periods with at least one purchase.</p>
+<p>The closure-level registry is:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">dept_id</th>
+<th style="text-align: left;">closure_start</th>
+<th style="text-align: left;">closure_end</th>
+<th style="text-align: right;">n_control_stores</th>
+<th style="text-align: right;">n_treatment</th>
+<th style="text-align: right;">n_control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">2021-05-27</td>
+<td style="text-align: left;">2021-06-10</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">598</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">2021-07-15</td>
+<td style="text-align: left;">2021-07-25</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">597</td>
+<td style="text-align: right;">2,764</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">124</td>
+<td style="text-align: left;">2021-07-22</td>
+<td style="text-align: left;">2021-08-18</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1,291</td>
+<td style="text-align: right;">2,029</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">238</td>
+<td style="text-align: left;">2021-07-24</td>
+<td style="text-align: left;">2021-08-21</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">773</td>
+<td style="text-align: right;">1,059</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">44</td>
+<td style="text-align: left;">2021-07-24</td>
+<td style="text-align: left;">2021-08-05</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">367</td>
+<td style="text-align: right;">1,231</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">39</td>
+<td style="text-align: left;">2021-07-25</td>
+<td style="text-align: left;">2021-08-19</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">253</td>
+<td style="text-align: right;">2,890</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">246</td>
+<td style="text-align: left;">2021-07-27</td>
+<td style="text-align: left;">2021-08-08</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">481</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">133</td>
+<td style="text-align: left;">2021-07-28</td>
+<td style="text-align: left;">2021-08-22</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">228</td>
+<td style="text-align: right;">2,128</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">47</td>
+<td style="text-align: left;">2021-07-30</td>
+<td style="text-align: left;">2021-08-10</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">223</td>
+<td style="text-align: right;">3,241</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">121</td>
+<td style="text-align: left;">2021-08-03</td>
+<td style="text-align: left;">2021-08-20</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">418</td>
+<td style="text-align: right;">1,890</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">182</td>
+<td style="text-align: left;">2021-08-03</td>
+<td style="text-align: left;">2021-08-20</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">221</td>
+<td style="text-align: right;">1,422</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">220</td>
+<td style="text-align: left;">2021-08-03</td>
+<td style="text-align: left;">2021-08-12</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">599</td>
+<td style="text-align: right;">1,261</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">59</td>
+<td style="text-align: left;">2021-08-03</td>
+<td style="text-align: left;">2021-08-19</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">423</td>
+<td style="text-align: right;">2,908</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">46</td>
+<td style="text-align: left;">2021-08-04</td>
+<td style="text-align: left;">2021-08-19</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">313</td>
+<td style="text-align: right;">2,495</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">62</td>
+<td style="text-align: left;">2021-08-04</td>
+<td style="text-align: left;">2021-08-17</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">231</td>
+<td style="text-align: right;">2,485</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">2021-08-09</td>
+<td style="text-align: left;">2021-08-22</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">734</td>
+<td style="text-align: right;">819</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">2021-08-18</td>
+<td style="text-align: left;">2021-08-31</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">432</td>
+<td style="text-align: right;">2,056</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">131</td>
+<td style="text-align: left;">2021-08-29</td>
+<td style="text-align: left;">2021-09-08</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">408</td>
+<td style="text-align: right;">2,350</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="the-key-distinction-blocked-buyers-as-active-purchase-goals" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> The Key Distinction: Blocked Buyers as Active Purchase Goals</h1>
@@ -2329,6 +2498,17 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 </ul>
 <p>The coefficient of interest is <strong><span class="math inline">\(\delta^D\)</span></strong>, the additional post-reopening effect for blocked treatment customers. This is the estimated consequence of having a due purchase interrupted, over and above general post-closure shifts that affect treated customers more broadly.</p>
 <p>The other key coefficient is <strong><span class="math inline">\(\delta^B\)</span></strong>, the post-reopening treatment effect for non-blocked customers. It captures general baseline-demand shifts that are not tied to a blocked purchase.</p>
+</section>
+<section id="identification-assumptions" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="identification-assumptions"><span class="header-section-number">4.4</span> Identification Assumptions</h2>
+<p>The interpretation of <span class="math inline">\(\delta^D\)</span> as the causal effect of a blocked purchase intention relies on four assumptions.</p>
+<ul>
+<li><strong>Triple-difference parallel trends</strong>: absent the closure, the pre/post outcome gap between blocked and non-blocked customers would have evolved similarly in treatment and control groups.</li>
+<li><strong>Valid matched controls</strong>: setup-time-matched control stores provide a reasonable counterfactual for what would have happened to customers attached to the treated store if that store had remained open.</li>
+<li><strong>Ex ante blocked-buyer classification</strong>: blocked status is constructed only from pre-closure information, so the indicator is not mechanically contaminated by post-closure behavior.</li>
+<li><strong>Limited spillovers and concurrent shocks</strong>: aside from the closure itself, there are no simultaneous shocks that differentially change post-reopening outcomes for blocked treatment customers relative to the other three groups.</li>
+</ul>
+<p>The event-study evidence is informative about these assumptions. For purchase frequency, the treatment-control ATT pretrend test does not reject. For novelty-seeking, both the ATT and blocked-buyer dynamic pretrend tests also do not reject at the headline level.</p>
 </section>
 </section>
 <section id="results" class="level1" data-number="5">
