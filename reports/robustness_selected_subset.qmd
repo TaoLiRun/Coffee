@@ -1,7 +1,6 @@
 ---
-title: "What Happens After Customers' Purchase Intention is Blocked: Evidence from a Large Coffee Chain"
-subtitle: "Temporary Store Closures and Consumer Response"
-date: today
+title: "What Happens After Customers' Purchase Intention is Blocked"
+subtitle: "Evidence from a Large Coffee Chain"
 format:
   html:
     embed-resources: true
@@ -33,7 +32,13 @@ For the analysis sample in this report, we study **18 unexpected store closures*
 - **Treatment group** — customers whose preferred store closed
 - **Control group** — customers whose preferred matched store remained open
 
-The matching comes from the customer-store pipeline launched by `scripts/customer-store/run_with_logging.sh`, which runs `src/customer-store/main_customer_store.py`. In that pipeline, each closure is paired with **five control stores** chosen as the nearest untreated stores in **store set-up time**. Control stores are assigned **without replacement across closures**, and stores flagged by excluded address keywords are removed from the control candidate pool. Within each closure, treatment customers are members whose pre-closure preferred store is the closing store, and control customers are members whose pre-closure preferred store is one of the matched control stores. In both groups, customers must have at least **5** pre-closure purchase days and a preferred-store purchase share of at least **0.8**. A closure is kept in the registry only if both groups have at least **50** customers and the control group's during-closure purchase rate is at least **twice** the treatment group's during-closure purchase rate.
+The matching proceeds as follows:
+
+- For each closure, identify candidate control stores that are untreated, not already assigned as controls for an earlier closure, and not excluded by address keywords.
+- Match the treated store to **five** control stores with the closest **store set-up times**.
+- Define treatment customers as members whose preferred pre-closure store is the closing store.
+- Define control customers as members whose preferred pre-closure store is one of the matched control stores.
+- In both groups, require at least **5** pre-closure purchase days and a preferred-store purchase share of at least **0.8**.
 
 The resulting panel contains **40,148 member-event pairs** and **321,184 member-event-period observations** for purchase frequency. For novelty-seeking, the estimation sample is smaller (**99,644 observations**) because the outcome is defined only in periods with at least one purchase.
 
@@ -146,12 +151,11 @@ The other key coefficient is **$\delta^B$**, the post-reopening treatment effect
 
 ## Identification Assumptions
 
-The interpretation of $\delta^D$ as the causal effect of a blocked purchase intention relies on four assumptions.
+The triple interaction identifies the blocked-purchase effect if:
 
-- **Triple-difference parallel trends**: absent the closure, the pre/post outcome gap between blocked and non-blocked customers would have evolved similarly in treatment and control groups.
-- **Valid matched controls**: setup-time-matched control stores provide a reasonable counterfactual for what would have happened to customers attached to the treated store if that store had remained open.
-- **Ex ante blocked-buyer classification**: blocked status is constructed only from pre-closure information, so the indicator is not mechanically contaminated by post-closure behavior.
-- **Limited spillovers and concurrent shocks**: aside from the closure itself, there are no simultaneous shocks that differentially change post-reopening outcomes for blocked treatment customers relative to the other three groups.
+- **Parallel triple differences hold**: without the closure, the blocked-versus-non-blocked gap would have evolved similarly in treatment and control groups.
+- **Baseline-demand shifts do not differentially hit blocked treated customers**: any post-reopening change in prices, promotions, convenience, or perceived quality affects blocked and non-blocked treated customers similarly, so it is absorbed by the baseline treatment effect rather than the triple interaction.
+- **Blocked status and controls are valid**: blocked-buyer status is determined from pre-closure behavior, and the matched control stores provide the relevant counterfactual for treated customers.
 
 The event-study evidence is informative about these assumptions. For purchase frequency, the treatment-control ATT pretrend test does not reject. For novelty-seeking, both the ATT and blocked-buyer dynamic pretrend tests also do not reject at the headline level.
 
