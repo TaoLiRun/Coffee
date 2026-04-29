@@ -270,7 +270,7 @@ To test whether these cross-store substitutes are driving the results, we re-est
 - Purchase frequency: $\delta^D = +0.00515$ ($p = 0.043$)
 - Novelty-seeking: $\delta^D = -0.03225$ ($p = 0.036$)
 
-So the focused rebound pattern does not depend solely on customers who visibly substituted to another store during the closure. Even after removing them, blocked customers still come back without a purchase-frequency drop and still shift away from new products.
+However, the effects are **attenuated**.
 
 ## Mechanism 2: Missed Exposure to New Products
 
@@ -291,11 +291,11 @@ Across the 18 closures, matched control stores introduced an average of **9.344*
 
 If missed exposure to new products were the dominant explanation, closures with more control-store introductions should show a more negative novelty effect. That is not what the closure-level evidence shows.
 
-- For purchase frequency, the correlation between introductions and the closure-level blocked-buyer effect is **0.088**, which is very weak.
-- For novelty-seeking, the correlation is **0.050**, also very weak and not in the predicted direction overall.
+%- For purchase frequency, the correlation between introductions and the closure-level blocked-buyer effect is **0.088**, which is very weak.
+%- For novelty-seeking, the correlation is **0.050**, also very weak and not in the predicted direction overall.
 - Above-median introduction closures have an average novelty effect of **−0.0255**, whereas below-median introduction closures have a more negative average effect of **−0.0650**.
 
-The closures with statistically significant negative novelty effects are not concentrated among the highest-introduction cases:
+Some closure-specific results:
 
 - `dept_id = 246`: introductions = **6.0**, novelty effect = **−0.4046** ($p = 0.044$)
 - `dept_id = 121`: introductions = **10.2**, novelty effect = **−0.1782** ($p = 0.003$)
@@ -303,7 +303,7 @@ The closures with statistically significant negative novelty effects are not con
 
 By contrast, the highest-introduction closure (`dept_id = 238`, **15.4** introductions) has a novelty effect near zero (**+0.0045**, $p = 0.930$).
 
-So missed exposure to new products remains a plausible auxiliary channel, but the closure-level implementation does not support it as the main driver of the novelty result.
+If this mechanism works, **the closure with the most new product introductions should show the strongest negative novelty effect**, so these results do not support it as the main driver of the novelty result.
 
 # Summary
 
