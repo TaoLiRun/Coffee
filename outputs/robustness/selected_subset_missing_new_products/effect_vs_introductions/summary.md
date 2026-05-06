@@ -48,3 +48,52 @@
 |:--------------|-------------:|--------------:|----------------:|
 | high          |            9 |    -0.0254935 |      -0.0256246 |
 | low           |            9 |    -0.0649517 |      -0.0667247 |
+
+## Matched-Bin Comparison by Closure Length
+
+- Bins (inclusive): 10-14, 15-19, 20-24, 25-29 days.
+- Metric for product changes: `avg_n_introduced_during_control`.
+- The pooled within-bin correlation is computed after demeaning introductions and effects within each length bin.
+- `high_minus_low_mean_effect_within_bin` compares above-median vs below-median introductions inside each length bin.
+
+### n_purchases
+
+- Closures in configured bins with non-missing key effect: 18
+- Pooled within-bin correlation between introductions and key DDD effect: -0.092
+- Mean within-bin high-minus-low effect gap: -0.0067
+
+| outcome     | length_bin   |   n_closures |   mean_closure_duration_days |   mean_avg_n_introduced_during_control |   mean_effect |   corr_intro_vs_effect_within_bin |   within_bin_median_intro |   high_intro_n_closures |   low_intro_n_closures |   high_minus_low_mean_effect_within_bin |
+|:------------|:-------------|-------------:|-----------------------------:|---------------------------------------:|--------------:|----------------------------------:|--------------------------:|------------------------:|-----------------------:|----------------------------------------:|
+| n_purchases | 10-14        |            9 |                      12.4444 |                                7.06667 |   -0.00965496 |                       0.000465344 |                       7.4 |                       5 |                      4 |                               0.0211382 |
+| n_purchases | 15-19        |            5 |                      16.8    |                               10.24    |    0.00683414 |                      -0.399691    |                       9.2 |                       3 |                      2 |                              -0.0149806 |
+| n_purchases | 25-29        |            4 |                      27.25   |                               13.35    |    0.0030551  |                      -0.696691    |                      13.2 |                       2 |                      2 |                              -0.0262804 |
+
+### variety_seeking_unbalanced
+
+- Closures in configured bins with non-missing key effect: 18
+- Pooled within-bin correlation between introductions and key DDD effect: -0.049
+- Mean within-bin high-minus-low effect gap: -0.0115
+
+| outcome                    | length_bin   |   n_closures |   mean_closure_duration_days |   mean_avg_n_introduced_during_control |   mean_effect |   corr_intro_vs_effect_within_bin |   within_bin_median_intro |   high_intro_n_closures |   low_intro_n_closures |   high_minus_low_mean_effect_within_bin |
+|:---------------------------|:-------------|-------------:|-----------------------------:|---------------------------------------:|--------------:|----------------------------------:|--------------------------:|------------------------:|-----------------------:|----------------------------------------:|
+| variety_seeking_unbalanced | 10-14        |            9 |                      12.4444 |                                7.06667 |   -0.0476172  |                         -0.11733  |                       7.4 |                       5 |                      4 |                               0.0756754 |
+| variety_seeking_unbalanced | 15-19        |            5 |                      16.8    |                               10.24    |   -0.0748815  |                          0.311068 |                       9.2 |                       3 |                      2 |                               0.0077967 |
+| variety_seeking_unbalanced | 25-29        |            4 |                      27.25   |                               13.35    |   -0.00276125 |                         -0.368225 |                      13.2 |                       2 |                      2 |                              -0.117898  |
+
+## Formal Mechanism Tests
+
+### n_purchases
+
+| test_name                        | term                          |         coef |           se |   pvalue_two_sided |   pvalue_one_sided_less |      n |   r2_within | outcome     |   n_closures |   alpha |   observed_coef |   n_permutations |
+|:---------------------------------|:------------------------------|-------------:|-------------:|-------------------:|------------------------:|-------:|------------:|:------------|-------------:|--------:|----------------:|-----------------:|
+| pooled_4way_interaction          | post_X_treated_X_disp_X_intro |  -0.00615197 |   0.00239409 |          0.0101838 |              0.00509192 | 321184 |   0.0138201 | n_purchases |          nan |  nan    |     nan         |              nan |
+| closure_level_wls_bin_adjusted   | intro_z                       |  -0.0105715  |   0.00589414 |          0.0945037 |              0.0472519  |    nan | nan         | n_purchases |           18 |    0.05 |     nan         |              nan |
+| within_bin_permutation_wls_slope | intro_z                       | nan          | nan          |          0.121     |              0.059      |    nan | nan         | n_purchases |          nan |    0.05 |      -0.0105715 |             1000 |
+
+### variety_seeking_unbalanced
+
+| test_name                        | term                          |          coef |          se |   pvalue_two_sided |   pvalue_one_sided_less |     n |    r2_within | outcome                    |   n_closures |   alpha |   observed_coef |   n_permutations |
+|:---------------------------------|:------------------------------|--------------:|------------:|-------------------:|------------------------:|------:|-------------:|:---------------------------|-------------:|--------:|----------------:|-----------------:|
+| pooled_4way_interaction          | post_X_treated_X_disp_X_intro |  -0.000563605 |   0.0118044 |           0.96192  |                0.48096  | 99644 |   0.00063886 | variety_seeking_unbalanced |          nan |  nan    |      nan        |              nan |
+| closure_level_wls_bin_adjusted   | intro_z                       |  -0.034309    |   0.0350013 |           0.343614 |                0.171807 |   nan | nan          | variety_seeking_unbalanced |           18 |    0.05 |      nan        |              nan |
+| within_bin_permutation_wls_slope | intro_z                       | nan           | nan         |           0.404    |                0.19     |   nan | nan          | variety_seeking_unbalanced |          nan |    0.05 |       -0.034309 |             1000 |

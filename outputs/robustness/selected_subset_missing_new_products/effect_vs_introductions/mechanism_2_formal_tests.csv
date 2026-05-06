@@ -1,0 +1,7 @@
+test_name,term,coef,se,pvalue_two_sided,pvalue_one_sided_less,n,r2_within,outcome,n_closures,alpha,observed_coef,n_permutations
+pooled_4way_interaction,post_X_treated_X_disp_X_intro,-0.0061519747385220406,0.002394094844251774,0.010183841893513401,0.005091920946756701,321184.0,0.013820149124058934,n_purchases,,,,
+closure_level_wls_bin_adjusted,intro_z,-0.010571534787668656,0.005894138464498059,0.09450370487988999,0.047251852439944994,,,n_purchases,18.0,0.05,,
+within_bin_permutation_wls_slope,intro_z,,,0.121,0.059,,,n_purchases,,0.05,-0.010571534787668656,1000.0
+pooled_4way_interaction,post_X_treated_X_disp_X_intro,-0.0005636053001139247,0.011804422777096141,0.9619196666512337,0.48095983332561687,99644.0,0.000638859566812422,variety_seeking_unbalanced,,,,
+closure_level_wls_bin_adjusted,intro_z,-0.03430900361782053,0.03500132179925908,0.34361375498044744,0.17180687749022372,,,variety_seeking_unbalanced,18.0,0.05,,
+within_bin_permutation_wls_slope,intro_z,,,0.404,0.19,,,variety_seeking_unbalanced,,0.05,-0.03430900361782053,1000.0

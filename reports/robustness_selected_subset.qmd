@@ -332,6 +332,15 @@ If missed exposure to new products were the dominant explanation, closures with 
 - For novelty-seeking, the correlation is **0.050**, also very weak and not in the predicted direction overall.
 - Above-median introduction closures have an average novelty effect of **−0.0255**, whereas below-median introduction closures have a more negative average effect of **−0.0650**.
 
+To address closure-length confounding directly, we also run a **within-bin permutation test** using closure-length bins (10-14, 15-19, 20-24, 25-29 days). The test keeps each closure's estimated blocked-buyer effect fixed, randomly reassigns introduction intensity **within** each length bin, and recomputes the intro-effect slope many times to form a randomization null.
+
+Using **1,000 permutations** with standardized introduction intensity:
+
+- Purchase frequency: observed slope = **−0.0106**, one-sided $p = 0.059$ (two-sided $p = 0.121$).
+- Novelty-seeking: observed slope = **−0.0343**, one-sided $p = 0.190$ (two-sided $p = 0.404$).
+
+So while the estimated slopes are negative, the permutation evidence does not reject the null at the 5% level, and this mechanism remains preliminary rather than confirmatory.
+
 Some closure-specific results:
 
 - `dept_id = 246`: introductions = **6.0**, novelty effect = **−0.4046** ($p = 0.044$)

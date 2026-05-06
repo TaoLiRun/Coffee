@@ -9,6 +9,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pyfixest as pf
+import statsmodels.formula.api as smf
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -26,6 +28,9 @@ from run import fit_spec_bundle
 SELECTED_REGISTRY_REL = "outputs/customer-store/closure_pair_registry_selected.csv"
 OUTPUT_ROOT_REL = "outputs/robustness/selected_subset_missing_new_products"
 T_HORIZON = 4
+LENGTH_BINS: list[tuple[int, int]] = [(10, 14), (15, 19), (20, 24), (25, 29)]
+MECHANISM_ALPHA = 0.05
+MECHANISM_PERMUTATIONS = 1000
 
 
 def _set_selected_registry_env() -> None:
@@ -229,6 +234,192 @@ def _corr(x: pd.Series, y: pd.Series) -> float:
     return float(x[mask].corr(y[mask]))
 
 
+def _assign_length_bin(closure_duration_days: pd.Series) -> pd.Series:
+    labels = [f"{start}-{end}" for start, end in LENGTH_BINS]
+    bins = [LENGTH_BINS[0][0]] + [end for _, end in LENGTH_BINS]
+    return pd.cut(
+        closure_duration_days,
+        bins=bins,
+        labels=labels,
+        include_lowest=True,
+        right=True,
+    )
+
+
+def _standardize_intro(df: pd.DataFrame, intro_col: str) -> pd.Series:
+    values = pd.to_numeric(df[intro_col], errors="coerce")
+    std = float(values.std(ddof=0))
+    if std == 0.0 or math.isnan(std):
+        return values * 0.0
+    return (values - float(values.mean())) / std
+
+
+def _fit_pooled_interaction_test(
+    *,
+    sample: pd.DataFrame,
+    intro_df: pd.DataFrame,
+    outcome_col: str,
+    cluster_col: str = "member_id",
+) -> pd.DataFrame:
+    merge_cols = ["dept_id", "closure_start", "closure_end", "closure_duration_days"]
+    intro_cols = merge_cols + ["avg_n_introduced_during_control"]
+    work_df = sample.merge(
+        intro_df[intro_cols],
+        on=merge_cols,
+        how="left",
+        validate="many_to_one",
+    ).copy()
+    if work_df["avg_n_introduced_during_control"].isna().any():
+        raise ValueError("Missing intro intensity after merging pooled sample with closure-level intro table.")
+
+    work_df["intro_z"] = _standardize_intro(work_df, "avg_n_introduced_during_control")
+    work_df["post_X_treated"] = work_df["post"] * work_df["treated"]
+    work_df["post_X_disp"] = work_df["post"] * work_df["disp_binary"]
+    work_df["post_X_treated_X_disp"] = work_df["post"] * work_df["treated"] * work_df["disp_binary"]
+    work_df["post_X_intro"] = work_df["post"] * work_df["intro_z"]
+    work_df["post_X_treated_X_intro"] = work_df["post"] * work_df["treated"] * work_df["intro_z"]
+    work_df["post_X_disp_X_intro"] = work_df["post"] * work_df["disp_binary"] * work_df["intro_z"]
+    work_df["post_X_treated_X_disp_X_intro"] = (
+        work_df["post"] * work_df["treated"] * work_df["disp_binary"] * work_df["intro_z"]
+    )
+
+    formula = (
+        f"{outcome_col} ~ post_X_treated + post_X_disp + post_X_treated_X_disp + "
+        "post_X_intro + post_X_treated_X_intro + post_X_disp_X_intro + "
+        "post_X_treated_X_disp_X_intro | event_fe_id + rel_t + calendar_month"
+    )
+    fit = pf.feols(
+        fml=f"{formula}",
+        data=work_df,
+        vcov={"CRV1": cluster_col},
+    )
+    tidy = fit.tidy()
+    term = "post_X_treated_X_disp_X_intro"
+    if term not in tidy.index:
+        raise ValueError(f"Expected pooled interaction term not found in model output: {term}")
+
+    return pd.DataFrame(
+        [
+            {
+                "test_name": "pooled_4way_interaction",
+                "term": term,
+                "coef": float(tidy.loc[term, "Estimate"]),
+                "se": float(tidy.loc[term, "Std. Error"]),
+                "pvalue_two_sided": float(tidy.loc[term, "Pr(>|t|)"]),
+                "pvalue_one_sided_less": float(tidy.loc[term, "Pr(>|t|)"] / 2.0)
+                if float(tidy.loc[term, "Estimate"]) < 0
+                else float(1.0 - float(tidy.loc[term, "Pr(>|t|)"] / 2.0)),
+                "n": int(fit._N),
+                "r2_within": float(fit._r2_within),
+            }
+        ]
+    )
+
+
+def _fit_closure_level_wls_test(
+    *,
+    closure_df: pd.DataFrame,
+    outcome_label: str,
+    coef_col: str,
+    se_col: str,
+) -> pd.DataFrame:
+    work_df = closure_df[
+        ["dept_id", "closure_duration_days", "avg_n_introduced_during_control", coef_col, se_col]
+    ].copy()
+    work_df = work_df.rename(columns={coef_col: "effect", se_col: "effect_se"})
+    work_df = work_df.dropna(subset=["effect", "effect_se", "avg_n_introduced_during_control"]).copy()
+    work_df["length_bin"] = _assign_length_bin(work_df["closure_duration_days"])
+    work_df = work_df[work_df["length_bin"].notna()].copy()
+    work_df["intro_z"] = _standardize_intro(work_df, "avg_n_introduced_during_control")
+    work_df["weight"] = 1.0 / np.square(work_df["effect_se"])
+
+    fitted = smf.wls(
+        formula="effect ~ intro_z + C(length_bin)",
+        data=work_df,
+        weights=work_df["weight"],
+    ).fit()
+    if "intro_z" not in fitted.params.index:
+        raise ValueError("Expected intro_z coefficient missing from WLS model.")
+
+    return pd.DataFrame(
+        [
+            {
+                "test_name": "closure_level_wls_bin_adjusted",
+                "outcome": outcome_label,
+                "term": "intro_z",
+                "coef": float(fitted.params["intro_z"]),
+                "se": float(fitted.bse["intro_z"]),
+                "pvalue_two_sided": float(fitted.pvalues["intro_z"]),
+                "pvalue_one_sided_less": float(fitted.pvalues["intro_z"] / 2.0)
+                if float(fitted.params["intro_z"]) < 0
+                else float(1.0 - float(fitted.pvalues["intro_z"] / 2.0)),
+                "n_closures": int(work_df.shape[0]),
+                "alpha": MECHANISM_ALPHA,
+            }
+        ]
+    )
+
+
+def _permutation_test_within_bins(
+    *,
+    closure_df: pd.DataFrame,
+    coef_col: str,
+    se_col: str,
+    n_permutations: int,
+    seed: int = 20260506,
+) -> pd.DataFrame:
+    work_df = closure_df[
+        ["closure_duration_days", "avg_n_introduced_during_control", coef_col, se_col]
+    ].copy()
+    work_df = work_df.rename(columns={coef_col: "effect", se_col: "effect_se"})
+    work_df = work_df.dropna(subset=["effect", "effect_se", "avg_n_introduced_during_control"]).copy()
+    work_df["length_bin"] = _assign_length_bin(work_df["closure_duration_days"])
+    work_df = work_df[work_df["length_bin"].notna()].copy()
+    work_df["intro_z"] = _standardize_intro(work_df, "avg_n_introduced_during_control")
+    work_df["weight"] = 1.0 / np.square(work_df["effect_se"])
+
+    obs_fit = smf.wls(
+        formula="effect ~ intro_z + C(length_bin)",
+        data=work_df,
+        weights=work_df["weight"],
+    ).fit()
+    observed_coef = float(obs_fit.params["intro_z"])
+
+    rng = np.random.default_rng(seed=seed)
+    perm_coefs: list[float] = []
+    for _ in range(n_permutations):
+        perm_df = work_df.copy()
+        perm_df["intro_perm"] = perm_df["intro_z"]
+        for _, idx in perm_df.groupby("length_bin", sort=False).groups.items():
+            idx_list = list(idx)
+            perm_values = perm_df.loc[idx_list, "intro_perm"].to_numpy(copy=True)
+            rng.shuffle(perm_values)
+            perm_df.loc[idx_list, "intro_perm"] = perm_values
+        perm_fit = smf.wls(
+            formula="effect ~ intro_perm + C(length_bin)",
+            data=perm_df,
+            weights=perm_df["weight"],
+        ).fit()
+        perm_coefs.append(float(perm_fit.params["intro_perm"]))
+
+    perm_arr = np.asarray(perm_coefs, dtype=float)
+    pvalue_one_sided_less = float(np.mean(perm_arr <= observed_coef))
+    pvalue_two_sided = float(np.mean(np.abs(perm_arr) >= abs(observed_coef)))
+    return pd.DataFrame(
+        [
+            {
+                "test_name": "within_bin_permutation_wls_slope",
+                "term": "intro_z",
+                "observed_coef": observed_coef,
+                "pvalue_one_sided_less": pvalue_one_sided_less,
+                "pvalue_two_sided": pvalue_two_sided,
+                "n_permutations": int(n_permutations),
+                "alpha": MECHANISM_ALPHA,
+            }
+        ]
+    )
+
+
 def _plot_effect_vs_introductions(
     *,
     df: pd.DataFrame,
@@ -312,12 +503,80 @@ def _summarize_relationship(
     return summary
 
 
+def _summarize_relationship_by_length_bin(
+    *,
+    df: pd.DataFrame,
+    outcome: str,
+    coef_col: str,
+) -> tuple[dict[str, object], pd.DataFrame]:
+    work_df = df.copy()
+    work_df["length_bin"] = _assign_length_bin(work_df["closure_duration_days"])
+    work_df = work_df[work_df["length_bin"].notna() & work_df[coef_col].notna()].copy()
+
+    # Pooled within-bin correlation by residualizing both variables on length-bin means.
+    work_df["intro_resid"] = (
+        work_df["avg_n_introduced_during_control"]
+        - work_df.groupby("length_bin")["avg_n_introduced_during_control"].transform("mean")
+    )
+    work_df["effect_resid"] = (
+        work_df[coef_col] - work_df.groupby("length_bin")[coef_col].transform("mean")
+    )
+    pooled_within_bin_corr = _corr(work_df["intro_resid"], work_df["effect_resid"])
+
+    bin_rows: list[dict[str, object]] = []
+    for length_bin, bin_df in work_df.groupby("length_bin", sort=True):
+        corr_value = _corr(bin_df["avg_n_introduced_during_control"], bin_df[coef_col])
+        within_bin_median_intro = float(bin_df["avg_n_introduced_during_control"].median())
+        high_df = bin_df[bin_df["avg_n_introduced_during_control"] >= within_bin_median_intro]
+        low_df = bin_df[bin_df["avg_n_introduced_during_control"] < within_bin_median_intro]
+        high_low_diff = (
+            float(high_df[coef_col].mean() - low_df[coef_col].mean())
+            if (not high_df.empty and not low_df.empty)
+            else math.nan
+        )
+        bin_rows.append(
+            {
+                "outcome": outcome,
+                "length_bin": str(length_bin),
+                "n_closures": int(bin_df.shape[0]),
+                "mean_closure_duration_days": float(bin_df["closure_duration_days"].mean()),
+                "mean_avg_n_introduced_during_control": float(
+                    bin_df["avg_n_introduced_during_control"].mean()
+                ),
+                "mean_effect": float(bin_df[coef_col].mean()),
+                "corr_intro_vs_effect_within_bin": corr_value,
+                "within_bin_median_intro": within_bin_median_intro,
+                "high_intro_n_closures": int(high_df.shape[0]),
+                "low_intro_n_closures": int(low_df.shape[0]),
+                "high_minus_low_mean_effect_within_bin": high_low_diff,
+            }
+        )
+
+    by_bin_df = pd.DataFrame(bin_rows).sort_values("length_bin").reset_index(drop=True)
+    summary = {
+        "outcome": outcome,
+        "coef_col": coef_col,
+        "n_closures": int(work_df.shape[0]),
+        "pooled_within_bin_corr": pooled_within_bin_corr,
+        "mean_within_bin_high_minus_low_effect": (
+            float(by_bin_df["high_minus_low_mean_effect_within_bin"].dropna().mean())
+            if "high_minus_low_mean_effect_within_bin" in by_bin_df.columns
+            and by_bin_df["high_minus_low_mean_effect_within_bin"].notna().any()
+            else math.nan
+        ),
+    }
+    return summary, by_bin_df
+
+
 def _write_effect_summary(
     *,
     output_dir: Path,
     menu_summary_df: pd.DataFrame,
     merged_wide_df: pd.DataFrame,
     relationship_summaries: list[dict[str, object]],
+    relationship_by_bin_summaries: list[dict[str, object]],
+    relationship_by_bin_tables: list[pd.DataFrame],
+    mechanism_test_tables: list[pd.DataFrame],
 ) -> None:
     lines = [
         "# Effect vs. Control-Store Introductions",
@@ -353,6 +612,49 @@ def _write_effect_summary(
             ]
         )
 
+    lines.extend(
+        [
+            "",
+            "## Matched-Bin Comparison by Closure Length",
+            "",
+            "- Bins (inclusive): 10-14, 15-19, 20-24, 25-29 days.",
+            "- Metric for product changes: `avg_n_introduced_during_control`.",
+            "- The pooled within-bin correlation is computed after demeaning introductions and effects within each length bin.",
+            "- `high_minus_low_mean_effect_within_bin` compares above-median vs below-median introductions inside each length bin.",
+        ]
+    )
+
+    for summary, table in zip(relationship_by_bin_summaries, relationship_by_bin_tables):
+        lines.extend(
+            [
+                "",
+                f"### {summary['outcome']}",
+                "",
+                f"- Closures in configured bins with non-missing key effect: {summary['n_closures']}",
+                (
+                    "- Pooled within-bin correlation between introductions and key DDD effect: "
+                    f"{summary['pooled_within_bin_corr']:.3f}"
+                    if not math.isnan(float(summary["pooled_within_bin_corr"]))
+                    else "- Pooled within-bin correlation between introductions and key DDD effect: NA"
+                ),
+                (
+                    "- Mean within-bin high-minus-low effect gap: "
+                    f"{summary['mean_within_bin_high_minus_low_effect']:.4f}"
+                    if not math.isnan(float(summary["mean_within_bin_high_minus_low_effect"]))
+                    else "- Mean within-bin high-minus-low effect gap: NA"
+                ),
+                "",
+                table.to_markdown(index=False),
+            ]
+        )
+
+    lines.extend(["", "## Formal Mechanism Tests", ""])
+    for table in mechanism_test_tables:
+        if table.empty:
+            continue
+        header = str(table["outcome"].iloc[0]) if "outcome" in table.columns else "global"
+        lines.extend([f"### {header}", "", table.to_markdown(index=False), ""])
+
     (output_dir / "summary.md").write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -384,6 +686,9 @@ def main() -> None:
     effect_tables: list[pd.DataFrame] = []
     merged_tables: list[pd.DataFrame] = []
     relationship_summaries: list[dict[str, object]] = []
+    relationship_by_bin_summaries: list[dict[str, object]] = []
+    relationship_by_bin_tables: list[pd.DataFrame] = []
+    mechanism_test_tables: list[pd.DataFrame] = []
 
     for settings in _outcome_settings():
         outcome_output_dir = separate_root / str(settings["output_subdir"])
@@ -412,6 +717,37 @@ def main() -> None:
         )
         merged_tables.append(merged_df.assign(outcome=str(settings["output_subdir"])))
 
+        pooled_sample = build_estimation_sample(
+            outcome=str(settings["outcome"]),
+            cfg=cfg,
+            t_horizon=T_HORIZON,
+            closure_duration_days=False,
+            separate_effect=False,
+            select_recency_consumers=False,
+            require_balanced_panel=settings["require_balanced_panel"],
+            variety_seeking_mode=str(settings["variety_seeking_mode"]),
+            drop_period0_purchasers=bool(settings["drop_period0_purchasers"]),
+            unbalanced_panel=bool(settings["unbalanced_panel"]),
+        )
+        pooled_result = _fit_pooled_interaction_test(
+            sample=pooled_sample,
+            intro_df=menu_summary_df,
+            outcome_col=str(settings["outcome"]),
+        ).assign(outcome=str(settings["output_subdir"]))
+        wls_result = _fit_closure_level_wls_test(
+            closure_df=merged_df,
+            outcome_label=str(settings["output_subdir"]),
+            coef_col="binary_coef",
+            se_col="binary_se",
+        )
+        perm_result = _permutation_test_within_bins(
+            closure_df=merged_df,
+            coef_col="binary_coef",
+            se_col="binary_se",
+            n_permutations=MECHANISM_PERMUTATIONS,
+        ).assign(outcome=str(settings["output_subdir"]))
+        mechanism_test_tables.append(pd.concat([pooled_result, wls_result, perm_result], ignore_index=True))
+
         coef_col = "binary_coef"
         relationship_summaries.append(
             _summarize_relationship(
@@ -420,6 +756,13 @@ def main() -> None:
                 coef_col=coef_col,
             )
         )
+        by_bin_summary, by_bin_table = _summarize_relationship_by_length_bin(
+            df=merged_df,
+            outcome=str(settings["output_subdir"]),
+            coef_col=coef_col,
+        )
+        relationship_by_bin_summaries.append(by_bin_summary)
+        relationship_by_bin_tables.append(by_bin_table)
         _plot_effect_vs_introductions(
             df=merged_df,
             coef_col=coef_col,
@@ -431,6 +774,14 @@ def main() -> None:
     compare_output_dir.mkdir(parents=True, exist_ok=True)
     all_effects_df = pd.concat(effect_tables, ignore_index=True)
     all_effects_df.to_csv(compare_output_dir / "closure_level_key_effects_long.csv", index=False)
+    pd.concat(relationship_by_bin_tables, ignore_index=True).to_csv(
+        compare_output_dir / "closure_level_effects_vs_control_introductions_by_length_bin.csv",
+        index=False,
+    )
+    pd.concat(mechanism_test_tables, ignore_index=True).to_csv(
+        compare_output_dir / "mechanism_2_formal_tests.csv",
+        index=False,
+    )
 
     n_purchase_df = next(df for df in merged_tables if df["outcome"].iloc[0] == "n_purchases").copy()
     variety_df = next(
@@ -509,6 +860,9 @@ def main() -> None:
         menu_summary_df=menu_summary_df,
         merged_wide_df=merged_wide_df,
         relationship_summaries=relationship_summaries,
+        relationship_by_bin_summaries=relationship_by_bin_summaries,
+        relationship_by_bin_tables=relationship_by_bin_tables,
+        mechanism_test_tables=mechanism_test_tables,
     )
 
     metadata = {
