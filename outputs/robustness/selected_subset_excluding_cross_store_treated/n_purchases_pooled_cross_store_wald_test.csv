@@ -1,0 +1,2 @@
+outcome,test,statistic,pvalue,n_restrictions,n
+n_purchases,H0: post_X_treated_non_cross_X_disp = post_X_treated_cross_X_disp,0.03784526036789236,0.8457541877002721,1,321184

@@ -272,6 +272,43 @@ To test whether these cross-store substitutes are driving the results, we re-est
 
 However, the effects are **attenuated**.
 
+### Exact Pooled Specification for Subgroup Difference
+
+The attenuation pattern above is based on two different samples (full vs. excluding cross-store treated buyers). To test whether the blocked-buyer treatment effect is **statistically different** across those two treated subgroups, we estimate one pooled DDD that allows subgroup-specific triple interactions.
+
+Define:
+
+- $C_{ie}=1$ if treated member-event $ie$ has at least one during-closure same-chain purchase at another store (cross-store treated);
+- $N_{ie}=1$ if treated member-event $ie$ has no such during-closure cross-store purchase (non-cross-store treated).
+
+The estimating equation is:
+
+$$
+\begin{align}
+Y_{iet} &= \beta_1(\text{post}\times \text{disp})
+      + \beta_2(\text{post}\times N)
+      + \beta_3(\text{post}\times C) \\
+      &\quad + \delta_N(\text{post}\times N\times \text{disp})
+      + \delta_C(\text{post}\times C\times \text{disp}) \\
+      &\quad + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}.
+\end{align}
+$$
+
+where $\phi_{ie}$ are member-event fixed effects, $\omega_t$ are relative-period fixed effects, and $\gamma_m$ are calendar-month fixed effects; standard errors are clustered at the member level. The key hypothesis test is:
+
+$$
+H_0:\ \delta_N = \delta_C.
+$$
+
+Motivation: if cross-store substitution is the main driver of the attenuation pattern, then the blocked-buyer treatment effect should differ clearly between these two treated subgroups, i.e., we should reject $H_0$.
+
+Findings:
+
+- **Purchase frequency**: $\delta_N = +0.00512$ ($p = 0.044$), $\delta_C = +0.00339$ ($p = 0.695$), and the equality test does not reject ($p = 0.846$).
+- **Novelty-seeking**: $\delta_N = -0.03216$ ($p = 0.036$), $\delta_C = -0.06554$ ($p = 0.110$), and the equality test does not reject ($p = 0.436$).
+
+So the two treatment-side blocked-buyer effects are not statistically distinguishable at conventional levels.
+
 ## Mechanism 2: Missed Exposure to New Products
 
 A second possibility is that control customers continue to browse and buy while treatment customers miss menu evolution during the closure. If newly introduced products appear at comparable open stores, blocked treatment customers return with less recent exposure to the updated assortment and may default to familiar items.

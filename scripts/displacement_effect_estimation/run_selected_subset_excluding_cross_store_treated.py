@@ -4,7 +4,9 @@ import json
 import os
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
+import pyfixest as pf
 
 
 def detect_data_dir(project_root: Path) -> Path:
@@ -55,38 +57,7 @@ def load_member_store_orders(member_ids: set[int], project_root: Path) -> pd.Dat
     return out.sort_values(["member_id", "date"]).reset_index(drop=True)
 
 
-def main() -> None:
-    project_root = Path(__file__).resolve().parents[2]
-    os.environ["DISPLACEMENT_EFFECT_CLOSURE_REGISTRY"] = (
-        "outputs/customer-store/closure_pair_registry_selected.csv"
-    )
-
-    # Lazy imports so this script can be run from repo root.
-    import sys
-
-    src_dir = project_root / "src" / "displacement_effect_estimation"
-    sys.path.insert(0, str(src_dir))
-    from data import build_estimation_sample, load_config
-    from report import save_outputs
-    from specs import fit_collapsed_specs, fit_event_study_specs
-
-    cfg = load_config()
-    output_dir = project_root / "outputs/robustness/selected_subset_excluding_cross_store_treated"
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    sample = build_estimation_sample(
-        outcome="n_purchases",
-        cfg=cfg,
-        t_horizon=4,
-        closure_duration_days=False,
-        separate_effect=False,
-        select_recency_consumers=False,
-        require_balanced_panel=None,
-        variety_seeking_mode="distinct",
-        drop_period0_purchasers=False,
-        unbalanced_panel=True,
-    )
-
+def build_treated_cross_store_flag(sample: pd.DataFrame, project_root: Path) -> pd.DataFrame:
     treated_events = sample.loc[
         sample["treated"] == 1,
         ["member_id", "dept_id", "closure_start", "closure_end"],
@@ -123,7 +94,10 @@ def main() -> None:
     treated_flag["exclude_treated_cross_store_during_closure"] = (
         treated_flag["exclude_treated_cross_store_during_closure"].fillna(0).astype(int)
     )
+    return treated_flag
 
+
+def attach_cross_store_flag(sample: pd.DataFrame, treated_flag: pd.DataFrame) -> pd.DataFrame:
     sample_with_flag = sample.merge(
         treated_flag,
         on=["member_id", "dept_id", "closure_start"],
@@ -132,13 +106,171 @@ def main() -> None:
     sample_with_flag["exclude_treated_cross_store_during_closure"] = (
         sample_with_flag["exclude_treated_cross_store_during_closure"].fillna(0).astype(int)
     )
+    return sample_with_flag
 
-    filtered_sample = sample_with_flag[
+
+def filter_sample_excluding_treated_cross_store(sample_with_flag: pd.DataFrame) -> pd.DataFrame:
+    return sample_with_flag[
         ~(
             (sample_with_flag["treated"] == 1)
             & (sample_with_flag["exclude_treated_cross_store_during_closure"] == 1)
         )
     ].copy()
+
+
+def filter_sample_only_treated_cross_store(sample_with_flag: pd.DataFrame) -> pd.DataFrame:
+    return sample_with_flag[
+        (sample_with_flag["treated"] == 0)
+        | (
+            (sample_with_flag["treated"] == 1)
+            & (sample_with_flag["exclude_treated_cross_store_during_closure"] == 1)
+        )
+    ].copy()
+
+
+def pooled_cross_store_difference_test(
+    *,
+    sample_with_flag: pd.DataFrame,
+    outcome: str,
+    cluster_col: str = "member_id",
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    work_df = sample_with_flag.copy()
+    work_df["treated_cross"] = (
+        (work_df["treated"] == 1)
+        & (work_df["exclude_treated_cross_store_during_closure"] == 1)
+    ).astype(int)
+    work_df["treated_non_cross"] = (
+        (work_df["treated"] == 1)
+        & (work_df["exclude_treated_cross_store_during_closure"] == 0)
+    ).astype(int)
+    work_df["post_X_disp"] = work_df["post"] * work_df["disp_binary"]
+    work_df["post_X_treated_non_cross"] = work_df["post"] * work_df["treated_non_cross"]
+    work_df["post_X_treated_cross"] = work_df["post"] * work_df["treated_cross"]
+    work_df["post_X_treated_non_cross_X_disp"] = (
+        work_df["post"] * work_df["treated_non_cross"] * work_df["disp_binary"]
+    )
+    work_df["post_X_treated_cross_X_disp"] = (
+        work_df["post"] * work_df["treated_cross"] * work_df["disp_binary"]
+    )
+
+    fe_str = "event_fe_id + rel_t + calendar_month"
+    formula = (
+        f"{outcome} ~ post_X_disp + "
+        "post_X_treated_non_cross + post_X_treated_cross + "
+        "post_X_treated_non_cross_X_disp + post_X_treated_cross_X_disp"
+        f" | {fe_str}"
+    )
+    fit = pf.feols(formula, data=work_df, vcov={"CRV1": cluster_col})
+    tidy = fit.tidy()
+    key_terms = [
+        "post_X_treated_non_cross_X_disp",
+        "post_X_treated_cross_X_disp",
+    ]
+    coef_rows: list[dict[str, object]] = []
+    for term in key_terms:
+        if term not in tidy.index:
+            raise ValueError(f"Missing key term in pooled model: {term}")
+        coef_rows.append(
+            {
+                "outcome": outcome,
+                "term": term,
+                "coef": float(tidy.loc[term, "Estimate"]),
+                "se": float(tidy.loc[term, "Std. Error"]),
+                "pvalue": float(tidy.loc[term, "Pr(>|t|)"]),
+                "n": int(fit._N),
+            }
+        )
+
+    coef_names = list(tidy.index)
+    index_map = {str(name): i for i, name in enumerate(coef_names)}
+    p = len(coef_names)
+    r = np.zeros((1, p), dtype=float)
+    r[0, index_map["post_X_treated_non_cross_X_disp"]] = 1.0
+    r[0, index_map["post_X_treated_cross_X_disp"]] = -1.0
+    wald = fit.wald_test(R=r)
+    diff_row = {
+        "outcome": outcome,
+        "test": "H0: post_X_treated_non_cross_X_disp = post_X_treated_cross_X_disp",
+        "statistic": float(wald.iloc[0]),
+        "pvalue": float(wald.iloc[1]),
+        "n_restrictions": 1,
+        "n": int(fit._N),
+    }
+    return pd.DataFrame(coef_rows), pd.DataFrame([diff_row])
+
+
+def run_three_sample_collapsed(
+    *,
+    outcome: str,
+    full_sample: pd.DataFrame,
+    excluded_sample: pd.DataFrame,
+    only_cross_sample: pd.DataFrame,
+) -> pd.DataFrame:
+    from specs import fit_collapsed_specs
+
+    samples = [
+        ("full", full_sample),
+        ("exclude_treated_cross_store", excluded_sample),
+        ("only_treated_cross_store", only_cross_sample),
+    ]
+    parts: list[pd.DataFrame] = []
+    for sample_name, sample_df in samples:
+        coef_df, _ = fit_collapsed_specs(
+            df=sample_df,
+            outcome=outcome,
+            cluster_col="member_id",
+            use_did=False,
+        )
+        keep_terms = [
+            "post_X_treated",
+            "post_X_disp",
+            "post_X_treated_X_disp",
+        ]
+        part = coef_df[
+            (coef_df["spec"] == "binary_collapsed")
+            & (coef_df["term"].isin(keep_terms))
+        ].copy()
+        part["outcome"] = outcome
+        part["sample"] = sample_name
+        parts.append(part)
+    return pd.concat(parts, ignore_index=True)
+
+
+def main() -> None:
+    project_root = Path(__file__).resolve().parents[2]
+    os.environ["DISPLACEMENT_EFFECT_CLOSURE_REGISTRY"] = (
+        "outputs/customer-store/closure_pair_registry_selected.csv"
+    )
+
+    # Lazy imports so this script can be run from repo root.
+    import sys
+
+    src_dir = project_root / "src" / "displacement_effect_estimation"
+    sys.path.insert(0, str(src_dir))
+    from data import build_estimation_sample, load_config
+    from report import save_outputs
+    from specs import fit_collapsed_specs, fit_event_study_specs
+
+    cfg = load_config()
+    output_dir = project_root / "outputs/robustness/selected_subset_excluding_cross_store_treated"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    sample = build_estimation_sample(
+        outcome="n_purchases",
+        cfg=cfg,
+        t_horizon=4,
+        closure_duration_days=False,
+        separate_effect=False,
+        select_recency_consumers=False,
+        require_balanced_panel=None,
+        variety_seeking_mode="distinct",
+        drop_period0_purchasers=False,
+        unbalanced_panel=True,
+    )
+
+    treated_flag = build_treated_cross_store_flag(sample=sample, project_root=project_root)
+    sample_with_flag = attach_cross_store_flag(sample=sample, treated_flag=treated_flag)
+    filtered_sample = filter_sample_excluding_treated_cross_store(sample_with_flag=sample_with_flag)
 
     exclusion_rate = float(
         treated_flag["exclude_treated_cross_store_during_closure"].mean()
@@ -297,6 +429,72 @@ def main() -> None:
         index=False,
     )
 
+    # Formal pooled heterogeneity test and three-sample table for n_purchases
+    only_cross_sample = filter_sample_only_treated_cross_store(sample_with_flag=sample_with_flag)
+    n_purchases_three = run_three_sample_collapsed(
+        outcome="n_purchases",
+        full_sample=sample,
+        excluded_sample=filtered_sample,
+        only_cross_sample=only_cross_sample,
+    )
+    n_purchases_three.to_csv(
+        output_dir / "n_purchases_three_sample_collapsed_comparison.csv",
+        index=False,
+    )
+    n_purchases_pooled_terms, n_purchases_pooled_test = pooled_cross_store_difference_test(
+        sample_with_flag=sample_with_flag,
+        outcome="n_purchases",
+        cluster_col="member_id",
+    )
+    n_purchases_pooled_terms.to_csv(
+        output_dir / "n_purchases_pooled_cross_store_terms.csv",
+        index=False,
+    )
+    n_purchases_pooled_test.to_csv(
+        output_dir / "n_purchases_pooled_cross_store_wald_test.csv",
+        index=False,
+    )
+
+    # Repeat the same comparison for variety_seeking in the report-aligned setup.
+    variety_sample = build_estimation_sample(
+        outcome="variety_seeking",
+        cfg=cfg,
+        t_horizon=4,
+        closure_duration_days=False,
+        separate_effect=False,
+        select_recency_consumers=False,
+        require_balanced_panel=False,
+        variety_seeking_mode="distinct",
+        drop_period0_purchasers=False,
+        unbalanced_panel=True,
+    )
+    variety_with_flag = attach_cross_store_flag(sample=variety_sample, treated_flag=treated_flag)
+    variety_filtered = filter_sample_excluding_treated_cross_store(sample_with_flag=variety_with_flag)
+    variety_only_cross = filter_sample_only_treated_cross_store(sample_with_flag=variety_with_flag)
+    variety_three = run_three_sample_collapsed(
+        outcome="variety_seeking",
+        full_sample=variety_sample,
+        excluded_sample=variety_filtered,
+        only_cross_sample=variety_only_cross,
+    )
+    variety_three.to_csv(
+        output_dir / "variety_seeking_three_sample_collapsed_comparison.csv",
+        index=False,
+    )
+    variety_pooled_terms, variety_pooled_test = pooled_cross_store_difference_test(
+        sample_with_flag=variety_with_flag,
+        outcome="variety_seeking",
+        cluster_col="member_id",
+    )
+    variety_pooled_terms.to_csv(
+        output_dir / "variety_seeking_pooled_cross_store_terms.csv",
+        index=False,
+    )
+    variety_pooled_test.to_csv(
+        output_dir / "variety_seeking_pooled_cross_store_wald_test.csv",
+        index=False,
+    )
+
     metadata = {
         "date": "2026-04-27",
         "source_registry_path": "outputs/customer-store/closure_pair_registry_selected.csv",
@@ -310,6 +508,14 @@ def main() -> None:
         "sample_rows_after_filter": int(len(filtered_sample)),
         "unique_members_before_filter": int(sample["member_id"].nunique()),
         "unique_members_after_filter": int(filtered_sample["member_id"].nunique()),
+        "added_outputs": [
+            "n_purchases_three_sample_collapsed_comparison.csv",
+            "n_purchases_pooled_cross_store_terms.csv",
+            "n_purchases_pooled_cross_store_wald_test.csv",
+            "variety_seeking_three_sample_collapsed_comparison.csv",
+            "variety_seeking_pooled_cross_store_terms.csv",
+            "variety_seeking_pooled_cross_store_wald_test.csv",
+        ],
     }
     (output_dir / "run_metadata.json").write_text(
         json.dumps(metadata, ensure_ascii=True, indent=2) + "\n",

@@ -8,5 +8,13 @@
   "sample_rows_before_filter": 321184,
   "sample_rows_after_filter": 317032,
   "unique_members_before_filter": 40148,
-  "unique_members_after_filter": 39629
+  "unique_members_after_filter": 39629,
+  "added_outputs": [
+    "n_purchases_three_sample_collapsed_comparison.csv",
+    "n_purchases_pooled_cross_store_terms.csv",
+    "n_purchases_pooled_cross_store_wald_test.csv",
+    "variety_seeking_three_sample_collapsed_comparison.csv",
+    "variety_seeking_pooled_cross_store_terms.csv",
+    "variety_seeking_pooled_cross_store_wald_test.csv"
+  ]
 }

@@ -1,0 +1,2 @@
+outcome,test,statistic,pvalue,n_restrictions,n
+variety_seeking,H0: post_X_treated_non_cross_X_disp = post_X_treated_cross_X_disp,0.6075954940977932,0.435694588127286,1,99644
