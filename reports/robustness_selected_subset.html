@@ -2307,6 +2307,7 @@ window.Quarto = {
   <li><a href="#mechanism-1-blocked-goals-create-focused-rebound" id="toc-mechanism-1-blocked-goals-create-focused-rebound" class="nav-link" data-scroll-target="#mechanism-1-blocked-goals-create-focused-rebound"><span class="header-section-number">6.1</span> Mechanism 1: Blocked Goals Create Focused Rebound</a>
   <ul class="collapse">
   <li><a href="#implementation-and-findings" id="toc-implementation-and-findings" class="nav-link" data-scroll-target="#implementation-and-findings"><span class="header-section-number">6.1.1</span> Implementation and Findings</a></li>
+  <li><a href="#exact-pooled-specification-for-subgroup-difference" id="toc-exact-pooled-specification-for-subgroup-difference" class="nav-link" data-scroll-target="#exact-pooled-specification-for-subgroup-difference"><span class="header-section-number">6.1.2</span> Exact Pooled Specification for Subgroup Difference</a></li>
   </ul></li>
   <li><a href="#mechanism-2-missed-exposure-to-new-products" id="toc-mechanism-2-missed-exposure-to-new-products" class="nav-link" data-scroll-target="#mechanism-2-missed-exposure-to-new-products"><span class="header-section-number">6.2</span> Mechanism 2: Missed Exposure to New Products</a>
   <ul class="collapse">
@@ -2772,6 +2773,37 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 </ul>
 <p>However, the effects are <strong>attenuated</strong>.</p>
 </section>
+<section id="exact-pooled-specification-for-subgroup-difference" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="exact-pooled-specification-for-subgroup-difference"><span class="header-section-number">6.1.2</span> Exact Pooled Specification for Subgroup Difference</h3>
+<p>The attenuation pattern above is based on two different samples (full vs. excluding cross-store treated buyers). To test whether the blocked-buyer treatment effect is <strong>statistically different</strong> across those two treated subgroups, we estimate one pooled DDD that allows subgroup-specific triple interactions.</p>
+<p>Define:</p>
+<ul>
+<li><span class="math inline">\(C_{ie}=1\)</span> if treated member-event <span class="math inline">\(ie\)</span> has at least one during-closure same-chain purchase at another store (cross-store treated);</li>
+<li><span class="math inline">\(N_{ie}=1\)</span> if treated member-event <span class="math inline">\(ie\)</span> has no such during-closure cross-store purchase (non-cross-store treated).</li>
+</ul>
+<p>The estimating equation is:</p>
+<p><span class="math display">\[
+\begin{align}
+Y_{iet} &amp;= \beta_1(\text{post}\times \text{disp})
+      + \beta_2(\text{post}\times N)
+      + \beta_3(\text{post}\times C) \\
+      &amp;\quad + \delta_N(\text{post}\times N\times \text{disp})
+      + \delta_C(\text{post}\times C\times \text{disp}) \\
+      &amp;\quad + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}.
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(\phi_{ie}\)</span> are member-event fixed effects, <span class="math inline">\(\omega_t\)</span> are relative-period fixed effects, and <span class="math inline">\(\gamma_m\)</span> are calendar-month fixed effects; standard errors are clustered at the member level. The key hypothesis test is:</p>
+<p><span class="math display">\[
+H_0:\ \delta_N = \delta_C.
+\]</span></p>
+<p>Motivation: if cross-store substitution is the main driver of the attenuation pattern, then the blocked-buyer treatment effect should differ clearly between these two treated subgroups, i.e., we should reject <span class="math inline">\(H_0\)</span>.</p>
+<p>Findings:</p>
+<ul>
+<li><strong>Purchase frequency</strong>: <span class="math inline">\(\delta_N = +0.00512\)</span> (<span class="math inline">\(p = 0.044\)</span>), <span class="math inline">\(\delta_C = +0.00339\)</span> (<span class="math inline">\(p = 0.695\)</span>), and the equality test does not reject (<span class="math inline">\(p = 0.846\)</span>).</li>
+<li><strong>Novelty-seeking</strong>: <span class="math inline">\(\delta_N = -0.03216\)</span> (<span class="math inline">\(p = 0.036\)</span>), <span class="math inline">\(\delta_C = -0.06554\)</span> (<span class="math inline">\(p = 0.110\)</span>), and the equality test does not reject (<span class="math inline">\(p = 0.436\)</span>).</li>
+</ul>
+<p>So the two treatment-side blocked-buyer effects are not statistically distinguishable at conventional levels.</p>
+</section>
 </section>
 <section id="mechanism-2-missed-exposure-to-new-products" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="mechanism-2-missed-exposure-to-new-products"><span class="header-section-number">6.2</span> Mechanism 2: Missed Exposure to New Products</h2>
@@ -2795,6 +2827,13 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 <li>For novelty-seeking, the correlation is <strong>0.050</strong>, also very weak and not in the predicted direction overall.</li>
 <li>Above-median introduction closures have an average novelty effect of <strong>−0.0255</strong>, whereas below-median introduction closures have a more negative average effect of <strong>−0.0650</strong>.</li>
 </ul>
+<p>To address closure-length confounding directly, we also run a <strong>within-bin permutation test</strong> using closure-length bins (10-14, 15-19, 20-24, 25-29 days). The test keeps each closure’s estimated blocked-buyer effect fixed, randomly reassigns introduction intensity <strong>within</strong> each length bin, and recomputes the intro-effect slope many times to form a randomization null.</p>
+<p>Using <strong>1,000 permutations</strong> with standardized introduction intensity:</p>
+<ul>
+<li>Purchase frequency: observed slope = <strong>−0.0106</strong>, one-sided <span class="math inline">\(p = 0.059\)</span> (two-sided <span class="math inline">\(p = 0.121\)</span>).</li>
+<li>Novelty-seeking: observed slope = <strong>−0.0343</strong>, one-sided <span class="math inline">\(p = 0.190\)</span> (two-sided <span class="math inline">\(p = 0.404\)</span>).</li>
+</ul>
+<p>So while the estimated slopes are negative, the permutation evidence does not reject the null at the 5% level, and this mechanism remains preliminary rather than confirmatory.</p>
 <p>Some closure-specific results:</p>
 <ul>
 <li><code>dept_id = 246</code>: introductions = <strong>6.0</strong>, novelty effect = <strong>−0.4046</strong> (<span class="math inline">\(p = 0.044\)</span>)</li>
