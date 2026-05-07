@@ -201,24 +201,24 @@ The event-study evidence is informative about these assumptions. For purchase fr
 
 ### Post-Reopening Push Targeting Check
 
-A remaining concern is that firms may have targeted blocked and non-blocked treated customers differently after the store reopened. If blocked treated customers received systematically different push marketing, then the post-reopening blocked-buyer effect could partly reflect firm targeting rather than the consequence of a blocked purchase goal.
+A remaining concern is that firms may have targeted blocked and non-blocked customers differently after the store reopened. If blocked treated customers received systematically different push marketing, then the post-reopening blocked-buyer effect could partly reflect firm targeting rather than the consequence of a blocked purchase goal.
 
-To check this, we process the push records for the **7,390 treated member-events** in the selected sample: **2,041** predicted blocked buyers and **5,349** predicted non-blocked buyers. We use the same four post-reopening event-length windows as the main analysis, yielding **29,560 member-event-window observations** and **89,872 filtered push records**.
+To check this, we process post-reopening push records for all **40,148 member-events** in the selected sample: **7,390 treated** and **32,758 control**. The control group contains **8,824** predicted blocked buyers and **23,934** predicted non-blocked buyers; the treatment group contains **2,041** predicted blocked buyers and **5,349** predicted non-blocked buyers. We use the same four post-reopening event-length windows as the main analysis, yielding **160,592 member-event-window observations** and **446,602 filtered push records**.
 
-We compare predicted blocked and predicted non-blocked treated customers using regressions of push exposure on predicted blocked status with closure-window fixed effects, so the comparison is within the same closure and relative post-reopening window. Standard errors are clustered at the member level.
+We first compare predicted blocked and predicted non-blocked customers separately within treatment and control groups. We then estimate a pooled interaction model that tests whether the blocked-versus-non-blocked push gap differs between treatment and control groups. All specifications include closure-window fixed effects and cluster standard errors at the member level.
 
-| Push outcome | Difference for predicted blocked | SE | 95% CI | p-value |
+| Push outcome | Control gap | Treatment gap | Treatment − control gap | p-value |
 |---|---:|---:|---:|---:|
-| Pushes per window | −1.3137 | 0.0668 | [−1.4446, −1.1828] | <0.001 |
-| Pushes per day | −0.0717 | 0.0034 | [−0.0783, −0.0651] | <0.001 |
-| Pushes with coupon | −0.4913 | 0.0245 | [−0.5393, −0.4433] | <0.001 |
-| Share of pushes with coupon | −0.1074 | 0.0037 | [−0.1146, −0.1001] | <0.001 |
-| Mean coupon value | −4.3012 | 0.1470 | [−4.5893, −4.0131] | <0.001 |
-| Pushes with discount | −0.1699 | 0.0237 | [−0.2164, −0.1234] | <0.001 |
-| Share of pushes with discount | −0.0400 | 0.0046 | [−0.0490, −0.0311] | <0.001 |
-| Mean discount | −0.1466 | 0.0183 | [−0.1824, −0.1108] | <0.001 |
+| Pushes per window | −1.3703 | −1.3137 | +0.0526 [−0.0881, +0.1933] | 0.464 |
+| Pushes per day | −0.0845 | −0.0717 | +0.0093 [+0.0022, +0.0163] | 0.010 |
+| Pushes with coupon | −0.4835 | −0.4913 | +0.0086 [−0.0412, +0.0583] | 0.735 |
+| Share of pushes with coupon | −0.1170 | −0.1074 | +0.0095 [+0.0017, +0.0173] | 0.017 |
+| Mean coupon value | −4.6744 | −4.3012 | +0.2690 [−0.0422, +0.5802] | 0.090 |
+| Pushes with discount | −0.1248 | −0.1699 | −0.0531 [−0.1030, −0.0031] | 0.037 |
+| Share of pushes with discount | −0.0321 | −0.0400 | −0.0104 [−0.0199, −0.0009] | 0.031 |
+| Mean discount | −0.1180 | −0.1466 | −0.0376 [−0.0755, +0.0004] | 0.053 |
 
-The pattern does not suggest that predicted blocked treated customers were pushed more aggressively after reopening. If anything, they received fewer pushes and lower coupon/discount exposure than predicted non-blocked treated customers within the same closure-window cells. Differential push targeting therefore does not explain the positive purchase-frequency rebound or the negative novelty-seeking effect among blocked treated customers.
+The first two columns show that predicted blocked customers receive fewer pushes in both treatment and control groups. The interaction tests show no meaningful difference in the total push-count gap or the coupon-count gap between treatment and control. Some intensity-normalized coupon and discount measures differ across treatment status, but the direction still does not suggest that blocked treated customers were pushed more aggressively after reopening. Differential push targeting therefore does not explain the positive purchase-frequency rebound or the negative novelty-seeking effect among blocked treated customers.
 
 # Results
 

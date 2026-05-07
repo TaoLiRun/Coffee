@@ -38,7 +38,7 @@ def build_event_id(*, df: pd.DataFrame) -> pd.Series:
     )
 
 
-def load_treated_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
+def load_selected_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
     paths_cfg = cfg["paths"]
     registry_path = project_path(relative_path=paths_cfg["selected_closure_registry"])
     score_path = project_path(relative_path=paths_cfg["score_file"])
@@ -97,8 +97,8 @@ def load_treated_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
         how="inner",
         validate="many_to_one",
     )
-    scores = scores[scores["is_treated"].eq(1)].copy()
     scores["closure_event_id"] = build_event_id(df=scores)
+    scores["treated"] = scores["is_treated"].astype(int)
 
     out_cols = [
         "member_id",
@@ -109,6 +109,7 @@ def load_treated_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
         "closure_event_id",
         "group",
         "is_treated",
+        "treated",
         "displacement_prob",
         "predicted_purchase_intention",
     ]
@@ -118,10 +119,10 @@ def load_treated_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
     return scores.sort_values(["closure_start", "dept_id", "member_id"]).reset_index(drop=True)
 
 
-def build_post_windows(*, treated_scores: pd.DataFrame, rel_t_values: list[int]) -> pd.DataFrame:
+def build_post_windows(*, selected_scores: pd.DataFrame, rel_t_values: list[int]) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
     for rel_t in rel_t_values:
-        frame = treated_scores.copy()
+        frame = selected_scores.copy()
         duration = frame["closure_duration_days"].astype(int)
         post_anchor = frame["closure_end"] + pd.Timedelta(days=1)
         frame["rel_t"] = int(rel_t)
@@ -163,6 +164,9 @@ def filter_push_records(*, cfg: dict[str, Any], windows: pd.DataFrame) -> pd.Dat
         "closure_end",
         "closure_duration_days",
         "closure_event_id",
+        "group",
+        "is_treated",
+        "treated",
         "predicted_purchase_intention",
         "displacement_prob",
         "rel_t",
@@ -286,7 +290,7 @@ def build_push_panel(*, windows: pd.DataFrame, push_records: pd.DataFrame) -> pd
 
 def summarize_groups(*, panel: pd.DataFrame, metrics: list[str]) -> pd.DataFrame:
     return (
-        panel.groupby("predicted_purchase_intention", sort=True)[metrics]
+        panel.groupby(["treated", "predicted_purchase_intention"], sort=True)[metrics]
         .agg(["count", "mean", "std", "median"])
         .reset_index()
     )
@@ -317,49 +321,56 @@ def confidence_interval_from_diff(
 
 def welch_mean_tests(*, panel: pd.DataFrame, metrics: list[str], confidence_level: float) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
-    for metric in metrics:
-        group0 = panel.loc[panel["predicted_purchase_intention"].eq(0), metric].astype(float)
-        group1 = panel.loc[panel["predicted_purchase_intention"].eq(1), metric].astype(float)
-        n0 = int(group0.shape[0])
-        n1 = int(group1.shape[0])
-        mean0 = float(group0.mean())
-        mean1 = float(group1.mean())
-        var0 = float(group0.var(ddof=1))
-        var1 = float(group1.var(ddof=1))
-        se = math.sqrt(var0 / n0 + var1 / n1)
-        numerator = (var0 / n0 + var1 / n1) ** 2
-        denominator = ((var0 / n0) ** 2 / (n0 - 1)) + ((var1 / n1) ** 2 / (n1 - 1))
-        dfree = float(numerator / denominator)
-        diff = mean1 - mean0
-        t_stat = diff / se
-        pvalue = float(2.0 * st.t.sf(abs(t_stat), dfree))
-        ci_low, ci_high = confidence_interval_from_diff(
-            diff=diff,
-            se=se,
-            dfree=dfree,
-            confidence_level=confidence_level,
-        )
-        rows.append(
-            {
-                "metric": metric,
-                "comparison": "predicted_1_minus_0",
-                "n_predicted_0": n0,
-                "n_predicted_1": n1,
-                "mean_predicted_0": mean0,
-                "mean_predicted_1": mean1,
-                "difference": diff,
-                "se": se,
-                "t_stat": t_stat,
-                "df": dfree,
-                "pvalue": pvalue,
-                "ci_low": ci_low,
-                "ci_high": ci_high,
-            }
-        )
+    for treated_value, treatment_panel in panel.groupby("treated", sort=True):
+        for metric in metrics:
+            group0 = treatment_panel.loc[
+                treatment_panel["predicted_purchase_intention"].eq(0), metric
+            ].astype(float)
+            group1 = treatment_panel.loc[
+                treatment_panel["predicted_purchase_intention"].eq(1), metric
+            ].astype(float)
+            n0 = int(group0.shape[0])
+            n1 = int(group1.shape[0])
+            mean0 = float(group0.mean())
+            mean1 = float(group1.mean())
+            var0 = float(group0.var(ddof=1))
+            var1 = float(group1.var(ddof=1))
+            se = math.sqrt(var0 / n0 + var1 / n1)
+            numerator = (var0 / n0 + var1 / n1) ** 2
+            denominator = ((var0 / n0) ** 2 / (n0 - 1)) + ((var1 / n1) ** 2 / (n1 - 1))
+            dfree = float(numerator / denominator)
+            diff = mean1 - mean0
+            t_stat = diff / se
+            pvalue = float(2.0 * st.t.sf(abs(t_stat), dfree))
+            ci_low, ci_high = confidence_interval_from_diff(
+                diff=diff,
+                se=se,
+                dfree=dfree,
+                confidence_level=confidence_level,
+            )
+            rows.append(
+                {
+                    "treated": int(treated_value),
+                    "sample": "treatment" if int(treated_value) == 1 else "control",
+                    "metric": metric,
+                    "comparison": "predicted_1_minus_0",
+                    "n_predicted_0": n0,
+                    "n_predicted_1": n1,
+                    "mean_predicted_0": mean0,
+                    "mean_predicted_1": mean1,
+                    "difference": diff,
+                    "se": se,
+                    "t_stat": t_stat,
+                    "df": dfree,
+                    "pvalue": pvalue,
+                    "ci_low": ci_low,
+                    "ci_high": ci_high,
+                }
+            )
     return pd.DataFrame(rows)
 
 
-def regression_tests(
+def subgroup_regression_tests(
     *,
     panel: pd.DataFrame,
     metrics: list[str],
@@ -369,34 +380,87 @@ def regression_tests(
     rows: list[dict[str, Any]] = []
     work_df = panel.copy()
     work_df["closure_window_fe"] = work_df["closure_event_id"] + "_rel_" + work_df["rel_t"].astype(str)
+    for treated_value, treatment_df in work_df.groupby("treated", sort=True):
+        for metric in metrics:
+            formula = f"{metric} ~ predicted_purchase_intention + C(closure_window_fe)"
+            fit = smf.ols(formula=formula, data=treatment_df).fit(
+                cov_type="cluster",
+                cov_kwds={"groups": treatment_df[cluster_col]},
+            )
+            term = "predicted_purchase_intention"
+            coef = float(fit.params[term])
+            se = float(fit.bse[term])
+            alpha = 1.0 - confidence_level
+            ci_low, ci_high = fit.conf_int(alpha=alpha).loc[term].astype(float).tolist()
+            rows.append(
+                {
+                    "treated": int(treated_value),
+                    "sample": "treatment" if int(treated_value) == 1 else "control",
+                    "metric": metric,
+                    "term": term,
+                    "formula": formula,
+                    "coef": coef,
+                    "se": se,
+                    "t_stat": float(fit.tvalues[term]),
+                    "pvalue": float(fit.pvalues[term]),
+                    "ci_low": float(ci_low),
+                    "ci_high": float(ci_high),
+                    "n": int(fit.nobs),
+                    "r2": float(fit.rsquared),
+                    "cov_type": "cluster",
+                    "cluster_col": cluster_col,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def gap_difference_tests(
+    *,
+    panel: pd.DataFrame,
+    metrics: list[str],
+    cluster_col: str,
+    confidence_level: float,
+) -> pd.DataFrame:
+    rows: list[dict[str, Any]] = []
+    work_df = panel.copy()
+    work_df["closure_window_fe"] = work_df["closure_event_id"] + "_rel_" + work_df["rel_t"].astype(str)
+    work_df["predicted_X_treated"] = (
+        work_df["predicted_purchase_intention"] * work_df["treated"]
+    )
     for metric in metrics:
-        formula = f"{metric} ~ predicted_purchase_intention + C(closure_window_fe)"
+        formula = (
+            f"{metric} ~ predicted_purchase_intention + treated + predicted_X_treated "
+            "+ C(closure_window_fe)"
+        )
         fit = smf.ols(formula=formula, data=work_df).fit(
             cov_type="cluster",
             cov_kwds={"groups": work_df[cluster_col]},
         )
-        term = "predicted_purchase_intention"
-        coef = float(fit.params[term])
-        se = float(fit.bse[term])
         alpha = 1.0 - confidence_level
-        ci_low, ci_high = fit.conf_int(alpha=alpha).loc[term].astype(float).tolist()
-        rows.append(
-            {
-                "metric": metric,
-                "term": term,
-                "formula": formula,
-                "coef": coef,
-                "se": se,
-                "t_stat": float(fit.tvalues[term]),
-                "pvalue": float(fit.pvalues[term]),
-                "ci_low": float(ci_low),
-                "ci_high": float(ci_high),
-                "n": int(fit.nobs),
-                "r2": float(fit.rsquared),
-                "cov_type": "cluster",
-                "cluster_col": cluster_col,
-            }
-        )
+        ci = fit.conf_int(alpha=alpha)
+        for term, interpretation in [
+            ("predicted_purchase_intention", "control subgroup gap"),
+            ("predicted_X_treated", "treatment minus control subgroup gap"),
+        ]:
+            ci_low, ci_high = ci.loc[term].astype(float).tolist()
+            rows.append(
+                {
+                    "metric": metric,
+                    "term": term,
+                    "interpretation": interpretation,
+                    "formula": formula,
+                    "coef": float(fit.params[term]),
+                    "se": float(fit.bse[term]),
+                    "t_stat": float(fit.tvalues[term]),
+                    "pvalue": float(fit.pvalues[term]),
+                    "ci_low": float(ci_low),
+                    "ci_high": float(ci_high),
+                    "n": int(fit.nobs),
+                    "r2": float(fit.rsquared),
+                    "cov_type": "cluster",
+                    "cluster_col": cluster_col,
+                }
+            )
     return pd.DataFrame(rows)
 
 
@@ -404,32 +468,59 @@ def write_summary(
     *,
     output_dir: Path,
     summary_filename: str,
-    treated_scores: pd.DataFrame,
+    selected_scores: pd.DataFrame,
     push_records: pd.DataFrame,
     panel: pd.DataFrame,
     mean_tests: pd.DataFrame,
-    regression_results: pd.DataFrame,
+    subgroup_results: pd.DataFrame,
+    gap_difference_results: pd.DataFrame,
 ) -> None:
     group_counts = (
-        treated_scores["predicted_purchase_intention"].value_counts().sort_index().to_dict()
+        selected_scores.groupby(["treated", "predicted_purchase_intention"], sort=True)
+        .size()
+        .rename("n")
+        .reset_index()
     )
+    treated_rows = selected_scores[selected_scores["treated"].eq(1)]
+    control_rows = selected_scores[selected_scores["treated"].eq(0)]
     lines = [
         "# Push Targeting After Reopening",
         "",
-        f"- Treated member-events: {len(treated_scores):,}",
-        f"- Predicted no-intention treated member-events: {group_counts.get(0, 0):,}",
-        f"- Predicted intention treated member-events: {group_counts.get(1, 0):,}",
+        f"- Selected member-events: {len(selected_scores):,}",
+        f"- Treatment member-events: {len(treated_rows):,}",
+        f"- Control member-events: {len(control_rows):,}",
         f"- Member-event-window rows: {len(panel):,}",
         f"- Filtered push records: {len(push_records):,}",
+        "",
+        "## Member-Event Counts",
+        "",
+        group_counts.to_markdown(index=False),
         "",
         "## Welch Mean Tests",
         "",
         mean_tests.to_markdown(index=False),
         "",
-        "## Closure-Window Adjusted Regressions",
+        "## Closure-Window Adjusted Subgroup Regressions",
         "",
-        regression_results[
-            ["metric", "coef", "se", "pvalue", "ci_low", "ci_high", "n", "r2"]
+        subgroup_results[
+            ["sample", "metric", "coef", "se", "pvalue", "ci_low", "ci_high", "n", "r2"]
+        ].to_markdown(index=False),
+        "",
+        "## Treatment-Control Difference in Subgroup Gaps",
+        "",
+        gap_difference_results[
+            [
+                "metric",
+                "term",
+                "interpretation",
+                "coef",
+                "se",
+                "pvalue",
+                "ci_low",
+                "ci_high",
+                "n",
+                "r2",
+            ]
         ].to_markdown(index=False),
     ]
     (output_dir / summary_filename).write_text("\n".join(lines), encoding="utf-8")
@@ -446,9 +537,9 @@ def main() -> None:
     processed_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    treated_scores = load_treated_scores(cfg=cfg)
+    selected_scores = load_selected_scores(cfg=cfg)
     windows = build_post_windows(
-        treated_scores=treated_scores,
+        selected_scores=selected_scores,
         rel_t_values=[int(value) for value in analysis_cfg["post_rel_t_values"]],
     )
     push_records = filter_push_records(cfg=cfg, windows=windows)
@@ -461,7 +552,13 @@ def main() -> None:
         metrics=metrics,
         confidence_level=float(analysis_cfg["confidence_level"]),
     )
-    regression_results = regression_tests(
+    subgroup_results = subgroup_regression_tests(
+        panel=panel,
+        metrics=metrics,
+        cluster_col=str(analysis_cfg["cluster_col"]),
+        confidence_level=float(analysis_cfg["confidence_level"]),
+    )
+    gap_difference_results = gap_difference_tests(
         panel=panel,
         metrics=metrics,
         cluster_col=str(analysis_cfg["cluster_col"]),
@@ -472,7 +569,8 @@ def main() -> None:
     panel.to_parquet(processed_dir / outputs_cfg["push_panel"], index=False)
     group_summary.to_csv(processed_dir / outputs_cfg["group_summary"], index=False)
     mean_tests.to_csv(output_dir / outputs_cfg["mean_tests"], index=False)
-    regression_results.to_csv(output_dir / outputs_cfg["regression_tests"], index=False)
+    subgroup_results.to_csv(output_dir / outputs_cfg["subgroup_regression_tests"], index=False)
+    gap_difference_results.to_csv(output_dir / outputs_cfg["gap_difference_tests"], index=False)
 
     metadata = {
         "selected_closure_registry": paths_cfg["selected_closure_registry"],
@@ -481,7 +579,9 @@ def main() -> None:
         "push_file_pattern": paths_cfg["push_file_pattern"],
         "post_rel_t_values": analysis_cfg["post_rel_t_values"],
         "metrics": metrics,
-        "treated_member_events": int(len(treated_scores)),
+        "selected_member_events": int(len(selected_scores)),
+        "treatment_member_events": int(selected_scores["treated"].sum()),
+        "control_member_events": int(selected_scores["treated"].eq(0).sum()),
         "member_event_windows": int(len(panel)),
         "filtered_push_records": int(len(push_records)),
         "processed_outputs": {
@@ -491,7 +591,12 @@ def main() -> None:
         },
         "analysis_outputs": {
             "mean_tests": str((output_dir / outputs_cfg["mean_tests"]).relative_to(PROJECT_ROOT)),
-            "regression_tests": str((output_dir / outputs_cfg["regression_tests"]).relative_to(PROJECT_ROOT)),
+            "subgroup_regression_tests": str(
+                (output_dir / outputs_cfg["subgroup_regression_tests"]).relative_to(PROJECT_ROOT)
+            ),
+            "gap_difference_tests": str(
+                (output_dir / outputs_cfg["gap_difference_tests"]).relative_to(PROJECT_ROOT)
+            ),
         },
     }
     (output_dir / outputs_cfg["run_metadata"]).write_text(
@@ -501,11 +606,12 @@ def main() -> None:
     write_summary(
         output_dir=output_dir,
         summary_filename=str(outputs_cfg["summary"]),
-        treated_scores=treated_scores,
+        selected_scores=selected_scores,
         push_records=push_records,
         panel=panel,
         mean_tests=mean_tests,
-        regression_results=regression_results,
+        subgroup_results=subgroup_results,
+        gap_difference_results=gap_difference_results,
     )
 
 

@@ -2660,9 +2660,9 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 <p>The event-study evidence is informative about these assumptions. For purchase frequency, the treatment-control ATT pretrend test does not reject. For novelty-seeking, both the ATT and blocked-buyer dynamic pretrend tests also do not reject at the headline level.</p>
 <section id="post-reopening-push-targeting-check" class="level3" data-number="4.4.1">
 <h3 data-number="4.4.1" class="anchored" data-anchor-id="post-reopening-push-targeting-check"><span class="header-section-number">4.4.1</span> Post-Reopening Push Targeting Check</h3>
-<p>A remaining concern is that firms may have targeted blocked and non-blocked treated customers differently after the store reopened. If blocked treated customers received systematically different push marketing, then the post-reopening blocked-buyer effect could partly reflect firm targeting rather than the consequence of a blocked purchase goal.</p>
-<p>To check this, we process the push records for the <strong>7,390 treated member-events</strong> in the selected sample: <strong>2,041</strong> predicted blocked buyers and <strong>5,349</strong> predicted non-blocked buyers. We use the same four post-reopening event-length windows as the main analysis, yielding <strong>29,560 member-event-window observations</strong> and <strong>89,872 filtered push records</strong>.</p>
-<p>We compare predicted blocked and predicted non-blocked treated customers using regressions of push exposure on predicted blocked status with closure-window fixed effects, so the comparison is within the same closure and relative post-reopening window. Standard errors are clustered at the member level.</p>
+<p>A remaining concern is that firms may have targeted blocked and non-blocked customers differently after the store reopened. If blocked treated customers received systematically different push marketing, then the post-reopening blocked-buyer effect could partly reflect firm targeting rather than the consequence of a blocked purchase goal.</p>
+<p>To check this, we process post-reopening push records for all <strong>40,148 member-events</strong> in the selected sample: <strong>7,390 treated</strong> and <strong>32,758 control</strong>. The control group contains <strong>8,824</strong> predicted blocked buyers and <strong>23,934</strong> predicted non-blocked buyers; the treatment group contains <strong>2,041</strong> predicted blocked buyers and <strong>5,349</strong> predicted non-blocked buyers. We use the same four post-reopening event-length windows as the main analysis, yielding <strong>160,592 member-event-window observations</strong> and <strong>446,602 filtered push records</strong>.</p>
+<p>We first compare predicted blocked and predicted non-blocked customers separately within treatment and control groups. We then estimate a pooled interaction model that tests whether the blocked-versus-non-blocked push gap differs between treatment and control groups. All specifications include closure-window fixed effects and cluster standard errors at the member level.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 15%">
@@ -2674,72 +2674,72 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 <thead>
 <tr class="header">
 <th>Push outcome</th>
-<th style="text-align: right;">Difference for predicted blocked</th>
-<th style="text-align: right;">SE</th>
-<th style="text-align: right;">95% CI</th>
+<th style="text-align: right;">Control gap</th>
+<th style="text-align: right;">Treatment gap</th>
+<th style="text-align: right;">Treatment − control gap</th>
 <th style="text-align: right;">p-value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Pushes per window</td>
+<td style="text-align: right;">−1.3703</td>
 <td style="text-align: right;">−1.3137</td>
-<td style="text-align: right;">0.0668</td>
-<td style="text-align: right;">[−1.4446, −1.1828]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">+0.0526 [−0.0881, +0.1933]</td>
+<td style="text-align: right;">0.464</td>
 </tr>
 <tr class="even">
 <td>Pushes per day</td>
+<td style="text-align: right;">−0.0845</td>
 <td style="text-align: right;">−0.0717</td>
-<td style="text-align: right;">0.0034</td>
-<td style="text-align: right;">[−0.0783, −0.0651]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">+0.0093 [+0.0022, +0.0163]</td>
+<td style="text-align: right;">0.010</td>
 </tr>
 <tr class="odd">
 <td>Pushes with coupon</td>
+<td style="text-align: right;">−0.4835</td>
 <td style="text-align: right;">−0.4913</td>
-<td style="text-align: right;">0.0245</td>
-<td style="text-align: right;">[−0.5393, −0.4433]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">+0.0086 [−0.0412, +0.0583]</td>
+<td style="text-align: right;">0.735</td>
 </tr>
 <tr class="even">
 <td>Share of pushes with coupon</td>
+<td style="text-align: right;">−0.1170</td>
 <td style="text-align: right;">−0.1074</td>
-<td style="text-align: right;">0.0037</td>
-<td style="text-align: right;">[−0.1146, −0.1001]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">+0.0095 [+0.0017, +0.0173]</td>
+<td style="text-align: right;">0.017</td>
 </tr>
 <tr class="odd">
 <td>Mean coupon value</td>
+<td style="text-align: right;">−4.6744</td>
 <td style="text-align: right;">−4.3012</td>
-<td style="text-align: right;">0.1470</td>
-<td style="text-align: right;">[−4.5893, −4.0131]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">+0.2690 [−0.0422, +0.5802]</td>
+<td style="text-align: right;">0.090</td>
 </tr>
 <tr class="even">
 <td>Pushes with discount</td>
+<td style="text-align: right;">−0.1248</td>
 <td style="text-align: right;">−0.1699</td>
-<td style="text-align: right;">0.0237</td>
-<td style="text-align: right;">[−0.2164, −0.1234]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">−0.0531 [−0.1030, −0.0031]</td>
+<td style="text-align: right;">0.037</td>
 </tr>
 <tr class="odd">
 <td>Share of pushes with discount</td>
+<td style="text-align: right;">−0.0321</td>
 <td style="text-align: right;">−0.0400</td>
-<td style="text-align: right;">0.0046</td>
-<td style="text-align: right;">[−0.0490, −0.0311]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">−0.0104 [−0.0199, −0.0009]</td>
+<td style="text-align: right;">0.031</td>
 </tr>
 <tr class="even">
 <td>Mean discount</td>
+<td style="text-align: right;">−0.1180</td>
 <td style="text-align: right;">−0.1466</td>
-<td style="text-align: right;">0.0183</td>
-<td style="text-align: right;">[−0.1824, −0.1108]</td>
-<td style="text-align: right;">&lt;0.001</td>
+<td style="text-align: right;">−0.0376 [−0.0755, +0.0004]</td>
+<td style="text-align: right;">0.053</td>
 </tr>
 </tbody>
 </table>
-<p>The pattern does not suggest that predicted blocked treated customers were pushed more aggressively after reopening. If anything, they received fewer pushes and lower coupon/discount exposure than predicted non-blocked treated customers within the same closure-window cells. Differential push targeting therefore does not explain the positive purchase-frequency rebound or the negative novelty-seeking effect among blocked treated customers.</p>
+<p>The first two columns show that predicted blocked customers receive fewer pushes in both treatment and control groups. The interaction tests show no meaningful difference in the total push-count gap or the coupon-count gap between treatment and control. Some intensity-normalized coupon and discount measures differ across treatment status, but the direction still does not suggest that blocked treated customers were pushed more aggressively after reopening. Differential push targeting therefore does not explain the positive purchase-frequency rebound or the negative novelty-seeking effect among blocked treated customers.</p>
 </section>
 </section>
 </section>

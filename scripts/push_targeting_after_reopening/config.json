@@ -8,11 +8,12 @@
     "output_dir": "outputs/robustness/push_targeting_after_reopening"
   },
   "outputs": {
-    "push_records": "treated_post_reopening_push_records.parquet",
-    "push_panel": "treated_post_reopening_push_panel.parquet",
-    "group_summary": "treated_post_reopening_push_summary.csv",
-    "mean_tests": "treated_post_reopening_push_mean_tests.csv",
-    "regression_tests": "treated_post_reopening_push_regression_tests.csv",
+    "push_records": "selected_post_reopening_push_records.parquet",
+    "push_panel": "selected_post_reopening_push_panel.parquet",
+    "group_summary": "selected_post_reopening_push_summary.csv",
+    "mean_tests": "selected_post_reopening_push_mean_tests.csv",
+    "subgroup_regression_tests": "selected_post_reopening_push_subgroup_regression_tests.csv",
+    "gap_difference_tests": "selected_post_reopening_push_gap_difference_tests.csv",
     "run_metadata": "run_metadata.json",
     "summary": "summary.md"
   },
