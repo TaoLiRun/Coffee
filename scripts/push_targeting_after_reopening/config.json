@@ -1,0 +1,44 @@
+{
+  "paths": {
+    "selected_closure_registry": "outputs/customer-store/closure_pair_registry_selected.csv",
+    "score_file": "outputs/displacement_classification/displacement_scores_t0_ex_ante.csv",
+    "push_data_dir": "../data/data1031",
+    "push_file_pattern": "sleep_push_result_*.csv",
+    "processed_dir": "data/processed",
+    "output_dir": "outputs/robustness/push_targeting_after_reopening"
+  },
+  "outputs": {
+    "push_records": "treated_post_reopening_push_records.parquet",
+    "push_panel": "treated_post_reopening_push_panel.parquet",
+    "group_summary": "treated_post_reopening_push_summary.csv",
+    "mean_tests": "treated_post_reopening_push_mean_tests.csv",
+    "regression_tests": "treated_post_reopening_push_regression_tests.csv",
+    "run_metadata": "run_metadata.json",
+    "summary": "summary.md"
+  },
+  "analysis": {
+    "post_rel_t_values": [1, 2, 3, 4],
+    "push_columns": [
+      "dt",
+      "member_id",
+      "policy_id",
+      "coupon",
+      "discount"
+    ],
+    "metrics": [
+      "n_push",
+      "push_per_day",
+      "n_push_with_coupon",
+      "share_push_coupon",
+      "mean_coupon",
+      "n_push_with_discount",
+      "share_push_discount",
+      "mean_discount"
+    ],
+    "cluster_col": "member_id",
+    "confidence_level": 0.95
+  },
+  "processing": {
+    "chunksize": 1000000
+  }
+}

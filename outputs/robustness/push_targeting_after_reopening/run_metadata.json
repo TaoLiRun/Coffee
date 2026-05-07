@@ -1,0 +1,34 @@
+{
+  "selected_closure_registry": "outputs/customer-store/closure_pair_registry_selected.csv",
+  "score_file": "outputs/displacement_classification/displacement_scores_t0_ex_ante.csv",
+  "push_data_dir": "../data/data1031",
+  "push_file_pattern": "sleep_push_result_*.csv",
+  "post_rel_t_values": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "metrics": [
+    "n_push",
+    "push_per_day",
+    "n_push_with_coupon",
+    "share_push_coupon",
+    "mean_coupon",
+    "n_push_with_discount",
+    "share_push_discount",
+    "mean_discount"
+  ],
+  "treated_member_events": 7390,
+  "member_event_windows": 29560,
+  "filtered_push_records": 89872,
+  "processed_outputs": {
+    "push_records": "data/processed/treated_post_reopening_push_records.parquet",
+    "push_panel": "data/processed/treated_post_reopening_push_panel.parquet",
+    "group_summary": "data/processed/treated_post_reopening_push_summary.csv"
+  },
+  "analysis_outputs": {
+    "mean_tests": "outputs/robustness/push_targeting_after_reopening/treated_post_reopening_push_mean_tests.csv",
+    "regression_tests": "outputs/robustness/push_targeting_after_reopening/treated_post_reopening_push_regression_tests.csv"
+  }
+}
