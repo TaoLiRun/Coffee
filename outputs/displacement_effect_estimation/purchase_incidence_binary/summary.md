@@ -1,9 +1,9 @@
 # Displacement Effect Estimation Summary
 
-- Sample rows: 358,864
-- Unique members: 44,858
-- Unique closures: 22
-- Event FE units: 44,858
+- Sample rows: 321,184
+- Unique members: 40,148
+- Unique closures: 18
+- Event FE units: 40,148
 - Relative periods: [-4, -3, -2, -1, 1, 2, 3, 4]
 - Estimation mode: separate_effect=false
 - Closure duration filter days: False
@@ -13,124 +13,124 @@
 
 
 ## Binary Specs
-| spec                   | term                  |      n |   r2_within |        coef |         se |    pvalue |
-|:-----------------------|:----------------------|-------:|------------:|------------:|-----------:|----------:|
-| binary_collapsed       | post_X_treated        | 358864 |   0.0105927 |  0.0114987  | 0.00423184 | 0.0065866 |
-| binary_collapsed       | post_X_disp           | 358864 |   0.0105927 | -0.166985   | 0.00393568 | 0         |
-| binary_collapsed       | post_X_treated_X_disp | 358864 |   0.0105927 | -0.00065215 | 0.00914538 | 0.943152  |
-| binary_collapsed_logit | post_X_treated        | 358864 | nan         |  0.0408207  | 0.0248961  | 0.10108   |
-| binary_collapsed_logit | post_X_disp           | 358864 | nan         |  1.64236    | 0.0178159  | 0         |
-| binary_collapsed_logit | post_X_treated_X_disp | 358864 | nan         |  0.00950213 | 0.0421881  | 0.821798  |
+| spec                   | term                  |      n |   r2_within |       coef |         se |    pvalue |
+|:-----------------------|:----------------------|-------:|------------:|-----------:|-----------:|----------:|
+| binary_collapsed       | post_X_treated        | 321184 |   0.0106505 |  0.0110281 | 0.00443339 | 0.012868  |
+| binary_collapsed       | post_X_disp           | 321184 |   0.0106505 | -0.168781  | 0.00422108 | 0         |
+| binary_collapsed       | post_X_treated_X_disp | 321184 |   0.0106505 |  0.003676  | 0.00964036 | 0.702972  |
+| binary_collapsed_logit | post_X_treated        | 321184 | nan         |  0.0551024 | 0.0262677  | 0.0359293 |
+| binary_collapsed_logit | post_X_disp           | 321184 | nan         |  1.66773   | 0.0190623  | 0         |
+| binary_collapsed_logit | post_X_treated_X_disp | 321184 | nan         |  0.0110643 | 0.0443696  | 0.803077  |
 
 ## Score Spec
 | spec            | term                   |      n |   r2_within |        coef |         se |     pvalue |
 |:----------------|:-----------------------|-------:|------------:|------------:|-----------:|-----------:|
-| score_collapsed | post_X_treated         | 358864 |   0.0159013 |  0.00970772 | 0.00374894 | 0.00961596 |
-| score_collapsed | post_X_score           | 358864 |   0.0159013 | -0.287753   | 0.00514617 | 0          |
-| score_collapsed | post_X_treated_X_score | 358864 |   0.0159013 |  0.00143147 | 0.0117169  | 0.902763   |
+| score_collapsed | post_X_treated         | 321184 |    0.016146 |  0.0109336  | 0.00392039 | 0.00529102 |
+| score_collapsed | post_X_score           | 321184 |    0.016146 | -0.292552   | 0.00552387 | 0          |
+| score_collapsed | post_X_treated_X_score | 321184 |    0.016146 |  0.00973719 | 0.0122424  | 0.426405   |
 
 ## Event-study Specs
 | spec           | term                                                              |         coef |         se |      pvalue |      n |   r2_within |
 |:---------------|:------------------------------------------------------------------|-------------:|-----------:|------------:|-------:|------------:|
-| event_att      | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.00142477  | 0.00692558 | 0.837006    | 358864 |  0.00011404 |
-| event_att      | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00517528  | 0.006708   | 0.44041     | 358864 |  0.00011404 |
-| event_att      | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.00224052  | 0.00633514 | 0.723591    | 358864 |  0.00011404 |
-| event_att      | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0126377   | 0.00616241 | 0.0402958   | 358864 |  0.00011404 |
-| event_att      | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.0041395   | 0.00638598 | 0.516848    | 358864 |  0.00011404 |
-| event_att      | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0292823   | 0.00646318 | 5.89593e-06 | 358864 |  0.00011404 |
-| event_att      | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00962918  | 0.00664828 | 0.14752     | 358864 |  0.00011404 |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.00563419  | 0.00781883 | 0.471165    | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00280326  | 0.00751209 | 0.709026    | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.0144106   | 0.00694999 | 0.0381342   | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0148524   | 0.00682382 | 0.0295193   | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.0123365   | 0.00707298 | 0.0811353   | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.02814     | 0.00718764 | 9.05176e-05 | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00878162  | 0.00730458 | 0.22929     | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp             | -0.0180079   | 0.0163845  | 0.271738    | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp             | -0.0130878   | 0.0159273  | 0.411241    | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp             | -0.0371447   | 0.0151271  | 0.0140721   | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp              | -0.0161497   | 0.0148157  | 0.275704    | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp              | -0.0381193   | 0.0152937  | 0.0126889   | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp              | -0.00590112  | 0.0154195  | 0.70194     | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp              | -0.0102263   | 0.0160529  | 0.524101    | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-4]:disp_binary                | -0.0193396   | 0.00710594 | 0.00649889  | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-3]:disp_binary                |  0.0460534   | 0.00680303 | 1.30775e-11 | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[-2]:disp_binary                |  0.178212    | 0.00649205 | 0           | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[1]:disp_binary                 | -0.0884354   | 0.00649732 | 0           | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[2]:disp_binary                 | -0.107498    | 0.00671284 | 0           | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[3]:disp_binary                 | -0.12806     | 0.00679204 | 0           | 358864 |  0.0153375  |
-| event_binary_B | C(rel_t, contr.treatment(base=-1))[4]:disp_binary                 | -0.139233    | 0.00689179 | 0           | 358864 |  0.0153375  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.00556781  | 0.00786163 | 0.478809    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00338773  | 0.00756464 | 0.654272    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.0119881   | 0.00696996 | 0.0854447   | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0157915   | 0.00686147 | 0.0213694   | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.0119983   | 0.00710555 | 0.0913075   | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0281165   | 0.00722647 | 0.00010007  | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00811582  | 0.00735519 | 0.269854    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp             |  0.00451314  | 0.0185192  | 0.807464    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp             |  0.0272386   | 0.0178833  | 0.127733    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp             |  0.00178802  | 0.0170021  | 0.916245    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp              | -0.0193151   | 0.0168506  | 0.251696    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp              | -0.0166826   | 0.0171923  | 0.331877    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp              |  0.0179835   | 0.0175097  | 0.3044      | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp              |  0.0157305   | 0.0181403  | 0.38586     | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:disp_binary                | -0.0122273   | 0.0072271  | 0.0906781   | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:disp_binary                |  0.0540164   | 0.00693324 | 6.66134e-15 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:disp_binary                |  0.18844     | 0.00660955 | 0           | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:disp_binary                 | -0.0860227   | 0.00668536 | 0           | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:disp_binary                 | -0.101108    | 0.00688512 | 0           | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:disp_binary                 | -0.122483    | 0.00695737 | 0           | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:disp_binary                 | -0.133717    | 0.00699826 | 0           | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_len              |  0.00290764  | 0.0072895  | 0.689983    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_len              |  0.00783067  | 0.00695486 | 0.260202    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_len              | -0.0169445   | 0.00621165 | 0.00637723  | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:treated_X_len               |  0.0194144   | 0.00627232 | 0.00196764  | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:treated_X_len               | -0.0120961   | 0.00644276 | 0.0604605   | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:treated_X_len               | -0.00246257  | 0.00653237 | 0.706191    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:treated_X_len               | -0.00798961  | 0.0069177  | 0.248116    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:disp_X_len                 | -0.0393189   | 0.00634319 | 5.74579e-10 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:disp_X_len                 | -0.0412948   | 0.00593631 | 3.54095e-12 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:disp_X_len                 | -0.0447628   | 0.00552815 | 4.44089e-16 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:disp_X_len                  | -0.00737671  | 0.00562283 | 0.189554    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:disp_X_len                  | -0.0242689   | 0.00583345 | 3.18437e-05 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:disp_X_len                  | -0.0214721   | 0.00599538 | 0.000342064 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:disp_X_len                  | -0.0257433   | 0.00635356 | 5.09122e-05 | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:tXdXlen                    | -0.0121768   | 0.0143484  | 0.396079    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:tXdXlen                    | -0.0428928   | 0.0138665  | 0.00198095  | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:tXdXlen                    | -0.0131734   | 0.0128966  | 0.307041    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:tXdXlen                     | -0.0102471   | 0.0128748  | 0.426094    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:tXdXlen                     | -0.00203723  | 0.0133583  | 0.878788    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:tXdXlen                     | -0.0176876   | 0.0134829  | 0.189578    | 358864 |  0.0162128  |
-| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:tXdXlen                     | -0.0136745   | 0.0140782  | 0.331392    | 358864 |  0.0162128  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.000719344 | 0.00694261 | 0.917477    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00620363  | 0.00671338 | 0.355455    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.00510492  | 0.00628448 | 0.41662     | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.00937009  | 0.0061267  | 0.126176    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.000647442 | 0.00633712 | 0.918625    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0251664   | 0.00641946 | 8.85586e-05 | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00426219  | 0.00660559 | 0.518776    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_score            | -0.00571514  | 0.0191468  | 0.76533     | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_score            | -0.0232121   | 0.0179109  | 0.19499     | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_score            | -0.0304006   | 0.017001   | 0.0737559   | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[1]:treated_X_score             | -0.0119135   | 0.0179946  | 0.507937    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[2]:treated_X_score             | -0.0429965   | 0.0188463  | 0.0225279   | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[3]:treated_X_score             |  0.00794176  | 0.0188571  | 0.673644    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[4]:treated_X_score             | -0.00598465  | 0.0196493  | 0.760693    | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-4]:displacement_prob_centered | -0.0221156   | 0.00849359 | 0.00922281  | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-3]:displacement_prob_centered |  0.0802576   | 0.00784686 | 0           | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[-2]:displacement_prob_centered |  0.237694    | 0.0074084  | 0           | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[1]:displacement_prob_centered  | -0.171827    | 0.00802797 | 0           | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[2]:displacement_prob_centered  | -0.199505    | 0.00834798 | 0           | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[3]:displacement_prob_centered  | -0.238395    | 0.00848048 | 0           | 358864 |  0.0203044  |
-| event_score_C  | C(rel_t, contr.treatment(base=-1))[4]:displacement_prob_centered  | -0.24616     | 0.00864592 | 0           | 358864 |  0.0203044  |
+| event_att      | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.000177793 | 0.0072262  | 0.980371    | 321184 |  0.00011149 |
+| event_att      | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00406475  | 0.00704576 | 0.564006    | 321184 |  0.00011149 |
+| event_att      | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.00300674  | 0.00667308 | 0.652297    | 321184 |  0.00011149 |
+| event_att      | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0147617   | 0.00642251 | 0.0215421   | 321184 |  0.00011149 |
+| event_att      | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.0034823   | 0.00663589 | 0.599747    | 321184 |  0.00011149 |
+| event_att      | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0280216   | 0.00673834 | 3.2096e-05  | 321184 |  0.00011149 |
+| event_att      | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00990424  | 0.00693817 | 0.153444    | 321184 |  0.00011149 |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.00292551  | 0.008138   | 0.719233    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00214215  | 0.00785393 | 0.785048    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.0153236   | 0.00731307 | 0.0361441   | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0168449   | 0.00710294 | 0.0177192   | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.0111083   | 0.00732841 | 0.129581    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0259752   | 0.00749123 | 0.000526044 | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00743283  | 0.00762468 | 0.329647    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp             | -0.0145061   | 0.0171686  | 0.39816     | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp             | -0.013997    | 0.016831   | 0.405629    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp             | -0.042809    | 0.0159792  | 0.00738637  | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp              | -0.0151632   | 0.0155011  | 0.327979    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp              | -0.0353912   | 0.0160012  | 0.026987    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp              | -0.00138925  | 0.0161403  | 0.931409    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp              | -0.0031314   | 0.0168117  | 0.852239    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-4]:disp_binary                | -0.0122151   | 0.00759997 | 0.108006    | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-3]:disp_binary                |  0.0485045   | 0.00730952 | 3.26863e-11 | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[-2]:disp_binary                |  0.180528    | 0.00694747 | 0           | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[1]:disp_binary                 | -0.0874498   | 0.00695458 | 0           | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[2]:disp_binary                 | -0.108162    | 0.0071648  | 0           | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[3]:disp_binary                 | -0.125292    | 0.00726865 | 0           | 321184 |  0.0151918  |
+| event_binary_B | C(rel_t, contr.treatment(base=-1))[4]:disp_binary                 | -0.137909    | 0.00739489 | 0           | 321184 |  0.0151918  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:treated                    |  0.00302713  | 0.00819178 | 0.711733    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00238941  | 0.00791768 | 0.76282     | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.0125968   | 0.00733496 | 0.0859194   | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0178179   | 0.00714985 | 0.0127044   | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.0106858   | 0.00737174 | 0.14719     | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0258209   | 0.00754075 | 0.00061728  | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.00684079  | 0.00768586 | 0.373445    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp             |  0.0139385   | 0.0196562  | 0.478257    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp             |  0.0291574   | 0.0193714  | 0.132286    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp             | -1.69568e-05 | 0.0183301  | 0.999262    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp              | -0.0164024   | 0.0179036  | 0.359594    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp              | -0.00977853  | 0.0182367  | 0.591824    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp              |  0.0280873   | 0.018519   | 0.129356    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp              |  0.0275013   | 0.0192692  | 0.153526    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:disp_binary                | -0.00424947  | 0.00775568 | 0.583752    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:disp_binary                |  0.0573518   | 0.00749027 | 1.95399e-14 | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:disp_binary                |  0.193645    | 0.00709837 | 0           | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:disp_binary                 | -0.0856087   | 0.00718554 | 0           | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:disp_binary                 | -0.101382    | 0.00738859 | 0           | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:disp_binary                 | -0.117752    | 0.00746528 | 0           | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:disp_binary                 | -0.132439    | 0.007529   | 0           | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_len              |  0.00615946  | 0.00763843 | 0.42003     | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_len              |  0.0102664   | 0.00728802 | 0.158942    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_len              | -0.0191007   | 0.00652751 | 0.00343344  | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:treated_X_len               |  0.0193908   | 0.00652901 | 0.00298022  | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:treated_X_len               | -0.0116736   | 0.00668907 | 0.0809613   | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:treated_X_len               | -0.00358753  | 0.00680393 | 0.598007    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:treated_X_len               | -0.00673165  | 0.00723841 | 0.352381    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:disp_X_len                 | -0.0384908   | 0.00688284 | 2.25549e-08 | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:disp_X_len                 | -0.0410227   | 0.00644023 | 1.91382e-10 | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:disp_X_len                 | -0.0518197   | 0.00595381 | 0           | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:disp_X_len                  | -0.00348391  | 0.00609425 | 0.567548    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:disp_X_len                  | -0.0235303   | 0.00632175 | 0.000197827 | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:disp_X_len                  | -0.0273846   | 0.00648551 | 2.42219e-05 | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:disp_X_len                  | -0.022416    | 0.00690929 | 0.00117825  | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-4]:tXdXlen                    | -0.0230121   | 0.015234   | 0.130904    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-3]:tXdXlen                    | -0.0464595   | 0.0149435  | 0.00187844  | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[-2]:tXdXlen                    | -0.00934159  | 0.0138566  | 0.500212    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[1]:tXdXlen                     | -0.0161205   | 0.0136924  | 0.239072    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[2]:tXdXlen                     | -0.0074494   | 0.0141916  | 0.599644    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[3]:tXdXlen                     | -0.0193786   | 0.0142917  | 0.175127    | 321184 |  0.0162182  |
+| event_binary_D | C(rel_t, contr.treatment(base=-1))[4]:tXdXlen                     | -0.02118     | 0.0149948  | 0.157814    | 321184 |  0.0162182  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-4]:treated                    | -0.00110688  | 0.00722392 | 0.878222    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-3]:treated                    | -0.00589225  | 0.00702275 | 0.401461    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-2]:treated                    |  0.00434379  | 0.0065892  | 0.509752    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[1]:treated                     |  0.0120129   | 0.0063629  | 0.0590381   | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[2]:treated                     |  0.000744063 | 0.00656772 | 0.9098      | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[3]:treated                     |  0.0246139   | 0.00667765 | 0.000228093 | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[4]:treated                     |  0.0052434   | 0.00687479 | 0.445647    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-4]:treated_X_score            |  0.000884528 | 0.020023   | 0.964765    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-3]:treated_X_score            | -0.0231798   | 0.0189061  | 0.220188    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-2]:treated_X_score            | -0.0355538   | 0.0179936  | 0.0481713   | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[1]:treated_X_score             | -0.00689051  | 0.0187825  | 0.713728    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[2]:treated_X_score             | -0.0336226   | 0.0196226  | 0.0866348   | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[3]:treated_X_score             |  0.0157705   | 0.0197009  | 0.423428    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[4]:treated_X_score             |  0.00799824  | 0.0205008  | 0.696433    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-4]:displacement_prob_centered | -0.00820322  | 0.00909199 | 0.366931    | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-3]:displacement_prob_centered |  0.0885007   | 0.00843584 | 0           | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[-2]:displacement_prob_centered |  0.244076    | 0.00795384 | 0           | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[1]:displacement_prob_centered  | -0.171252    | 0.00861335 | 0           | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[2]:displacement_prob_centered  | -0.199693    | 0.00891711 | 0           | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[3]:displacement_prob_centered  | -0.232563    | 0.00909154 | 0           | 321184 |  0.0203791  |
+| event_score_C  | C(rel_t, contr.treatment(base=-1))[4]:displacement_prob_centered  | -0.243652    | 0.00929018 | 0           | 321184 |  0.0203791  |
 
 ## Pre-trend Joint Tests
-| spec           | test                                    |   n_restrictions |   statistic |     pvalue |      n |
-|:---------------|:----------------------------------------|-----------------:|------------:|-----------:|-------:|
-| event_att      | pretrend_att_joint_zero                 |                3 |     1.53924 | 0.673244   | 358864 |
-| event_binary_B | pretrend_baseline_joint_zero            |                3 |     6.53929 | 0.0881259  | 358864 |
-| event_binary_B | pretrend_displacement_joint_zero        |                3 |     6.4925  | 0.0899587  | 358864 |
-| event_binary_D | pretrend_length_displacement_joint_zero |                3 |    10.9134  | 0.0122033  | 358864 |
-| event_binary_D | pretrend_length_baseline_joint_zero     |                3 |    15.2589  | 0.00160821 | 358864 |
-| event_score_C  | pretrend_score_baseline_joint_zero      |                3 |     3.04423 | 0.384856   | 358864 |
-| event_score_C  | pretrend_score_slope_joint_zero         |                3 |     4.32068 | 0.228853   | 358864 |
+| spec           | test                                    |   n_restrictions |   statistic |      pvalue |      n |
+|:---------------|:----------------------------------------|-----------------:|------------:|------------:|-------:|
+| event_att      | pretrend_att_joint_zero                 |                3 |     1.07216 | 0.783798    | 321184 |
+| event_binary_B | pretrend_baseline_joint_zero            |                3 |     6.22977 | 0.100951    | 321184 |
+| event_binary_B | pretrend_displacement_joint_zero        |                3 |     8.13288 | 0.0433439   | 321184 |
+| event_binary_D | pretrend_length_displacement_joint_zero |                3 |    11.3359  | 0.0100414   | 321184 |
+| event_binary_D | pretrend_length_baseline_joint_zero     |                3 |    19.5719  | 0.000208197 | 321184 |
+| event_score_C  | pretrend_score_baseline_joint_zero      |                3 |     2.2289  | 0.526278    | 321184 |
+| event_score_C  | pretrend_score_slope_joint_zero         |                3 |     6.29938 | 0.0979191   | 321184 |

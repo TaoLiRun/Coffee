@@ -1,2 +1,2 @@
 spec,formula,n,r2,r2_within
-binary_collapsed,n_purchases ~ post_X_treated + post_X_disp + post_X_treated_X_disp | event_fe_id + rel_t + calendar_month,358864,0.5660709924926435,0.012996413881505409
+binary_collapsed,n_purchases ~ post_X_treated + post_X_disp + post_X_treated_X_disp | event_fe_id + rel_t + calendar_month,321184,0.5622840217157083,0.013024378924477609

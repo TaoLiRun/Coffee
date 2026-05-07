@@ -4,7 +4,7 @@ This note summarizes the robustness check where treated member-events are exclud
 
 ## 1) How many treated cross-store buyers?
 
-Using the selected-subset closure registry and the rule:
+Using the main-sample closure registry and the rule:
 
 - exclude treated member-event if member made at least one purchase at `dept_id != treated_dept_id` during `[closure_start, closure_end]`.
 
@@ -18,7 +18,7 @@ Counts:
 
 ## 2) How do DDD coefficients change after excluding them?
 
-Below, "before" means selected-subset estimates without exclusion, and "after" means estimates after excluding treated cross-store buyers.
+Below, "before" means main-sample estimates without exclusion, and "after" means estimates after excluding treated cross-store buyers.
 
 ### A. Outcome: `n_purchases` (overall collapsed DDD)
 

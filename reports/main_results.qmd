@@ -1,0 +1,384 @@
+---
+title: "What Happens After Customers' Purchase Intention is Blocked"
+subtitle: "Evidence from a Large Coffee Chain"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-float: true
+    toc-depth: 3
+    theme: united
+    highlight-style: tango
+    number-sections: true
+---
+
+# The Question
+
+When a store closes temporarily, do customers who wanted to buy but could not break their coffee habit? Or do they return as if the interruption never happened?
+
+The standard intuition is that habits are fragile: if a planned purchase is missed, the routine weakens and future demand falls. We test that idea using temporary store closures at a large coffee chain. The key distinction is between customers whose routine was actually interrupted and customers who happened not to need a purchase during the closure window.
+
+We study two outcomes:
+
+- **How much customers buy after reopening** — does a blocked purchase reduce future purchase frequency?
+- **What customers buy after reopening** — does interruption change whether customers try new products?
+
+# Setting and Data
+
+The coffee chain is a Chinese quick-service brand whose purchases are made primarily through a mobile app. Our transaction data cover June 2020 to December 2021 and include 10.6 million transactions from 779,000 customers.
+
+For the analysis sample in this report, we study **18 unexpected store closures** and assign customers to treatment or control according to which store they visited most before the closure:
+
+- **Treatment group** — customers whose preferred store closed
+- **Control group** — customers whose preferred matched store remained open
+
+The matching proceeds as follows:
+
+- For each closure, identify candidate control stores that are untreated, not already assigned as controls for an earlier closure, and not excluded by address keywords.
+- Match the treated store to **five** control stores with the closest **store set-up times**.
+- Define treatment customers as members whose preferred pre-closure store is the closing store.
+- Define control customers as members whose preferred pre-closure store is one of the matched control stores.
+- In both groups, require at least **5** pre-closure purchase days and a preferred-store purchase share of at least **0.8**.
+
+The resulting panel contains **40,148 member-event pairs** and **321,184 member-event-period observations** for purchase frequency. For novelty-seeking, the estimation sample is smaller (**99,644 observations**) because the outcome is defined only in periods with at least one purchase.
+
+The closure-level registry is:
+
+| dept_id | closure_start | closure_end | n_control_stores | n_treatment | n_control |
+|---:|:---|:---|---:|---:|---:|
+| 8 | 2021-05-27 | 2021-06-10 | 5 | 132 | 598 |
+| 19 | 2021-07-15 | 2021-07-25 | 5 | 597 | 2,764 |
+| 124 | 2021-07-22 | 2021-08-18 | 5 | 1,291 | 2,029 |
+| 238 | 2021-07-24 | 2021-08-21 | 5 | 773 | 1,059 |
+| 44 | 2021-07-24 | 2021-08-05 | 5 | 367 | 1,231 |
+| 39 | 2021-07-25 | 2021-08-19 | 5 | 253 | 2,890 |
+| 246 | 2021-07-27 | 2021-08-08 | 5 | 76 | 481 |
+| 133 | 2021-07-28 | 2021-08-22 | 5 | 228 | 2,128 |
+| 47 | 2021-07-30 | 2021-08-10 | 5 | 223 | 3,241 |
+| 121 | 2021-08-03 | 2021-08-20 | 5 | 418 | 1,890 |
+| 182 | 2021-08-03 | 2021-08-20 | 5 | 221 | 1,422 |
+| 220 | 2021-08-03 | 2021-08-12 | 5 | 599 | 1,261 |
+| 59 | 2021-08-03 | 2021-08-19 | 5 | 423 | 2,908 |
+| 46 | 2021-08-04 | 2021-08-19 | 5 | 313 | 2,495 |
+| 62 | 2021-08-04 | 2021-08-17 | 5 | 231 | 2,485 |
+| 3 | 2021-08-09 | 2021-08-22 | 5 | 734 | 819 |
+| 5 | 2021-08-18 | 2021-08-31 | 5 | 432 | 2,056 |
+| 131 | 2021-08-29 | 2021-09-08 | 5 | 408 | 2,350 |
+
+# The Key Distinction: Blocked Buyers as Active Purchase Goals
+
+Not every treatment customer would have bought during the closure even if the store had stayed open. Only customers with a purchase due in that window were truly interrupted. We call them **blocked buyers**.
+
+Conceptually, the blocked-buyer indicator is not just a proxy for being a heavy user. It is a revealed-preference proxy for an **active purchase goal**. Repeated coffee purchases can reflect a chronically active consumption goal rather than mere inertia, and recent action can push customers into an implemental mindset that makes follow-through more likely [Kruglanski and Szumowska (2020); Kruglanski et al. (2002); Dhar, Huber, and Khan (2007); Gollwitzer (1990)].
+
+We classify each member-event pair using an XGBoost model trained only on pre-closure behavior. The model predicts whether the customer would have made a purchase during the closure window absent disruption, and it achieves about **73% accuracy** on pre-treatment data.
+
+This distinction is central. If interruption damages habit, the effect should appear most clearly among blocked buyers, because they are the customers whose active purchase goal was actually obstructed.
+
+# Research Design
+
+## Outcomes
+
+Let $L_e$ denote the duration of closure event $e$.
+
+- **Purchase frequency**:
+
+$$
+Y^P_{iet} = \frac{\text{purchase days}_{iet}}{L_e}
+$$
+
+This is purchase days per calendar day within each event-length window.
+
+- **Novelty-seeking**:
+
+$$
+Y^V_{iet} = \frac{\text{new products}_{iet}}{\text{total products}_{iet}}
+$$
+
+where a product is "new" if the member's first-ever purchase of that product occurs in that window. Members with no purchases in a window have missing novelty outcomes for that period.
+
+## Conceptual Framework
+
+In this setting, a temporary store closure can affect post-reopening behavior through **baseline demand** and through **blocking a planned purchase**. Here, the planned choice is a coffee purchase from the chain during the closure window.
+
+### Purchase Frequency
+
+Let $C_{iet} \in \{0,1\}$ indicate whether member $i$ makes at least one purchase from the chain in event period $t$ for closure event $e$. We write the latent utility of buying from the chain as:
+
+$$
+U^P_{iet} = \alpha^P_{et} + \mu^P_{ie} + \gamma^P C_{ie,t-1} + \epsilon^P_{iet}.
+$$
+
+The notation is:
+
+- $\alpha^P_{et}$: baseline demand for the chain in event $e$ at time $t$;
+- $\mu^P_{ie}$: member-event fixed demand heterogeneity;
+- $C_{ie,t-1}$: whether the member bought from the chain in the previous event period;
+- $\gamma^P$: the effect of the previous purchase on the current purchase;
+- $\epsilon^P_{iet}$: an idiosyncratic shock.
+
+The key dynamic term is $\gamma^P C_{ie,t-1}$.
+
+- If $\gamma^P > 0$, buying from the chain in the previous period makes buying again more likely.
+- If $\gamma^P = 0$, there is no dynamic carryover from the previous purchase.
+
+The closure can affect post-reopening purchases in **two distinct ways**:
+
+- **Baseline-demand effect ($B$)**: the closure may change $\alpha^P_{et}$ after reopening, for example because customers discover substitutes, update beliefs about convenience, or respond to reopening promotions.
+- **Blocked-purchase effect ($D$)**: for customers who would have bought during the closure, the disruption changes their realized purchase history $C_{ie0}$, which can matter later when $\gamma^P \neq 0$.
+
+If a blocked customer would have bought during the closure absent disruption, then the closure lowers the recent-purchase term entering post-reopening utility. In the stark case with no same-chain substitution during the closure:
+
+$$
+C_{ie0}(0) = 1, \qquad C_{ie0}(1) = 0,
+$$
+
+so at reopening the customer's purchase utility is lower by $\gamma^P$ relative to the no-closure counterfactual. If the customer substitutes to another store of the same chain during the closure, this gap is smaller. Accordingly, our blocked-purchase effect should be interpreted as the average effect of having a planned purchase opportunity disrupted.
+
+### Novelty-Seeking
+
+Conditional on purchasing, the closure may also affect what the customer buys. Let $N_{iet} \in \{0,1\}$ indicate whether member $i$ chooses a new-to-them product in period $t$ of event $e$. We summarize that latent tendency as:
+
+$$
+U^V_{iet} = \alpha^V_{et} + \mu^V_{ie} + \lambda^V H_{ie,t-1} + \xi G_{ie} + \eta M_{ie} + \epsilon^V_{iet}.
+$$
+
+Here:
+
+- $\alpha^V_{et}$: baseline tendency to explore new products;
+- $\mu^V_{ie}$: member-event heterogeneity in exploration;
+- $H_{ie,t-1}$: recent product-choice history;
+- $G_{ie}$: a lingering blocked purchase goal after the closure;
+- $M_{ie}$: missed exposure to menu changes during the closure;
+- $\epsilon^V_{iet}$: an idiosyncratic shock.
+
+This notation helps separate two novelty mechanisms:
+
+- **Focused goal completion**: if the blocked purchase goal remains active, then $G_{ie}$ pushes customers back toward familiar products after reopening.
+- **Missed menu exposure**: if customers miss newly introduced items during the closure, then $M_{ie}$ can also lower subsequent novelty-seeking.
+
+The empirical goal is to separate a **baseline post-reopening shift** from the **additional effect of having a planned purchase blocked**.
+
+## Triple Difference-in-Differences
+
+We estimate a triple difference-in-differences design that compares:
+
+- treatment vs. control customers,
+- before vs. after reopening,
+- blocked vs. non-blocked customers.
+
+The pooled specification is:
+
+$$
+\begin{align}
+Y_{iet} &= \delta^B \cdot \text{post} \times \text{treated}
+        + \beta \cdot \text{post} \times \text{blocked} \\
+        &\quad + \delta^D \cdot \text{post} \times \text{treated} \times \text{blocked}
+        + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}.
+\end{align}
+$$
+
+Here:
+
+- $\phi_{ie}$ are member-closure fixed effects,
+- $\omega_t$ are relative-period fixed effects,
+- $\gamma_m$ are calendar-month fixed effects,
+- standard errors are clustered at the member level.
+
+The coefficient of interest is **$\delta^D$**, the additional post-reopening effect for blocked treatment customers. This is the estimated consequence of having a due purchase interrupted, over and above general post-closure shifts that affect treated customers more broadly.
+
+The other key coefficient is **$\delta^B$**, the post-reopening treatment effect for non-blocked customers. It captures general baseline-demand shifts that are not tied to a blocked purchase.
+
+## Identification Assumptions
+
+The triple interaction identifies the blocked-purchase effect if:
+
+- **Parallel triple differences hold**: without the closure, the blocked-versus-non-blocked gap would have evolved similarly in treatment and control groups.
+- **Baseline-demand shifts do not differentially hit blocked treated customers**: any post-reopening change in prices, promotions, convenience, or perceived quality affects blocked and non-blocked treated customers similarly, so it is absorbed by the baseline treatment effect rather than the triple interaction.
+- **Blocked status and controls are valid**: blocked-buyer status is determined from pre-closure behavior, and the matched control stores provide the relevant counterfactual for treated customers.
+
+The event-study evidence is informative about these assumptions. For purchase frequency, the treatment-control ATT pretrend test does not reject. For novelty-seeking, both the ATT and blocked-buyer dynamic pretrend tests also do not reject at the headline level.
+
+### Post-Reopening Push Targeting Check
+
+A remaining concern is that firms may have targeted blocked and non-blocked customers differently after the store reopened. If blocked treated customers received systematically different push marketing, then the post-reopening blocked-buyer effect could partly reflect firm targeting rather than the consequence of a blocked purchase goal.
+
+To check this, we process post-reopening push records for all **40,148 member-events** in the main sample: **7,390 treated** and **32,758 control**. The control group contains **8,824** predicted blocked buyers and **23,934** predicted non-blocked buyers; the treatment group contains **2,041** predicted blocked buyers and **5,349** predicted non-blocked buyers. We use the same four post-reopening event-length windows as the main analysis, yielding **160,592 member-event-window observations** and **446,602 filtered push records**.
+
+We first compare predicted blocked and predicted non-blocked customers separately within treatment and control groups. We then estimate a pooled interaction model that tests whether the blocked-versus-non-blocked push gap differs between treatment and control groups. All specifications include closure-window fixed effects and cluster standard errors at the member level.
+
+| Push outcome | Control gap | Treatment gap | Treatment − control gap | p-value |
+|---|---:|---:|---:|---:|
+| Pushes per window | −1.3703 | −1.3137 | +0.0526 [−0.0881, +0.1933] | 0.464 |
+| Pushes per day | −0.0845 | −0.0717 | +0.0093 [+0.0022, +0.0163] | 0.010 |
+| Pushes with coupon | −0.4835 | −0.4913 | +0.0086 [−0.0412, +0.0583] | 0.735 |
+| Share of pushes with coupon | −0.1170 | −0.1074 | +0.0095 [+0.0017, +0.0173] | 0.017 |
+| Mean coupon value | −4.6744 | −4.3012 | +0.2690 [−0.0422, +0.5802] | 0.090 |
+| Pushes with discount | −0.1248 | −0.1699 | −0.0531 [−0.1030, −0.0031] | 0.037 |
+| Share of pushes with discount | −0.0321 | −0.0400 | −0.0104 [−0.0199, −0.0009] | 0.031 |
+| Mean discount | −0.1180 | −0.1466 | −0.0376 [−0.0755, +0.0004] | 0.053 |
+
+The first two columns show that predicted blocked customers receive fewer pushes in both treatment and control groups. The interaction tests show no meaningful difference in the total push-count gap or the coupon-count gap between treatment and control. Some intensity-normalized coupon and discount measures differ across treatment status, but the direction still does not suggest that blocked treated customers were pushed more aggressively after reopening. Differential push targeting therefore does not explain the positive purchase-frequency rebound or the negative novelty-seeking effect among blocked treated customers.
+
+# Results
+
+## Purchase Frequency
+
+Did closures reduce how often customers buy from the chain after reopening?
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.00089 | 0.00067 | |
+| post × blocked ($\beta$) | −0.03437 | 0.00114 | *** |
+| post × treated × blocked ($\delta^D$) | +0.00583 | 0.00252 | ** |
+
+*321,184 observations; * p<0.1, ** p<0.05, *** p<0.01.*
+
+**What this means:**
+
+- **No general demand loss from closure itself** ($\delta^B \approx 0$): treatment customers who were not due to buy during the closure return at essentially the same purchase rate as matched controls.
+- **Blocked buyers show strong mean reversion** ($\beta = -0.034$): high-intensity customers buy more before the event and then drift back toward their usual level afterward, even in the control group. This is not a closure effect.
+- **No evidence that a blocked purchase weakens later buying** ($\delta^D = +0.0058$): if anything, blocked treatment customers buy slightly more after reopening than equally frequent blocked controls.
+
+The dynamic treatment-control event study also points to rebound rather than decay: the pre-period joint test does not reject ($p = 0.895$), and post-reopening treatment coefficients are positive in periods 1 and 3.
+
+## Novelty-Seeking
+
+Did closures change whether customers tried new products?
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.03129 | 0.01200 | *** |
+| post × blocked ($\beta$) | +0.03808 | 0.00639 | *** |
+| post × treated × blocked ($\delta^D$) | −0.04149 | 0.01450 | *** |
+
+*99,644 observations; * p<0.1, ** p<0.05, *** p<0.01.*
+
+**What this means:**
+
+- **Non-blocked treatment customers become more exploratory** ($\delta^B = +0.031$): when routine is disturbed but no specific purchase was blocked, customers become more willing to try new items.
+- **Blocked buyers are more exploratory in general** ($\beta = +0.038$): frequent buyers encounter the menu more often and naturally accumulate more first-time product trials.
+- **Blocked treatment customers become less exploratory after reopening** ($\delta^D = -0.041$): once a due purchase was interrupted, customers return in a more focused mode and shift toward familiar products relative to comparable blocked controls.
+
+For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative.
+
+## Continuous Propensity Version
+
+The same qualitative patterns appear when the binary blocked-buyer indicator is replaced by the model's continuous blocked-purchase score:
+
+- Purchase frequency: post × treated × score = **+0.00759** ($p = 0.040$)
+- Novelty-seeking: post × treated × score = **−0.04523** ($p = 0.040$)
+
+That is, the estimated treatment effect becomes more positive for purchase frequency and more negative for novelty-seeking as ex ante blocked-purchase propensity rises.
+
+# Why Does This Happen? Two Mechanisms
+
+## Mechanism 1: Blocked Goals Create Focused Rebound
+
+When a closure blocks an active purchase goal, the goal need not disappear. Unfinished goals can remain mentally active, prompt counterfactual thinking about the missed action, and intensify the desire to restore the restricted choice [Masicampo and Baumeister (2011); Epstude and Roese (2008); Kappes (2016); Brehm (1966); Clee and Wicklund (1980); Fitzsimons (2000)].
+
+This mechanism naturally matches the main results:
+
+- blocked customers do not buy less after reopening, because the missed goal survives the interruption;
+- blocked customers try fewer new products, because the return visit is oriented toward completing a familiar, already-active purchase.
+
+### Implementation and Findings
+
+One direct signature of an active goal is that some customers keep pursuing it even while the focal store is closed. In the data, **519 treated member-events** made at least one same-chain purchase at a different store during the closure window, equal to **7.0%** of treated member-events.
+
+To test whether these cross-store substitutes are driving the results, we re-estimate the DDD after excluding all treated member-events with any such during-closure purchase elsewhere in the chain. The main patterns remain:
+
+- Purchase frequency: $\delta^D = +0.00515$ ($p = 0.043$)
+- Novelty-seeking: $\delta^D = -0.03225$ ($p = 0.036$)
+
+However, the effects are **attenuated**.
+
+### Exact Pooled Specification for Subgroup Difference
+
+The attenuation pattern above is based on two different samples (full vs. excluding cross-store treated buyers). To test whether the blocked-buyer treatment effect is **statistically different** across those two treated subgroups, we estimate one pooled DDD that allows subgroup-specific triple interactions.
+
+Define:
+
+- $C_{ie}=1$ if treated member-event $ie$ has at least one during-closure same-chain purchase at another store (cross-store treated);
+- $N_{ie}=1$ if treated member-event $ie$ has no such during-closure cross-store purchase (non-cross-store treated).
+
+The estimating equation is:
+
+$$
+\begin{align}
+Y_{iet} &= \beta_1(\text{post}\times \text{disp})
+      + \beta_2(\text{post}\times N)
+      + \beta_3(\text{post}\times C) \\
+      &\quad + \delta_N(\text{post}\times N\times \text{disp})
+      + \delta_C(\text{post}\times C\times \text{disp}) \\
+      &\quad + \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}.
+\end{align}
+$$
+
+where $\phi_{ie}$ are member-event fixed effects, $\omega_t$ are relative-period fixed effects, and $\gamma_m$ are calendar-month fixed effects; standard errors are clustered at the member level. The key hypothesis test is:
+
+$$
+H_0:\ \delta_N = \delta_C.
+$$
+
+Motivation: if cross-store substitution is the main driver of the attenuation pattern, then the blocked-buyer treatment effect should differ clearly between these two treated subgroups, i.e., we should reject $H_0$.
+
+Findings:
+
+- **Purchase frequency**: $\delta_N = +0.00512$ ($p = 0.044$), $\delta_C = +0.00339$ ($p = 0.695$), and the equality test does not reject ($p = 0.846$).
+- **Novelty-seeking**: $\delta_N = -0.03216$ ($p = 0.036$), $\delta_C = -0.06554$ ($p = 0.110$), and the equality test does not reject ($p = 0.436$).
+
+So the two treatment-side blocked-buyer effects are not statistically distinguishable at conventional levels.
+
+## Mechanism 2: Missed Exposure to New Products
+
+A second possibility is that control customers continue to browse and buy while treatment customers miss menu evolution during the closure. If newly introduced products appear at comparable open stores, blocked treatment customers return with less recent exposure to the updated assortment and may default to familiar items.
+
+### Implementation
+
+We assess this channel in four steps:
+
+1. For each closure, we identify the matched control stores that remain open.
+2. Within each control store, we count products sold during the closure window that were not sold in the immediately preceding equal-length window.
+3. We average that measure across the matched controls to obtain a closure-level introduction intensity.
+4. We estimate the key DDD coefficient separately for each closure and compare it to control-store introduction intensity.
+
+Across the 18 closures, matched control stores introduced an average of **9.344** products during the closure window, with a range from **1.8** to **15.4**.
+
+### Findings
+
+If missed exposure to new products were the dominant explanation, closures with more control-store introductions should show a more negative novelty effect. That is not what the closure-level evidence shows.
+
+- For purchase frequency, the correlation between introductions and the closure-level blocked-buyer effect is **0.088**, which is very weak.
+- For novelty-seeking, the correlation is **0.050**, also very weak and not in the predicted direction overall.
+- Above-median introduction closures have an average novelty effect of **−0.0255**, whereas below-median introduction closures have a more negative average effect of **−0.0650**.
+
+To address closure-length confounding directly, we also run a **within-bin permutation test** using closure-length bins (10-14, 15-19, 20-24, 25-29 days). The test keeps each closure's estimated blocked-buyer effect fixed, randomly reassigns introduction intensity **within** each length bin, and recomputes the intro-effect slope many times to form a randomization null.
+
+Using **1,000 permutations** with standardized introduction intensity:
+
+- Purchase frequency: observed slope = **−0.0106**, one-sided $p = 0.059$ (two-sided $p = 0.121$).
+- Novelty-seeking: observed slope = **−0.0343**, one-sided $p = 0.190$ (two-sided $p = 0.404$).
+
+So while the estimated slopes are negative, the permutation evidence does not reject the null at the 5% level, and this mechanism remains preliminary rather than confirmatory.
+
+Some closure-specific results:
+
+- `dept_id = 246`: introductions = **6.0**, novelty effect = **−0.4046** ($p = 0.044$)
+- `dept_id = 121`: introductions = **10.2**, novelty effect = **−0.1782** ($p = 0.003$)
+- `dept_id = 182`: introductions = **8.4**, novelty effect = **−0.2033** ($p = 0.004$)
+
+By contrast, the highest-introduction closure (`dept_id = 238`, **15.4** introductions) has a novelty effect near zero (**+0.0045**, $p = 0.930$).
+
+If this mechanism works, **the closure with the most new product introductions should show the strongest negative novelty effect**, so these results do not support it as the main driver of the novelty result.
+
+# Summary
+
+| Finding | Result |
+|---|---|
+| Did blocked customers buy less after reopening? | **No** — the blocked-buyer effect on purchase frequency is slightly positive, not negative |
+| Did non-blocked treatment customers become more exploratory? | **Yes** — routine disruption raises novelty-seeking when no specific purchase was blocked |
+| Did blocked treatment customers become more exploratory? | **No** — they shift toward familiar products after reopening |
+| Which mechanism gets the strongest support? | **Focused goal completion** fits the evidence better than missed exposure to new products |
+
+The big picture is that temporarily blocked purchases do not erode coffee demand. Customers whose active purchase goal was interrupted come back and buy at least as much as comparable controls. What changes is the composition of demand: after a blocked purchase, customers return in a more focused mode and are less likely to explore new products.

@@ -38,16 +38,16 @@ def build_event_id(*, df: pd.DataFrame) -> pd.Series:
     )
 
 
-def load_selected_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
+def load_main_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
     paths_cfg = cfg["paths"]
-    registry_path = project_path(relative_path=paths_cfg["selected_closure_registry"])
+    registry_path = project_path(relative_path=paths_cfg["closure_registry"])
     score_path = project_path(relative_path=paths_cfg["score_file"])
 
     registry = pd.read_csv(registry_path, encoding="utf-8-sig")
     registry_required = {"dept_id", "closure_start", "closure_end", "closure_duration_days"}
     registry_missing = registry_required - set(registry.columns)
     if registry_missing:
-        raise ValueError(f"Missing selected registry columns: {sorted(registry_missing)}")
+        raise ValueError(f"Missing main registry columns: {sorted(registry_missing)}")
 
     registry = registry.assign(
         dept_id=registry["dept_id"].astype(int),
@@ -119,10 +119,10 @@ def load_selected_scores(*, cfg: dict[str, Any]) -> pd.DataFrame:
     return scores.sort_values(["closure_start", "dept_id", "member_id"]).reset_index(drop=True)
 
 
-def build_post_windows(*, selected_scores: pd.DataFrame, rel_t_values: list[int]) -> pd.DataFrame:
+def build_post_windows(*, main_scores: pd.DataFrame, rel_t_values: list[int]) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
     for rel_t in rel_t_values:
-        frame = selected_scores.copy()
+        frame = main_scores.copy()
         duration = frame["closure_duration_days"].astype(int)
         post_anchor = frame["closure_end"] + pd.Timedelta(days=1)
         frame["rel_t"] = int(rel_t)
@@ -468,7 +468,7 @@ def write_summary(
     *,
     output_dir: Path,
     summary_filename: str,
-    selected_scores: pd.DataFrame,
+    main_scores: pd.DataFrame,
     push_records: pd.DataFrame,
     panel: pd.DataFrame,
     mean_tests: pd.DataFrame,
@@ -476,17 +476,17 @@ def write_summary(
     gap_difference_results: pd.DataFrame,
 ) -> None:
     group_counts = (
-        selected_scores.groupby(["treated", "predicted_purchase_intention"], sort=True)
+        main_scores.groupby(["treated", "predicted_purchase_intention"], sort=True)
         .size()
         .rename("n")
         .reset_index()
     )
-    treated_rows = selected_scores[selected_scores["treated"].eq(1)]
-    control_rows = selected_scores[selected_scores["treated"].eq(0)]
+    treated_rows = main_scores[main_scores["treated"].eq(1)]
+    control_rows = main_scores[main_scores["treated"].eq(0)]
     lines = [
         "# Push Targeting After Reopening",
         "",
-        f"- Selected member-events: {len(selected_scores):,}",
+        f"- Main-sample member-events: {len(main_scores):,}",
         f"- Treatment member-events: {len(treated_rows):,}",
         f"- Control member-events: {len(control_rows):,}",
         f"- Member-event-window rows: {len(panel):,}",
@@ -537,9 +537,9 @@ def main() -> None:
     processed_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    selected_scores = load_selected_scores(cfg=cfg)
+    main_scores = load_main_scores(cfg=cfg)
     windows = build_post_windows(
-        selected_scores=selected_scores,
+        main_scores=main_scores,
         rel_t_values=[int(value) for value in analysis_cfg["post_rel_t_values"]],
     )
     push_records = filter_push_records(cfg=cfg, windows=windows)
@@ -573,15 +573,15 @@ def main() -> None:
     gap_difference_results.to_csv(output_dir / outputs_cfg["gap_difference_tests"], index=False)
 
     metadata = {
-        "selected_closure_registry": paths_cfg["selected_closure_registry"],
+        "closure_registry": paths_cfg["closure_registry"],
         "score_file": paths_cfg["score_file"],
         "push_data_dir": paths_cfg["push_data_dir"],
         "push_file_pattern": paths_cfg["push_file_pattern"],
         "post_rel_t_values": analysis_cfg["post_rel_t_values"],
         "metrics": metrics,
-        "selected_member_events": int(len(selected_scores)),
-        "treatment_member_events": int(selected_scores["treated"].sum()),
-        "control_member_events": int(selected_scores["treated"].eq(0).sum()),
+        "main_member_events": int(len(main_scores)),
+        "treatment_member_events": int(main_scores["treated"].sum()),
+        "control_member_events": int(main_scores["treated"].eq(0).sum()),
         "member_event_windows": int(len(panel)),
         "filtered_push_records": int(len(push_records)),
         "processed_outputs": {
@@ -606,7 +606,7 @@ def main() -> None:
     write_summary(
         output_dir=output_dir,
         summary_filename=str(outputs_cfg["summary"]),
-        selected_scores=selected_scores,
+        main_scores=main_scores,
         push_records=push_records,
         panel=panel,
         mean_tests=mean_tests,

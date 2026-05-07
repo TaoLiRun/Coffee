@@ -1,0 +1,20 @@
+{
+  "date": "2026-04-27",
+  "source_registry_path": "outputs/customer-store/closure_pair_registry.csv",
+  "filter_definition": "exclude treated member-event if member made >=1 purchase at dept_id != treated dept_id during [closure_start, closure_end]",
+  "treated_member_events_before_filter": 7390,
+  "treated_member_events_excluded": 519,
+  "treated_exclusion_rate": 0.07023004059539918,
+  "sample_rows_before_filter": 321184,
+  "sample_rows_after_filter": 317032,
+  "unique_members_before_filter": 40148,
+  "unique_members_after_filter": 39629,
+  "added_outputs": [
+    "n_purchases_three_sample_collapsed_comparison.csv",
+    "n_purchases_pooled_cross_store_terms.csv",
+    "n_purchases_pooled_cross_store_wald_test.csv",
+    "variety_seeking_three_sample_collapsed_comparison.csv",
+    "variety_seeking_pooled_cross_store_terms.csv",
+    "variety_seeking_pooled_cross_store_wald_test.csv"
+  ]
+}

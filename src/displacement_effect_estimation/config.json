@@ -1,5 +1,6 @@
 {
   "paths": {
+    "closure_registry_file": "outputs/customer-store/closure_pair_registry.csv",
     "score_file": "outputs/displacement_classification/displacement_scores_t0_ex_ante.csv",
     "feature_t0_cache_dir": "../outputs/displacement_classification/cache",
     "feature_cache_key": "ae32158f08a99abd",

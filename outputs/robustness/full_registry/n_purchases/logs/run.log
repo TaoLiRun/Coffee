@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/src/displacement_effect_estimation/run.py", line 11, in <module>
+    from report import save_outputs, save_variety_panel_plot
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/src/displacement_effect_estimation/report.py", line 5, in <module>
+    import matplotlib.pyplot as plt
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/pyplot.py", line 57, in <module>
+    import matplotlib.image
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/image.py", line 25, in <module>
+    from matplotlib.backend_bases import FigureCanvasBase
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/backend_bases.py", line 49, in <module>
+    from matplotlib import (
+        _api, backend_tools as tools, cbook, colors, _docstring, text,
+        _tight_bbox, transforms, widgets, is_interactive, rcParams)
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/text.py", line 16, in <module>
+    from .font_manager import FontProperties
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 1643, in <module>
+    fontManager = _load_fontmanager()
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 1637, in _load_fontmanager
+    fm = FontManager()
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 1101, in __init__
+    *findSystemFonts(fontext=fontext)]:
+     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 293, in findSystemFonts
+    installed_fonts += _get_macos_fonts()
+                       ~~~~~~~~~~~~~~~~^^
+  File "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/JAX-py/lib/python3.14/site-packages/matplotlib/font_manager.py", line 269, in _get_macos_fonts
+    subprocess.check_output(["system_profiler", "-xml", "SPFontsDataType"]))
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/taoli/.local/share/uv/python/cpython-3.14.3-macos-aarch64-none/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/Users/taoli/.local/share/uv/python/cpython-3.14.3-macos-aarch64-none/lib/python3.14/subprocess.py", line 556, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/taoli/.local/share/uv/python/cpython-3.14.3-macos-aarch64-none/lib/python3.14/subprocess.py", line 1207, in communicate
+    stdout = self.stdout.read()
+KeyboardInterrupt

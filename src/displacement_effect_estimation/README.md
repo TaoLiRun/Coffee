@@ -9,6 +9,7 @@ This module implements two parallel causal specifications on top of the existing
 ## Inputs
 
 - Displacement scores: `outputs/displacement_classification/displacement_scores_t0_ex_ante.csv`
+- Closure registry: `outputs/customer-store/closure_pair_registry.csv` (the 18-closure main sample)
 - Ex-ante feature cache: `../outputs/displacement_classification/cache/features_t0_<hash>.parquet`
 - Orders history: `data/data1031/order_result.csv` (auto-detected under workspace)
 
@@ -63,6 +64,7 @@ python run.py --outcome variety_seeking --variety-seeking-mode instance-only-old
 
 Behavior is controlled by `config.json`:
 
+- `paths.closure_registry_file` points to the closure registry used as the main analysis sample.
 - `paths.feature_t0_cache_dir` points to the directory containing `features_t0_<hash>.parquet`.
 - `paths.feature_cache_key` selects which cached `features_t0_<hash>.parquet` to load.
 - `spec.closure_duration_days = false` keeps all closure durations.

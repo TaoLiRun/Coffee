@@ -30,11 +30,16 @@ you get:
 
 - `outcome=n_purchases`
 - pooled estimation across all closure events
+- closure registry from `outputs/customer-store/closure_pair_registry.csv` (the 18-closure main sample)
 - unbalanced panel
 - DDD model
 - no closure-duration filter
 - no recency filter
 - outputs under `outputs/displacement_effect_estimation`
+
+The previous 22-closure registry is preserved at
+`outputs/customer-store/closure_pair_registry_full.csv`, with archived result bundles under
+`outputs/robustness/full_registry`.
 
 ## Main Run Dimensions
 

@@ -1,6 +1,6 @@
 {
   "paths": {
-    "selected_closure_registry": "outputs/customer-store/closure_pair_registry_selected.csv",
+    "closure_registry": "outputs/customer-store/closure_pair_registry.csv",
     "score_file": "outputs/displacement_classification/displacement_scores_t0_ex_ante.csv",
     "push_data_dir": "../data/data1031",
     "push_file_pattern": "sleep_push_result_*.csv",
@@ -8,12 +8,12 @@
     "output_dir": "outputs/robustness/push_targeting_after_reopening"
   },
   "outputs": {
-    "push_records": "selected_post_reopening_push_records.parquet",
-    "push_panel": "selected_post_reopening_push_panel.parquet",
-    "group_summary": "selected_post_reopening_push_summary.csv",
-    "mean_tests": "selected_post_reopening_push_mean_tests.csv",
-    "subgroup_regression_tests": "selected_post_reopening_push_subgroup_regression_tests.csv",
-    "gap_difference_tests": "selected_post_reopening_push_gap_difference_tests.csv",
+    "push_records": "main_post_reopening_push_records.parquet",
+    "push_panel": "main_post_reopening_push_panel.parquet",
+    "group_summary": "main_post_reopening_push_summary.csv",
+    "mean_tests": "main_post_reopening_push_mean_tests.csv",
+    "subgroup_regression_tests": "main_post_reopening_push_subgroup_regression_tests.csv",
+    "gap_difference_tests": "main_post_reopening_push_gap_difference_tests.csv",
     "run_metadata": "run_metadata.json",
     "summary": "summary.md"
   },

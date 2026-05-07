@@ -1,0 +1,3 @@
+2026-04-19 10:20:00 | INFO | displacement_effect_estimation | Starting displacement effect estimation run
+2026-04-19 10:20:00 | INFO | displacement_effect_estimation | Arguments: outcome=n_purchases, t_horizon=4, cluster_col=member_id, closure_duration_days=False, separate_effect=False, select_recency_consumers=False, require_balanced_panel=None, drop_period0_purchasers=False, variety_seeking_mode=distinct, unbalanced_panel=True, use_did=False, output_dir=outputs/displacement_effect_estimation/selected_registry_n_purchases_ddd
+2026-04-19 10:20:01 | INFO | displacement_effect_estimation | Applied closure registry filter using /Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/outputs/customer-store/closure_pair_registry.csv: closures 22 -> 16 (dropped=6)
