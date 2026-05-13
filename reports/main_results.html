@@ -2303,7 +2303,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#purchase-frequency-1" id="toc-purchase-frequency-1" class="nav-link" data-scroll-target="#purchase-frequency-1"><span class="header-section-number">5.1</span> Purchase Frequency</a></li>
   <li><a href="#novelty-seeking-1" id="toc-novelty-seeking-1" class="nav-link" data-scroll-target="#novelty-seeking-1"><span class="header-section-number">5.2</span> Novelty-Seeking</a></li>
-  <li><a href="#continuous-propensity-version" id="toc-continuous-propensity-version" class="nav-link" data-scroll-target="#continuous-propensity-version"><span class="header-section-number">5.3</span> Continuous Propensity Version</a></li>
+  <li><a href="#market-new-share-distinct-only-new" id="toc-market-new-share-distinct-only-new" class="nav-link" data-scroll-target="#market-new-share-distinct-only-new"><span class="header-section-number">5.3</span> Market-new share (distinct-only-new)</a></li>
+  <li><a href="#continuous-propensity-version" id="toc-continuous-propensity-version" class="nav-link" data-scroll-target="#continuous-propensity-version"><span class="header-section-number">5.4</span> Continuous Propensity Version</a></li>
   </ul></li>
   <li><a href="#why-does-this-happen-two-mechanisms" id="toc-why-does-this-happen-two-mechanisms" class="nav-link" data-scroll-target="#why-does-this-happen-two-mechanisms"><span class="header-section-number">6</span> Why Does This Happen? Two Mechanisms</a>
   <ul class="collapse">
@@ -2565,6 +2566,13 @@ Y^P_{iet} = \frac{\text{purchase days}_{iet}}{L_e}
 Y^V_{iet} = \frac{\text{new products}_{iet}}{\text{total products}_{iet}}
 \]</span></p>
 <p>where a product is “new” if the member’s first-ever purchase of that product occurs in that window. Members with no purchases in a window have missing novelty outcomes for that period.</p>
+<ul>
+<li><strong>Market-new share (distinct-only-new).</strong> As a chain-level robustness check, we define a second variety-style outcome. Let <span class="math inline">\(\mathcal{P}_{iet}\)</span> be the set of distinct products member <span class="math inline">\(i\)</span> purchases in event period <span class="math inline">\(t\)</span> (relative window) for closure <span class="math inline">\(e\)</span>, and let <span class="math inline">\(F(p)\)</span> be the calendar date of product <span class="math inline">\(p\)</span>’s <strong>global</strong> first sale in the chain. Let <span class="math inline">\(W^{\mathrm{curr}}_{et}\)</span> and <span class="math inline">\(W^{\mathrm{prev}}_{et}\)</span> be the calendar date ranges of the current event-time bin and the <strong>chronologically previous</strong> estimation bin (the panel omits <span class="math inline">\(rel_t=0\)</span>; for the leftmost pre bin there is no previous bin, so only <span class="math inline">\(W^{\mathrm{curr}}_{et}\)</span> is used). Then</li>
+</ul>
+<p><span class="math display">\[
+Y^{N}_{iet} = \frac{\left|\left\{ p \in \mathcal{P}_{iet} : F(p) \in W^{\mathrm{prev}}_{et} \cup W^{\mathrm{curr}}_{et} \right\}\right|}{\left|\mathcal{P}_{iet}\right|},
+\]</span></p>
+<p>with the same missingness rule when <span class="math inline">\(\mathcal{P}_{iet}\)</span> is empty. When no previous estimation bin exists (the leftmost pre period), the union is just <span class="math inline">\(W^{\mathrm{curr}}_{et}\)</span>. It is estimated on the same 18-closure sample, with an unbalanced panel and triple-difference specification, using four pre and four post event-length windows (matching the headline novelty analysis).</p>
 </section>
 <section id="conceptual-framework" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="conceptual-framework"><span class="header-section-number">4.2</span> Conceptual Framework</h2>
@@ -2829,8 +2837,47 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 </ul>
 <p>For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level (<span class="math inline">\(p = 0.186\)</span> for the ATT version and <span class="math inline">\(p = 0.797\)</span> for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative.</p>
 </section>
-<section id="continuous-propensity-version" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="continuous-propensity-version"><span class="header-section-number">5.3</span> Continuous Propensity Version</h2>
+<section id="market-new-share-distinct-only-new" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="market-new-share-distinct-only-new"><span class="header-section-number">5.3</span> Market-new share (distinct-only-new)</h2>
+<p>The <strong>member-first-time</strong> novelty measure above counts products that are new <strong>to the customer</strong>. The <strong>distinct-only-new</strong> outcome instead asks, among products the customer bought in a given event-time window, what fraction were <strong>new to the chain’s menu</strong> in the sense that their <strong>global</strong> first-sale date falls in <strong>that window or the immediately preceding estimation window</strong> (inclusive calendar bounds). The leftmost pre period has no preceding panel bin, so the union reduces to the current window only. This is intended as a menu-innovation exposure measure that does not use the member’s own purchase history to label “new.”</p>
+<p>We re-estimate the same pooled triple-difference specification with this outcome in place of member-first novelty, holding the rest of the design fixed. The effective regression sample again has <strong>99,644</strong> observations (the same count as in the headline novelty-seeking pooled binary specification).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Coefficient</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">SE</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post × treated (<span class="math inline">\(\delta^B\)</span>)</td>
+<td style="text-align: right;">+0.00805</td>
+<td style="text-align: right;">0.00916</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>post × blocked (<span class="math inline">\(\beta\)</span>)</td>
+<td style="text-align: right;">+0.03005</td>
+<td style="text-align: right;">0.00500</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>post × treated × blocked (<span class="math inline">\(\delta^D\)</span>)</td>
+<td style="text-align: right;">−0.04172</td>
+<td style="text-align: right;">0.01147</td>
+<td>***</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>p&lt;0.1, ** p&lt;0.05, *** p&lt;0.01.*</li>
+</ul>
+<p><strong>Read:</strong> The blocked-buyer triple interaction is again <strong>negative</strong> (−0.042): blocked treatment customers allocate purchases toward products that were <strong>not</strong> chain-new in the adjacent-window sense, relative to comparable blocked controls, while non-blocked treated customers show a positive baseline shift (<span class="math inline">\(\delta^B\)</span>). The pattern is qualitatively similar to member-first novelty-seeking, with a somewhat smaller baseline treatment effect than the headline +0.031 estimate.</p>
+</section>
+<section id="continuous-propensity-version" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="continuous-propensity-version"><span class="header-section-number">5.4</span> Continuous Propensity Version</h2>
 <p>The same qualitative patterns appear when the binary blocked-buyer indicator is replaced by the model’s continuous blocked-purchase score:</p>
 <ul>
 <li>Purchase frequency: post × treated × score = <strong>+0.00759</strong> (<span class="math inline">\(p = 0.040\)</span>)</li>

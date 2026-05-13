@@ -163,7 +163,7 @@ COMMIT="$(git -C "$PROJECT_ROOT" rev-parse HEAD 2>/dev/null || true)"
 
 PURCHASE_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --output-dir $PURCHASE_OUTPUT_REL --log-file $PURCHASE_OUTPUT_REL/logs/run.log"
 PURCHASE_BINARY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --output-dir $PURCHASE_BINARY_OUTPUT_REL --log-file $PURCHASE_BINARY_OUTPUT_REL/logs/run.log"
-VARIETY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome variety_seeking --no-balanced-panel --output-dir $VARIETY_OUTPUT_REL --log-file $VARIETY_OUTPUT_REL/logs/run.log"
+VARIETY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome variety_seeking --output-dir $VARIETY_OUTPUT_REL --log-file $VARIETY_OUTPUT_REL/logs/run.log"
 
 echo "Running main-sample purchase-frequency result..."
 (
@@ -189,7 +189,6 @@ echo "Running main-sample novelty-seeking result..."
   cd "$PROJECT_ROOT"
   "${PYTHON_CMD[@]}" src/displacement_effect_estimation/run.py \
     --outcome variety_seeking \
-    --no-balanced-panel \
     --output-dir "$VARIETY_OUTPUT_REL" \
     --log-file "$VARIETY_OUTPUT_REL/logs/run.log"
 )

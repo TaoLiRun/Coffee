@@ -97,6 +97,14 @@ $$
 
 where a product is "new" if the member's first-ever purchase of that product occurs in that window. Members with no purchases in a window have missing novelty outcomes for that period.
 
+- **Market-new share (distinct-only-new).** As a chain-level robustness check, we define a second variety-style outcome. Let $\mathcal{P}_{iet}$ be the set of distinct products member $i$ purchases in event period $t$ (relative window) for closure $e$, and let $F(p)$ be the calendar date of product $p$'s **global** first sale in the chain. Let $W^{\mathrm{curr}}_{et}$ and $W^{\mathrm{prev}}_{et}$ be the calendar date ranges of the current event-time bin and the **chronologically previous** estimation bin (the panel omits $rel_t=0$; for the leftmost pre bin there is no previous bin, so only $W^{\mathrm{curr}}_{et}$ is used). Then
+
+$$
+Y^{N}_{iet} = \frac{\left|\left\{ p \in \mathcal{P}_{iet} : F(p) \in W^{\mathrm{prev}}_{et} \cup W^{\mathrm{curr}}_{et} \right\}\right|}{\left|\mathcal{P}_{iet}\right|},
+$$
+
+with the same missingness rule when $\mathcal{P}_{iet}$ is empty. When no previous estimation bin exists (the leftmost pre period), the union is just $W^{\mathrm{curr}}_{et}$. It is estimated on the same 18-closure sample, with an unbalanced panel and triple-difference specification, using four pre and four post event-length windows (matching the headline novelty analysis).
+
 ## Conceptual Framework
 
 In this setting, a temporary store closure can affect post-reopening behavior through **baseline demand** and through **blocking a planned purchase**. Here, the planned choice is a coffee purchase from the chain during the closure window.
@@ -261,6 +269,22 @@ Did closures change whether customers tried new products?
 - **Blocked treatment customers become less exploratory after reopening** ($\delta^D = -0.041$): once a due purchase was interrupted, customers return in a more focused mode and shift toward familiar products relative to comparable blocked controls.
 
 For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative.
+
+## Market-new share (distinct-only-new)
+
+The **member-first-time** novelty measure above counts products that are new **to the customer**. The **distinct-only-new** outcome instead asks, among products the customer bought in a given event-time window, what fraction were **new to the chain’s menu** in the sense that their **global** first-sale date falls in **that window or the immediately preceding estimation window** (inclusive calendar bounds). The leftmost pre period has no preceding panel bin, so the union reduces to the current window only. This is intended as a menu-innovation exposure measure that does not use the member’s own purchase history to label “new.”
+
+We re-estimate the same pooled triple-difference specification with this outcome in place of member-first novelty, holding the rest of the design fixed. The effective regression sample again has **99,644** observations (the same count as in the headline novelty-seeking pooled binary specification).
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.00805 | 0.00916 | |
+| post × blocked ($\beta$) | +0.03005 | 0.00500 | *** |
+| post × treated × blocked ($\delta^D$) | −0.04172 | 0.01147 | *** |
+
+* p<0.1, ** p<0.05, *** p<0.01.*
+
+**Read:** The blocked-buyer triple interaction is again **negative** (−0.042): blocked treatment customers allocate purchases toward products that were **not** chain-new in the adjacent-window sense, relative to comparable blocked controls, while non-blocked treated customers show a positive baseline shift ($\delta^B$). The pattern is qualitatively similar to member-first novelty-seeking, with a somewhat smaller baseline treatment effect than the headline +0.031 estimate.
 
 ## Continuous Propensity Version
 

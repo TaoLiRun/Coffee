@@ -6,8 +6,9 @@
 # The estimation supports two panel structures that determine the model:
 #
 #   BALANCED panel  -> DiD model (no displacement prediction needed)
-#     Members who purchased in every period (variety_seeking) or every
-#     pre-period (n_purchases) are retained.  A simple DiD is estimated:
+#     variety_seeking: members with variety_seeking observed in every rel_t period
+#       (pass --balanced-panel). n_purchases: members who purchased in every pre-period
+#       (--no-unbalanced-panel). A simple DiD is estimated:
 #       y = delta * post * treated + FE
 #
 #   UNBALANCED panel -> DDD model (displacement prediction via classification)
@@ -15,7 +16,7 @@
 #       y = delta^B * post * treated + delta^D * post * treated * D + ...
 #
 # The model is chosen automatically based on the panel structure:
-#   variety_seeking  -> balanced by default (DiD); --no-balanced-panel switches to DDD
+#   variety_seeking  -> unbalanced by default (DDD); --balanced-panel switches to DiD
 #   n_purchases      -> unbalanced by default (DDD); --no-unbalanced-panel switches to DiD
 # =============================================================================
 
@@ -40,7 +41,7 @@
 #       --select-recency-consumers 10 \
 #       --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
 #
-# Variety-seeking, distinct mode (balanced panel, DiD by default):
+# Variety-seeking, distinct mode (unbalanced panel, DDD by default):
 #   ./run_with_logging.sh --outcome variety_seeking \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking
 #
@@ -48,14 +49,15 @@
 #   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance \
 #       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
 #
-# Variety-seeking, instance-only-old mode (share of purchase rows on products
-# that existed before rel_t=-4):
-#   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance-only-old \
-#       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance_only_old
+# Variety-seeking, distinct-only-new mode (share of distinct in-window products whose
+# global first sale falls in this window or the previous panel window):
+#   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode distinct-only-new \
+#       --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
 #
-# Variety-seeking, unbalanced panel (switches from DiD to DDD):
-#   ./run_with_logging.sh --outcome variety_seeking --no-balanced-panel \
-#       --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced
+# Variety-seeking, balanced panel (DiD; also applies period-0 contrast filter unless
+# --keep-period0-purchasers):
+#   ./run_with_logging.sh --outcome variety_seeking --balanced-panel \
+#       --output-dir outputs/displacement_effect_estimation/variety_seeking_balanced
 #
 # Invalid:
 #   ./run_with_logging.sh --select-recency-consumers 10

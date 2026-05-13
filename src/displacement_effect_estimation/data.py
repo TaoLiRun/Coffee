@@ -12,7 +12,7 @@ import pandas as pd
 
 LOGGER = logging.getLogger("displacement_effect_estimation")
 
-_VARIETY_SEEKING_MODES = frozenset({"distinct", "instance", "instance-only-old"})
+_VARIETY_SEEKING_MODES = frozenset({"distinct", "instance", "distinct-only-new"})
 
 _BASE_OUTPUT_COLS = [
     "member_id",
@@ -396,7 +396,8 @@ def _compute_variety_seeking_for_window(
     end_dt: pd.Timestamp,
     mode: str = "distinct",
     product_first_seen_df: pd.DataFrame | None = None,
-    old_product_cutoff_dt: pd.Timestamp | None = None,
+    prev_window_start: pd.Timestamp | None = None,
+    prev_window_end: pd.Timestamp | None = None,
 ) -> pd.DataFrame:
     """Compute variety_seeking for all members in one period window.
 
@@ -410,9 +411,12 @@ def _compute_variety_seeking_for_window(
     mode="instance":
         Both numerator and denominator count individual purchase rows — buying
         the same product k times contributes k to both numerator and denominator.
-    mode="instance-only-old":
-        Denominator counts all purchase rows in the window. Numerator counts only
-        rows whose product existed before the event's rel_t=-4 window start.
+    mode="distinct-only-new":
+        Among distinct product_ids purchased in [start_dt, end_dt], share whose
+        global first-sale date lies in that same window or, when provided, in the
+        adjacent previous panel window [prev_window_start, prev_window_end]. When
+        no previous window is passed (leftmost pre bin), only the current window
+        is used.
 
     Returns DataFrame[member_id, variety_seeking].
     Members with no purchases in the window receive NaN.
@@ -432,20 +436,25 @@ def _compute_variety_seeking_for_window(
         all_members["variety_seeking"] = np.nan
         return all_members
 
-    if mode == "instance-only-old":
-        if product_first_seen_df is None or old_product_cutoff_dt is None:
-            raise ValueError(
-                "instance-only-old mode requires product_first_seen_df and old_product_cutoff_dt."
-            )
-        win_rows = win[["member_id", "product_id"]].copy()
-        win_rows = win_rows.merge(product_first_seen_df, on="product_id", how="left")
-        win_rows["is_old"] = (win_rows["product_first_date"] < old_product_cutoff_dt).astype(int)
+    if mode == "distinct-only-new":
+        if product_first_seen_df is None:
+            raise ValueError("distinct-only-new mode requires product_first_seen_df.")
+        win_prods = win[["member_id", "product_id"]].drop_duplicates()
+        win_prods = win_prods.merge(product_first_seen_df, on="product_id", how="left")
+        pdt = pd.to_datetime(win_prods["product_first_date"], errors="coerce")
+        in_curr = (pdt >= start_dt) & (pdt <= end_dt)
+        if prev_window_start is not None and prev_window_end is not None:
+            in_prev = (pdt >= prev_window_start) & (pdt <= prev_window_end)
+            is_new = (in_curr | in_prev).fillna(False).astype(int)
+        else:
+            is_new = in_curr.fillna(False).astype(int)
+        win_prods["is_new"] = is_new
         agg = (
-            win_rows.groupby("member_id", sort=False)
-            .agg(total_prods=("product_id", "count"), old_prods=("is_old", "sum"))
+            win_prods.groupby("member_id", sort=False)
+            .agg(total_prods=("product_id", "count"), new_prods=("is_new", "sum"))
             .reset_index()
         )
-        agg["variety_seeking"] = agg["old_prods"] / agg["total_prods"]
+        agg["variety_seeking"] = agg["new_prods"] / agg["total_prods"]
         return all_members.merge(agg[["member_id", "variety_seeking"]], on="member_id", how="left")
 
     win_prods = win[["member_id", "product_id"]].copy()
@@ -474,6 +483,19 @@ def _slice_by_date(sorted_df: pd.DataFrame, start_date: pd.Timestamp, end_date: 
     left = np.searchsorted(date_arr, start_date.to_datetime64(), side="left")
     right = np.searchsorted(date_arr, end_date.to_datetime64(), side="right")
     return sorted_df.iloc[left:right]
+
+
+def _previous_rel_t_in_variety_panel(rel_t: int, *, t_horizon: int) -> int | None:
+    """Chronological predecessor in [-K..-1] + [1..K] (no rel_t=0 in the panel)."""
+    if t_horizon < 1:
+        raise ValueError("t_horizon must be >= 1.")
+    seq = list(range(-t_horizon, 0)) + list(range(1, t_horizon + 1))
+    if rel_t not in seq:
+        raise ValueError(f"rel_t={rel_t} not in panel sequence for t_horizon={t_horizon}.")
+    idx = seq.index(rel_t)
+    if idx == 0:
+        return None
+    return int(seq[idx - 1])
 
 
 def _window_bounds(closure_start: pd.Timestamp, closure_end: pd.Timestamp, rel_t: int, bin_days: int) -> tuple[pd.Timestamp, pd.Timestamp]:
@@ -620,7 +642,7 @@ def build_variety_period0_rows(
     first_purchase_df = _compute_first_purchase_dates(commodity_df)
     product_first_seen_df = (
         load_product_first_seen_dates(cfg=cfg)
-        if variety_seeking_mode == "instance-only-old"
+        if variety_seeking_mode == "distinct-only-new"
         else _compute_product_first_seen_dates(commodity_df)
     )
 
@@ -632,13 +654,15 @@ def build_variety_period0_rows(
         closure_start_dt = pd.to_datetime(closure_start)
         closure_end_dt = pd.to_datetime(closure_end)
         closure_bin_days = int(frame["closure_duration_days"].iloc[0])
-        t_horizon = int(frame["rel_t"].abs().max()) if "rel_t" in frame.columns else int(sample["rel_t"].abs().max())
-        old_product_cutoff_dt, _ = _window_bounds(
-            closure_start=closure_start_dt,
-            closure_end=closure_end_dt,
-            rel_t=-t_horizon,
-            bin_days=closure_bin_days,
-        )
+        if variety_seeking_mode == "distinct-only-new":
+            prev_start, prev_end = _window_bounds(
+                closure_start=closure_start_dt,
+                closure_end=closure_end_dt,
+                rel_t=-1,
+                bin_days=closure_bin_days,
+            )
+        else:
+            prev_start, prev_end = None, None
         members = set(frame["member_id"].tolist())
         vs_result = _compute_variety_seeking_for_window(
             commodity_df=commodity_df,
@@ -648,7 +672,8 @@ def build_variety_period0_rows(
             end_dt=closure_end_dt,
             mode=variety_seeking_mode,
             product_first_seen_df=product_first_seen_df,
-            old_product_cutoff_dt=old_product_cutoff_dt,
+            prev_window_start=prev_start,
+            prev_window_end=prev_end,
         )
         part = frame.merge(vs_result, on="member_id", how="left")
         part["rel_t"] = 0
@@ -678,15 +703,15 @@ def build_estimation_sample(
         raise ValueError(
             f"Unsupported outcome '{outcome}'. Must be one of {sorted(_SUPPORTED_OUTCOMES)}."
         )
-    # For variety_seeking the balanced-panel filter (drop members missing any period) is the
-    # default; pass require_balanced_panel=False to keep NaN rows instead.
+    # For variety_seeking, default is unbalanced (DDD): keep member-period rows even when
+    # variety_seeking is missing in some periods. Pass require_balanced_panel=True for DiD.
     if require_balanced_panel is None:
-        _require_balanced_panel = outcome == "variety_seeking"
+        _require_balanced_panel = False
     else:
         _require_balanced_panel = bool(require_balanced_panel)
 
     if drop_period0_purchasers is None:
-        _drop_period0_purchasers = outcome == "variety_seeking"
+        _drop_period0_purchasers = outcome == "variety_seeking" and _require_balanced_panel
     else:
         _drop_period0_purchasers = bool(drop_period0_purchasers)
 
@@ -736,8 +761,8 @@ def build_estimation_sample(
         first_purchase_df = _compute_first_purchase_dates(commodity_df)
         product_first_seen_df = (
             load_product_first_seen_dates(cfg=cfg)
-            if variety_seeking_mode == "instance-only-old"
-            else _compute_product_first_seen_dates(commodity_df)
+        if variety_seeking_mode == "distinct-only-new"
+        else _compute_product_first_seen_dates(commodity_df)
         )
         if variety_seeking_mode not in _VARIETY_SEEKING_MODES:
             raise ValueError(
@@ -836,12 +861,6 @@ def build_estimation_sample(
         )
         members = set(member_frame["member_id"].tolist())
         closure_parts: list[pd.DataFrame] = []
-        old_product_cutoff_dt, _ = _window_bounds(
-            closure_start=closure_start_dt,
-            closure_end=closure_end_dt,
-            rel_t=-t_horizon,
-            bin_days=closure_bin_days,
-        )
 
         for rel_t in rel_t_values:
             start_dt, end_dt = _window_bounds(
@@ -850,6 +869,18 @@ def build_estimation_sample(
                 rel_t=rel_t,
                 bin_days=closure_bin_days,
             )
+
+            prev_start: pd.Timestamp | None = None
+            prev_end: pd.Timestamp | None = None
+            if outcome == "variety_seeking" and variety_seeking_mode == "distinct-only-new":
+                prev_rel = _previous_rel_t_in_variety_panel(rel_t, t_horizon=t_horizon)
+                if prev_rel is not None:
+                    prev_start, prev_end = _window_bounds(
+                        closure_start=closure_start_dt,
+                        closure_end=closure_end_dt,
+                        rel_t=prev_rel,
+                        bin_days=closure_bin_days,
+                    )
 
             if outcome in {"n_purchases", "purchase_incidence_binary"}:
                 win_orders = _slice_by_date(sorted_df=orders, start_date=start_dt, end_date=end_dt)
@@ -875,7 +906,8 @@ def build_estimation_sample(
                     end_dt=end_dt,
                     mode=variety_seeking_mode,
                     product_first_seen_df=product_first_seen_df,
-                    old_product_cutoff_dt=old_product_cutoff_dt,
+                    prev_window_start=prev_start,
+                    prev_window_end=prev_end,
                 )
                 block = member_frame.merge(vs_result, on="member_id", how="left")
 

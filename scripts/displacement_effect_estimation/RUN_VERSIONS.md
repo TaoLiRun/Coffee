@@ -63,8 +63,9 @@ For `n_purchases`:
 
 For `variety_seeking`:
 
-- default: balanced panel -> DiD
-- `--no-balanced-panel`: unbalanced panel -> DDD
+- default: unbalanced panel -> DDD (same as purchase-frequency default)
+- `--balanced-panel`: balanced panel -> DiD
+- `--no-balanced-panel`: same as default (kept for backward compatibility; do not combine with `--balanced-panel`)
 
 ### 3. Estimation Scope
 
@@ -99,12 +100,11 @@ These only matter when `--outcome variety_seeking`.
   Default. Counts each `product_id` once per member per window.
 - `--variety-seeking-mode instance`
   Counts every purchase row, so repeated purchases carry more weight.
-- `--variety-seeking-mode instance-only-old`
-  Measures the share of purchase rows on products that already existed before the event's earliest pre window.
+- `--variety-seeking-mode distinct-only-new`
+  Among distinct `product_id` values purchased in the window: share whose global first-sale date lies in **this** calendar window **or** the **chronologically previous** panel window (inclusive bounds). Leftmost pre bin has no previous window, so only the current window applies. Period-0 plots use the union of the closure window and the `rel_t=-1` window.
 
 - `--keep-period0-purchasers`
-  By default, variety-seeking runs drop period-0 purchasers to keep the treatment contrast clean.
-  This flag keeps them.
+  When using `--balanced-panel`, variety-seeking runs otherwise drop treated members who purchase during the closure window and controls who do not, to keep the treatment contrast clean. This flag keeps them. (Unbalanced DDD runs do not apply that filter by default.)
 
 ## Supported Run Matrix
 
@@ -162,7 +162,7 @@ These only matter when `--outcome variety_seeking`.
 
 ### `variety_seeking`
 
-1. Aggregate, default balanced-panel DiD, `distinct` mode
+1. Aggregate, default unbalanced-panel DDD, `distinct` mode
 
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
@@ -170,7 +170,7 @@ These only matter when `--outcome variety_seeking`.
   --output-dir outputs/displacement_effect_estimation/variety_seeking
 ```
 
-2. Aggregate, balanced-panel DiD, `instance` mode
+2. Aggregate, unbalanced-panel DDD, `instance` mode
 
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
@@ -179,29 +179,30 @@ These only matter when `--outcome variety_seeking`.
   --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
 ```
 
-3. Aggregate, balanced-panel DiD, `instance-only-old` mode
+3. Aggregate, unbalanced-panel DDD, `distinct-only-new` mode
 
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
-  --variety-seeking-mode instance-only-old \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_instance_only_old
+  --variety-seeking-mode distinct-only-new \
+  --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
 ```
 
-4. Aggregate, unbalanced-panel DDD
+4. Aggregate, balanced-panel DiD
 
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
-  --no-balanced-panel \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced
+  --balanced-panel \
+  --output-dir outputs/displacement_effect_estimation/variety_seeking_balanced
 ```
 
-5. Aggregate, keep period-0 purchasers
+5. Aggregate, keep period-0 purchasers (only relevant with `--balanced-panel`)
 
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
+  --balanced-panel \
   --keep-period0-purchasers \
   --output-dir outputs/displacement_effect_estimation/variety_seeking_keep_p0
 ```
@@ -225,7 +226,7 @@ These only matter when `--outcome variety_seeking`.
   --output-dir outputs/displacement_effect_estimation/variety_seeking_separate_r10
 ```
 
-8. Separate effect with unbalanced panel
+8. Separate effect with explicit unbalanced panel (same as default)
 
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
@@ -241,9 +242,9 @@ These only matter when `--outcome variety_seeking`.
 - `--closure-duration-days N` must use a positive integer.
 - `--select-recency-consumers N` must use a positive integer.
 - `--t-horizon` must be at least `1`.
-- `--variety-seeking-mode` must be one of `distinct`, `instance`, or `instance-only-old`.
+- `--variety-seeking-mode` must be one of `distinct`, `instance`, or `distinct-only-new`.
 - `--no-unbalanced-panel` is only meaningful for `n_purchases`.
-- `--no-balanced-panel`, `--variety-seeking-mode`, and `--keep-period0-purchasers` are only meaningful for `variety_seeking`.
+- `--balanced-panel`, `--no-balanced-panel`, `--variety-seeking-mode`, and `--keep-period0-purchasers` are only meaningful for `variety_seeking`.
 
 ## Other Useful Flags
 
@@ -266,4 +267,5 @@ To keep runs easy to compare, it helps to encode the key choices in `--output-di
 - `separate_effect`
 - `separate_effect_d10_r10`
 - `variety_seeking_instance`
-- `variety_seeking_unbalanced`
+- `variety_seeking_distinct_only_new`
+- `variety_seeking_balanced`

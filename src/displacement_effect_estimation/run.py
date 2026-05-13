@@ -116,8 +116,17 @@ def main() -> None:
         action="store_true",
         default=False,
         help=(
-            "For outcome=variety_seeking: keep member-closure pairs that are missing in some "
-            "periods (unbalanced panel). Default is to drop such pairs (balanced panel)."
+            "For outcome=variety_seeking: same as the default (unbalanced panel, DDD). "
+            "Kept for backward compatibility; do not combine with --balanced-panel."
+        ),
+    )
+    parser.add_argument(
+        "--balanced-panel",
+        action="store_true",
+        default=False,
+        help=(
+            "For outcome=variety_seeking: drop member-closure pairs missing variety_seeking in "
+            "any period and estimate DiD. Default is unbalanced panel with DDD."
         ),
     )
     parser.add_argument(
@@ -133,13 +142,15 @@ def main() -> None:
     parser.add_argument(
         "--variety-seeking-mode",
         type=str,
-        choices=["distinct", "instance", "instance-only-old"],
+        choices=["distinct", "instance", "distinct-only-new"],
         default="distinct",
         help=(
             "For outcome=variety_seeking: 'distinct' (default) counts each product_id once "
             "per window (set cardinality); 'instance' counts every purchase row so repeated "
-            "buys of the same product contribute proportionally; 'instance-only-old' measures "
-            "the share of purchase rows coming from products that existed before rel_t=-4."
+            "buys of the same product contribute proportionally; 'distinct-only-new' is the "
+            "share of distinct products in the window whose global first-sale date falls in "
+            "this window or the chronologically previous panel window (current window only for "
+            "the leftmost pre period)."
         ),
     )
     parser.add_argument(
@@ -148,8 +159,8 @@ def main() -> None:
         default=False,
         help=(
             "For outcome=variety_seeking: keep all member-closure pairs regardless of period-0 "
-            "(closure-window) purchases. By default, treated with period-0 purchases are dropped "
-            "and controls without period-0 purchases are dropped."
+            "(closure-window) purchases. With --balanced-panel, treated members who purchase in "
+            "period 0 and controls who do not are still dropped unless this flag is set."
         ),
     )
     parser.add_argument(
@@ -161,6 +172,11 @@ def main() -> None:
     parser.add_argument("--log-file", type=str, default=None, help="Path to log file.")
     parser.add_argument("--log-level", type=str, default="INFO", help="Logging level (DEBUG, INFO, WARNING, ERROR).")
     args = parser.parse_args()
+
+    if args.balanced_panel and args.outcome != "variety_seeking":
+        parser.error("--balanced-panel is only valid with --outcome variety_seeking")
+    if args.outcome == "variety_seeking" and args.balanced_panel and args.no_balanced_panel:
+        parser.error("Cannot combine --balanced-panel with --no-balanced-panel.")
 
     closure_duration_days = (
         args.closure_duration_days
@@ -180,12 +196,20 @@ def main() -> None:
 
     logger = setup_logging(log_file=log_file, log_level=args.log_level)
     logger.info("Starting displacement effect estimation run")
-    require_balanced_panel = None if not args.no_balanced_panel else False
-    drop_period0_purchasers = args.outcome == "variety_seeking" and not args.keep_period0_purchasers and not args.no_balanced_panel
-    unbalanced_panel = not args.no_unbalanced_panel
-    # Determine model type: DiD for balanced panels, DDD for unbalanced.
     if args.outcome == "variety_seeking":
-        use_did = require_balanced_panel is not False
+        require_balanced_panel = bool(args.balanced_panel)
+    else:
+        require_balanced_panel = None if not args.no_balanced_panel else False
+    drop_period0_purchasers = (
+        args.outcome == "variety_seeking"
+        and not args.keep_period0_purchasers
+        and args.balanced_panel
+    )
+    unbalanced_panel = not args.no_unbalanced_panel
+    # Determine model type: DiD for balanced variety panels; DDD for unbalanced variety;
+    # purchase outcomes use --no-unbalanced-panel for DiD.
+    if args.outcome == "variety_seeking":
+        use_did = bool(args.balanced_panel)
     else:
         use_did = not unbalanced_panel
 

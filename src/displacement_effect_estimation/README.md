@@ -23,7 +23,7 @@ The formula is implemented in `data.py` (`_compute_variety_seeking_for_window`):
 - `variety_seeking = |new products in window| / |products in window|`
 - `distinct` mode (default): each `product_id` is counted once per member per window.
 - `instance` mode: each purchase row is counted (repeated buys increase weight).
-- `instance-only-old` mode: each period's outcome is the share of purchase rows whose products already existed before the event's `rel_t=-4` window.
+- `distinct-only-new` mode: among distinct products purchased in the window, the share whose **global** first-sale date falls in **this** window’s dates or in the **chronologically previous** panel window’s dates (inclusive). For the leftmost pre bin there is no previous window, so only the current window is used. Period-0 plots use the union of the closure window and the `rel_t=-1` window.
 
 `period 0` means the closure window `[closure_start, closure_end]`.
 
@@ -54,12 +54,12 @@ python run.py --outcome n_purchases --t-horizon 4 --separate-effect --select-rec
 # Separate effect for 10-day closures only, saved to a custom folder
 python run.py --outcome n_purchases --t-horizon 4 --separate-effect --closure-duration-days 10 --select-recency-consumers 10 --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
 
-# Variety-seeking: keep period-0 purchasers (default behavior is to drop them)
-python run.py --outcome variety_seeking --keep-period0-purchasers
+# Variety-seeking: keep period-0 purchasers when using --balanced-panel (otherwise that filter applies)
+python run.py --outcome variety_seeking --balanced-panel --keep-period0-purchasers
 
-# Variety-seeking: share of purchase instances on products that pre-date rel_t=-4
-python run.py --outcome variety_seeking --variety-seeking-mode instance-only-old \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_instance_only_old
+# Variety-seeking: global catalog-age share (distinct products in-window)
+python run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new \
+  --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
 ```
 
 Behavior is controlled by `config.json`:
@@ -73,8 +73,7 @@ Behavior is controlled by `config.json`:
 - `spec.separate_effect = true` runs one estimation per closure/event and skips the closure-length heterogeneity event-study spec, which is not identified within a single event.
 - `spec.select_recency_consumers = false` keeps the full scored consumer base.
 - `spec.select_recency_consumers = 10` is only valid when `spec.separate_effect = true` and keeps consumers with `days_since_last_purchase < 10` from the cached `features_t0` file, while `order_result.csv` is still used to build event-time outcomes.
-- For `outcome=variety_seeking`, member-closure pairs with purchases in period 0 are dropped by default to keep treatment contrast clean.
-- `--keep-period0-purchasers` overrides that default for a single run.
+- For `outcome=variety_seeking`, the default is an **unbalanced** panel and a **DDD** specification (aligned with `n_purchases`). Pass `--balanced-panel` for a balanced panel and DiD. With `--balanced-panel`, member-closure pairs are dropped when treated members purchase during the closure window or control members do not, unless you pass `--keep-period0-purchasers`.
 - `--output-dir ...` overrides `paths.output_dir` for a single run without changing the config file.
 
 ## Outputs

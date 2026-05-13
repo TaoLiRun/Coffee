@@ -20,7 +20,7 @@ Do temporary store closures change customers' product exploration behavior, and 
 
 To estimate closure effects on variety seeking using the DDD framework with an **unbalanced panel** (members not required to purchase in every period), and **distinct mode** outcome definition.
 
-This run uses `--no-balanced-panel`, which disables both the balanced-panel filter and the period-0 cleaning, so all members are retained.
+The estimation code defaults to this unbalanced setup (no `--no-balanced-panel` flag required). Period-0 contrast cleaning is only applied when using `--balanced-panel` (DiD).
 
 The model is DDD because the panel is unbalanced.
 
