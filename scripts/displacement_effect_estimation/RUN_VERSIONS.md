@@ -106,6 +106,19 @@ These only matter when `--outcome variety_seeking`.
 - `--keep-period0-purchasers`
   When using `--balanced-panel`, variety-seeking runs otherwise drop treated members who purchase during the closure window and controls who do not, to keep the treatment contrast clean. This flag keeps them. (Unbalanced DDD runs do not apply that filter by default.)
 
+### 6. Pre-novelty heterogeneity (distinct variety, pooled DDD)
+
+This is an **optional extension** for headline novelty-seeking (`--outcome variety_seeking` with `--variety-seeking-mode distinct`, **unbalanced** panel / DDD only).
+
+- **`--variety-pre-novelty-heterogeneity`**
+  - For each **member–closure** episode, compute the **pre-period** mean of the distinct novelty outcome (all `rel_t < 0` rows with non-missing outcome in that episode).
+  - Form a binary indicator **high pre-novelty** vs **low** by comparing that episode mean to a cross-sectional threshold computed **across episodes** in the built estimation sample. The default threshold is the **sample median** of those episode means; set `spec.variety_pre_novelty_split_method` to **`"mode"`** in `config.json` to use instead the **statistical mode** of the episode means (after rounding to 10 decimal places so the mode is well defined for near-continuous values). **High** means strictly **above** the threshold; **at or below** counts as low.
+  - The indicator is merged to all rows of the episode (constant within member–closure over `rel_t`).
+  - **Collapsed pooled DDD** is augmented with interactions of that indicator with the existing post-based treatment and displacement terms: `post × treated × high`, `post × blocked × high`, and `post × treated × blocked × high`. The original three coefficients continue to summarize the **low** pre-novelty subgroup; the three new terms are the **additional** components for the **high** subgroup. The continuous-score collapsed spec is unchanged; **event-study** specifications are unchanged in this version (heterogeneity read off the collapsed table only).
+  - **Not supported together with** `--balanced-panel`, `--separate-effect`, or `--variety-seeking-mode` other than `distinct`.
+
+Suggested output directory label: `variety_seeking_distinct_pre_novelty_heterogeneity`.
+
 ## Supported Run Matrix
 
 ### `n_purchases`
@@ -236,6 +249,18 @@ These only matter when `--outcome variety_seeking`.
   --output-dir outputs/displacement_effect_estimation/variety_seeking_separate_unbalanced
 ```
 
+9. Aggregate, unbalanced-panel DDD, `distinct` mode, pre-novelty heterogeneity (collapsed DDD with `post` × treatment × displacement × high/low pre-novelty split)
+
+```bash
+./scripts/displacement_effect_estimation/run_with_logging.sh \
+  --outcome variety_seeking \
+  --variety-seeking-mode distinct \
+  --variety-pre-novelty-heterogeneity \
+  --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity
+```
+
+Use `spec.variety_pre_novelty_split_method` in `config.json` (`"median"` default, or `"mode"`) to choose the cross-episode threshold for the episode-level pre-period mean distinct novelty measure.
+
 ## Important Constraints
 
 - `--select-recency-consumers N` requires `--separate-effect`.
@@ -245,6 +270,7 @@ These only matter when `--outcome variety_seeking`.
 - `--variety-seeking-mode` must be one of `distinct`, `instance`, or `distinct-only-new`.
 - `--no-unbalanced-panel` is only meaningful for `n_purchases`.
 - `--balanced-panel`, `--no-balanced-panel`, `--variety-seeking-mode`, and `--keep-period0-purchasers` are only meaningful for `variety_seeking`.
+- `--variety-pre-novelty-heterogeneity` requires `--outcome variety_seeking`, `--variety-seeking-mode distinct`, pooled estimation (not `--separate-effect`), and unbalanced-panel DDD (do not use `--balanced-panel`).
 
 ## Other Useful Flags
 
@@ -269,3 +295,4 @@ To keep runs easy to compare, it helps to encode the key choices in `--output-di
 - `variety_seeking_instance`
 - `variety_seeking_distinct_only_new`
 - `variety_seeking_balanced`
+- `variety_seeking_distinct_pre_novelty_heterogeneity`

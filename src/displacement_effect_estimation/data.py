@@ -685,6 +685,58 @@ def build_variety_period0_rows(
     return pd.concat(out_parts, ignore_index=True)
 
 
+def _attach_novelty_pre_heterogeneity_cols(
+    *,
+    merged: pd.DataFrame,
+    outcome_col: str,
+    split_method: str,
+) -> pd.DataFrame:
+    """Episode-level pre mean of outcome, split vs cross-sectional median or mode; inner-merge drops episodes with no valid pre mean."""
+    key_cols = ["member_id", "dept_id", "closure_start"]
+    sm = str(split_method).lower().strip()
+    if sm not in {"median", "mode"}:
+        raise ValueError(
+            "variety_pre_novelty_split_method in config must be 'median' or 'mode'; "
+            f"got {split_method!r}."
+        )
+    pre = merged.loc[merged["rel_t"] < 0, key_cols + [outcome_col]].copy()
+    pre = pre[pre[outcome_col].notna()]
+    if pre.empty:
+        raise ValueError(
+            "No pre-period rows with non-missing outcome; cannot compute pre-novelty heterogeneity split."
+        )
+    episode_means = (
+        pre.groupby(key_cols, sort=False)[outcome_col].mean().rename("novelty_pre_mean")
+    )
+    valid_means = episode_means.dropna()
+    if valid_means.empty:
+        raise ValueError("Episode pre-novelty means are all missing.")
+    if sm == "median":
+        thresh = float(valid_means.median())
+    else:
+        rounded = valid_means.round(decimals=10)
+        modes = rounded.mode(dropna=True)
+        thresh = float(modes.iloc[0]) if len(modes) > 0 else float(valid_means.median())
+    ep_df = episode_means.reset_index()
+    ep_df["novelty_pre_high"] = (ep_df["novelty_pre_mean"] > thresh).astype(int)
+    n_ep = int(ep_df["novelty_pre_mean"].notna().sum())
+    n_hi = int((ep_df["novelty_pre_high"] == 1).sum())
+    out = merged.merge(ep_df, on=key_cols, how="inner")
+    LOGGER.info(
+        "Pre-novelty heterogeneity: split_method=%s threshold=%s episode_rows=%s n_high_episodes=%s "
+        "panel_rows_before=%s panel_rows_after=%s",
+        sm,
+        repr(thresh),
+        f"{n_ep:,}",
+        f"{n_hi:,}",
+        f"{len(merged):,}",
+        f"{len(out):,}",
+    )
+    if out.empty:
+        raise ValueError("Sample empty after merging pre-novelty heterogeneity columns.")
+    return out
+
+
 def build_estimation_sample(
     outcome: str,
     cfg: dict | None = None,
@@ -696,6 +748,7 @@ def build_estimation_sample(
     variety_seeking_mode: str = "distinct",
     drop_period0_purchasers: bool | None = None,
     unbalanced_panel: bool | None = None,
+    variety_pre_novelty_heterogeneity: bool = False,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
     _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "purchase_incidence_binary", "variety_seeking"})
@@ -990,5 +1043,20 @@ def build_estimation_sample(
         merged["closure_length_std"] = 0.0
     else:
         merged["closure_length_std"] = (merged["closure_duration_days"] - len_mean) / len_std
+
+    if variety_pre_novelty_heterogeneity:
+        if outcome != "variety_seeking" or variety_seeking_mode != "distinct":
+            raise ValueError(
+                "variety_pre_novelty_heterogeneity requires outcome='variety_seeking' and "
+                "variety_seeking_mode='distinct'."
+            )
+        split_raw = str(
+            cfg.get("spec", {}).get("variety_pre_novelty_split_method", "median")
+        )
+        merged = _attach_novelty_pre_heterogeneity_cols(
+            merged=merged,
+            outcome_col=outcome,
+            split_method=split_raw,
+        )
 
     return merged

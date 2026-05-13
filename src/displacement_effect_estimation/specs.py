@@ -42,6 +42,7 @@ Specification map (matches identification_rewrite.md section 2.3)
 ------------------------------------------------------------------
   Collapsed (post-dummy) specs  ->  fit_collapsed_specs()
       binary_collapsed           : Spec B collapsed   (delta^B, delta^D, beta)
+      binary_collapsed_pre_novelty_split : Spec B plus pre-novelty-high interactions (6 terms)
       score_collapsed            : Spec C collapsed   (delta^B, delta^S, beta^S)
 
   Event-study specs             ->  fit_event_study_specs()
@@ -207,10 +208,11 @@ def _joint_zero_test(fit,
 # ---------------------------------------------------------------------------
 
 def fit_collapsed_specs(
-    df:          pd.DataFrame,
-    outcome:     str,
+    df: pd.DataFrame,
+    outcome: str,
     cluster_col: str = "member_id",
-    use_did:     bool = False,
+    use_did: bool = False,
+    variety_pre_novelty_heterogeneity: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Collapsed (post vs. pre) binary and continuous-score DDD specs.
@@ -222,6 +224,12 @@ def fit_collapsed_specs(
 
     t = 0 rows must be excluded from df before calling.
     `post` must be a column in df: 1 if rel_t > 0, 0 if rel_t < 0.
+
+    When ``variety_pre_novelty_heterogeneity`` is True (DDD only), ``df`` must
+    include ``novelty_pre_high`` (0/1 within member-closure). An additional
+    collapsed spec ``binary_collapsed_pre_novelty_split`` adds interactions
+    of that indicator with the three post terms; baseline coefficients remain
+    the low pre-novelty subgroup.
 
     Spec B collapsed
     ----------------
@@ -263,6 +271,11 @@ def fit_collapsed_specs(
     rows:     list[dict] = []
     fit_rows: list[dict] = []
 
+    if variety_pre_novelty_heterogeneity and use_did:
+        raise ValueError(
+            "variety_pre_novelty_heterogeneity is only defined for the DDD (use_did=False) collapsed spec."
+        )
+
     if use_did:
         # ------------------------------------------------------------------
         # DiD collapsed: post x treated only (no displacement interactions)
@@ -294,6 +307,37 @@ def fit_collapsed_specs(
     fit_rows.append(_fit_row(fit, spec, formula))
     for term in ("post_X_treated", "post_X_disp", "post_X_treated_X_disp"):
         rows.append(_tidy_row(fit, term, spec))
+
+    if variety_pre_novelty_heterogeneity:
+        _assert_columns(df, ["novelty_pre_high"])
+        df["post_X_treated_X_novelty_pre_high"] = (
+            df["post"] * df["treated"] * df["novelty_pre_high"]
+        )
+        df["post_X_disp_X_novelty_pre_high"] = (
+            df["post"] * df["disp_binary"] * df["novelty_pre_high"]
+        )
+        df["post_X_treated_X_disp_X_novelty_pre_high"] = (
+            df["post"] * df["treated"] * df["disp_binary"] * df["novelty_pre_high"]
+        )
+        spec = "binary_collapsed_pre_novelty_split"
+        formula = (
+            f"{outcome} ~ "
+            "post_X_treated + post_X_disp + post_X_treated_X_disp + "
+            "post_X_treated_X_novelty_pre_high + post_X_disp_X_novelty_pre_high + "
+            "post_X_treated_X_disp_X_novelty_pre_high"
+            f" | {fe_str}"
+        )
+        fit = pf.feols(formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(fit, spec, formula))
+        for term in (
+            "post_X_treated",
+            "post_X_disp",
+            "post_X_treated_X_disp",
+            "post_X_treated_X_novelty_pre_high",
+            "post_X_disp_X_novelty_pre_high",
+            "post_X_treated_X_disp_X_novelty_pre_high",
+        ):
+            rows.append(_tidy_row(fit, term, spec))
 
     # ------------------------------------------------------------------
     # Spec C collapsed

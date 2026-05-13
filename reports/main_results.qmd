@@ -270,6 +270,43 @@ Did closures change whether customers tried new products?
 
 For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative.
 
+### Heterogeneity by pre-period novelty (distinct measure)
+
+Customers differ in how exploratory they are **before** the closure episode. To ask whether the triple-difference pattern is stronger for habitually more novelty-seeking shoppers, we split each member–closure episode at the **sample median** of the episode’s **pre-period** mean distinct novelty share (all $rel_t<0$ windows with non-missing outcomes). Episodes without any valid pre-period novelty observation are dropped. This yields **25,894** episodes with a defined split (**12,189** above the median), and **95,986** panel rows enter the pooled regressions (member–closure periods with non-missing novelty outcomes on the restricted episode set).
+
+We then augment the collapsed triple-difference specification by interacting a high-pre-novelty indicator with each existing post interaction—analogous in structure to the quadruple-difference heterogeneity in Levine and Hristakeva’s Stop \& Shop strike analysis (section 5.3, “Heterogeneity in Trip Displacement Effects”), where a moderator enters interactions with each post term in the baseline displacement specification. The first three coefficients in the augmented regression are the post effects **for the below-median pre-novelty subgroup** ($H=0$); the next three are **increments** for the above-median subgroup ($H=1$). Implied effects for $H=1$ are sums of the corresponding pair (e.g.\ the blocked-treatment triple for the high subgroup is $\delta^D_{\text{low}} + \delta^D_{H}$ on `post` $\times$ `treated` $\times$ `blocked`).
+
+On this restricted sample, the **standard** collapsed DDD (without heterogeneity interactions) is close to the headline estimates:
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.03134 | 0.01199 | *** |
+| post × blocked ($\beta$) | +0.03841 | 0.00639 | *** |
+| post × treated × blocked ($\delta^D$) | −0.04155 | 0.01449 | ** |
+
+*95,986 observations; * p<0.1, ** p<0.05, *** p<0.01.*
+
+The **augmented** collapsed specification (`binary_collapsed_pre_novelty_split`) reports:
+
+| Term | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($H=0$) | +0.26059 | 0.01464 | *** |
+| post × blocked ($H=0$) | +0.13010 | 0.00651 | *** |
+| post × treated × blocked ($H=0$) | −0.26276 | 0.01730 | *** |
+| post × treated × $H$ | −0.48144 | 0.01830 | *** |
+| post × blocked × $H$ | −0.30876 | 0.00719 | *** |
+| post × treated × blocked × $H$ | +0.49234 | 0.02376 | *** |
+
+**Implied coefficients for the above-median pre-novelty subgroup ($H=1$):**
+
+| Coefficient | Implied estimate |
+|---|---:|
+| post × treated | −0.22085 |
+| post × blocked | −0.17866 |
+| post × treated × blocked | +0.22958 |
+
+**Read:** Among customers who were **less** novelty-seeking before the episode, the blocked-buyer pattern is **strongly negative** on novelty (−0.26 on the triple interaction). Among those who were **more** novelty-seeking ex ante, the incremental interactions flip the sign of that triple to a **positive** net effect (+0.23), while the baseline post terms for $H=1$ are also shifted by large negative increments on `post`×`treated` and `post`×`blocked`. Substantively, the closure’s association with “focused,” less exploratory buying after reopening is concentrated in the **low** pre-novelty segment; high pre-novelty customers show a different (and noisier to interpret) decomposition, so this split should be read as descriptive heterogeneity rather than a separate causal estimand.
+
 ## Market-new share (distinct-only-new)
 
 The **member-first-time** novelty measure above counts products that are new **to the customer**. The **distinct-only-new** outcome instead asks, among products the customer bought in a given event-time window, what fraction were **new to the chain’s menu** in the sense that their **global** first-sale date falls in **that window or the immediately preceding estimation window** (inclusive calendar bounds). The leftmost pre period has no preceding panel bin, so the union reduces to the current window only. This is intended as a menu-innovation exposure measure that does not use the member’s own purchase history to label “new.”

@@ -44,12 +44,14 @@ def fit_spec_bundle(
     cluster_col: str,
     include_length_heterogeneity: bool,
     use_did: bool = False,
+    variety_pre_novelty_heterogeneity: bool = False,
 ) -> dict[str, pd.DataFrame]:
     collapsed_terms, collapsed_fit = fit_collapsed_specs(
         df=sample,
         outcome=outcome,
         cluster_col=cluster_col,
         use_did=use_did,
+        variety_pre_novelty_heterogeneity=variety_pre_novelty_heterogeneity,
     )
     event_terms, event_fit, pretrend_tests = fit_event_study_specs(
         df=sample,
@@ -68,14 +70,12 @@ def fit_spec_bundle(
             "event_fit": event_fit.copy(),
             "pretrend_tests": pretrend_tests.copy(),
         }
+    bin_spec_mask = collapsed_terms["spec"].str.startswith("binary_collapsed")
+    bin_fit_mask = collapsed_fit["spec"].str.startswith("binary_collapsed")
     return {
-        "binary_terms": collapsed_terms[
-            collapsed_terms["spec"].isin(["binary_collapsed", "binary_collapsed_logit"])
-        ].copy(),
+        "binary_terms": collapsed_terms[bin_spec_mask].copy(),
         "score_terms": collapsed_terms[collapsed_terms["spec"] == "score_collapsed"].copy(),
-        "binary_fit": collapsed_fit[
-            collapsed_fit["spec"].isin(["binary_collapsed", "binary_collapsed_logit"])
-        ].copy(),
+        "binary_fit": collapsed_fit[bin_fit_mask].copy(),
         "score_fit": collapsed_fit[collapsed_fit["spec"] == "score_collapsed"].copy(),
         "event_terms": event_terms.copy(),
         "event_fit": event_fit.copy(),
@@ -164,6 +164,17 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--variety-pre-novelty-heterogeneity",
+        action="store_true",
+        default=False,
+        help=(
+            "For outcome=variety_seeking with --variety-seeking-mode distinct and unbalanced DDD: "
+            "split member-closure episodes by pre-period mean novelty vs sample median or mode "
+            "(config spec.variety_pre_novelty_split_method), and fit an extended collapsed DDD "
+            "with post×treatment×displacement interactions with the high-pre indicator."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=str,
         default=default_output_dir,
@@ -191,6 +202,15 @@ def main() -> None:
         if args.select_recency_consumers is not None
         else defaults.get("select_recency_consumers", False)
     )
+    if args.variety_pre_novelty_heterogeneity:
+        if args.outcome != "variety_seeking":
+            parser.error("--variety-pre-novelty-heterogeneity requires --outcome variety_seeking")
+        if args.variety_seeking_mode != "distinct":
+            parser.error("--variety-pre-novelty-heterogeneity requires --variety-seeking-mode distinct")
+        if args.balanced_panel:
+            parser.error("--variety-pre-novelty-heterogeneity cannot be used with --balanced-panel")
+        if separate_effect:
+            parser.error("--variety-pre-novelty-heterogeneity cannot be used with --separate-effect")
     out_dir = project_root / args.output_dir
     log_file = Path(args.log_file) if args.log_file else out_dir / "logs" / "run.log"
 
@@ -217,7 +237,8 @@ def main() -> None:
         "Arguments: outcome=%s, t_horizon=%s, cluster_col=%s, closure_duration_days=%s, "
         "separate_effect=%s, select_recency_consumers=%s, require_balanced_panel=%s, "
         "drop_period0_purchasers=%s, "
-        "variety_seeking_mode=%s, unbalanced_panel=%s, use_did=%s, output_dir=%s",
+        "variety_seeking_mode=%s, unbalanced_panel=%s, use_did=%s, "
+        "variety_pre_novelty_heterogeneity=%s, output_dir=%s",
         args.outcome,
         args.t_horizon,
         args.cluster_col,
@@ -229,6 +250,7 @@ def main() -> None:
         args.variety_seeking_mode,
         unbalanced_panel,
         use_did,
+        args.variety_pre_novelty_heterogeneity,
         args.output_dir,
     )
 
@@ -243,6 +265,7 @@ def main() -> None:
         variety_seeking_mode=args.variety_seeking_mode,
         drop_period0_purchasers=drop_period0_purchasers,
         unbalanced_panel=unbalanced_panel,
+        variety_pre_novelty_heterogeneity=args.variety_pre_novelty_heterogeneity,
     )
     logger.info("Built estimation sample: %s rows", f"{len(sample):,}")
 
@@ -271,6 +294,7 @@ def main() -> None:
                 cluster_col=args.cluster_col,
                 include_length_heterogeneity=False,
                 use_did=use_did,
+                variety_pre_novelty_heterogeneity=args.variety_pre_novelty_heterogeneity,
             )
             event_output_dir = separate_dir / closure_event_id
             save_outputs(
@@ -322,8 +346,20 @@ def main() -> None:
             cluster_col=args.cluster_col,
             include_length_heterogeneity=True,
             use_did=use_did,
+            variety_pre_novelty_heterogeneity=args.variety_pre_novelty_heterogeneity,
         )
         logger.info("Fitted aggregate collapsed/event-study specs")
+        agg_notes = [
+            "- Estimation mode: separate_effect=false",
+            f"- Closure duration filter days: {closure_duration_days}",
+            f"- Recency filter days: {select_recency_consumers}",
+            f"- Drop period-0 purchasers: {drop_period0_purchasers}",
+            f"- Model type: {'DiD' if use_did else 'DDD'}",
+        ]
+        if args.variety_pre_novelty_heterogeneity:
+            agg_notes.append(
+                "- Pre-novelty heterogeneity: collapsed DDD includes post×(treatment, displacement)×high-pre split"
+            )
         save_outputs(
             output_dir=out_dir,
             sample=sample,
@@ -334,13 +370,7 @@ def main() -> None:
             event_terms=results["event_terms"],
             event_fit=results["event_fit"],
             pretrend_tests=results["pretrend_tests"],
-            summary_notes=[
-                "- Estimation mode: separate_effect=false",
-                f"- Closure duration filter days: {closure_duration_days}",
-                f"- Recency filter days: {select_recency_consumers}",
-                f"- Drop period-0 purchasers: {drop_period0_purchasers}",
-                f"- Model type: {'DiD' if use_did else 'DDD'}",
-            ],
+            summary_notes=agg_notes,
         )
         if args.outcome == "variety_seeking":
             save_variety_panel_plot(

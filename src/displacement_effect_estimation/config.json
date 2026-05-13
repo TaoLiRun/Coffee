@@ -13,6 +13,7 @@
     "cluster_col": "member_id",
     "closure_duration_days": false,
     "separate_effect": false,
-    "select_recency_consumers": false
+    "select_recency_consumers": false,
+    "variety_pre_novelty_split_method": "median"
   }
 }

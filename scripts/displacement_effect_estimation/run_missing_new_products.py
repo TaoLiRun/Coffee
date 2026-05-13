@@ -85,6 +85,7 @@ def _run_separate_effects(
         variety_seeking_mode=variety_seeking_mode,
         drop_period0_purchasers=drop_period0_purchasers,
         unbalanced_panel=unbalanced_panel,
+        variety_pre_novelty_heterogeneity=False,
     )
 
     event_index_rows: list[dict[str, object]] = []
@@ -108,6 +109,7 @@ def _run_separate_effects(
             cluster_col="member_id",
             include_length_heterogeneity=False,
             use_did=use_did,
+            variety_pre_novelty_heterogeneity=False,
         )
 
         event_output_dir = output_dir / closure_event_id
@@ -721,6 +723,7 @@ def main() -> None:
             variety_seeking_mode=str(settings["variety_seeking_mode"]),
             drop_period0_purchasers=bool(settings["drop_period0_purchasers"]),
             unbalanced_panel=bool(settings["unbalanced_panel"]),
+            variety_pre_novelty_heterogeneity=False,
         )
         pooled_result = _fit_pooled_interaction_test(
             sample=pooled_sample,

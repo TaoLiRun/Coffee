@@ -2302,7 +2302,10 @@ window.Quarto = {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">5</span> Results</a>
   <ul class="collapse">
   <li><a href="#purchase-frequency-1" id="toc-purchase-frequency-1" class="nav-link" data-scroll-target="#purchase-frequency-1"><span class="header-section-number">5.1</span> Purchase Frequency</a></li>
-  <li><a href="#novelty-seeking-1" id="toc-novelty-seeking-1" class="nav-link" data-scroll-target="#novelty-seeking-1"><span class="header-section-number">5.2</span> Novelty-Seeking</a></li>
+  <li><a href="#novelty-seeking-1" id="toc-novelty-seeking-1" class="nav-link" data-scroll-target="#novelty-seeking-1"><span class="header-section-number">5.2</span> Novelty-Seeking</a>
+  <ul class="collapse">
+  <li><a href="#heterogeneity-by-pre-period-novelty-distinct-measure" id="toc-heterogeneity-by-pre-period-novelty-distinct-measure" class="nav-link" data-scroll-target="#heterogeneity-by-pre-period-novelty-distinct-measure"><span class="header-section-number">5.2.1</span> Heterogeneity by pre-period novelty (distinct measure)</a></li>
+  </ul></li>
   <li><a href="#market-new-share-distinct-only-new" id="toc-market-new-share-distinct-only-new" class="nav-link" data-scroll-target="#market-new-share-distinct-only-new"><span class="header-section-number">5.3</span> Market-new share (distinct-only-new)</a></li>
   <li><a href="#continuous-propensity-version" id="toc-continuous-propensity-version" class="nav-link" data-scroll-target="#continuous-propensity-version"><span class="header-section-number">5.4</span> Continuous Propensity Version</a></li>
   </ul></li>
@@ -2836,6 +2839,116 @@ Y_{iet} &amp;= \delta^B \cdot \text{post} \times \text{treated}
 <li><strong>Blocked treatment customers become less exploratory after reopening</strong> (<span class="math inline">\(\delta^D = -0.041\)</span>): once a due purchase was interrupted, customers return in a more focused mode and shift toward familiar products relative to comparable blocked controls.</li>
 </ul>
 <p>For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level (<span class="math inline">\(p = 0.186\)</span> for the ATT version and <span class="math inline">\(p = 0.797\)</span> for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative.</p>
+<section id="heterogeneity-by-pre-period-novelty-distinct-measure" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="heterogeneity-by-pre-period-novelty-distinct-measure"><span class="header-section-number">5.2.1</span> Heterogeneity by pre-period novelty (distinct measure)</h3>
+<p>Customers differ in how exploratory they are <strong>before</strong> the closure episode. To ask whether the triple-difference pattern is stronger for habitually more novelty-seeking shoppers, we split each member–closure episode at the <strong>sample median</strong> of the episode’s <strong>pre-period</strong> mean distinct novelty share (all <span class="math inline">\(rel_t&lt;0\)</span> windows with non-missing outcomes). Episodes without any valid pre-period novelty observation are dropped. This yields <strong>25,894</strong> episodes with a defined split (<strong>12,189</strong> above the median), and <strong>95,986</strong> panel rows enter the pooled regressions (member–closure periods with non-missing novelty outcomes on the restricted episode set).</p>
+<p>We then augment the collapsed triple-difference specification by interacting a high-pre-novelty indicator with each existing post interaction—analogous in structure to the quadruple-difference heterogeneity in Levine and Hristakeva’s Stop &amp; Shop strike analysis (section 5.3, “Heterogeneity in Trip Displacement Effects”), where a moderator enters interactions with each post term in the baseline displacement specification. The first three coefficients in the augmented regression are the post effects <strong>for the below-median pre-novelty subgroup</strong> (<span class="math inline">\(H=0\)</span>); the next three are <strong>increments</strong> for the above-median subgroup (<span class="math inline">\(H=1\)</span>). Implied effects for <span class="math inline">\(H=1\)</span> are sums of the corresponding pair (e.g. the blocked-treatment triple for the high subgroup is <span class="math inline">\(\delta^D_{\text{low}} + \delta^D_{H}\)</span> on <code>post</code> <span class="math inline">\(\times\)</span> <code>treated</code> <span class="math inline">\(\times\)</span> <code>blocked</code>).</p>
+<p>On this restricted sample, the <strong>standard</strong> collapsed DDD (without heterogeneity interactions) is close to the headline estimates:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Coefficient</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">SE</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post × treated (<span class="math inline">\(\delta^B\)</span>)</td>
+<td style="text-align: right;">+0.03134</td>
+<td style="text-align: right;">0.01199</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>post × blocked (<span class="math inline">\(\beta\)</span>)</td>
+<td style="text-align: right;">+0.03841</td>
+<td style="text-align: right;">0.00639</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>post × treated × blocked (<span class="math inline">\(\delta^D\)</span>)</td>
+<td style="text-align: right;">−0.04155</td>
+<td style="text-align: right;">0.01449</td>
+<td>**</td>
+</tr>
+</tbody>
+</table>
+<p><em>95,986 observations; </em> p&lt;0.1, ** p&lt;0.05, *** p&lt;0.01.*</p>
+<p>The <strong>augmented</strong> collapsed specification (<code>binary_collapsed_pre_novelty_split</code>) reports:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Term</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">SE</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post × treated (<span class="math inline">\(H=0\)</span>)</td>
+<td style="text-align: right;">+0.26059</td>
+<td style="text-align: right;">0.01464</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>post × blocked (<span class="math inline">\(H=0\)</span>)</td>
+<td style="text-align: right;">+0.13010</td>
+<td style="text-align: right;">0.00651</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>post × treated × blocked (<span class="math inline">\(H=0\)</span>)</td>
+<td style="text-align: right;">−0.26276</td>
+<td style="text-align: right;">0.01730</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>post × treated × <span class="math inline">\(H\)</span></td>
+<td style="text-align: right;">−0.48144</td>
+<td style="text-align: right;">0.01830</td>
+<td>***</td>
+</tr>
+<tr class="odd">
+<td>post × blocked × <span class="math inline">\(H\)</span></td>
+<td style="text-align: right;">−0.30876</td>
+<td style="text-align: right;">0.00719</td>
+<td>***</td>
+</tr>
+<tr class="even">
+<td>post × treated × blocked × <span class="math inline">\(H\)</span></td>
+<td style="text-align: right;">+0.49234</td>
+<td style="text-align: right;">0.02376</td>
+<td>***</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Implied coefficients for the above-median pre-novelty subgroup (<span class="math inline">\(H=1\)</span>):</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Coefficient</th>
+<th style="text-align: right;">Implied estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>post × treated</td>
+<td style="text-align: right;">−0.22085</td>
+</tr>
+<tr class="even">
+<td>post × blocked</td>
+<td style="text-align: right;">−0.17866</td>
+</tr>
+<tr class="odd">
+<td>post × treated × blocked</td>
+<td style="text-align: right;">+0.22958</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Read:</strong> Among customers who were <strong>less</strong> novelty-seeking before the episode, the blocked-buyer pattern is <strong>strongly negative</strong> on novelty (−0.26 on the triple interaction). Among those who were <strong>more</strong> novelty-seeking ex ante, the incremental interactions flip the sign of that triple to a <strong>positive</strong> net effect (+0.23), while the baseline post terms for <span class="math inline">\(H=1\)</span> are also shifted by large negative increments on <code>post</code>×<code>treated</code> and <code>post</code>×<code>blocked</code>. Substantively, the closure’s association with “focused,” less exploratory buying after reopening is concentrated in the <strong>low</strong> pre-novelty segment; high pre-novelty customers show a different (and noisier to interpret) decomposition, so this split should be read as descriptive heterogeneity rather than a separate causal estimand.</p>
+</section>
 </section>
 <section id="market-new-share-distinct-only-new" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="market-new-share-distinct-only-new"><span class="header-section-number">5.3</span> Market-new share (distinct-only-new)</h2>
