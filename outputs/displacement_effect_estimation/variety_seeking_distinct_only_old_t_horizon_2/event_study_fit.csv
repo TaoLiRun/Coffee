@@ -1,5 +1,0 @@
-spec,formula,n,r2,r2_within
-event_att,"variety_seeking ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",42101,0.5508390436755033,3.887921739509359e-05
-event_binary_B,"variety_seeking ~ i(rel_t, treated,       ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,   ref=-1) | event_fe_id + rel_t + calendar_month",42101,0.5510745366340954,0.0005631540892301334
-event_binary_D,"variety_seeking ~ i(rel_t, treated,        ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,    ref=-1) + i(rel_t, treated_X_len,  ref=-1) + i(rel_t, disp_X_len,     ref=-1) + i(rel_t, tXdXlen,        ref=-1) | event_fe_id + rel_t + calendar_month",42101,0.5519785769033712,0.0025758070328321114
-event_score_C,"variety_seeking ~ i(rel_t, treated,                   ref=-1) + i(rel_t, treated_X_score,           ref=-1) + i(rel_t, displacement_prob_centered, ref=-1) | event_fe_id + rel_t + calendar_month",42101,0.5511084821686189,0.0006387265856139246
