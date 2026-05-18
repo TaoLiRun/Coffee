@@ -146,36 +146,40 @@ def save_pre_novelty_histogram(
     sample: pd.DataFrame,
 ) -> None:
     """Save the episode-level pre-period novelty distribution and histogram."""
-    required = {
-        "member_id",
-        "dept_id",
-        "closure_start",
-        "novelty_pre_mean",
-        "novelty_pre_split_rule",
-        "novelty_pre_threshold_low",
-        "novelty_pre_threshold_high",
-    }
-    missing = required - set(sample.columns)
-    if missing:
-        raise ValueError(f"sample missing required columns for pre-novelty histogram: {sorted(missing)}")
+    stored_distribution = sample.attrs.get("pre_novelty_distribution")
+    if stored_distribution is not None:
+        episode_df = stored_distribution.copy()
+    else:
+        required = {
+            "member_id",
+            "dept_id",
+            "closure_start",
+            "novelty_pre_mean",
+            "novelty_pre_split_rule",
+            "novelty_pre_threshold_low",
+            "novelty_pre_threshold_high",
+        }
+        missing = required - set(sample.columns)
+        if missing:
+            raise ValueError(f"sample missing required columns for pre-novelty histogram: {sorted(missing)}")
 
-    key_cols = ["member_id", "dept_id", "closure_start"]
-    episode_df = (
-        sample.loc[
-            sample["novelty_pre_mean"].notna(),
-            key_cols
-            + [
-                "novelty_pre_mean",
-                "novelty_pre_high",
-                "novelty_pre_group",
-                "novelty_pre_split_rule",
-                "novelty_pre_threshold_low",
-                "novelty_pre_threshold_high",
-            ],
-        ]
-        .drop_duplicates(subset=key_cols)
-        .copy()
-    )
+        key_cols = ["member_id", "dept_id", "closure_start"]
+        episode_df = (
+            sample.loc[
+                sample["novelty_pre_mean"].notna(),
+                key_cols
+                + [
+                    "novelty_pre_mean",
+                    "novelty_pre_high",
+                    "novelty_pre_group",
+                    "novelty_pre_split_rule",
+                    "novelty_pre_threshold_low",
+                    "novelty_pre_threshold_high",
+                ],
+            ]
+            .drop_duplicates(subset=key_cols)
+            .copy()
+        )
     if episode_df.empty:
         raise ValueError("No non-missing novelty_pre_mean values available for histogram.")
 

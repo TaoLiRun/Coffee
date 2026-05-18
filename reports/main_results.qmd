@@ -311,7 +311,7 @@ The **augmented** collapsed specification (`binary_collapsed_pre_novelty_split`)
 
 If we instead set `customer_median_split = false`, the heterogeneity sample keeps only the **bottom quartile** and **top quartile** of episode-level pre-period novelty, dropping the middle 50%. In this run, the retained sample has **14,461** episodes (**7,297** baseline and **7,164** high), with cutoffs at **0.25** and **1.00**.
 
-The distribution used for this split is shown below:
+The histogram below shows the **full population distribution** of episode-level pre-period novelty used to define these cutoffs. The regression keeps only the bottom- and top-quartile tails; the middle 50% are omitted from the tail-only heterogeneity estimation.
 
 ![](../outputs/displacement_effect_estimation/pre_period_novelty_histogram.png)
 

@@ -713,7 +713,7 @@ def _attach_novelty_pre_heterogeneity_cols(
     if valid_means.empty:
         raise ValueError("Episode pre-novelty means are all missing.")
 
-    ep_df = episode_means.reset_index()
+    ep_df_full = episode_means.reset_index()
     if customer_median_split:
         if sm == "median":
             thresh = float(valid_means.median())
@@ -721,30 +721,38 @@ def _attach_novelty_pre_heterogeneity_cols(
             rounded = valid_means.round(decimals=10)
             modes = rounded.mode(dropna=True)
             thresh = float(modes.iloc[0]) if len(modes) > 0 else float(valid_means.median())
-        ep_df["novelty_pre_high"] = (ep_df["novelty_pre_mean"] > thresh).astype(int)
-        ep_df["novelty_pre_group"] = np.where(ep_df["novelty_pre_high"] == 1, "high", "baseline")
-        ep_df["novelty_pre_split_rule"] = f"{sm}_full_sample"
-        ep_df["novelty_pre_threshold_low"] = thresh
-        ep_df["novelty_pre_threshold_high"] = thresh
+        ep_df_full["novelty_pre_selected_for_heterogeneity"] = 1
+        ep_df_full["novelty_pre_high"] = (ep_df_full["novelty_pre_mean"] > thresh).astype(int)
+        ep_df_full["novelty_pre_group"] = np.where(ep_df_full["novelty_pre_high"] == 1, "high", "baseline")
+        ep_df_full["novelty_pre_split_rule"] = f"{sm}_full_sample"
+        ep_df_full["novelty_pre_threshold_low"] = thresh
+        ep_df_full["novelty_pre_threshold_high"] = thresh
+        ep_df = ep_df_full.copy()
         dropped_middle = 0
     else:
         thresh_low = float(valid_means.quantile(0.25))
         thresh_high = float(valid_means.quantile(0.75))
-        lower_mask = ep_df["novelty_pre_mean"] <= thresh_low
-        upper_mask = ep_df["novelty_pre_mean"] >= thresh_high
+        lower_mask = ep_df_full["novelty_pre_mean"] <= thresh_low
+        upper_mask = ep_df_full["novelty_pre_mean"] >= thresh_high
         keep_mask = lower_mask | upper_mask
         dropped_middle = int((~keep_mask).sum())
-        ep_df = ep_df.loc[keep_mask].copy()
+        ep_df_full["novelty_pre_selected_for_heterogeneity"] = keep_mask.astype(int)
+        ep_df_full["novelty_pre_group"] = np.where(
+            lower_mask,
+            "baseline",
+            np.where(upper_mask, "high", "middle"),
+        )
+        ep_df_full["novelty_pre_split_rule"] = "quartile_tails"
+        ep_df_full["novelty_pre_threshold_low"] = thresh_low
+        ep_df_full["novelty_pre_threshold_high"] = thresh_high
+        ep_df = ep_df_full.loc[keep_mask].copy()
         ep_df["novelty_pre_high"] = upper_mask.loc[ep_df.index].astype(int)
-        ep_df["novelty_pre_group"] = np.where(ep_df["novelty_pre_high"] == 1, "high", "baseline")
-        ep_df["novelty_pre_split_rule"] = "quartile_tails"
-        ep_df["novelty_pre_threshold_low"] = thresh_low
-        ep_df["novelty_pre_threshold_high"] = thresh_high
 
     n_ep = int(ep_df["novelty_pre_mean"].notna().sum())
     n_hi = int((ep_df["novelty_pre_high"] == 1).sum())
     n_baseline = int((ep_df["novelty_pre_high"] == 0).sum())
     out = merged.merge(ep_df, on=key_cols, how="inner")
+    out.attrs["pre_novelty_distribution"] = ep_df_full.copy()
     LOGGER.info(
         "Pre-novelty heterogeneity: customer_median_split=%s split_method=%s threshold_low=%s "
         "threshold_high=%s episode_rows=%s n_baseline_episodes=%s n_high_episodes=%s "
