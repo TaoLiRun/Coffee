@@ -307,6 +307,39 @@ The **augmented** collapsed specification (`binary_collapsed_pre_novelty_split`)
 
 **Read:** Among customers who were **less** novelty-seeking before the episode, the blocked-buyer pattern is **strongly negative** on novelty (−0.26 on the triple interaction). Among those who were **more** novelty-seeking ex ante, the incremental interactions flip the sign of that triple to a **positive** net effect (+0.23), while the baseline post terms for $H=1$ are also shifted by large negative increments on `post`×`treated` and `post`×`blocked`. Substantively, the closure’s association with “focused,” less exploratory buying after reopening is concentrated in the **low** pre-novelty segment; high pre-novelty customers show a different (and noisier to interpret) decomposition, so this split should be read as descriptive heterogeneity rather than a separate causal estimand.
 
+### Tail-only split: bottom quartile vs top quartile
+
+If we instead set `customer_median_split = false`, the heterogeneity sample keeps only the **bottom quartile** and **top quartile** of episode-level pre-period novelty, dropping the middle 50%. In this run, the retained sample has **14,461** episodes (**7,297** baseline and **7,164** high), with cutoffs at **0.25** and **1.00**.
+
+On this tail-only sample, the **standard** collapsed DDD is:
+
+| Coefficient | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($\delta^B$) | +0.04170 | 0.01738 | ** |
+| post × blocked ($\beta$) | +0.12786 | 0.00938 | *** |
+| post × treated × blocked ($\delta^D$) | −0.05359 | 0.02231 | ** |
+
+The **augmented** collapsed specification reports:
+
+| Term | Estimate | SE | |
+|---|---:|---:|---|
+| post × treated ($H=0$) | +0.41242 | 0.01940 | *** |
+| post × blocked ($H=0$) | +0.21179 | 0.00903 | *** |
+| post × treated × blocked ($H=0$) | −0.40986 | 0.02314 | *** |
+| post × treated × $H$ | −0.69824 | 0.02292 | *** |
+| post × blocked × $H$ | −0.55632 | 0.01368 | *** |
+| post × treated × blocked × $H$ | +0.73847 | 0.03685 | *** |
+
+**Implied coefficients for the top-quartile subgroup ($H=1$):**
+
+| Coefficient | Implied estimate |
+|---|---:|
+| post × treated | −0.28582 |
+| post × blocked | −0.34453 |
+| post × treated × blocked | +0.32861 |
+
+**Read:** the same qualitative pattern holds, but it is sharper: the low-novelty tail has a strongly negative blocked-buyer novelty effect, while the top-novelty tail flips to a clearly positive implied triple interaction.
+
 ## Market-new share (distinct-only-new)
 
 The **member-first-time** novelty measure above counts products that are new **to the customer**. The **distinct-only-new** outcome instead asks, among products the customer bought in a given event-time window, what fraction were **new to the chain’s menu** in the sense that their **global** first-sale date falls in **that window or the immediately preceding estimation window** (inclusive calendar bounds). The leftmost pre period has no preceding panel bin, so the union reduces to the current window only. This is intended as a menu-innovation exposure measure that does not use the member’s own purchase history to label “new.”

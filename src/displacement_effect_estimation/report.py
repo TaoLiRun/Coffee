@@ -138,3 +138,84 @@ def save_variety_panel_plot(
     plt.close(fig)
 
     agg.to_csv(output_dir / "variety_panel_trend_stats.csv", index=False)
+
+
+def save_pre_novelty_histogram(
+    *,
+    output_dir: Path,
+    sample: pd.DataFrame,
+) -> None:
+    """Save the episode-level pre-period novelty distribution and histogram."""
+    required = {
+        "member_id",
+        "dept_id",
+        "closure_start",
+        "novelty_pre_mean",
+        "novelty_pre_split_rule",
+        "novelty_pre_threshold_low",
+        "novelty_pre_threshold_high",
+    }
+    missing = required - set(sample.columns)
+    if missing:
+        raise ValueError(f"sample missing required columns for pre-novelty histogram: {sorted(missing)}")
+
+    key_cols = ["member_id", "dept_id", "closure_start"]
+    episode_df = (
+        sample.loc[
+            sample["novelty_pre_mean"].notna(),
+            key_cols
+            + [
+                "novelty_pre_mean",
+                "novelty_pre_high",
+                "novelty_pre_group",
+                "novelty_pre_split_rule",
+                "novelty_pre_threshold_low",
+                "novelty_pre_threshold_high",
+            ],
+        ]
+        .drop_duplicates(subset=key_cols)
+        .copy()
+    )
+    if episode_df.empty:
+        raise ValueError("No non-missing novelty_pre_mean values available for histogram.")
+
+    episode_df["novelty_pre_mean"] = episode_df["novelty_pre_mean"].astype(float)
+    split_rule = str(episode_df["novelty_pre_split_rule"].iloc[0])
+    threshold_low = float(episode_df["novelty_pre_threshold_low"].iloc[0])
+    threshold_high = float(episode_df["novelty_pre_threshold_high"].iloc[0])
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    episode_df.to_csv(output_dir / "pre_period_novelty_episode_means.csv", index=False)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.hist(
+        episode_df["novelty_pre_mean"].values,
+        bins=np.linspace(0.0, 1.0, 31),
+        color="#1f77b4",
+        edgecolor="white",
+        alpha=0.85,
+    )
+    ax.axvline(
+        threshold_low,
+        color="#d62728",
+        linestyle="--",
+        linewidth=2,
+        label=f"low threshold = {threshold_low:.3f}",
+    )
+    if not np.isclose(threshold_high, threshold_low):
+        ax.axvline(
+            threshold_high,
+            color="#2ca02c",
+            linestyle="--",
+            linewidth=2,
+            label=f"high threshold = {threshold_high:.3f}",
+        )
+    ax.set_xlim(0.0, 1.0)
+    ax.set_xlabel("Pre-period novelty share")
+    ax.set_ylabel("Episodes")
+    ax.set_title(f"Distribution of pre-period novelty ({split_rule})")
+    ax.legend()
+    ax.grid(True, alpha=0.25)
+    fig.tight_layout()
+    fig.savefig(output_dir / "pre_period_novelty_histogram.png", dpi=300, bbox_inches="tight")
+    plt.close(fig)

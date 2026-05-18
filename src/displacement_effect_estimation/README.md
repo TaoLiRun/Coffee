@@ -60,6 +60,10 @@ python run.py --outcome variety_seeking --balanced-panel --keep-period0-purchase
 # Variety-seeking: global catalog-age share (distinct products in-window)
 python run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new \
   --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
+
+# Variety-seeking heterogeneity: compare bottom vs top quartile of pre-period novelty
+python run.py --outcome variety_seeking --variety-pre-novelty-heterogeneity \
+  --customer-median-split false
 ```
 
 Behavior is controlled by `config.json`:
@@ -90,6 +94,7 @@ Saved to `outputs/displacement_effect_estimation/`:
 - `event_study_fit.csv`
 - `pretrend_joint_tests.csv`
 - `summary.md`
+- `pre_period_novelty_episode_means.csv` and `pre_period_novelty_histogram.png` when `--variety-pre-novelty-heterogeneity` is used
 
 When `spec.separate_effect = true`, outputs are saved under
 `outputs/displacement_effect_estimation/separate_effect/<closure_event_id>/`

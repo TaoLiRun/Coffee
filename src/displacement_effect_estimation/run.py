@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from data import build_estimation_sample, get_project_root, load_config
-from report import save_outputs, save_variety_panel_plot
+from report import save_outputs, save_pre_novelty_histogram, save_variety_panel_plot
 from specs import fit_collapsed_specs, fit_event_study_specs
 
 
@@ -81,6 +81,17 @@ def fit_spec_bundle(
         "event_fit": event_fit.copy(),
         "pretrend_tests": pretrend_tests.copy(),
     }
+
+
+def _parse_bool_arg(value: str) -> bool:
+    raw = str(value).strip().lower()
+    if raw in {"true", "1", "yes", "y"}:
+        return True
+    if raw in {"false", "0", "no", "n"}:
+        return False
+    raise argparse.ArgumentTypeError(
+        f"Expected a boolean value for customer_median_split; got {value!r}."
+    )
 
 
 def main() -> None:
@@ -175,6 +186,16 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--customer-median-split",
+        type=_parse_bool_arg,
+        default=True,
+        help=(
+            "When true (default), split valid member-closure episodes at the configured "
+            "full-sample pre-novelty threshold. When false, keep only the bottom-quartile "
+            "and top-quartile episodes by pre-period novelty and drop the middle 50%."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=str,
         default=default_output_dir,
@@ -238,7 +259,7 @@ def main() -> None:
         "separate_effect=%s, select_recency_consumers=%s, require_balanced_panel=%s, "
         "drop_period0_purchasers=%s, "
         "variety_seeking_mode=%s, unbalanced_panel=%s, use_did=%s, "
-        "variety_pre_novelty_heterogeneity=%s, output_dir=%s",
+        "variety_pre_novelty_heterogeneity=%s, customer_median_split=%s, output_dir=%s",
         args.outcome,
         args.t_horizon,
         args.cluster_col,
@@ -251,6 +272,7 @@ def main() -> None:
         unbalanced_panel,
         use_did,
         args.variety_pre_novelty_heterogeneity,
+        args.customer_median_split,
         args.output_dir,
     )
 
@@ -266,6 +288,7 @@ def main() -> None:
         drop_period0_purchasers=drop_period0_purchasers,
         unbalanced_panel=unbalanced_panel,
         variety_pre_novelty_heterogeneity=args.variety_pre_novelty_heterogeneity,
+        customer_median_split=args.customer_median_split,
     )
     logger.info("Built estimation sample: %s rows", f"{len(sample):,}")
 
@@ -315,6 +338,7 @@ def main() -> None:
                     f"- Drop period-0 purchasers: {drop_period0_purchasers}",
                     "- Length-heterogeneity event-study spec skipped: true",
                     f"- Model type: {'DiD' if use_did else 'DDD'}",
+                    f"- Customer median split: {args.customer_median_split}",
                 ],
             )
             if args.outcome == "variety_seeking":
@@ -360,6 +384,7 @@ def main() -> None:
             agg_notes.append(
                 "- Pre-novelty heterogeneity: collapsed DDD includes post×(treatment, displacement)×high-pre split"
             )
+            agg_notes.append(f"- Customer median split: {args.customer_median_split}")
         save_outputs(
             output_dir=out_dir,
             sample=sample,
@@ -372,6 +397,11 @@ def main() -> None:
             pretrend_tests=results["pretrend_tests"],
             summary_notes=agg_notes,
         )
+        if args.variety_pre_novelty_heterogeneity:
+            save_pre_novelty_histogram(
+                output_dir=out_dir,
+                sample=sample,
+            )
         if args.outcome == "variety_seeking":
             save_variety_panel_plot(
                 output_dir=out_dir,

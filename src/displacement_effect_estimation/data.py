@@ -690,6 +690,7 @@ def _attach_novelty_pre_heterogeneity_cols(
     merged: pd.DataFrame,
     outcome_col: str,
     split_method: str,
+    customer_median_split: bool,
 ) -> pd.DataFrame:
     """Episode-level pre mean of outcome, split vs cross-sectional median or mode; inner-merge drops episodes with no valid pre mean."""
     key_cols = ["member_id", "dept_id", "closure_start"]
@@ -711,24 +712,51 @@ def _attach_novelty_pre_heterogeneity_cols(
     valid_means = episode_means.dropna()
     if valid_means.empty:
         raise ValueError("Episode pre-novelty means are all missing.")
-    if sm == "median":
-        thresh = float(valid_means.median())
-    else:
-        rounded = valid_means.round(decimals=10)
-        modes = rounded.mode(dropna=True)
-        thresh = float(modes.iloc[0]) if len(modes) > 0 else float(valid_means.median())
+
     ep_df = episode_means.reset_index()
-    ep_df["novelty_pre_high"] = (ep_df["novelty_pre_mean"] > thresh).astype(int)
+    if customer_median_split:
+        if sm == "median":
+            thresh = float(valid_means.median())
+        else:
+            rounded = valid_means.round(decimals=10)
+            modes = rounded.mode(dropna=True)
+            thresh = float(modes.iloc[0]) if len(modes) > 0 else float(valid_means.median())
+        ep_df["novelty_pre_high"] = (ep_df["novelty_pre_mean"] > thresh).astype(int)
+        ep_df["novelty_pre_group"] = np.where(ep_df["novelty_pre_high"] == 1, "high", "baseline")
+        ep_df["novelty_pre_split_rule"] = f"{sm}_full_sample"
+        ep_df["novelty_pre_threshold_low"] = thresh
+        ep_df["novelty_pre_threshold_high"] = thresh
+        dropped_middle = 0
+    else:
+        thresh_low = float(valid_means.quantile(0.25))
+        thresh_high = float(valid_means.quantile(0.75))
+        lower_mask = ep_df["novelty_pre_mean"] <= thresh_low
+        upper_mask = ep_df["novelty_pre_mean"] >= thresh_high
+        keep_mask = lower_mask | upper_mask
+        dropped_middle = int((~keep_mask).sum())
+        ep_df = ep_df.loc[keep_mask].copy()
+        ep_df["novelty_pre_high"] = upper_mask.loc[ep_df.index].astype(int)
+        ep_df["novelty_pre_group"] = np.where(ep_df["novelty_pre_high"] == 1, "high", "baseline")
+        ep_df["novelty_pre_split_rule"] = "quartile_tails"
+        ep_df["novelty_pre_threshold_low"] = thresh_low
+        ep_df["novelty_pre_threshold_high"] = thresh_high
+
     n_ep = int(ep_df["novelty_pre_mean"].notna().sum())
     n_hi = int((ep_df["novelty_pre_high"] == 1).sum())
+    n_baseline = int((ep_df["novelty_pre_high"] == 0).sum())
     out = merged.merge(ep_df, on=key_cols, how="inner")
     LOGGER.info(
-        "Pre-novelty heterogeneity: split_method=%s threshold=%s episode_rows=%s n_high_episodes=%s "
-        "panel_rows_before=%s panel_rows_after=%s",
+        "Pre-novelty heterogeneity: customer_median_split=%s split_method=%s threshold_low=%s "
+        "threshold_high=%s episode_rows=%s n_baseline_episodes=%s n_high_episodes=%s "
+        "dropped_middle_episodes=%s panel_rows_before=%s panel_rows_after=%s",
+        customer_median_split,
         sm,
-        repr(thresh),
+        repr(float(ep_df["novelty_pre_threshold_low"].iloc[0])),
+        repr(float(ep_df["novelty_pre_threshold_high"].iloc[0])),
         f"{n_ep:,}",
+        f"{n_baseline:,}",
         f"{n_hi:,}",
+        f"{dropped_middle:,}",
         f"{len(merged):,}",
         f"{len(out):,}",
     )
@@ -749,6 +777,7 @@ def build_estimation_sample(
     drop_period0_purchasers: bool | None = None,
     unbalanced_panel: bool | None = None,
     variety_pre_novelty_heterogeneity: bool = False,
+    customer_median_split: bool = True,
 ) -> pd.DataFrame:
     cfg = cfg or load_config()
     _SUPPORTED_OUTCOMES = frozenset({"n_purchases", "purchase_incidence_binary", "variety_seeking"})
@@ -1057,6 +1086,7 @@ def build_estimation_sample(
             merged=merged,
             outcome_col=outcome,
             split_method=split_raw,
+            customer_median_split=customer_median_split,
         )
 
     return merged
