@@ -55,8 +55,8 @@ Pre-trend joint-zero F-tests are produced for every event-study spec.
 
 Duplication-safety note
 -----------------------
-pyfixest names i(rel_t, x, ref=-1) terms as
-    "C(rel_t, contr.treatment(base=-1))[<t>]:<x>"
+pyfixest names i(rel_t, x, ref=<base>) terms as
+    "C(rel_t, contr.treatment(base=<base>))[<t>]:<x>"
 Using substring `in` to match ":treated" would also match
 ":treated_X_disp", ":treated_X_len", etc., causing duplicate rows.
 All extraction helpers below use str.endswith() for exact suffix
@@ -145,19 +145,24 @@ def _pre_period_terms(tidy_index: pd.Index,
       (a) correspond to one of `pre_periods` in the i()-interaction bracket, AND
       (b) end exactly with `suffix`.
 
-    pyfixest names i(rel_t, x, ref=-1) terms as
+    pyfixest can name i(rel_t, x, ref=-1) terms in at least two formats:
         "C(rel_t, contr.treatment(base=-1))[<t>]:<x>"
-    We extract all [...] tokens and intersect with the pre-period set,
-    then apply endswith() for the suffix to avoid false matches.
+        "rel_t::<t>:<x>"
+    We support both naming schemes, then apply endswith() for the suffix to
+    avoid false matches such as ":treated" matching ":treated_X_disp".
     """
-    tokens = {f"[{t}]" for t in pre_periods}   # e.g. {"[-4]","[-3]","[-2]"}
+    bracket_tokens = {f"[{t}]" for t in pre_periods}   # e.g. {"[-4]","[-3]","[-2]"}
+    colon_tokens = {f"::{t}:" for t in pre_periods}    # e.g. {"::-4:","::-3:","::-2:"}
     selected: list[str] = []
     for name in tidy_index:
-        brackets = set(re.findall(r"\[[-\d]+\]", str(name)))
-        if not brackets.intersection(tokens):
+        name_str = str(name)
+        brackets = set(re.findall(r"\[[-\d]+\]", name_str))
+        has_bracket_match = bool(brackets.intersection(bracket_tokens))
+        has_colon_match = any(token in name_str for token in colon_tokens)
+        if not (has_bracket_match or has_colon_match):
             continue
-        if str(name).endswith(suffix):
-            selected.append(str(name))
+        if name_str.endswith(suffix):
+            selected.append(name_str)
     return selected
 
 
@@ -407,13 +412,14 @@ def fit_event_study_specs(
     cluster_col: str = "member_id",
     include_length_heterogeneity: bool = True,
     use_did:     bool = False,
+    ref_period:  int = -1,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Event-study versions of Specs A, B, C, D (identification_rewrite.md
     section 2.3).
 
-    All specifications use i(rel_t, <var>, ref=-1) to interact relative-time
-    dummies with treatment/displacement variables, with t = -1 as the omitted
+    All specifications use i(rel_t, <var>, ref=<ref_period>) to interact relative-time
+    dummies with treatment/displacement variables, with t = ref_period as the omitted
     reference period.  t = 0 rows must already be excluded from df.
 
     Fixed effects absorbed in all specs: event_fe_id + rel_t + calendar_month.
@@ -468,7 +474,17 @@ def fit_event_study_specs(
         df["tXdXlen"]         = df["treated"]  * df["disp_binary"] * df["closure_length_std"]
         df["treated_X_score"] = df["treated"]  * df["displacement_prob_centered"]
 
-    pre_periods: list[int] = sorted(int(t) for t in df["rel_t"].unique() if int(t) < -1)
+    rel_t_values = sorted(int(t) for t in df["rel_t"].unique())
+    if ref_period not in rel_t_values:
+        raise ValueError(
+            f"ref_period={ref_period} is not present in rel_t values {rel_t_values}"
+        )
+    if ref_period >= 0:
+        raise ValueError(f"ref_period must be a pre-treatment period; got {ref_period}.")
+
+    pre_periods: list[int] = sorted(
+        int(t) for t in rel_t_values if int(t) < 0 and int(t) != ref_period
+    )
     vcov    = {"CRV1": cluster_col}
     fe_str  = "event_fe_id + rel_t + calendar_month"
 
@@ -479,17 +495,17 @@ def fit_event_study_specs(
     # ------------------------------------------------------------------
     # Spec A: Overall ATT event study
     #
-    # y_{iet} = sum_{l != -1} delta_l * 1(t=l) * treated_{ie}
+    # y_{iet} = sum_{l != ref_period} delta_l * 1(t=l) * treated_{ie}
     #           + phi_{ie} + omega_t + gamma_m + nu_{iet}
     #
-    # i(rel_t, treated, ref=-1) produces one delta_l per period l != -1.
+    # i(rel_t, treated, ref=ref_period) produces one delta_l per period l != ref_period.
     #
     # Interpretation:
-    #   l < -1 : pre-trend test -- should be jointly zero
+    #   l < 0, l != ref_period : pre-trend test -- should be jointly zero
     #   l > 0  : post-closure ATT (displacement + baseline combined)
     # ------------------------------------------------------------------
     spec    = "event_att"
-    formula = f"{outcome} ~ i(rel_t, treated, ref=-1) | {fe_str}"
+    formula = f"{outcome} ~ i(rel_t, treated, ref={ref_period}) | {fe_str}"
     fit     = pf.feols(formula, data=df, vcov=vcov)
     fit_rows.append(_fit_row(fit, spec, formula))
     rows.extend(_tidy_rows_suffix(fit, ":treated", spec))
@@ -506,9 +522,9 @@ def fit_event_study_specs(
     # ------------------------------------------------------------------
     # Spec B: Triple-difference, binary displacement
     #
-    # y_{iet} = sum_{l!=-1} delta^B_l * 1(t=l) * treated_{ie}
-    #         + sum_{l!=-1} delta^D_l * 1(t=l) * treated_{ie} * D_{ie}
-    #         + sum_{l!=-1} beta_l    * 1(t=l) * D_{ie}
+    # y_{iet} = sum_{l!=ref_period} delta^B_l * 1(t=l) * treated_{ie}
+    #         + sum_{l!=ref_period} delta^D_l * 1(t=l) * treated_{ie} * D_{ie}
+    #         + sum_{l!=ref_period} beta_l    * 1(t=l) * D_{ie}
     #         + phi_{ie} + omega_t + gamma_m + nu_{iet}
     #
     # Cell means at l > 0 (after FE, relative to t=-1):
@@ -522,15 +538,15 @@ def fit_event_study_specs(
     #             - (Control-Disp - Control-NonDisp)
     #
     # Pre-trend tests:
-    #   delta^B_l = 0 for l < -1  ->  baseline parallel trends
-    #   delta^D_l = 0 for l < -1  ->  displacement parallel trends
+    #   delta^B_l = 0 for l < 0, l != ref_period  ->  baseline parallel trends
+    #   delta^D_l = 0 for l < 0, l != ref_period  ->  displacement parallel trends
     # ------------------------------------------------------------------
     spec    = "event_binary_B"
     formula = (
         f"{outcome} ~ "
-        f"i(rel_t, treated,       ref=-1) + "
-        f"i(rel_t, treated_X_disp, ref=-1) + "
-        f"i(rel_t, disp_binary,   ref=-1) "
+        f"i(rel_t, treated,       ref={ref_period}) + "
+        f"i(rel_t, treated_X_disp, ref={ref_period}) + "
+        f"i(rel_t, disp_binary,   ref={ref_period}) "
         f"| {fe_str}"
     )
     fit = pf.feols(formula, data=df, vcov=vcov)
@@ -561,15 +577,15 @@ def fit_event_study_specs(
         # Augments Spec B with interactions involving L_tilde_e:
         #
         # y_{iet} = [Spec B terms]
-        #         + sum_{l!=-1} kappa_l * 1(t=l) * treated_{ie} * L_tilde_e
-        #         + sum_{l!=-1} theta_l * 1(t=l) * treated_{ie} * D_{ie} * L_tilde_e
+        #         + sum_{l!=ref_period} kappa_l * 1(t=l) * treated_{ie} * L_tilde_e
+        #         + sum_{l!=ref_period} theta_l * 1(t=l) * treated_{ie} * D_{ie} * L_tilde_e
         #         + [lower-order: l * disp * len]
         #         + phi_{ie} + omega_t + gamma_m + nu_{iet}
         #
         # All lower-order interactions involving L_tilde_e are included:
-        #   i(rel_t, disp_X_len,    ref=-1)  : 1(t=l) x D x L_tilde
-        #   i(rel_t, treated_X_len, ref=-1)  : 1(t=l) x treated x L_tilde  (kappa)
-        #   i(rel_t, tXdXlen,       ref=-1)  : 1(t=l) x treated x D x L_tilde (theta)
+        #   i(rel_t, disp_X_len,    ref=ref_period)  : 1(t=l) x D x L_tilde
+        #   i(rel_t, treated_X_len, ref=ref_period)  : 1(t=l) x treated x L_tilde  (kappa)
+        #   i(rel_t, tXdXlen,       ref=ref_period)  : 1(t=l) x treated x D x L_tilde (theta)
         #
         # The main effects of L_tilde_e and treated*L_tilde_e are absorbed by
         # event_fe_id; theta_l and kappa_l are identified only through their
@@ -581,18 +597,18 @@ def fit_event_study_specs(
         #   kappa_l   : change in baseline effect per 1-SD longer closure
         #
         # Pre-trend tests:
-        #   theta_l = 0 for l < -1  ->  length x displacement falsification
-        #   kappa_l = 0 for l < -1  ->  length x baseline falsification
+        #   theta_l = 0 for l < 0, l != ref_period  ->  length x displacement falsification
+        #   kappa_l = 0 for l < 0, l != ref_period  ->  length x baseline falsification
         # ------------------------------------------------------------------
         spec    = "event_binary_D"
         formula = (
             f"{outcome} ~ "
-            f"i(rel_t, treated,        ref=-1) + "
-            f"i(rel_t, treated_X_disp, ref=-1) + "
-            f"i(rel_t, disp_binary,    ref=-1) + "
-            f"i(rel_t, treated_X_len,  ref=-1) + "
-            f"i(rel_t, disp_X_len,     ref=-1) + "
-            f"i(rel_t, tXdXlen,        ref=-1) "
+            f"i(rel_t, treated,        ref={ref_period}) + "
+            f"i(rel_t, treated_X_disp, ref={ref_period}) + "
+            f"i(rel_t, disp_binary,    ref={ref_period}) + "
+            f"i(rel_t, treated_X_len,  ref={ref_period}) + "
+            f"i(rel_t, disp_X_len,     ref={ref_period}) + "
+            f"i(rel_t, tXdXlen,        ref={ref_period}) "
             f"| {fe_str}"
         )
         fit = pf.feols(formula, data=df, vcov=vcov)
@@ -619,9 +635,9 @@ def fit_event_study_specs(
     # ------------------------------------------------------------------
     # Spec C: Continuous displacement-score DDD
     #
-    # y_{iet} = sum_{l!=-1} delta^B_l * 1(t=l) * treated_{ie}
-    #         + sum_{l!=-1} delta^S_l * 1(t=l) * treated_{ie} * s_tilde_{ie}
-    #         + sum_{l!=-1} beta^S_l  * 1(t=l) * s_tilde_{ie}
+    # y_{iet} = sum_{l!=ref_period} delta^B_l * 1(t=l) * treated_{ie}
+    #         + sum_{l!=ref_period} delta^S_l * 1(t=l) * treated_{ie} * s_tilde_{ie}
+    #         + sum_{l!=ref_period} beta^S_l  * 1(t=l) * s_tilde_{ie}
     #         + phi_{ie} + omega_t + gamma_m + nu_{iet}
     #
     # s_tilde_{ie} = displacement_prob_centered is already mean-centered,
@@ -635,8 +651,8 @@ def fit_event_study_specs(
     #   beta^S_l  : propensity-purchase relationship pooled across groups
     #
     # Pre-trend tests:
-    #   delta^B_l = 0 for l < -1  ->  baseline parallel trends
-    #   delta^S_l = 0 for l < -1  ->  score-slope falsification
+    #   delta^B_l = 0 for l < 0, l != ref_period  ->  baseline parallel trends
+    #   delta^S_l = 0 for l < 0, l != ref_period  ->  score-slope falsification
     #               (non-zero pre-period slope indicates the score is
     #                picking up pre-existing purchase dynamics, not
     #                a displacement effect)
@@ -644,9 +660,9 @@ def fit_event_study_specs(
     spec    = "event_score_C"
     formula = (
         f"{outcome} ~ "
-        f"i(rel_t, treated,                   ref=-1) + "
-        f"i(rel_t, treated_X_score,           ref=-1) + "
-        f"i(rel_t, displacement_prob_centered, ref=-1) "
+        f"i(rel_t, treated,                   ref={ref_period}) + "
+        f"i(rel_t, treated_X_score,           ref={ref_period}) + "
+        f"i(rel_t, displacement_prob_centered, ref={ref_period}) "
         f"| {fe_str}"
     )
     fit = pf.feols(formula, data=df, vcov=vcov)

@@ -10,6 +10,7 @@
 - Recency filter days: False
 - Drop period-0 purchasers: False
 - Model type: DDD
+- Event-study reference period: -1
 
 
 ## Binary Specs

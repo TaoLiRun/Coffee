@@ -205,7 +205,7 @@ The triple interaction identifies the blocked-purchase effect if:
 - **Baseline-demand shifts do not differentially hit blocked treated customers**: any post-reopening change in prices, promotions, convenience, or perceived quality affects blocked and non-blocked treated customers similarly, so it is absorbed by the baseline treatment effect rather than the triple interaction.
 - **Blocked status and controls are valid**: blocked-buyer status is determined from pre-closure behavior, and the matched control stores provide the relevant counterfactual for treated customers.
 
-The event-study evidence is informative about these assumptions. For purchase frequency, the treatment-control ATT pretrend test does not reject. For novelty-seeking, both the ATT and blocked-buyer dynamic pretrend tests also do not reject at the headline level.
+The event-study evidence is informative about these assumptions, but it is mixed rather than uniformly reassuring. For purchase frequency, the blocked-buyer triple-difference event study shows a significant pre-period deviation at $rel_t=-2$ and rejects the joint displacement pretrend test. For novelty-seeking, by contrast, both the ATT and blocked-buyer dynamic pretrend tests do not reject at the headline level.
 
 ### Post-Reopening Push Targeting Check
 
@@ -248,7 +248,9 @@ Did closures reduce how often customers buy from the chain after reopening?
 - **Blocked buyers show strong mean reversion** ($\beta = -0.034$): high-intensity customers buy more before the event and then drift back toward their usual level afterward, even in the control group. This is not a closure effect.
 - **No evidence that a blocked purchase weakens later buying** ($\delta^D = +0.0058$): if anything, blocked treatment customers buy slightly more after reopening than equally frequent blocked controls.
 
-The dynamic treatment-control event study also points to rebound rather than decay: the pre-period joint test does not reject ($p = 0.895$), and post-reopening treatment coefficients are positive in periods 1 and 3.
+The dynamic evidence for the blocked-buyer estimand is more cautious than the collapsed post coefficient alone. In the purchase-frequency event-study displacement path, the joint pretrend test for the triple-difference coefficients rejects ($p = 0.0025$), driven by a negative estimate at $rel_t=-2$. The post-reopening displacement coefficients are positive in periods 1 and 3, which is directionally consistent with rebound rather than habit decay, but the pre-period deviation means this dynamic evidence should be treated as suggestive rather than cleanly identified.
+
+![](../outputs/displacement_effect_estimation/event_study_displacement.png)
 
 ## Novelty-Seeking
 
@@ -268,7 +270,9 @@ Did closures change whether customers tried new products?
 - **Blocked buyers are more exploratory in general** ($\beta = +0.038$): frequent buyers encounter the menu more often and naturally accumulate more first-time product trials.
 - **Blocked treatment customers become less exploratory after reopening** ($\delta^D = -0.041$): once a due purchase was interrupted, customers return in a more focused mode and shift toward familiar products relative to comparable blocked controls.
 
-For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative.
+For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative. The coefficient path is also visually consistent with that interpretation: the pre-period blocked-buyer displacement estimates have wide confidence intervals covering zero, while the post-period coefficients turn negative in the direction implied by the collapsed DDD.
+
+![](../outputs/displacement_effect_estimation/variety_seeking_unbalanced/event_study_displacement.png)
 
 ### Heterogeneity by pre-period novelty (distinct measure)
 
@@ -359,6 +363,10 @@ We re-estimate the same pooled triple-difference specification with this outcome
 * p<0.1, ** p<0.05, *** p<0.01.*
 
 **Read:** The blocked-buyer triple interaction is again **negative** (−0.042): blocked treatment customers allocate purchases toward products that were **not** chain-new in the adjacent-window sense, relative to comparable blocked controls, while non-blocked treated customers show a positive baseline shift ($\delta^B$). The pattern is qualitatively similar to member-first novelty-seeking, with a somewhat smaller baseline treatment effect than the headline +0.031 estimate.
+
+The event-study diagnostics for this market-new outcome also support the headline interpretation: the pretrend tests do not reject at the headline level for either the ATT version ($p = 0.177$) or the blocked-buyer displacement version ($p = 0.515$), while the post-period displacement coefficients are negative in sign.
+
+![](../outputs/displacement_effect_estimation/variety_seeking_distinct_only_new/event_study_displacement.png)
 
 ## Continuous Propensity Version
 

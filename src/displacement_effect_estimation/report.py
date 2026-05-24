@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -73,6 +74,127 @@ def save_outputs(
     if summary_notes:
         lines[7:7] = [*summary_notes, ""]
     (output_dir / "summary.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def _extract_rel_t(term: str) -> int | None:
+    match = re.search(r"C\(rel_t, contr\.treatment\(base=-?\d+\)\)\[(-?\d+)\]", term)
+    if match:
+        return int(match.group(1))
+
+    match = re.search(r"rel_t::(-?\d+):", term)
+    if match:
+        return int(match.group(1))
+
+    return None
+
+
+def _classify_event_term(term: str) -> str | None:
+    suffix_map = [
+        (":treated_X_disp", "displacement"),
+        (":treated_X_score", "score_slope"),
+        (":treated_X_len", "length_baseline"),
+        (":disp_X_len", "length_lower_order"),
+        (":tXdXlen", "length_displacement"),
+        (":disp_binary", "blocked_control_gap"),
+        (":treated", "att_or_baseline"),
+    ]
+    for suffix, label in suffix_map:
+        if term.endswith(suffix):
+            return label
+    return None
+
+
+def _event_study_plot_specs(event_terms: pd.DataFrame) -> list[dict]:
+    plot_specs: list[dict] = []
+
+    if ((event_terms["spec"] == "event_att") & (event_terms["effect"] == "att_or_baseline")).any():
+        plot_specs.append(
+            {
+                "spec": "event_att",
+                "effect": "att_or_baseline",
+                "filename": "event_study_att.png",
+                "title": "Event-study ATT",
+                "ylabel": "Coefficient",
+            }
+        )
+
+    if ((event_terms["spec"] == "event_binary_B") & (event_terms["effect"] == "displacement")).any():
+        plot_specs.append(
+            {
+                "spec": "event_binary_B",
+                "effect": "displacement",
+                "filename": "event_study_displacement.png",
+                "title": "Event-study displacement effect",
+                "ylabel": "Triple-difference coefficient",
+            }
+        )
+
+    if ((event_terms["spec"] == "event_binary_B") & (event_terms["effect"] == "att_or_baseline")).any():
+        plot_specs.append(
+            {
+                "spec": "event_binary_B",
+                "effect": "att_or_baseline",
+                "filename": "event_study_baseline.png",
+                "title": "Event-study baseline treatment effect",
+                "ylabel": "Difference-in-differences coefficient",
+            }
+        )
+
+    return plot_specs
+
+
+def save_event_study_plots(
+    *,
+    output_dir: Path,
+    event_terms: pd.DataFrame,
+) -> None:
+    """Save coefficient plots for the main event-study effects."""
+    required = {"spec", "term", "coef", "se"}
+    missing = required - set(event_terms.columns)
+    if missing:
+        raise ValueError(f"event_terms missing required columns for event-study plots: {sorted(missing)}")
+
+    plot_df = event_terms.copy()
+    plot_df["term"] = plot_df["term"].astype(str)
+    plot_df["rel_t"] = plot_df["term"].map(_extract_rel_t)
+    plot_df["effect"] = plot_df["term"].map(_classify_event_term)
+    plot_df = plot_df.loc[plot_df["rel_t"].notna() & plot_df["effect"].notna()].copy()
+    if plot_df.empty:
+        return
+
+    plot_df["rel_t"] = plot_df["rel_t"].astype(int)
+    plot_df["ci_low"] = plot_df["coef"] - 1.96 * plot_df["se"]
+    plot_df["ci_high"] = plot_df["coef"] + 1.96 * plot_df["se"]
+    plot_df.to_csv(output_dir / "event_study_plot_data.csv", index=False)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for plot_spec in _event_study_plot_specs(plot_df):
+        sub = plot_df[
+            (plot_df["spec"] == plot_spec["spec"])
+            & (plot_df["effect"] == plot_spec["effect"])
+        ].sort_values("rel_t")
+        if sub.empty:
+            continue
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        x = sub["rel_t"].to_numpy()
+        y = sub["coef"].to_numpy()
+        ci_low = sub["ci_low"].to_numpy()
+        ci_high = sub["ci_high"].to_numpy()
+
+        ax.axhline(y=0, color="black", linewidth=1, alpha=0.8)
+        ax.axvline(x=0, color="gray", linestyle="--", linewidth=1.2, alpha=0.8)
+        ax.plot(x, y, "o-", color="#1f4e79", linewidth=2, markersize=5)
+        ax.fill_between(x, ci_low, ci_high, color="#6baed6", alpha=0.25)
+
+        ax.set_xticks(sorted(sub["rel_t"].unique().tolist()))
+        ax.set_xlabel("Relative period t")
+        ax.set_ylabel(plot_spec["ylabel"])
+        ax.set_title(plot_spec["title"])
+        ax.grid(True, axis="y", alpha=0.25)
+        fig.tight_layout()
+        fig.savefig(output_dir / plot_spec["filename"], dpi=300, bbox_inches="tight")
+        plt.close(fig)
 
 
 def save_variety_panel_plot(

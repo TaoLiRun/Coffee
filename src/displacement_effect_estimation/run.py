@@ -8,7 +8,12 @@ from pathlib import Path
 import pandas as pd
 
 from data import build_estimation_sample, get_project_root, load_config
-from report import save_outputs, save_pre_novelty_histogram, save_variety_panel_plot
+from report import (
+    save_event_study_plots,
+    save_outputs,
+    save_pre_novelty_histogram,
+    save_variety_panel_plot,
+)
 from specs import fit_collapsed_specs, fit_event_study_specs
 
 
@@ -45,6 +50,7 @@ def fit_spec_bundle(
     include_length_heterogeneity: bool,
     use_did: bool = False,
     variety_pre_novelty_heterogeneity: bool = False,
+    event_study_ref_period: int = -1,
 ) -> dict[str, pd.DataFrame]:
     collapsed_terms, collapsed_fit = fit_collapsed_specs(
         df=sample,
@@ -59,6 +65,7 @@ def fit_spec_bundle(
         cluster_col=cluster_col,
         include_length_heterogeneity=include_length_heterogeneity,
         use_did=use_did,
+        ref_period=event_study_ref_period,
     )
     if use_did:
         return {
@@ -201,6 +208,12 @@ def main() -> None:
         default=default_output_dir,
         help="Directory, relative to project root, where estimation outputs are saved.",
     )
+    parser.add_argument(
+        "--event-study-ref-period",
+        type=int,
+        default=-1,
+        help="Pre-treatment rel_t used as the omitted reference period in event-study specifications.",
+    )
     parser.add_argument("--log-file", type=str, default=None, help="Path to log file.")
     parser.add_argument("--log-level", type=str, default="INFO", help="Logging level (DEBUG, INFO, WARNING, ERROR).")
     args = parser.parse_args()
@@ -318,6 +331,7 @@ def main() -> None:
                 include_length_heterogeneity=False,
                 use_did=use_did,
                 variety_pre_novelty_heterogeneity=args.variety_pre_novelty_heterogeneity,
+                event_study_ref_period=args.event_study_ref_period,
             )
             event_output_dir = separate_dir / closure_event_id
             save_outputs(
@@ -339,7 +353,12 @@ def main() -> None:
                     "- Length-heterogeneity event-study spec skipped: true",
                     f"- Model type: {'DiD' if use_did else 'DDD'}",
                     f"- Customer median split: {args.customer_median_split}",
+                    f"- Event-study reference period: {args.event_study_ref_period}",
                 ],
+            )
+            save_event_study_plots(
+                output_dir=event_output_dir,
+                event_terms=results["event_terms"],
             )
             if args.outcome == "variety_seeking":
                 save_variety_panel_plot(
@@ -371,6 +390,7 @@ def main() -> None:
             include_length_heterogeneity=True,
             use_did=use_did,
             variety_pre_novelty_heterogeneity=args.variety_pre_novelty_heterogeneity,
+            event_study_ref_period=args.event_study_ref_period,
         )
         logger.info("Fitted aggregate collapsed/event-study specs")
         agg_notes = [
@@ -379,6 +399,7 @@ def main() -> None:
             f"- Recency filter days: {select_recency_consumers}",
             f"- Drop period-0 purchasers: {drop_period0_purchasers}",
             f"- Model type: {'DiD' if use_did else 'DDD'}",
+            f"- Event-study reference period: {args.event_study_ref_period}",
         ]
         if args.variety_pre_novelty_heterogeneity:
             agg_notes.append(
@@ -396,6 +417,10 @@ def main() -> None:
             event_fit=results["event_fit"],
             pretrend_tests=results["pretrend_tests"],
             summary_notes=agg_notes,
+        )
+        save_event_study_plots(
+            output_dir=out_dir,
+            event_terms=results["event_terms"],
         )
         if args.variety_pre_novelty_heterogeneity:
             save_pre_novelty_histogram(

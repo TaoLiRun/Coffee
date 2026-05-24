@@ -1,18 +1,18 @@
 {
-  "generated_at_utc": "2026-04-25T14:56:17.296496+00:00",
+  "generated_at_utc": "2026-05-24T08:04:43.733304+00:00",
   "source_registry_path": "outputs/customer-store/closure_pair_registry.csv",
   "registry_snapshot_path": "outputs/displacement_effect_estimation/metadata/closure_pair_registry.csv",
+  "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv",
   "purchase_result_path": "outputs/displacement_effect_estimation",
   "purchase_binary_result_path": "outputs/displacement_effect_estimation/purchase_incidence_binary",
   "novelty_result_path": "outputs/displacement_effect_estimation/variety_seeking_unbalanced",
-  "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv",
   "expected_main_closure_count": 18,
   "excluded_closure_count": 4,
   "executed_commands": [
-    "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY=outputs/customer-store/closure_pair_registry.csv conda run -n JAX-py python src/displacement_effect_estimation/run.py --output-dir outputs/displacement_effect_estimation --log-file outputs/displacement_effect_estimation/logs/run.log",
-    "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY=outputs/customer-store/closure_pair_registry.csv conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --output-dir outputs/displacement_effect_estimation/purchase_incidence_binary --log-file outputs/displacement_effect_estimation/purchase_incidence_binary/logs/run.log",
-    "DISPLACEMENT_EFFECT_CLOSURE_REGISTRY=outputs/customer-store/closure_pair_registry.csv conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome variety_seeking --no-balanced-panel --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced --log-file outputs/displacement_effect_estimation/variety_seeking_unbalanced/logs/run.log"
+    "conda run -n JAX-py python src/displacement_effect_estimation/run.py --output-dir outputs/displacement_effect_estimation --log-file outputs/displacement_effect_estimation/logs/run.log",
+    "conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --output-dir outputs/displacement_effect_estimation/purchase_incidence_binary --log-file outputs/displacement_effect_estimation/purchase_incidence_binary/logs/run.log",
+    "conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome variety_seeking --output-dir outputs/displacement_effect_estimation/variety_seeking_unbalanced --log-file outputs/displacement_effect_estimation/variety_seeking_unbalanced/logs/run.log"
   ],
   "git_branch": "issue-4/further-selection",
-  "git_commit": "a626c5ef8e62939cd7eafeacaf220513823e80b7"
+  "git_commit": "6c7b49a0a14d87c117803c82d18d5898962da03f"
 }

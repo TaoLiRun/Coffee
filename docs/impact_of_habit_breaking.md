@@ -1,416 +1,1230 @@
-# Impact of Habit Breaking: Store Closures and Consumer Purchasing at Luckin
+# Impact of Habit Breaking: Technical Record
 
-This document describes the analysis of how temporary store closures affect consumer purchasing behavior at Luckin Coffee, in the direction of the identification and decomposition approach in Levine & Hristakeva (2026), *"Stopping Shopping at Stop and Shop? How Temporary Disruptions Affect Store Choice"* (Paper 2). It summarizes **context and identification**, **what has been done**, and **what remains to be done**.
+This document is the project-level technical record for the model-free analysis behind **“What Happens After Customers' Purchase Intention is Blocked”**. It is written to be self-contained: a new reader should be able to understand the research design, the data flow, the implemented pipeline, the main estimation choices, and where each part lives in the codebase.
 
----
+The project studies whether a temporary closure of a customer’s usual Luckin Coffee store breaks later purchasing behavior. The central empirical distinction is between:
 
-## 1. Context and Research Question
+- **baseline post-closure demand shifts**, which affect treated customers in general; and
+- **blocked purchase effects**, which affect customers who likely would have bought during the closure window had the store remained open.
 
-### 1.1 Setting
+The pipeline is implemented under:
 
-- **Focal firm:** Luckin Coffee (store-level transactions in the data).
-- **Shock:** Temporary store closures (e.g., campus/store renovations, operational closures). There are on the order of **~100 closure events** in the sample, with **varying geography, timing, and duration** (e.g., from roughly two weeks to several months).
-- **Outcome of interest:** Consumer purchasing at Luckin—frequency, level, and persistence of purchases before, during, and after a closure.
+- scripts: `model-free/scripts`
+- source code: `model-free/src`
+- main report: `model-free/reports/main_results.qmd`
 
-### 1.2 Economic Question
-
-We want to understand:
-
-1. **Overall effect:** Do consumers who lose access to their usual Luckin store reduce purchases during the closure, and do they return to previous levels after reopening?
-2. **Mechanism:** Can we separate:
-   - **Displacement effect (D):** The effect of *forced non-purchase*—consumers who would have bought during the closure window but could not, and whose habit or state dependence is disrupted.
-   - **Baseline-demand effect (B):** Any shift in baseline demand for Luckin (e.g., reputation, alternatives discovered, mentally affected by Covid Lockdown) that affects all exposed consumers regardless of whether they were “displaced.”
-
-As in Paper 2, the displacement effect is the object of interest for **habit/state dependence**: it measures the persistent cost of interrupting a planned purchase, over and above any general demand shift.
-
-### 1.3 Why This Differs from Paper 2
-
-- **Multiple closure events:** We have many closures (different stores, dates, lengths) rather than one strike. This allows stacking consumer–closure observations and exploiting **variation in closure length** and **severity** (share of a consumer’s accessible stores closed).
-- **Forced non-purchase vs. store substitution:** In our setting, “treatment” is often loss of access to Luckin at a location (e.g., campus); the relevant margin is “would have purchased at Luckin during the closure window” vs. “would not have,” rather than switching to another grocery chain. The **counterfactual purchase** during the closure is unobservable for treated consumers, so it must be predicted (displacement classification).
+The current codebase already implements the full main pipeline: closure identification, treatment/control construction, blocked-buyer prediction, pooled and separate-effect estimation, pretrend tests, novelty variants, robustness scripts, and post-reopening push-targeting checks. This file records that full state.
 
 ---
 
-## 2. Identification
+## 1. Project Question and Empirical Object
 
-### 2.1 Treatment and Control
+### 1.1 Research question
 
-**Unit of observation.** The analysis is conducted at the **consumer–closure event** level. Each time a qualifying consumer is exposed to a closure event is one observation. Consumers who experience multiple closures contribute multiple observations, one per closure. Let $i$ index consumers, $e$ index closure events, and $t$ index time periods defined relative to the onset of closure event $e$.
+The project asks:
 
-**Treated consumers** (for closure event $e$): regular Luckin purchasers whose pre-closure preferred store is the store that closed in event $e$. "Regular" is defined as at least 5 pre-closure purchases and a preferred-store loyalty ratio of at least 0.8 (i.e., at least 80% of pre-closure purchases were at the closed store), measured using only orders strictly before the closure start date.
+1. When a customer’s regular store closes temporarily, do they buy less from Luckin after reopening?
+2. If not, does the closure still change **what** they buy, especially their willingness to try new products?
+3. Can we separate a general post-closure shift in demand from the more specific effect of having an active purchase intention blocked?
 
-**Control consumers** (for closure event $e$): regular Luckin purchasers (same thresholds) whose pre-closure preferred store belongs to the set of stores matched to closure event $e$ by store set-up time, and whose preferred store did not close in any closure event during the same calendar window. Control stores are assigned one-to-one across closures (see Section 3.2). One consumer–closure observation is constructed for each control consumer matched to event $e$.
+The write-up in [main_results.qmd](/home/litao/Coffee/model-free/reports/main_results.qmd:1) frames the key estimand as the additional post-reopening effect for treated customers who were genuinely due to purchase during the closure.
 
-**Why this control construction supports identification.** Matching control stores by set-up time proxies for store age and market maturity, reducing systematic differences in customer base between treated and control consumers. This strengthens the parallel trends assumption (Section 2.4). Remaining threats — such as local economic shocks that affect the closed store's neighborhood but not the matched control store — are discussed in Section 2.4.
+### 1.2 Core conceptual distinction
 
----
+The project does **not** treat all treated customers as equally interrupted. Instead it distinguishes:
 
-### 2.2 Decomposing the Strike's Effect: Displacement vs. Baseline Demand
+- **blocked buyers**: customers who would have purchased during the closure window absent disruption;
+- **non-blocked buyers**: customers assigned to the treated closure event but who would not have purchased in that window anyway.
 
-The closure may affect post-closure Luckin purchasing through two distinct channels:
+For treated customers, blocked status is counterfactual and must be predicted. For controls, it is observed from actual behavior during the matched closure window. This asymmetry is the foundation of the blocked-buyer classifier and the triple-difference design.
 
-- **Displacement effect (D):** The causal effect of a forced interruption to a planned purchase. Consumers who would have bought Luckin during the closure window but could not, may have their purchasing habit disrupted, reducing subsequent purchases through state dependence.
-- **Baseline-demand effect (B):** Any shift in consumers' underlying demand for Luckin that is independent of the missed purchase — for example, consumers discovering alternative coffee options during the closure, or Luckin responding to the closure with post-reopening promotions. This affects all exposed consumers regardless of whether they had a planned purchase during the closure.
+### 1.3 Why the design is multi-stage
 
-The overall observed post-closure reduction in purchases conflates both channels. Our goal is to isolate the displacement effect.
+The pipeline has four linked empirical stages:
 
-**Displaced vs. non-displaced consumers.** For each consumer–closure pair $(i, e)$, define:
+1. build the closure sample and matched treated/control registry;
+2. train a model that predicts closure-window purchase intention using only pre-closure information;
+3. attach predicted blocked-buyer measures to member-closure pairs;
+4. estimate DiD / DDD / event-study specifications on post-reopening outcomes.
 
-- **Displaced** ($D_{ie} = 1$): Consumer $i$ would have made at least one Luckin purchase during the closure window of event $e$ in the counterfactual where the store remained open.
-- **Non-displaced** ($D_{ie} = 0$): Consumer $i$ would not have made any Luckin purchase in that window even without the closure.
+That architecture is reflected directly in the code layout:
 
-For **treated** consumers, displacement status is unobservable — the closure happened, so we cannot observe counterfactual behavior. For **control** consumers, displacement status is directly observable, since their stores were unaffected and their actual behavior during the closure window is the counterfactual. We exploit this asymmetry to train a classifier (Section 3.8) and use control consumers to evaluate its accuracy.
-
-**Identification intuition.** Non-displaced treated consumers did not have a planned purchase during the closure window. Any post-closure change in their purchasing therefore reflects only baseline-demand shifts — they serve as a clean estimate of $B$. Displaced treated consumers experienced both a missed purchase and any baseline-demand shift. The difference in post-closure outcomes between displaced and non-displaced treated consumers, after differencing out the same gap in control consumers (who face no supply disruption), isolates the displacement effect $D$.
-
----
-
-### 2.3 Regression Framework
-
-**Time index.** For each closure event $e$, time $t$ is defined in units of the closure duration $D_e$ (i.e., one period = $D_e$ days), centered on the closure window:
-
-- **Pre-closure:** $t \in \{-4, -3, -2, -1\}$ (four periods of length $D_e$ before closure onset).
-- **Closure window:** $t = 0$ (excluded from all regressions; used only for displacement classification).
-- **Post-closure:** $t \in \{1, 2, \ldots, M\}$ (periods of length $D_e$ after closure resolution).
-
-The reference period is $t = -1$ in all event-study specifications. Using a period length equal to the closure duration $D_e$ ensures that the prediction target for the displacement classifier (Section 3.8) — "would have purchased at least once in a window of length $D_e$?" — is consistent with the regression time unit. This also implies that the base purchase probability for the label varies with closure length; this is discussed further in Section 3.8.
-
-**Period fixed effects.** The fixed effects $\omega_t$ in all specifications below are fixed effects for **relative event time** $t$, common across all closure events. They absorb common trends in relative time (e.g., any systematic pattern in purchases $k$ periods before any closure). Because closures occur at different calendar dates, $\omega_t$ does not absorb calendar seasonality. Calendar-month fixed effects are included as additional controls in all specifications to address this.
+- closure and pairing pipeline: [main_customer_store.py](/home/litao/Coffee/model-free/src/customer-store/main_customer_store.py:1)
+- blocked-buyer classification: [main.py](/home/litao/Coffee/model-free/src/displacement_classification/main.py:1)
+- displacement-effect estimation: [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:1)
 
 ---
 
-#### Specification (A): Overall ATT — Difference-in-Differences Event Study
+## 2. Codebase Map
 
-The primary specification estimates the overall average treatment effect on the treated (ATT) at each relative period:
+### 2.1 Main runnable entry points
 
-$$
-\text{Purchases}_{iet} = \sum_{\ell \in \mathcal{T},\,\ell \neq -1} \delta_{\ell}\,\mathbb{1}(t = \ell) \times \mathbb{1}(\text{Treated}_{ie} = 1) + \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
-$$
+The most important top-level runners are:
 
-**Notation:**
-- $\text{Purchases}_{iet}$: number of Luckin purchases by consumer $i$ in closure event $e$ at relative period $t$, normalized by period length (purchases per day).
-- $\phi_{ie}$: consumer–closure fixed effects. These absorb all time-invariant characteristics of consumer $i$ in the context of closure event $e$, including the consumer's baseline purchase frequency, displacement status (which is fixed per consumer-closure pair), and closure-level attributes such as closure length. Since $\phi_{ie}$ absorbs any time-invariant term, the main effects of $\mathbb{1}(\text{Treated}_{ie})$ and $\mathbb{1}(\text{Displaced}_{ie})$ are not separately identified and are omitted.
-- $\omega_t$: relative-time fixed effects (common across events).
-- $\gamma_m$: calendar-month fixed effects (to absorb seasonality not captured by $\omega_t$).
-- $\mathcal{T}$: the set of all relative periods in the sample, excluding $t = 0$ (closure window).
+- customer-store pipeline wrapper: [scripts/customer-store/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/customer-store/run_with_logging.sh:1)
+- displacement-classification wrapper: [scripts/displacement_classification/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/displacement_classification/run_with_logging.sh:1)
+- displacement-effect-estimation wrapper: [scripts/displacement_effect_estimation/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_with_logging.sh:1)
+- main-results bundle runner: [scripts/displacement_effect_estimation/run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
+- push-targeting-after-reopening runner: [scripts/push_targeting_after_reopening/run_push_targeting_analysis.py](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:1)
 
-**Interpretation of coefficients:**
-- $\delta_\ell$ for $\ell < -1$: **pre-trend tests**. Under the parallel trends assumption, these should be jointly indistinguishable from zero. A statistically significant pre-trend indicates that treated and control consumers were on different trajectories before the closure, violating the identifying assumption.
-- $\delta_\ell$ for $\ell > 0$: **post-closure ATT**. The combined effect of displacement and baseline-demand shifts on treated consumers' purchases, relative to control, at $\ell$ periods after the closure. A negative and persistent $\delta_\ell$ indicates that treated consumers have not fully recovered their pre-closure purchasing rate.
+### 2.2 Main source modules
 
-This specification does not separate the two channels; it provides the total reduced-form effect and the pre-trend falsification evidence.
+The core logic is spread across these modules:
 
----
+- store closure detection: [src/store/identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:1)
+- treatment/control registry and descriptive panels: [src/customer-store/data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:1), [src/customer-store/did_analysis.py](/home/litao/Coffee/model-free/src/customer-store/did_analysis.py:1), [src/customer-store/trend_analysis.py](/home/litao/Coffee/model-free/src/customer-store/trend_analysis.py:1)
+- displacement classification data/feature engineering: [src/displacement_classification/data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:1)
+- displacement classification model training and artifact export: [src/displacement_classification/model.py](/home/litao/Coffee/model-free/src/displacement_classification/model.py:1)
+- push-feature caching and feature computation for the classifier: [src/displacement_classification/push_event_cache.py](/home/litao/Coffee/model-free/src/displacement_classification/push_event_cache.py:1)
+- estimation sample builder: [src/displacement_effect_estimation/data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:1)
+- econometric specifications: [src/displacement_effect_estimation/specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:1)
+- output writing and diagnostic figures: [src/displacement_effect_estimation/report.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/report.py:1)
+- menu-change and control-menu-introduction helpers: [src/displacement_effect_estimation/menu_features.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/menu_features.py:1), [src/displacement_effect_estimation/control_menu_features.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/control_menu_features.py:1)
 
-#### Specification (B): Triple-Difference — Isolating the Displacement Effect (Binary)
+### 2.3 Important configuration files
 
-To separate the displacement effect from baseline-demand shifts, we exploit variation in displacement status across consumers within each group. The estimating equation is:
-
-$$
-\text{Purchases}_{iet} =
-\sum_{\ell \neq -1} \delta^B_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})
-+ \sum_{\ell \neq -1} \delta^D_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})\times D_{ie}
-+ \sum_{\ell \neq -1} \beta_{\ell}\,\mathbb{1}(t=\ell)\times D_{ie}
-+ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
-$$
-
-where $D_{ie} \in \{0,1\}$ is the binary displacement indicator for consumer $i$ in closure event $e$.
-
-**Cell means implied by the regression.** To see what each coefficient identifies, write out the expected outcome for each of the four groups at post-closure period $\ell > 0$ (relative to the reference period $t = -1$, after absorbing fixed effects):
-
-| | Non-displaced ($D_{ie}=0$) | Displaced ($D_{ie}=1$) |
-|---|---|---|
-| **Control** | $0$ | $\beta_\ell$ |
-| **Treated** | $\delta^B_\ell$ | $\delta^B_\ell + \beta_\ell + \delta^D_\ell$ |
-
-The triple-difference estimator is:
-
-$$
-\delta^D_\ell = \underbrace{(\text{Treated-Displaced} - \text{Treated-NonDisp})}_{\text{DiD within treated}} - \underbrace{(\text{Control-Displaced} - \text{Control-NonDisp})}_{\text{DiD within control}}
-$$
-
-**Interpretation of coefficients:**
-- $\delta^B_\ell$ for $\ell > 0$: the **baseline-demand effect** — the post-closure ATT for non-displaced treated consumers. Since non-displaced consumers did not have a planned purchase interrupted, any change in their purchasing relative to non-displaced control consumers reflects only shifts in baseline demand (e.g., discovered alternatives, Luckin promotions post-reopening). We expect this to be small in magnitude given that our closures are operational rather than reputational events.
-- $\delta^D_\ell$ for $\ell > 0$: the **displacement effect** — the additional post-closure reduction in purchases for displaced treated consumers, beyond the baseline-demand effect. A negative and persistent $\delta^D_\ell$ is the primary evidence for structural state dependence: the mere interruption of a planned purchase causally reduces subsequent purchasing.
-- $\beta_\ell$: the time-varying difference in purchases between displaced and non-displaced consumers, pooled across treated and control groups. This captures the fact that displaced consumers (by definition more frequent purchasers) have a different time profile of purchases even absent any treatment. Note that the main level effect of $D_{ie}$ is absorbed by $\phi_{ie}$ and is not separately identified.
-
-**Pre-trend falsification.** For $\ell < -1$:
-- $\delta^B_\ell \approx 0$ is required for the parallel trends assumption to hold for non-displaced consumers (baseline-demand channel).
-- $\delta^D_\ell \approx 0$ is required for the parallel trends assumption to hold for the displaced-vs-non-displaced differential (displacement channel).
-
-Both sets of pre-period coefficients must be reported and tested jointly. A violation in $\delta^B_\ell$ suggests treated and control non-displaced consumers were trending differently before the closure. A violation in $\delta^D_\ell$ suggests the displaced/non-displaced composition differs systematically between treated and control in ways that evolve over time.
-
-**Constraint embedded in the specification.** The regression assumes that $\beta_\ell$ — the time profile of the displaced-vs-non-displaced gap — is the same for treated and control consumers. This is the equal-baseline-demand assumption (Section 2.4). We test this assumption empirically using the matched subsample (Section 5b) and the diagnostic in Section 2.4.
+- classifier config: [src/displacement_classification/config.json](/home/litao/Coffee/model-free/src/displacement_classification/config.json:1)
+- estimator config: [src/displacement_effect_estimation/config.json](/home/litao/Coffee/model-free/src/displacement_effect_estimation/config.json:1)
+- push-targeting config: [scripts/push_targeting_after_reopening/config.json](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/config.json:1)
 
 ---
 
-#### Specification (C): Triple-Difference — Continuous Displacement Score
+## 3. Data Inputs and Raw Objects
 
-As a complement to the binary DDD, we replace the hard-threshold displacement indicator $D_{ie}$ with the continuous predicted purchase propensity $\tilde{s}_{ie} = s_{ie} - \bar{s}$, where $s_{ie} \in [0,1]$ is the classifier's predicted probability of at least one purchase during the closure window, and $\bar{s}$ is its sample mean. Mean-centering ensures that $\delta^B_\ell$ is interpretable as the treatment effect at the average displacement propensity rather than at the extrapolated corner $s_{ie} = 0$.
+### 3.1 Main raw data used by the pipeline
 
-$$
-\text{Purchases}_{iet} =
-\sum_{\ell \neq -1} \delta^B_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})
-+ \sum_{\ell \neq -1} \delta^S_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})\times \tilde{s}_{ie}
-+ \sum_{\ell \neq -1} \beta^S_{\ell}\,\mathbb{1}(t=\ell)\times \tilde{s}_{ie}
-+ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
-$$
+The project uses:
 
-**Interpretation of coefficients:**
-- $\delta^B_\ell$ for $\ell > 0$: the baseline-demand effect for a consumer with average displacement propensity $s_{ie} = \bar{s}$.
-- $\delta^S_\ell$ for $\ell > 0$: the **marginal displacement effect** — how much the treatment effect increases per unit increase in displacement propensity, at period $\ell$. A consumer with $\tilde{s}_{ie} = 1 - \bar{s}$ (predicted certain to purchase) has a total treatment effect of $\delta^B_\ell + \delta^S_\ell \cdot (1 - \bar{s})$. A negative $\delta^S_\ell$ means that consumers more likely to have been displaced experienced larger post-closure purchase reductions, consistent with the displacement effect driving the result.
-- $\beta^S_\ell$: the time-varying relationship between displacement propensity and purchases, common across treated and control.
+- `order_result.csv`: order-level behavior, store, discount, coupon, basket-related columns
+- `order_commodity_result.csv` and processed commodity data: product-level purchase history
+- `member_result.csv`: member demographics and app attributes
+- push CSVs matching `sleep_push_result_*.csv`
+- store metadata including `set_up_time`
+- geocoded store metadata for closure construction
 
-**Advantages over binary classification.** This specification avoids dependence on any particular decision threshold and tests for a monotonic dose-response relationship: consumers with higher purchase propensity during the closure (i.e., more strongly displaced) should show larger post-closure reductions if state dependence is the mechanism. It is reported alongside Specification (B) as a robustness check.
+Relevant loading code:
 
-**Pre-trend falsification.** Since $\tilde{s}_{ie}$ is mechanically correlated with pre-closure purchase frequency (more frequent buyers have higher $s_{ie}$), the interaction $\mathbb{1}(t=\ell) \times \tilde{s}_{ie}$ may capture heterogeneity in purchase levels across the pre-period time series even absent any treatment. We therefore require $\delta^S_\ell \approx 0$ for all $\ell < -1$ as a falsification test. A non-zero pre-period $\delta^S_\ell$ would indicate that the score is picking up pre-existing heterogeneity in purchase dynamics rather than a displacement effect.
+- customer-store commodity loader: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:48)
+- customer-store order loader: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:73)
+- classifier order loader: [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:211)
+- demographics loader: [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:162)
 
----
+### 3.2 Key derived datasets
 
-#### Specification (D): Closure-Length Heterogeneity
+The main derived objects are:
 
-A unique feature of our setting is that closure durations vary substantially across events (approximately 10 to 100 days). We augment Specification (B) to test whether the displacement effect is larger or more persistent for longer closures, consistent with habit-formation models in which longer gaps erode habits more severely:
-
-$$
-\text{Purchases}_{iet} =
-\sum_{\ell \neq -1} \delta^B_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})
-+ \sum_{\ell \neq -1} \delta^D_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})\times D_{ie}
-+ \sum_{\ell \neq -1} \theta_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})\times D_{ie} \times \widetilde{L}_e
-+ \sum_{\ell \neq -1} \kappa_{\ell}\,\mathbb{1}(t=\ell)\times\mathbb{1}(\text{Treated}_{ie})\times \widetilde{L}_e
-+ \sum_{\ell \neq -1} \beta_{\ell}\,\mathbb{1}(t=\ell)\times D_{ie}
-+ \phi_{ie} + \omega_t + \gamma_m + \nu_{iet}
-$$
-
-where $\widetilde{L}_e = (L_e - \bar{L}) / \text{sd}(L)$ is the standardized closure length in days (mean zero, unit standard deviation), and all lower-order interactions involving $\widetilde{L}_e$ are included.
-
-**Why $\widetilde{L}_e$ rather than raw days.** Closure length $L_e$ is a closure-level variable that does not vary across periods $t$ within a consumer-closure observation; its main effect is therefore absorbed by $\phi_{ie}$ and is not separately identified. Standardizing makes $\theta_\ell$ interpretable as the change in the displacement effect associated with a one-standard-deviation longer closure. The main effect of $\widetilde{L}_e$ and its interaction with $\mathbb{1}(\text{Treated}_{ie})$ are identified only through their interactions with the time dummies, which vary within the panel.
-
-**Interpretation of coefficients:**
-- $\delta^D_\ell$: the displacement effect at period $\ell$ for a closure of average length ($\widetilde{L}_e = 0$).
-- $\theta_\ell$: how the displacement effect at period $\ell$ changes per one-standard-deviation increase in closure length. A negative $\theta_\ell$ in post-periods indicates that longer closures produce larger habit disruption.
-- $\kappa_\ell$: how the baseline-demand effect at period $\ell$ varies with closure length (e.g., longer closures may trigger stronger firm responses such as promotions post-reopening).
-
-**Linearity assumption.** The specification above is linear in $\widetilde{L}_e$. We additionally report a binned version (short: $L_e < 30$ days; medium: $30 \leq L_e < 60$ days; long: $L_e \geq 60$ days) to detect non-linearities, since habit decay may be concave in gap length.
+- store closures: `outputs/store/store_closures.csv`
+- non-university closure sample: `outputs/store/non_uni_store_closures.csv`
+- closure-pair registry: `outputs/customer-store/closure_pair_registry.csv`
+- full pre-estimation classifier panel with scores: `outputs/displacement_classification/panel_with_scores_*.parquet`
+- ex-ante closure-window score file: `outputs/displacement_classification/displacement_scores_t0_ex_ante.csv`
+- final estimation samples and regression outputs under `outputs/displacement_effect_estimation/...`
 
 ---
 
-### 2.4 Identifying Assumptions
+## 4. Stage 1: Store Closure Identification
 
-The displacement effect $\delta^D_\ell$ is identified under two assumptions.
+### 4.1 Definition of a closure
 
-**Assumption 1: Parallel Trends.** Within each displacement group (displaced and non-displaced separately), treated and control consumers follow the same trend in Luckin purchases in the absence of the closure. Equivalently, the trend difference between treated and control may differ from zero, provided it is the same across the displaced and non-displaced groups — so that the triple-difference removes it.
+Closures are identified as spells of **at least 10 consecutive zero-demand days** for a store, with non-zero demand observed both before and after the zero-demand spell. This is implemented in:
 
-*Why this is plausible in our setting.* Control stores are matched to closed stores by set-up time, which proxies for store age and customer base maturity. Within each closure event, treated and control consumers are drawn from stores of similar vintage operating in Nanjing, reducing systematic compositional differences. The main threat is local economic shocks affecting the neighborhood of the closed store but not the matched control store. We assess this empirically: pre-period coefficients $\delta^B_\ell$ and $\delta^D_\ell$ for $\ell < -1$ must be jointly indistinguishable from zero. Following the approach in Levine & Hristakeva (2026) Appendix C, we also formally test whether the linear pre-trend slope differs between treated and control within each displacement group, and whether any violation is equal across groups (which would leave the triple-difference unbiased even if within-group parallel trends fails).
+- zero-demand grid construction: [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:45)
+- consecutive-zero detection: [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:88)
 
-**Assumption 2: Equal Baseline-Demand Effects.** The shift in baseline demand for Luckin caused by the closure (the $B$ channel) is the same for displaced and non-displaced treated consumers. If displaced and non-displaced consumers have different levels of underlying demand for Luckin, the closure may shift their baseline demand by different amounts — for example, a more habitual consumer (who is more likely to be displaced) may respond more strongly to post-reopening promotions.
+The exact closure record written out contains:
 
-*Why this is plausible in our setting.* Unlike a high-profile labor strike, our closures are operational events (renovations, temporary shutdowns) with low public salience. Large reputational effects or strategic firm responses that differentially affect displaced and non-displaced consumers are therefore unlikely. Nevertheless, displaced consumers are by definition more frequent buyers, which may make them more sensitive to any baseline-demand shift. We test this assumption using two approaches. First, we estimate Specification (B) on a matched subsample in which displaced and non-displaced consumers are balanced on pre-closure purchase frequency and revisit probability (the proxy for state dependence); similarity of $\delta^D_\ell$ estimates across the full and matched samples provides evidence that baseline-demand heterogeneity is not driving the result. Second, following the diagnostic in Levine & Hristakeva (2026), we estimate the difference in post-closure purchase trajectories between displaced and non-displaced consumers within the **control** group only: since control consumers are unaffected by the closure, any post-closure divergence between their displaced and non-displaced subgroups must reflect baseline-demand differences rather than displacement. If this divergence is small, the equal-baseline-demand assumption is supported.
----
+- `dept_id`
+- `closure_start`
+- `closure_end`
+- `closure_duration_days`
 
-## 3. What Has Been Done
+See [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:144).
 
-The current production pipeline (primarily `model-free/src/customer-store/analyze_closure_impact.py` and `model-free/src/displacement_classification/*.py`) implements the following.
+### 4.2 Geographic and university filtering
 
-### 3.1 Data and Sample
+After closure spells are found, the script:
 
-- **Order data:** `order_commodity_result.csv`, `order_result.csv` (commodity-level and order-level, with store `dept_id`, `member_id`, date, discount, coupon).
-- **Closures (constructed):** `model-free/src/store/identify_closures.py` identifies closures from daily store demand as **≥10 consecutive zero-demand days**, requiring **non-zero demand both before and after** the zero-demand spell. It then merges geocoded store metadata and keeps stores with valid coordinates within Nanjing bounds.
-- **Analysis closure input:** `outputs/store/non_uni_store_closures.csv` (derived from `outputs/store/store_closures.csv` by excluding stores whose `address` contains `大学` or `学院`).
-- **Thresholds:** “Regular” customer: at least **5** pre-closure purchases (`DEFAULT_LOWEST_PURCHASES`) and preferred-store loyalty ratio **≥ 0.8** (`DEFAULT_LOWEST_RATIO`). The script includes **threshold justification** (coverage at different purchase and ratio cutoffs).
+- merges geocoded store metadata,
+- keeps stores successfully geocoded and within Nanjing bounds,
+- flags stores whose address contains `大学` or `学院`,
+- writes both the full closure list and a non-university version.
 
-### 3.2 Treatment and Control
+Implemented in:
 
-- **Default mode (enabled): set-up-time–matched control (`USE_SET_UP_TIME_MATCHED_CONTROL=True`).**
-  - **Treatment (per closure):** Using only visits **before closure start**, customers whose pre-closure preferred store is the closed store, with pre-closure `total_purchases ≥ 5` and `preferred_ratio ≥ 0.8`.
-  - **Control stores (per closure):** Up to `SET_UP_TIME_NEAREST_N=5` stores chosen by nearest `set_up_time` to the closed store, restricted to non-treated stores; each control store is used at most once across closures (processed in closure-start order).
-  - **Control members (per closure):** Customers whose pre-closure preferred store is in that closure’s matched control-store set, with the same pre-closure thresholds (`≥5` purchases and ratio `≥0.8`).
-- **Alternative mode (disabled by default): never-treated closure-specific control.**
-  - Never-treated pool = qualified loyal customers whose preferred store never appears in closures.
-  - For each closure, keep pool members who were qualified at that closure date (`≥5` purchases before closure start and max single-store share `≥0.8`).
+- geocode merge and coordinate validation: [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:165)
+- university flag: [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:202)
+- output writing: [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:250)
 
-In both modes, one observation unit remains the **consumer–closure event**, and the same consumer can appear in multiple closures.
+### 4.3 Closure-duration filter used downstream
 
-- **Boundary consumer rule in production selection:** Treatment assignment is based on **pre-closure preferred store = closed store** (no additional distance-based override is applied).
-- **Cross-pipeline consistency:** Closure-specific matched controls are persisted in `outputs/customer-store/closure_pair_registry.csv`, and displacement training loads the same kept-closure registry.
-- **Comparability diagnostics captured in outputs:** Closure timing/duration and treatment-control pairing metadata are persisted in registry fields (e.g., closure dates, `closure_duration_days`, matched control stores, status/skip reason), with closure-event covariates (`closure_start_month`, `closure_start_weekday`, `closure_start_season`, `share_visited_stores_closed`) carried into displacement panels.
+The customer-store and estimation pipelines further restrict to closures with:
 
-### 3.3 Time Windows
+- `closure_duration_days < 30`
 
-- **Pre / during / post** defined per closure using a configurable **window** (default 14 days, robustness 28 days):  
-  - Pre: `window_days` before closure start.  
-  - During: closure start to closure end.  
-  - Post: `window_days` after closure end.  
-- Period lengths are used to normalize metrics (e.g., purchases per day).
+This is enforced by `filter_closures_shorter_than_max()` in [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:155), with `MAX_CLOSURE_DURATION_DAYS = 30` defined at [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:28).
 
-### 3.4 Outcomes and Behavior
+So there are two nested closure scopes:
 
-- **Behavior metrics** (per customer, per period):  
-  - `n_purchases`: purchase days per day in the period.  
-  - `new_product_ratio`, `total_discount`, `coupon_usage_rate`.  
-- **Panel:** One row per (closure, group, period, member_id) in `period_df`.
-
-### 3.5 Descriptive and Visual
-
-- **Threshold justification:** Distribution of purchase counts and preferred-store ratio; fraction qualifying at different cutoffs.
-- **Unique stores:** Histogram of number of distinct stores per customer (among qualified).
-- **Closure impact summary:** Per-closure counts of treatment/control, purchase rates during closure, selectivity ratio.
-- **Plots:**  
-  - Treatment vs control, pre / during / post, for the four behavior metrics (with significance brackets).  
-  - **Duration split:** Short vs long closures (e.g., &lt; 30 vs ≥ 30 days).  
-  - **Push split:** Treatment subdivided into no-push vs with-push (using `no_push_members.csv`), vs control.
-
-### 3.6 Inference (Current)
-
-- **Paired t-tests:** Treatment and control, pre vs post (per customer, control deduplicated across closures).
-- **Two-sample t-tests:** Treatment vs control in pre and in post.
-- **Closure-level inclusion filters in analysis:**
-  - Skip closure if either group size is below `MIN_GROUP_SIZE=50`.
-  - Skip closure if control during-closure purchase rate is too low: `control_rate < 2.0 × treatment_rate` (`MIN_CTRL_TREAT_RATIO=2.0`).
-  - The retained subset is exported as `outputs/customer-store/closures_used.csv`.
-- No regression-based DiD or triple-difference yet; no displacement classification; no event-study or formal pre-trend tests.
-
-### 3.7 Outputs
-
-- Summary CSV per closure (treatment/control sizes, purchase rates during closure).  
-- Period-level behavior CSV.  
-- Statistical test results CSV.  
-- PDFs: behavior comparison (main, robustness window), duration-split, push-split.
-
-### 3.8 Displacement Classification Model
-
-**3.8.1 Prediction target and panel construction**
-
-- Label = whether a consumer made **at least one Luckin purchase** in a given consumer–closure–period row.
-- Training panel uses periods `-4, -3, -2, -1` for treatment/control and period `0` for control evaluation.
-- Period length equals closure duration `D = closure_duration_days`.
-- History guardrails are enforced at closure and member levels (`closure_start ≥ earliest_order_date + 4D + 8 days`; first purchase before earliest pre-period start).
-- Train/eval split is implemented as: train `period <= -2`, eval-pre `period = -1`, eval-during `period = 0 & group=control`.
-
-**3.8.2 Features**
-
-- Uses `order_result.csv` for behavioral/order features and `member_result.csv` for demographics.
-- Builds 46 consumer-level features from history strictly prior to `period_start` (frequency/recency, regularity, DOW patterns, basket breadth, loyalty, order-level behavior, demographics).
-- Stores additional closure-event covariates in panel outputs for downstream DiD/DDD estimation.
-
-**3.8.3 Model training and evaluation**
-
-- Trains XGBoost (`binary:logistic`, `max_depth=6`, `eta=0.1`, `tree_method=hist`, 500 rounds), using CUDA when available and CPU otherwise.
-- Trains **one model per closure duration `D`**.
-- Evaluates with group-period slices: Treatment-Pre (`t=-1`), Control-Pre (`t=-1`), Control-During (`t=0`), including FPR/FNR.
-- Produces gain-based variable importance and label-balance audits by duration/split.
-
-**3.8.4 Outputs and displacement classification**
-
-- Duration-suffixed artifacts are generated: `displacement_model_D.json`, `variable_importance_D.csv`, `prediction_accuracy_D.csv`, `panel_with_scores_D.parquet`, `displacement_scores_D.csv`.
-- Run-level artifacts include `label_balance_audit.csv` and training logs in `outputs/displacement_classification/logs/`.
-- Binary displacement classification uses `predicted probability ≥ decision_threshold` (default 0.5), and continuous displacement scores are saved for score-based specifications.
+- a broader raw closure table from the zero-demand rule;
+- the analysis closure scope after dropping university closures and long closures.
 
 ---
 
-## 4. What Has Not Been Done (To-Do)
+## 5. Stage 2: Treated / Control Construction and Closure Registry
 
-The following steps align the remaining analysis with Paper 2 and exploit our multi-closure, varying-length structure.
+### 5.1 Unit of analysis
+
+The core unit is the **member-closure event pair**. A customer can appear multiple times if they are exposed to multiple closures. This logic is baked into the closure registry and every later panel.
+
+### 5.2 “Regular customer” thresholds
+
+A customer is considered eligible only if, before a given closure:
+
+- they have at least `5` unique purchase days;
+- their preferred-store loyalty ratio is at least `0.8`.
+
+Defaults are defined at:
+
+- [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:23)
+- [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:117)
+
+### 5.3 Preferred-store calculation
+
+Preferred store and preferred-store ratio are computed from unique `(member_id, date, dept_id)` visits. Implemented in:
+
+- full-sample preference function: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:177)
+- closure-date-specific preference recomputation: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:340)
+
+The closure-date-specific version is what matters for treatment and control assignment.
+
+### 5.4 Treatment definition
+
+For a closure event, treated members are those whose **pre-closure preferred store equals the closed store**, with the purchase and loyalty thresholds satisfied. The operative code path is:
+
+- [get_treatment_and_control_members_for_closure()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:382)
+
+Inside the set-up-time matched mode, treatment is built from the closure-date-specific preferred store:
+
+- [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:399)
+
+### 5.5 Control-store matching
+
+The default analysis mode uses **set-up-time matched controls**:
+
+- candidate control stores must not be treated stores;
+- each control store can be used only once across closures;
+- stores with excluded keywords in identifying text are removed from the candidate pool;
+- the `n=5` nearest stores by `set_up_time` are selected.
+
+Implemented in:
+
+- setup-time loading: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:94)
+- keyword exclusion helper: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:148)
+- nearest-store matching: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:282)
+
+The constant `SET_UP_TIME_NEAREST_N = 5` is defined at [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:34).
+
+### 5.6 Control-member definition
+
+For each closure, control members are customers whose closure-date-specific preferred store belongs to the matched control-store set, and who pass the same purchase and loyalty thresholds. Implemented in:
+
+- [get_closure_control_members_set_up_matched()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:360)
+- [get_treatment_and_control_members_for_closure()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:382)
+
+### 5.7 Alternative control construction
+
+The codebase still contains an alternative “never-treated control pool” mode, but the active pipeline uses the set-up-time matched design:
+
+- mode switch: `USE_SET_UP_TIME_MATCHED_CONTROL = True` at [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:32)
+
+### 5.8 Closure-level screening rules
+
+Even after treatment/control assignment, a closure is dropped unless:
+
+- treatment group size is at least `50`;
+- control group size is at least `50`;
+- control purchase rate during the closure is at least `2.0 ×` the treatment purchase rate during the closure.
+
+Threshold constants:
+
+- `MIN_GROUP_SIZE = 50`: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:35)
+- `MIN_CTRL_TREAT_RATIO = 2.0`: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:36)
+
+These rules are applied when constructing the registry in:
+
+- [build_closure_pair_registry()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:607)
+
+The closure-level status logic appears at:
+
+- [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:676)
+
+### 5.9 The closure registry
+
+The closure registry is the project’s central glue dataset. It stores, for each closure:
+
+- closure timing and duration;
+- treated store metadata;
+- control store IDs, addresses, and set-up times;
+- treatment/control counts;
+- during-closure treated/control purchase rates;
+- screening status and skip reason.
+
+Implemented in:
+
+- [build_closure_pair_registry()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:607)
+- kept-only export wrapper: [build_kept_closure_registry()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:780)
+
+The main customer-store runner:
+
+- loads and filters inputs,
+- builds the kept registry,
+- merges descriptive DiD summaries into it,
+- then runs weekly trend analysis.
+
+See [main_customer_store.py](/home/litao/Coffee/model-free/src/customer-store/main_customer_store.py:18).
+
+### 5.10 Full vs main registry
+
+The project currently distinguishes:
+
+- `closure_pair_registry_full.csv`: broader retained registry
+- `closure_pair_registry.csv`: the main 18-closure registry used for the headline report
+
+The main-results script validates that the main registry contains exactly 18 unique closures and excludes 4 closures relative to the full registry:
+
+- [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:27)
+- registry-scope validation: [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:53)
 
 ---
 
-### Step 3: Construct the Estimation Sample
+## 6. Stage 3: Descriptive Customer-Store Panels
 
-**3a. Time window.**
+Before the blocked-buyer model and the formal DDD pipeline, the code constructs descriptive panels used for the earlier customer-store analysis.
 
-- Pre: $N$ periods before closure onset (e.g., 9).  
-- Closure: t = 0 (possibly normalized to one “period” or expressed in common time units).  
-- Post: $M$ periods after resolution.  
-- Given varying closure length, consider normalizing “during” to one period and expressing pre/post in consistent units (e.g., weeks) relative to onset/resolution.
+### 6.1 Per-period behavior measures
 
-**3b. Outcome.**
+For each member, period, and closure, the descriptive code computes:
 
-- **Primary:** Number of Luckin purchases per period (or binary “any purchase”) at consumer–period level.
+- purchase days per day
+- new-product ratio
+- mean total discount
+- coupon-usage rate
 
-**3c. Stack observations.**
+Implemented in:
 
-- Stack **consumer–closure event** observations (as in Paper 1 with multiple hurricanes).  
-- Time index relative to each closure.  
-- Account for multiple closures per consumer in **standard errors** (e.g., cluster at consumer or consumer–closure).
+- [_compute_customer_behavior()](/home/litao/Coffee/model-free/src/customer-store/did_analysis.py:45)
 
----
+### 6.2 Descriptive pre/during/post windows
 
-### Step 4: Estimate the Displacement Effect
+The descriptive DiD script builds:
 
-**4a. Overall ATT.**
+- pre window
+- during-closure window
+- post window
 
-- Run DiD: post vs pre, treated vs control (excluding t = 0).  
-- Present as **event study** (e.g. $\delta_l$ by period $l$): check no pre-trend, drop at t = 1, gradual recovery.
+using user-specified `window_days`, typically 14 or 28. See:
 
-**4b. Triple-difference.**
+- [analyze_closure_impact()](/home/litao/Coffee/model-free/src/customer-store/did_analysis.py:138)
 
-- Estimate Equation 9 (or event-study version): $\delta^B$, $\delta^D$, $\beta$.  
-- Present event study for displacement effect over time.
-- Also estimate a **continuous-score DDD** using predicted displacement propensity to avoid threshold arbitrariness and test monotonic dose-response.
+### 6.3 Weekly trend panels
 
-**4c. Closure-length interaction.**
+The project also builds weekly event-time panels for trend plots. These use:
 
-- Add $\delta^D_1 \times \text{ClosureLength}$ (and possibly level) to test whether longer closures increase or prolong displacement effects.
+- pre weeks in 7-day bins,
+- the closure window as `t=0`,
+- post weeks in 7-day bins.
 
----
+Implemented in:
 
-### Step 5: Robustness Checks
+- [build_week_level_panel()](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:498)
+- [run_trend_analysis()](/home/litao/Coffee/model-free/src/customer-store/trend_analysis.py:98)
 
-**5a. Parallel pre-trends.**
-
-- Event study by displaced vs non-displaced; test formally (e.g. Paper 2 Appendix C) whether pre-trend slope differs by treatment within displacement group and whether any violation is equal across displacement groups.
-
-**5b. Matched subsample.**
-
-- Match displaced to non-displaced on pre-closure purchase frequency (e.g. share of periods with a purchase) and revisit probability; re-estimate triple-difference on matched sample.
-
-**5c. Classification threshold.**
-
-- Try thresholds for “displaced” (e.g. predicted probability &gt; 0.4, 0.5, 0.6); show displacement effect stability.
-- Add score calibration and functional-form robustness for continuous-score specification (e.g., linear vs binned/spline score effects).
-
-**5d. Subsample by closure severity.**
-
-- Full vs partial closure (all vs some of consumer’s accessible stores closed); compare estimates.
-
-**5e. Attenuation bound.**
-
-- Use control-based µ and λ (Step 2e) and Paper 2 Appendix D–style correction to derive a **lower bound** on the true displacement effect.
+This descriptive weekly panel is separate from the later event-length-normalized DDD estimation panel.
 
 ---
 
-### Step 6: Heterogeneity Analysis
+## 7. Stage 4: Blocked-Buyer Classification
 
-**6a. Competitor.**  
-If data allow: number of competitors near the store; test whether displacement effect varies with competition.
+### 7.1 Purpose of the classifier
 
-**6b. Closure length.**  
-Already in Step 4c; interpret as main novel heterogeneity.
+The classifier predicts whether a member would have made at least one Luckin purchase during the closure window had the store remained available. In the code and outputs this is often called:
 
-**6c. Habit strength.**  
-Split by pre-closure regularity (e.g. daily vs weekly vs occasional). Test whether displacement effect is larger for stronger habits (habit capital depreciates) or smaller (entrenched preferences, quick return).
+- displacement
+- predicted displaced
+- predicted purchase intention
+- ex-ante t0 score
 
-**6d. Demographics.**  
-By age, income, city tier (analogous to Paper 2 Table 6).
+These labels all refer to the same substantive object: predicted closure-window purchase intention.
 
-**6e. Privacy / push.**  
-Compare displacement effect between **push0** (opted out of push at first use) and **push1**; interpret as proxy for privacy sensitivity or engagement with the app.
+### 7.2 Why the classifier is trained on pre-period rows
+
+The training panel uses only pre-closure periods to learn the mapping from past behavior to whether the member buys at least once in a window of length `D`, where `D` is the closure duration. The classifier then scores the ex-ante closure window (`t=0`) for both treated and control members.
+
+### 7.3 Training panel construction
+
+The classifier constructs a panel with:
+
+- periods `-4, -3, -2, -1` for treated and control
+- period `0` for controls only, used for evaluation
+
+Each period length equals that closure’s duration `D = closure_duration_days`.
+
+Implemented in:
+
+- [build_training_panel()](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:324)
+
+Key details:
+
+- closures before the configured filter date are dropped in [main.py](/home/litao/Coffee/model-free/src/displacement_classification/main.py:90)
+- panel rows are restricted to closures with `status == kept` in the registry: [filter_closures_to_registry_kept()](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:283)
+- closures are skipped if there is insufficient history for `4 × D + 8` days before closure start: [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:371)
+- members are further required to have first purchase before the earliest pre-period start: [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:412)
+
+The label is:
+
+- `1` if the member purchased at least once in that `D`-day window,
+- `0` otherwise.
+
+See row construction at [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:433).
+
+### 7.4 Ex-ante t0 scoring panel
+
+After training, the project builds a separate panel with one row per treated or control member at the closure window start:
+
+- `period = 0`
+- `score_time = "t0_ex_ante"`
+- features use only information available before closure start
+
+Implemented in:
+
+- [build_t0_ex_ante_panel()](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:491)
+
+This is the panel that receives the ex-ante blocked-buyer scores used downstream in the DDD estimation.
+
+### 7.5 Classifier features
+
+The classifier engineers a large member-level feature set from order history and demographics. The implementation is in:
+
+- [compute_features_for_panel()](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:626)
+
+Feature families include:
+
+- closure-event covariates:
+  - `closure_start_month`, `closure_start_weekday`, `closure_start_season`, `share_visited_stores_closed`, `tenure_days`
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:681)
+- recency/frequency:
+  - total purchase days before the cutoff
+  - purchases per week over all history, last 4 weeks, last 2 weeks, last week
+  - `days_since_last_purchase`, `purchased_in_last_7_days`, `purchased_in_last_14_days`
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:776)
+- order counts and spend:
+  - total orders and spend, recent spend
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:822)
+- habit / regularity:
+  - mean and standard deviation of interpurchase gaps
+  - max purchase gap
+  - coefficient of variation of interpurchase interval
+  - longest consecutive streak
+  - share of weeks with purchase
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:852)
+- day-of-week preference:
+  - day shares, modal purchase day, day-of-week entropy
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:910)
+- basket and category breadth:
+  - average basket size
+  - average number of order categories
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:942)
+- store loyalty:
+  - unique stores visited
+  - preferred-store ratio
+  - second-store ratio
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:969)
+- order-level aggregates:
+  - average discount
+  - coupon usage rate
+  - average coffee count
+  - average food count
+  - average coffee-wallet usage
+  - average delivery pay
+  - coffee-share of orders
+  - take-address rate
+  - [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:998)
+- demographics:
+  - encoded gender, level, inviter status, manufacturer, callphone, push
+  - [load_member_demographics()](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:162)
+
+The code is deliberately strict: if expected source columns or merges are missing, it raises errors rather than silently filling.
+
+### 7.6 Push features in the classifier
+
+The classifier can optionally augment the feature matrix with push-notification history. This branch is controlled by:
+
+- `push_features.enabled` in [src/displacement_classification/config.json](/home/litao/Coffee/model-free/src/displacement_classification/config.json:1)
+
+Push rows are filtered and cached to parquet using:
+
+- [load_or_build_push_events_cache()](/home/litao/Coffee/model-free/src/displacement_classification/push_event_cache.py:95)
+
+Push-derived features include:
+
+- counts of pushes in rolling windows such as 7, 14, 28 days
+- trigger-tag composition shares
+- counts and shares of pushes with coupon / discount
+- coupon and discount intensity
+- push-to-purchase latency measures
+- follow-up purchase probabilities by trigger tag
+- pushes since last purchase
+
+Implemented in:
+
+- [compute_push_features_for_batch()](/home/litao/Coffee/model-free/src/displacement_classification/push_event_cache.py:227)
+
+### 7.7 Feature-matrix caching
+
+To avoid repeated expensive push loading and feature computation, the pipeline caches:
+
+- training feature matrices
+- ex-ante t0 feature matrices
+
+The cache key depends on closures, members, push-subset bounds, and run flags. This logic lives in:
+
+- [feature_matrix_cache.py](/home/litao/Coffee/model-free/src/displacement_classification/feature_matrix_cache.py:1)
+
+### 7.8 Model training
+
+The classifier trains one **XGBoost model per closure duration**. This is important because the prediction target is “any purchase within a `D`-day window,” and the base rate changes with `D`.
+
+Main training loop:
+
+- [main.py](/home/litao/Coffee/model-free/src/displacement_classification/main.py:302)
+
+Model settings from config:
+
+- `max_depth = 6`
+- `eta = 0.1`
+- `objective = binary:logistic`
+- `eval_metric = auc`
+- `tree_method = hist`
+- `num_boost_round = 500`
+- `decision_threshold = 0.5`
+
+See [src/displacement_classification/config.json](/home/litao/Coffee/model-free/src/displacement_classification/config.json:1).
+
+GPU availability is auto-detected in:
+
+- [check_gpu()](/home/litao/Coffee/model-free/src/displacement_classification/model.py:47)
+
+### 7.9 Train/evaluation split and audits
+
+The effective split is:
+
+- train: periods `<= -2`
+- evaluation on pre period: `-1`
+- evaluation on control during-closure period: `0`
+
+This is handled in the model-training loop in [main.py](/home/litao/Coffee/model-free/src/displacement_classification/main.py:318) and summarized in the label-balance audit created at [main.py](/home/litao/Coffee/model-free/src/displacement_classification/main.py:267).
+
+### 7.10 Classifier outputs
+
+For each duration-specific model, the pipeline writes:
+
+- model JSON
+- feature importance CSV
+- prediction-accuracy CSV
+- scored panel parquet
+- score summary CSV
+
+Implemented in:
+
+- [save_model_artifacts()](/home/litao/Coffee/model-free/src/displacement_classification/model.py:88)
+
+The ex-ante score file used downstream contains:
+
+- `displacement_prob_t0_ex_ante`
+- `predicted_displaced_t0_ex_ante`
+
+These are later normalized to:
+
+- `displacement_prob`
+- `disp_binary`
+
+inside the estimation sample builder at [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:104).
 
 ---
 
-## 5. Summary Table
+## 8. Stage 5: Estimation Sample Construction
 
-| Area | Done | Not done |
-|------|------|----------|
-| **Treatment/control** | Pre-closure preferred-store-based treatment; default set-up-time–matched closure-specific control (with one-time control-store assignment); threshold justification; boundary rule under preferred-store assignment; multi-closure consumer–event handling; closure-level screening (`MIN_GROUP_SIZE`, control/treatment rate filter); pairing registry (`closure_pair_registry.csv`) shared across pipelines; comparability metadata captured in registry/panel covariates | — |
-| **Displacement** | Registry-aligned panel (periods −4…−1 + control t=0, with period length = closure duration `D`); 46 behavioral/demographic features from `order_result.csv`; train/eval split (`<=-2`, `-1`, `0-control`); XGBoost trained per duration `D` (500 rounds, gain importance); duration-suffixed outputs (`displacement_model_D.json`, `variable_importance_D.csv`, `prediction_accuracy_D.csv`, `displacement_scores_D.csv`) plus `label_balance_audit.csv`; binary and continuous displacement scores persisted for downstream estimation | — |
-| **Sample** | Pre/during/post windows; period-level behavior panel | Normalized time units; stacked consumer–closure; clustering design |
-| **Estimation** | Descriptive stats, t-tests, visual comparison | DiD ATT; triple-difference; event study; closure-length interaction |
-| **Robustness** | 14 vs 28 day window; duration-split and push-split plots; model evaluation by pre/during groups and duration | Parallel trends test; matching; threshold sensitivity; severity subsample; attenuation bound; continuous-score calibration robustness |
-| **Heterogeneity** | Duration-split, push-split (visual) | Competitor, habit strength, demographics, push0 vs push1 (regression) |
+### 8.1 Main sample source
+
+The estimator starts from:
+
+- the main closure registry
+- the ex-ante blocked-buyer scores
+- order history for purchase outcomes
+- commodity history for novelty outcomes
+
+The entry point is:
+
+- [build_estimation_sample()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:776)
+
+### 8.2 Loading and harmonizing blocked-buyer scores
+
+`load_displacement_scores()`:
+
+- loads `displacement_scores_t0_ex_ante.csv`
+- enforces required columns
+- filters scores to the closure scope in the active registry
+- merges `days_since_last_purchase` from the cached t0 feature matrix
+- constructs standardized downstream fields:
+  - `treated`
+  - `disp_binary`
+  - `displacement_prob`
+
+See:
+
+- [load_displacement_scores()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:104)
+
+### 8.3 Event-time structure
+
+For each closure and each relative period:
+
+- pre bins: `-K, ..., -1`
+- post bins: `1, ..., K`
+- period `0` is excluded from the estimation panel
+
+The default `K = 4` is read from config:
+
+- [config.json](/home/litao/Coffee/model-free/src/displacement_effect_estimation/config.json:1)
+
+Window bounds are computed in:
+
+- [_window_bounds()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:501)
+
+and the main closure loop that builds period rows is in:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:891)
+
+Each pre and post period uses a bin length equal to that event’s `closure_duration_days`.
+
+### 8.4 Outcomes
+
+The estimator supports three outcomes:
+
+- `n_purchases`
+- `purchase_incidence_binary`
+- `variety_seeking`
+
+Support is declared at:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:791)
+
+#### Purchase-frequency outcome
+
+For `n_purchases`, the outcome is:
+
+- number of purchase days in the period divided by closure duration
+
+Implemented in:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:975)
+
+#### Purchase-incidence-binary outcome
+
+For `purchase_incidence_binary`, the outcome is:
+
+- indicator of any purchase in the period
+
+Implemented at:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:988)
+
+#### Variety-seeking outcome
+
+For `variety_seeking`, the estimator loads member-level product history and computes a window-specific novelty share in:
+
+- [_compute_variety_seeking_for_window()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:391)
+
+Three modes are implemented:
+
+- `distinct`: each product counted once per member-window
+- `instance`: repeated purchase rows count multiple times
+- `distinct-only-new`: share of distinct products whose global first-sale date falls in the current or previous estimation window
+
+See:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:404)
+- CLI option handling in [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:154)
+
+### 8.5 Balanced vs unbalanced panels
+
+The estimator supports different panel constructions, which determine whether the model is DiD or DDD.
+
+For `n_purchases`:
+
+- default: unbalanced panel -> DDD
+- `--no-unbalanced-panel`: balanced panel -> DiD
+
+For `variety_seeking`:
+
+- default: unbalanced panel -> DDD
+- `--balanced-panel`: balanced panel -> DiD
+
+These rules are enforced in:
+
+- [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:240)
+
+The actual within-closure balanced-panel filtering is applied inside `build_estimation_sample()` at:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:1010)
+
+For balanced variety panels, there is also an optional period-0 contrast filter that can drop:
+
+- treated members who purchase during the closure window
+- control members who do not purchase during the closure window
+
+That filter is implemented in:
+
+- [_filter_members_with_period0_purchases()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:562)
+
+### 8.6 Optional sample filters
+
+The estimation code supports:
+
+- exact closure-duration filtering
+- separate-effect estimation by closure event
+- recency filtering based on `days_since_last_purchase`
+
+These are resolved in:
+
+- [_resolve_closure_duration_days()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:531)
+- [_resolve_recency_days()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:513)
+- recency member filtering: [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:546)
+
+### 8.7 Final estimation-sample columns
+
+After the closure loop, the sample builder adds:
+
+- `event_fe_id = member_id | dept_id | closure_start`
+- `displacement_prob_centered`
+- standardized closure length `closure_length_std`
+- optional pre-novelty heterogeneity columns
+
+Implemented in:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:1064)
 
 ---
 
-*References:*  
-- Levine, J., & Hristakeva, S. (2026). *Stopping Shopping at Stop and Shop? How Temporary Disruptions Affect Store Choice.* Draft January 5, 2026 (Paper 2).  
-- Script: `model-free/src/customer-store/analyze_closure_impact.py`  
-- Closure construction: `model-free/src/store/identify_closures.py`  
-- Closures used for analysis: `model-free/outputs/store/non_uni_store_closures.csv`
+## 9. Stage 6: Econometric Specifications
+
+### 9.1 Estimation engine
+
+All main fixed-effects regressions use `pyfixest.feols()` with:
+
+- member-closure fixed effects
+- relative-time fixed effects
+- calendar-month fixed effects
+- clustered standard errors, default at `member_id`
+
+This is documented and implemented in:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:1)
+
+### 9.2 Fixed effects and absorbed variation
+
+Every main specification absorbs:
+
+- `event_fe_id`: member-closure fixed effect
+- `rel_t`: relative-period fixed effect
+- `calendar_month`: month fixed effect
+
+See the design notes at:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:11)
+
+### 9.3 Collapsed specifications
+
+`fit_collapsed_specs()` implements the scalar post-vs-pre models:
+
+- DiD collapsed
+- binary blocked-buyer DDD
+- continuous-score DDD
+- optional pre-novelty heterogeneity extension
+
+Entry point:
+
+- [fit_collapsed_specs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:210)
+
+#### Binary DDD
+
+The binary DDD includes:
+
+- `post_X_treated`
+- `post_X_disp`
+- `post_X_treated_X_disp`
+
+implemented at:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:297)
+
+Interpretation:
+
+- `post_X_treated`: baseline treatment effect for non-blocked customers
+- `post_X_disp`: blocked-vs-non-blocked post shift pooled across groups
+- `post_X_treated_X_disp`: blocked-buyer treatment effect of interest
+
+#### Continuous-score DDD
+
+The score specification includes:
+
+- `post_X_treated`
+- `post_X_score`
+- `post_X_treated_X_score`
+
+implemented at:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:342)
+
+#### Supplementary logit
+
+For `purchase_incidence_binary`, a supplementary collapsed logit is also fit:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:356)
+
+### 9.4 Event-study specifications
+
+`fit_event_study_specs()` implements:
+
+- overall ATT event study
+- binary DDD event study
+- closure-length heterogeneity event study
+- continuous-score event study
+
+Entry point:
+
+- [fit_event_study_specs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:404)
+
+#### Event-study ATT
+
+Specification `event_att` is implemented at:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:479)
+
+#### Event-study binary DDD
+
+Specification `event_binary_B` is implemented at:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:506)
+
+#### Closure-length heterogeneity
+
+Specification `event_binary_D` augments the binary DDD with length interactions:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:557)
+
+The standardized closure-length variable used here comes from:
+
+- [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:1077)
+
+#### Continuous-score event study
+
+Specification `event_score_C` is implemented at:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:619)
+
+### 9.5 Pretrend joint tests
+
+The code automatically constructs joint zero tests for pre-period coefficients in each event-study specification using:
+
+- [_joint_zero_test()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:164)
+
+Produced tests include:
+
+- ATT pretrend
+- baseline pretrend
+- displacement pretrend
+- score-slope pretrend
+- length-interaction pretrends
+
+The specific calls appear throughout:
+
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:496)
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:544)
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:606)
+- [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:657)
+
+#### 9.5.1 Audit update: purchase pretrend selector bug, refreshed diagnostics, and reference-period robustness
+
+In the May 2026 audit pass, the pooled purchase-frequency event-study output was found to contain an invalid `pretrend_joint_tests.csv` despite the underlying event-study regression having run successfully. The issue was in coefficient-name selection for the Wald tests, not in the regression formulas themselves.
+
+The event-study formulas are generated in [fit_event_study_specs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:409), while the joint tests rely on `_pre_period_terms()` plus `_joint_zero_test()` in [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:140). `pyfixest` named interaction terms in two formats across different runs:
+
+- `C(rel_t, contr.treatment(base=...))[t]:var`
+- `rel_t::t:var`
+
+The earlier selector only matched one of those formats, so the pooled purchase bundle ended up with zero matched pre-period restrictions and `NaN` pretrend p-values even though `event_study_results.csv` already contained the relevant coefficients. `_pre_period_terms()` was then extended so it recognizes both naming schemes. After that fix, the canonical headline bundle was regenerated with:
+
+- [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
+
+and recorded in:
+
+- [run_manifest.json](/home/litao/Coffee/model-free/outputs/displacement_effect_estimation/metadata/run_manifest.json:1)
+
+The refreshed diagnostic conclusions are:
+
+- purchase-frequency ATT pretrend test: non-rejection;
+- purchase-frequency blocked-buyer displacement pretrend test: rejection;
+- novelty ATT pretrend test: non-rejection;
+- novelty blocked-buyer displacement pretrend test: non-rejection.
+
+For the maintained report narrative, the key object is the **blocked-buyer DDD path**, not the overall purchase ATT path. The important technical conclusion is therefore that the **purchase-frequency blocked-buyer event-study fails the stricter dynamic pretrend test** in the refreshed pooled run, even though the simpler purchase ATT pretrend test does not reject.
+
+The same audit pass also introduced a configurable event-study omitted pre-period through `--event-study-ref-period` in:
+
+- [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:97)
+- [fit_event_study_specs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:409)
+
+This was used to test whether choosing the first pre period (`rel_t = -4`) as the omitted category materially improved the purchase-frequency dynamic evidence. It did not. The individual event-study coefficients were re-centered, but the joint pretrend tests were unchanged. The temporary `ref=-4` bundles were therefore deleted, and the maintained canonical outputs remain the default `ref=-1` runs.
+
+The same audit workflow was also applied to the `distinct-only-new` market-new novelty outcome. That bundle was rerun under the maintained `ref=-1` normalization, and the refreshed event-study diagnostics remained supportive:
+
+- market-new ATT pretrend test: non-rejection;
+- market-new blocked-buyer displacement pretrend test: non-rejection.
+
+So, across the two novelty outcomes now maintained in the report:
+
+- member-first novelty-seeking: dynamic pretrend diagnostics are acceptable;
+- market-new novelty-seeking (`distinct-only-new`): dynamic pretrend diagnostics are also acceptable;
+- purchase-frequency blocked-buyer dynamics remain the only headline outcome with a rejected blocked-buyer event-study pretrend test.
+
+---
+
+## 10. Stage 7: Output Writing and Main Estimation Runs
+
+### 10.1 Output bundle written for each run
+
+Each estimation run writes:
+
+- `estimation_sample.csv`
+- `ddd_binary_results.csv`
+- `ddd_binary_fit.csv`
+- `ddd_score_results.csv`
+- `ddd_score_fit.csv`
+- `event_study_results.csv`
+- `event_study_fit.csv`
+- `pretrend_joint_tests.csv`
+- `spec_comparison.csv`
+- `summary.md`
+
+Implemented in:
+
+- [save_outputs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/report.py:18)
+
+### 10.2 Variety diagnostic plot
+
+For `variety_seeking` runs, the code can also create:
+
+- period-0 inclusive variety panel trend plot
+- per-period treatment/control mean-SD statistics
+
+Implemented in:
+
+- [save_variety_panel_plot()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/report.py:78)
+
+### 10.3 Event-study coefficient plots
+
+The reporting layer now also writes dynamic coefficient-path figures directly from the event-study regression output. This is implemented in:
+
+- [save_event_study_plots()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/report.py:146)
+
+The plotting helper:
+
+- parses `rel_t` back out of the pyfixest term names;
+- classifies coefficients into ATT, baseline-treatment, and displacement paths;
+- computes pointwise 95% confidence intervals as `coef ± 1.96 * se`;
+- writes `event_study_plot_data.csv`;
+- saves publication-ready PNG figures.
+
+For pooled headline runs, the new files are:
+
+- `event_study_att.png`
+- `event_study_baseline.png`
+- `event_study_displacement.png`
+
+These figures are now generated for:
+
+- the purchase-frequency bundle;
+- the headline member-first novelty-seeking bundle;
+- the market-new novelty bundle (`distinct-only-new`);
+
+and are referenced from the main report where relevant.
+
+### 10.4 Main pooled runner
+
+The main estimator CLI is:
+
+- [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:97)
+
+It:
+
+- parses all run options,
+- builds the sample,
+- fits collapsed and event-study specs,
+- writes outputs,
+- optionally writes pre-novelty histograms and variety plots,
+- optionally runs separate-effect bundles.
+
+Aggregate run path:
+
+- [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:366)
+
+Separate-effect run path:
+
+- [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:295)
+
+### 10.5 Supported run matrix
+
+The maintained run matrix and examples are documented in:
+
+- [scripts/displacement_effect_estimation/RUN_VERSIONS.md](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/RUN_VERSIONS.md:1)
+
+This file is the best compact reference for:
+
+- pooled vs separate-effect runs
+- balanced vs unbalanced panels
+- novelty mode variants
+- pre-novelty heterogeneity variant
+- recency and duration filters
+
+### 10.6 Main-results bundle script
+
+The most reproducible high-level script for the headline results is:
+
+- [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
+
+It:
+
+- validates the closure-registry scope,
+- snapshots the active registry,
+- runs the pooled purchase-frequency, purchase-incidence, and novelty pipelines,
+- validates each output bundle,
+- writes a run manifest,
+- assembles a report body fragment from regression outputs.
+
+See especially:
+
+- output validation: [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:96)
+- purchase / incidence / novelty runs: [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:168)
+
+---
+
+## 11. Novelty-Seeking Extensions and Heterogeneity
+
+### 11.1 Distinct vs instance vs distinct-only-new
+
+The project implements three novelty definitions in the estimator. The most important implementation details are in:
+
+- [_compute_variety_seeking_for_window()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:391)
+
+Interpretations:
+
+- `distinct`: variety share over distinct products in the member-window
+- `instance`: variety share over all purchase instances in the member-window
+- `distinct-only-new`: share of distinct products that are newly introduced at the chain level in the current or previous estimation bin
+
+### 11.2 Pre-period novelty heterogeneity
+
+The project includes an additional pooled DDD extension for the headline `distinct` novelty measure. It:
+
+- computes each member-closure episode’s mean pre-period novelty;
+- splits episodes into high vs baseline using either the median or the mode threshold;
+- optionally uses only top and bottom quartile tails;
+- augments the collapsed DDD with:
+  - `post × treated × high`
+  - `post × blocked × high`
+  - `post × treated × blocked × high`
+
+Implemented in:
+
+- heterogeneity-column builder: [_attach_novelty_pre_heterogeneity_cols()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:688)
+- regression augmentation: [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:311)
+- histogram export: [save_pre_novelty_histogram()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/report.py:143)
+
+The CLI constraints and examples are documented in:
+
+- [RUN_VERSIONS.md](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/RUN_VERSIONS.md:109)
+
+---
+
+## 12. Robustness and Mechanism Scripts
+
+### 12.1 Excluding treated cross-store purchasers during closure
+
+To test whether same-chain substitution during the closure explains the main effects, the project identifies treated member-events that purchased at a different Luckin store during the closure window.
+
+Implemented in:
+
+- treated cross-store flag builder: [run_excluding_cross_store_treated.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:59)
+- sample attachment and filtering: [run_excluding_cross_store_treated.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:99)
+- pooled subgroup-difference DDD test: [run_excluding_cross_store_treated.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:130)
+
+This script writes both:
+
+- reduced-sample main-effect bundles
+- pooled equality tests comparing cross-store vs non-cross-store treated subgroups
+
+### 12.2 Missing new products / missed menu exposure mechanism
+
+The project includes a mechanism script for whether treated customers miss exposure to new products introduced elsewhere in the chain during the closure.
+
+Main runner:
+
+- [run_missing_new_products.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_missing_new_products.py:1)
+
+This script:
+
+- builds separate-effect estimates for each closure;
+- extracts closure-level blocked-buyer coefficients;
+- computes control-store menu-introduction intensity during the closure;
+- studies the relation between introduction intensity and closure-level effects;
+- runs within-length-bin permutation tests.
+
+### 12.3 Menu-change feature builders
+
+Two helper modules support these exercises:
+
+- treatment-store menu before/after closure windows:
+  - [menu_features.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/menu_features.py:199)
+- control-store introduced products during the treatment store’s closure:
+  - [control_menu_features.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/control_menu_features.py:145)
+
+These modules write CSVs summarizing:
+
+- menu size before and after
+- products introduced and removed
+- control-store introduction counts during closure
+
+---
+
+## 13. Post-Reopening Push-Targeting Check
+
+### 13.1 Purpose
+
+One concern is that blocked and non-blocked customers might receive different push marketing after reopening, which could contaminate the interpretation of the blocked-buyer coefficients.
+
+### 13.2 Input objects
+
+The push-targeting analysis starts from:
+
+- the main closure registry
+- the ex-ante blocked-buyer scores
+- raw push CSVs
+
+These are loaded in:
+
+- [load_main_scores()](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:41)
+
+### 13.3 Construction of post-reopening windows
+
+The script builds the same post-reopening event-length windows used in the main analysis:
+
+- [build_post_windows()](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:122)
+
+### 13.4 Push filtering and panel creation
+
+Push records are:
+
+- loaded chunkwise from all matching CSVs,
+- filtered to sample members and relevant dates,
+- matched into member-event-window rows,
+- aggregated into counts and intensity measures.
+
+Implemented in:
+
+- [filter_push_records()](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:150)
+- [build_push_panel()](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:231)
+
+Main metrics include:
+
+- `n_push`
+- `push_per_day`
+- `n_push_with_coupon`
+- `share_push_coupon`
+- `mean_coupon`
+- `n_push_with_discount`
+- `share_push_discount`
+- `mean_discount`
+
+### 13.5 Inferential checks
+
+The script reports:
+
+- group summaries
+- Welch mean tests within treatment and control groups
+- subgroup regressions
+- treatment-minus-control gap-difference tests
+
+This is why the report can argue that differential push targeting does not explain the headline blocked-buyer results.
+
+---
+
+## 14. Reproducibility Sequence
+
+For a new user who wants the main pipeline in order, the logical sequence is:
+
+1. Build closures.
+   - run [identify_closures.py](/home/litao/Coffee/model-free/src/store/identify_closures.py:1)
+2. Build the customer-store registry and descriptive outputs.
+   - run [scripts/customer-store/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/customer-store/run_with_logging.sh:1)
+3. Train the blocked-buyer classifier and generate ex-ante t0 scores.
+   - run [scripts/displacement_classification/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/displacement_classification/run_with_logging.sh:1)
+4. Run the pooled displacement-effect estimation.
+   - run [scripts/displacement_effect_estimation/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_with_logging.sh:1)
+5. For the headline bundle, use:
+   - [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
+6. For push-targeting and mechanism checks, run the dedicated helper scripts:
+   - [run_push_targeting_analysis.py](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:1)
+   - [run_excluding_cross_store_treated.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:1)
+   - [run_missing_new_products.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_missing_new_products.py:1)
+
+---
+
+## 15. What the Current Pipeline Produces
+
+At the current state of the codebase, the project can produce:
+
+- a validated main closure registry for the 18-closure headline sample;
+- ex-ante blocked-buyer scores for treated and control members;
+- pooled DDD estimates for:
+  - purchase frequency
+  - purchase incidence
+  - novelty seeking
+- continuous-score DDD estimates;
+- event-study estimates with joint pretrend tests;
+- closure-length heterogeneity event-study terms;
+- separate-effect bundles for each closure event;
+- novelty robustness variants:
+  - `distinct`
+  - `instance`
+  - `distinct-only-new`
+- pre-period novelty heterogeneity splits;
+- cross-store-treated exclusion robustness;
+- control-menu-introduction / missing-new-products mechanism outputs;
+- post-reopening push-targeting diagnostics.
+
+So the project is no longer in an early “descriptive only” stage. The current codebase already implements the full blocked-buyer causal pipeline described in the main report.
+
+---
+
+## 16. File References Summary
+
+If someone new wants the shortest path into the project, these are the highest-value files:
+
+- research narrative: [main_results.qmd](/home/litao/Coffee/model-free/reports/main_results.qmd:1)
+- registry and treated/control construction: [data_processing.py](/home/litao/Coffee/model-free/src/customer-store/data_processing.py:607)
+- classifier panel and features: [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:324), [data_loading_feature_constructing.py](/home/litao/Coffee/model-free/src/displacement_classification/data_loading_feature_constructing.py:626)
+- classifier training: [main.py](/home/litao/Coffee/model-free/src/displacement_classification/main.py:72)
+- estimation sample builder: [data.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/data.py:776)
+- econometric specs: [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:210), [specs.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:404)
+- pooled runner: [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:97)
+- headline bundle script: [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
