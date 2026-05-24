@@ -10,6 +10,7 @@ import pandas as pd
 from data import build_estimation_sample, get_project_root, load_config
 from report import (
     save_event_study_plots,
+    save_lower_group_displacement_event_study_plot,
     save_outputs,
     save_pre_novelty_histogram,
     save_variety_panel_plot,
@@ -66,6 +67,7 @@ def fit_spec_bundle(
         include_length_heterogeneity=include_length_heterogeneity,
         use_did=use_did,
         ref_period=event_study_ref_period,
+        variety_pre_novelty_heterogeneity=variety_pre_novelty_heterogeneity,
     )
     if use_did:
         return {
@@ -426,6 +428,12 @@ def main() -> None:
             save_pre_novelty_histogram(
                 output_dir=out_dir,
                 sample=sample,
+            )
+            split_label = "median" if args.customer_median_split else "quartile_tails"
+            save_lower_group_displacement_event_study_plot(
+                output_dir=out_dir,
+                event_terms=results["event_terms"],
+                split_label=split_label,
             )
         if args.outcome == "variety_seeking":
             save_variety_panel_plot(

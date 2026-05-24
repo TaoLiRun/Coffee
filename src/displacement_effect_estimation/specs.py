@@ -413,6 +413,7 @@ def fit_event_study_specs(
     include_length_heterogeneity: bool = True,
     use_did:     bool = False,
     ref_period:  int = -1,
+    variety_pre_novelty_heterogeneity: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Event-study versions of Specs A, B, C, D (identification_rewrite.md
@@ -473,6 +474,13 @@ def fit_event_study_specs(
         df["disp_X_len"]      = df["disp_binary"] * df["closure_length_std"]
         df["tXdXlen"]         = df["treated"]  * df["disp_binary"] * df["closure_length_std"]
         df["treated_X_score"] = df["treated"]  * df["displacement_prob_centered"]
+        if variety_pre_novelty_heterogeneity:
+            _assert_columns(df, ["novelty_pre_high"])
+            df["treated_X_novelty_pre_high"] = df["treated"] * df["novelty_pre_high"]
+            df["disp_X_novelty_pre_high"] = df["disp_binary"] * df["novelty_pre_high"]
+            df["treated_X_disp_X_novelty_pre_high"] = (
+                df["treated"] * df["disp_binary"] * df["novelty_pre_high"]
+            )
 
     rel_t_values = sorted(int(t) for t in df["rel_t"].unique())
     if ref_period not in rel_t_values:
@@ -569,6 +577,44 @@ def fit_event_study_specs(
         spec      = spec,
         test_name = "pretrend_displacement_joint_zero",
     ))
+
+    if variety_pre_novelty_heterogeneity:
+        # ------------------------------------------------------------------
+        # Spec B heterogeneity event study:
+        # lower/baseline subgroup is novelty_pre_high == 0;
+        # high subgroup is captured by additional increments.
+        # ------------------------------------------------------------------
+        spec    = "event_binary_B_pre_novelty_split"
+        formula = (
+            f"{outcome} ~ "
+            f"i(rel_t, treated, ref={ref_period}) + "
+            f"i(rel_t, treated_X_disp, ref={ref_period}) + "
+            f"i(rel_t, disp_binary, ref={ref_period}) + "
+            f"i(rel_t, treated_X_novelty_pre_high, ref={ref_period}) + "
+            f"i(rel_t, disp_X_novelty_pre_high, ref={ref_period}) + "
+            f"i(rel_t, treated_X_disp_X_novelty_pre_high, ref={ref_period}) "
+            f"| {fe_str}"
+        )
+        fit = pf.feols(formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(fit, spec, formula))
+        rows.extend(_tidy_rows_suffix(fit, ":treated", spec))
+        rows.extend(_tidy_rows_suffix(fit, ":treated_X_disp", spec))
+        rows.extend(_tidy_rows_suffix(fit, ":disp_binary", spec))
+        rows.extend(_tidy_rows_suffix(fit, ":treated_X_novelty_pre_high", spec))
+        rows.extend(_tidy_rows_suffix(fit, ":disp_X_novelty_pre_high", spec))
+        rows.extend(_tidy_rows_suffix(fit, ":treated_X_disp_X_novelty_pre_high", spec))
+        pre_rows.append(_joint_zero_test(
+            fit       = fit,
+            terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":treated_X_disp"),
+            spec      = spec,
+            test_name = "pretrend_displacement_lower_group_joint_zero",
+        ))
+        pre_rows.append(_joint_zero_test(
+            fit       = fit,
+            terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":treated_X_disp_X_novelty_pre_high"),
+            spec      = spec,
+            test_name = "pretrend_displacement_high_increment_joint_zero",
+        ))
 
     if include_length_heterogeneity:
         # ------------------------------------------------------------------

@@ -1,0 +1,146 @@
+spec,term,n,r2_within,coef,se,pvalue,group
+binary_collapsed,post_X_treated,44508,0.008777765680107907,0.0417018809501119,0.017379862765799083,0.0164367027245389,binary
+binary_collapsed,post_X_disp,44508,0.008777765680107907,0.12785591665178914,0.009377617288814184,0.0,binary
+binary_collapsed,post_X_treated_X_disp,44508,0.008777765680107907,-0.05358773515299701,0.022313697261691915,0.016341567723161976,binary
+binary_collapsed_pre_novelty_split,post_X_treated,44508,0.08787639867172703,0.4124242768678612,0.01940168646892535,0.0,binary
+binary_collapsed_pre_novelty_split,post_X_disp,44508,0.08787639867172703,0.2117909509392432,0.00902691612213008,0.0,binary
+binary_collapsed_pre_novelty_split,post_X_treated_X_disp,44508,0.08787639867172703,-0.4098599574221913,0.023140788804700795,0.0,binary
+binary_collapsed_pre_novelty_split,post_X_treated_X_novelty_pre_high,44508,0.08787639867172703,-0.6982386275738143,0.022924146675285764,0.0,binary
+binary_collapsed_pre_novelty_split,post_X_disp_X_novelty_pre_high,44508,0.08787639867172703,-0.5563185984696948,0.013676242728270976,0.0,binary
+binary_collapsed_pre_novelty_split,post_X_treated_X_disp_X_novelty_pre_high,44508,0.08787639867172703,0.738466007375537,0.03684806644238709,0.0,binary
+score_collapsed,post_X_treated,44508,0.010183266149836778,0.02523473728276916,0.014467745198094954,0.08115075062226529,score
+score_collapsed,post_X_score,44508,0.010183266149836778,0.2120378172459564,0.01370913405496467,0.0,score
+score_collapsed,post_X_treated_X_score,44508,0.010183266149836778,-0.044192618338902395,0.03226154264707766,0.17076972887615205,score
+event_att,"C(rel_t, contr.treatment(base=-1))[-4]:treated",44508,0.00034993851682219024,-0.0215066983131613,0.015343828783004389,0.16104735328555164,event_study
+event_att,"C(rel_t, contr.treatment(base=-1))[-3]:treated",44508,0.00034993851682219024,-0.00797873789574962,0.015152692487992583,0.598512627046051,event_study
+event_att,"C(rel_t, contr.treatment(base=-1))[-2]:treated",44508,0.00034993851682219024,-0.04882337605629283,0.014097333106562832,0.0005355946505791742,event_study
+event_att,"C(rel_t, contr.treatment(base=-1))[1]:treated",44508,0.00034993851682219024,0.0025222766535993807,0.01970374996762946,0.8981433941536756,event_study
+event_att,"C(rel_t, contr.treatment(base=-1))[2]:treated",44508,0.00034993851682219024,-0.00533878105124952,0.019694151862188147,0.7863310167377915,event_study
+event_att,"C(rel_t, contr.treatment(base=-1))[3]:treated",44508,0.00034993851682219024,-0.025055423737062772,0.019741583779294025,0.20440709526704448,event_study
+event_att,"C(rel_t, contr.treatment(base=-1))[4]:treated",44508,0.00034993851682219024,-0.0140898350911503,0.019506054913548704,0.4701060005717652,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-4]:treated",44508,0.011347155414063725,-0.04037006757474384,0.02437062863166929,0.09764786975665074,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-3]:treated",44508,0.011347155414063725,-0.02785727588020893,0.02437251590381983,0.2530719335652718,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-2]:treated",44508,0.011347155414063725,-0.06632738680775274,0.024331663032522717,0.006421340460035285,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[1]:treated",44508,0.011347155414063725,0.0022172047585057937,0.031028415365768336,0.9430351470054299,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[2]:treated",44508,0.011347155414063725,0.024966050616247393,0.02899903352897929,0.3892968568859505,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[3]:treated",44508,0.011347155414063725,-0.008174697434437278,0.03047523937127493,0.7885190875926065,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[4]:treated",44508,0.011347155414063725,0.01598541222105033,0.030088236661848743,0.5952323140146918,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp",44508,0.011347155414063725,0.037119179289300676,0.030949225892194187,0.23041466012733536,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp",44508,0.011347155414063725,0.03652828436036627,0.030768464910524256,0.2351746299434896,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp",44508,0.011347155414063725,0.023543458086974767,0.02951441507218946,0.4250654250704873,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp",44508,0.011347155414063725,0.005524475269821232,0.039412299280312896,0.8885271502891041,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp",44508,0.011347155414063725,-0.053008254249725,0.03906795517686789,0.17486542992764975,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp",44508,0.011347155414063725,-0.025702302351427838,0.039303222348081104,0.5131582243294934,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp",44508,0.011347155414063725,-0.05478223366705832,0.03887678547645586,0.15882635697954584,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-4]:disp_binary",44508,0.011347155414063725,0.07767399658260116,0.012336017397327245,3.1590197124842234e-10,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-3]:disp_binary",44508,0.011347155414063725,0.06256613671443849,0.012212963734971768,3.058795490229471e-07,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[-2]:disp_binary",44508,0.011347155414063725,0.010269700563081777,0.012413766755407323,0.40809435817026785,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[1]:disp_binary",44508,0.011347155414063725,0.12441029486942197,0.01596889836732663,7.327471962526033e-15,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[2]:disp_binary",44508,0.011347155414063725,0.1917736945839898,0.016352765683657455,0.0,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[3]:disp_binary",44508,0.011347155414063725,0.1780882721131407,0.01679497809591303,0.0,event_study
+event_binary_B,"C(rel_t, contr.treatment(base=-1))[4]:disp_binary",44508,0.011347155414063725,0.17744455437869724,0.016483571329404728,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-4]:treated",44508,0.09141137093178742,0.024203025965266776,0.02954445306207878,0.4126858526979009,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-3]:treated",44508,0.09141137093178742,0.02719319063384546,0.030505163893806305,0.37271834236898904,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-2]:treated",44508,0.09141137093178742,-0.040237942694852466,0.03167040673020802,0.20392545234678505,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[1]:treated",44508,0.09141137093178742,0.43821890629949645,0.038180870559139456,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[2]:treated",44508,0.09141137093178742,0.40007940086407445,0.03691322056975429,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[3]:treated",44508,0.09141137093178742,0.4010378103391071,0.037485282699069054,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[4]:treated",44508,0.09141137093178742,0.43296354074261517,0.03617707022060739,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp",44508,0.09141137093178742,-0.015365143761846183,0.036356840442690344,0.6725804024602726,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp",44508,0.09141137093178742,-0.016283803886935195,0.03706024709643307,0.6603894442503413,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp",44508,0.09141137093178742,0.004354417445054837,0.03665873092639097,0.9054497859372694,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp",44508,0.09141137093178742,-0.4190808368411157,0.04582511710414351,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp",44508,0.09141137093178742,-0.3968558539104348,0.045250559024698,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp",44508,0.09141137093178742,-0.41501807776967237,0.04507511821568583,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp",44508,0.09141137093178742,-0.451950055442783,0.04369365652241243,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-4]:disp_binary",44508,0.09141137093178742,0.09578189829003504,0.012546411911845726,2.4646951146678475e-14,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-3]:disp_binary",44508,0.09141137093178742,0.07430736806054355,0.0123916439699659,2.0780397402830886e-09,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-2]:disp_binary",44508,0.09141137093178742,0.012379705123154236,0.01258254583341211,0.3251963623435503,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[1]:disp_binary",44508,0.09141137093178742,0.2112788438844783,0.015882912775148236,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[2]:disp_binary",44508,0.09141137093178742,0.292132779747618,0.016321016259861598,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[3]:disp_binary",44508,0.09141137093178742,0.2724816344585889,0.016656805024777916,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[4]:disp_binary",44508,0.09141137093178742,0.26683172378064857,0.016372398382926322,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.021102849328579053,0.03356546725584897,0.5295537351578543,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.03471782158394164,0.03451695633281144,0.31452442244473344,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.014575855101988817,0.03501155892494111,0.677187194098336,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.7381973775016486,0.04660790422587439,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.6608408476021643,0.04432078815901454,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.722683270309815,0.0451774487359644,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_novelty_pre_high",44508,0.09141137093178742,-0.7355911245827522,0.04393219175809452,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-4]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.08217718807403217,0.014364146481033192,1.0864263932930385e-08,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-3]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.06115783247281106,0.01419896795289956,1.6675423863521388e-05,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-2]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.047883627834512235,0.012962673680010367,0.00022184705289052253,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[1]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.5413323494640281,0.024193590649193974,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[2]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.6319400136392778,0.02455360651694725,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[3]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.6330118475812883,0.026582554742894966,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[4]:disp_X_novelty_pre_high",44508,0.09141137093178742,-0.6171361724642377,0.026801959008156247,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.048732415076630564,0.04667016713038185,0.29642129610072576,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.07337223552505606,0.04694803696516539,0.11811892163417359,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.058513562138133995,0.04562686309487511,0.199716297060619,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.8076063416435101,0.07145038649562986,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.6971366673347625,0.07057568972552894,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.8207476896514112,0.06994724205895969,0.0,event_study
+event_binary_B_pre_novelty_split,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp_X_novelty_pre_high",44508,0.09141137093178742,0.8128048661245049,0.07303499555340327,0.0,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-4]:treated",44508,0.012292510233899545,-0.03911472018836015,0.02454762738257263,0.11109411908373557,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-3]:treated",44508,0.012292510233899545,-0.02559846208588295,0.02471908956620184,0.3004231976071403,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-2]:treated",44508,0.012292510233899545,-0.06564507609102666,0.02482536495365755,0.008198146611570367,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[1]:treated",44508,0.012292510233899545,0.0027466543185217535,0.031874117047649114,0.9313312955847604,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[2]:treated",44508,0.012292510233899545,0.025006633409512324,0.02908450830870308,0.38992217276149654,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[3]:treated",44508,0.012292510233899545,-0.006911128994072571,0.03062147099449912,0.8214423945910161,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[4]:treated",44508,0.012292510233899545,0.013858941617130525,0.03019023327401441,0.6462045160941319,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_disp",44508,0.012292510233899545,0.02643741384848123,0.03213838147820221,0.41074642611417644,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_disp",44508,0.012292510233899545,0.026566966452652115,0.03175288237681292,0.4027911034575862,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_disp",44508,0.012292510233899545,0.013379075536474664,0.03054040995553196,0.6613384152168122,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_disp",44508,0.012292510233899545,-0.0045896748997160145,0.04109967129619689,0.9110856473939868,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_disp",44508,0.012292510233899545,-0.0651664882329429,0.03915061861723576,0.0960393369232857,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_disp",44508,0.012292510233899545,-0.026016261622227595,0.03989213580840057,0.5143081324599139,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_disp",44508,0.012292510233899545,-0.05559273361863361,0.03972186679557097,0.16167610656862985,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-4]:disp_binary",44508,0.012292510233899545,0.07872984007462032,0.012315287295140165,1.693527540425066e-10,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-3]:disp_binary",44508,0.012292510233899545,0.06393492293619212,0.012193532765876917,1.6058904117599582e-07,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-2]:disp_binary",44508,0.012292510233899545,0.011580456419026457,0.012376045239430304,0.34944008879645505,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[1]:disp_binary",44508,0.012292510233899545,0.12477055788883447,0.015928965945834976,5.329070518200751e-15,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[2]:disp_binary",44508,0.012292510233899545,0.19291162698829728,0.016282384512991674,0.0,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[3]:disp_binary",44508,0.012292510233899545,0.17838474291496753,0.01676717382943401,0.0,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[4]:disp_binary",44508,0.012292510233899545,0.17797322039169605,0.016460855354390437,0.0,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_len",44508,0.012292510233899545,-0.01073990222395024,0.020732786132317393,0.6044578610714457,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_len",44508,0.012292510233899545,-0.02064859433717438,0.019133184543485556,0.28052060128789114,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_len",44508,0.012292510233899545,-0.00021194475186244038,0.01854118186292612,0.9908797640958356,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_len",44508,0.012292510233899545,-0.01900239769981338,0.024568184937900937,0.4392693319550589,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_len",44508,0.012292510233899545,-0.03247347556558222,0.02428647076830382,0.18121692778161647,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_len",44508,0.012292510233899545,-0.04758194139768964,0.024009829777295832,0.04752971111114901,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_len",44508,0.012292510233899545,-0.06883793506300527,0.025669174033081305,0.007334972441605414,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-4]:disp_X_len",44508,0.012292510233899545,-0.009298584141075853,0.00937754842029918,0.32142434664907227,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-3]:disp_X_len",44508,0.012292510233899545,-0.01145305983120039,0.008404994161587796,0.17302069989778612,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-2]:disp_X_len",44508,0.012292510233899545,-0.008848823543674094,0.007142034837943741,0.2153798760552601,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[1]:disp_X_len",44508,0.012292510233899545,-0.009159801365780798,0.01030034313752917,0.3738764727236388,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[2]:disp_X_len",44508,0.012292510233899545,-0.02333045831035081,0.011562645518160934,0.04364195461710629,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[3]:disp_X_len",44508,0.012292510233899545,-0.021921728729778087,0.01163940188016165,0.05967138647914094,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[4]:disp_X_len",44508,0.012292510233899545,-0.055838181449137686,0.014626015977939904,0.00013541761048152523,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-4]:tXdXlen",44508,0.012292510233899545,0.03768132903610229,0.02638431690308547,0.15327064865517248,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-3]:tXdXlen",44508,0.012292510233899545,0.04419359630316462,0.025023668651893826,0.07741128987489732,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[-2]:tXdXlen",44508,0.012292510233899545,0.026777485951289884,0.023693665369141362,0.25843584975413236,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[1]:tXdXlen",44508,0.012292510233899545,0.04011965569883885,0.03230193700735596,0.21425538662543708,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[2]:tXdXlen",44508,0.012292510233899545,0.06953330049434299,0.03316646274121885,0.036060947207879,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[3]:tXdXlen",44508,0.012292510233899545,0.050736879527224346,0.032135292424743646,0.1143984475150226,event_study
+event_binary_D,"C(rel_t, contr.treatment(base=-1))[4]:tXdXlen",44508,0.012292510233899545,0.09296193225999132,0.03368640976388996,0.00579622596453655,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-4]:treated",44508,0.012877891317573553,-0.032520682106376285,0.0210879054085538,0.12306602070666717,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-3]:treated",44508,0.012877891317573553,-0.009492060968349569,0.02055397757912812,0.6442256344696804,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-2]:treated",44508,0.012877891317573553,-0.05809261891408345,0.021207485060334545,0.006167772472355892,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[1]:treated",44508,0.012877891317573553,0.003586005861651298,0.02598153602787185,0.8902260732257674,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[2]:treated",44508,0.012877891317573553,0.0054232629796914485,0.024401770471947463,0.8241243360783015,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[3]:treated",44508,0.012877891317573553,-0.013868445936521114,0.025352482423687473,0.5843724417598608,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[4]:treated",44508,0.012877891317573553,0.005610722708107942,0.025276272884392024,0.8243367510784521,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-4]:treated_X_score",44508,0.012877891317573553,0.05721581082523848,0.04960383830766246,0.24874839228481416,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-3]:treated_X_score",44508,0.012877891317573553,0.015137129989919096,0.04840623370408907,0.7545066123062978,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-2]:treated_X_score",44508,0.012877891317573553,0.031125568776992508,0.04880301368687888,0.5236302903902414,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[1]:treated_X_score",44508,0.012877891317573553,0.019669877286265455,0.058841183026570286,0.7381688711154832,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[2]:treated_X_score",44508,0.012877891317573553,-0.01948254689886841,0.058338631286524716,0.7384189300825765,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[3]:treated_X_score",44508,0.012877891317573553,-0.016550893719464523,0.057891779313204536,0.7749648922763466,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[4]:treated_X_score",44508,0.012877891317573553,-0.06942280549736025,0.05792628237817725,0.23076040193531577,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-4]:displacement_prob_centered",44508,0.012877891317573553,0.13701559683372838,0.01968573156027943,3.5909053508476063e-12,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-3]:displacement_prob_centered",44508,0.012877891317573553,0.10488819964768417,0.019656422148135084,9.684865220904726e-08,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[-2]:displacement_prob_centered",44508,0.012877891317573553,0.019065136656049624,0.02024143063430616,0.34627109412032375,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[1]:displacement_prob_centered",44508,0.012877891317573553,0.2207967444685823,0.02383920408337371,0.0,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[2]:displacement_prob_centered",44508,0.012877891317573553,0.31922778666600976,0.024850090513867346,0.0,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[3]:displacement_prob_centered",44508,0.012877891317573553,0.3044373159283883,0.02524826152990627,0.0,event_study
+event_score_C,"C(rel_t, contr.treatment(base=-1))[4]:displacement_prob_centered",44508,0.012877891317573553,0.28785899460868586,0.02479502152927136,0.0,event_study

@@ -197,6 +197,64 @@ def save_event_study_plots(
         plt.close(fig)
 
 
+def save_lower_group_displacement_event_study_plot(
+    *,
+    output_dir: Path,
+    event_terms: pd.DataFrame,
+    split_label: str,
+) -> None:
+    """
+    Save the blocked-buyer displacement event-study path for the lower/baseline
+    pre-novelty group only. This uses the filtered sample produced by the
+    heterogeneity pipeline, where `novelty_pre_high == 0` identifies the lower
+    group under either the full-sample median split or the quartile-tail split.
+    """
+    required_event = {"spec", "term", "coef", "se"}
+    missing_event = required_event - set(event_terms.columns)
+    if missing_event:
+        raise ValueError(
+            f"event_terms missing required columns for lower-group event-study plot: {sorted(missing_event)}"
+        )
+
+    plot_df = event_terms.copy()
+    plot_df["term"] = plot_df["term"].astype(str)
+    plot_df["rel_t"] = plot_df["term"].map(_extract_rel_t)
+    plot_df["effect"] = plot_df["term"].map(_classify_event_term)
+    plot_df = plot_df.loc[
+        (plot_df["spec"] == "event_binary_B_pre_novelty_split")
+        & (plot_df["effect"] == "displacement")
+        & plot_df["rel_t"].notna()
+    ].copy()
+    if plot_df.empty:
+        return
+
+    plot_df["rel_t"] = plot_df["rel_t"].astype(int)
+    plot_df["ci_low"] = plot_df["coef"] - 1.96 * plot_df["se"]
+    plot_df["ci_high"] = plot_df["coef"] + 1.96 * plot_df["se"]
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    x = plot_df["rel_t"].to_numpy()
+    y = plot_df["coef"].to_numpy()
+    ci_low = plot_df["ci_low"].to_numpy()
+    ci_high = plot_df["ci_high"].to_numpy()
+
+    ax.axhline(y=0, color="black", linewidth=1, alpha=0.8)
+    ax.axvline(x=0, color="gray", linestyle="--", linewidth=1.2, alpha=0.8)
+    ax.plot(x, y, "o-", color="#8c2d04", linewidth=2, markersize=5)
+    ax.fill_between(x, ci_low, ci_high, color="#fdbb84", alpha=0.3)
+    ax.set_xticks(sorted(plot_df["rel_t"].unique().tolist()))
+    ax.set_xlabel("Relative period t")
+    ax.set_ylabel("Triple-difference coefficient")
+    ax.set_title(f"Lower-group displacement event study ({split_label})")
+    ax.grid(True, axis="y", alpha=0.25)
+    fig.tight_layout()
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"event_study_displacement_lower_group_{split_label}.png"
+    fig.savefig(output_dir / filename, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
 def save_variety_panel_plot(
     *,
     output_dir: Path,

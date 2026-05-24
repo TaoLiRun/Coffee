@@ -959,7 +959,58 @@ These figures are now generated for:
 
 and are referenced from the main report where relevant.
 
-### 10.4 Main pooled runner
+### 10.4 Dynamic heterogeneity event study for pre-novelty groups
+
+The original pre-novelty heterogeneity implementation was **collapsed only**: the lower-pre-novelty group (`novelty_pre_high == 0`) was the baseline subgroup, and the higher-pre-novelty group entered through additional post interactions. This is implemented in [fit_collapsed_specs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:220).
+
+In the May 2026 extension, the same logic was implemented period by period in the event-study specification so that the dynamic path matches the collapsed heterogeneity design rather than an ad hoc sample split.
+
+The event-study heterogeneity specification augments the binary DDD event study with:
+
+- `i(rel_t, treated_X_novelty_pre_high, ref=ref_period)`
+- `i(rel_t, disp_X_novelty_pre_high, ref=ref_period)`
+- `i(rel_t, treated_X_disp_X_novelty_pre_high, ref=ref_period)`
+
+alongside the original baseline-path terms:
+
+- `i(rel_t, treated, ref=ref_period)`
+- `i(rel_t, treated_X_disp, ref=ref_period)`
+- `i(rel_t, disp_binary, ref=ref_period)`
+
+This is implemented in:
+
+- [fit_event_study_specs()](/home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:409)
+
+Interpretation:
+
+- the `:treated_X_disp` path inside `event_binary_B_pre_novelty_split` is the **lower-group dynamic blocked-buyer triple interaction**;
+- the `:treated_X_disp_X_novelty_pre_high` path is the **high-group increment relative to the lower group**;
+- the high-group blocked-buyer path is therefore the period-by-period sum of those two coefficient paths.
+
+This mirrors the collapsed heterogeneity interpretation exactly:
+
+- lower group = baseline coefficients;
+- high group = baseline + incremental coefficients.
+
+Two pooled runs are now maintained for this extension:
+
+- median split: `outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity`
+- quartile-tail split: `outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails`
+
+The lower-group dynamic displacement plots saved from that exact event-study heterogeneity specification are:
+
+- [event_study_displacement_lower_group_median.png](/home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity/event_study_displacement_lower_group_median.png:1)
+- [event_study_displacement_lower_group_quartile_tails.png](/home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails/event_study_displacement_lower_group_quartile_tails.png:1)
+
+The resulting dynamic estimates line up with the collapsed heterogeneity table:
+
+- under the median split, the lower-group post-period blocked-buyer path is strongly negative, approximately `-0.268`, `-0.269`, `-0.281`, and `-0.299` in periods `1` through `4`;
+- under the quartile-tail split, the lower-group post-period blocked-buyer path is even more negative, approximately `-0.419`, `-0.397`, `-0.415`, and `-0.452`;
+- the corresponding high-group increment path is strongly positive in post periods, consistent with the collapsed heterogeneity result that the high-pre-novelty subgroup reverses the sign of the lower-group effect.
+
+This extension was added because plotting the baseline event-study on a filtered heterogeneity sample does **not** reproduce the same estimand as the collapsed heterogeneity regression. The maintained implementation now uses the correct event-study analog of the heterogeneity specification already used in the report.
+
+### 10.5 Main pooled runner
 
 The main estimator CLI is:
 
@@ -982,7 +1033,7 @@ Separate-effect run path:
 
 - [run.py](/home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:295)
 
-### 10.5 Supported run matrix
+### 10.6 Supported run matrix
 
 The maintained run matrix and examples are documented in:
 
@@ -996,7 +1047,7 @@ This file is the best compact reference for:
 - pre-novelty heterogeneity variant
 - recency and duration filters
 
-### 10.6 Main-results bundle script
+### 10.7 Main-results bundle script
 
 The most reproducible high-level script for the headline results is:
 

@@ -126,9 +126,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#output-bundle-written-for-each-run" id="toc-output-bundle-written-for-each-run" class="nav-link" data-scroll-target="#output-bundle-written-for-each-run"><span class="header-section-number">1.10.1</span> 10.1 Output bundle written for each run</a></li>
   <li><a href="#variety-diagnostic-plot" id="toc-variety-diagnostic-plot" class="nav-link" data-scroll-target="#variety-diagnostic-plot"><span class="header-section-number">1.10.2</span> 10.2 Variety diagnostic plot</a></li>
   <li><a href="#event-study-coefficient-plots" id="toc-event-study-coefficient-plots" class="nav-link" data-scroll-target="#event-study-coefficient-plots"><span class="header-section-number">1.10.3</span> 10.3 Event-study coefficient plots</a></li>
-  <li><a href="#main-pooled-runner" id="toc-main-pooled-runner" class="nav-link" data-scroll-target="#main-pooled-runner"><span class="header-section-number">1.10.4</span> 10.4 Main pooled runner</a></li>
-  <li><a href="#supported-run-matrix" id="toc-supported-run-matrix" class="nav-link" data-scroll-target="#supported-run-matrix"><span class="header-section-number">1.10.5</span> 10.5 Supported run matrix</a></li>
-  <li><a href="#main-results-bundle-script" id="toc-main-results-bundle-script" class="nav-link" data-scroll-target="#main-results-bundle-script"><span class="header-section-number">1.10.6</span> 10.6 Main-results bundle script</a></li>
+  <li><a href="#dynamic-heterogeneity-event-study-for-pre-novelty-groups" id="toc-dynamic-heterogeneity-event-study-for-pre-novelty-groups" class="nav-link" data-scroll-target="#dynamic-heterogeneity-event-study-for-pre-novelty-groups"><span class="header-section-number">1.10.4</span> 10.4 Dynamic heterogeneity event study for pre-novelty groups</a></li>
+  <li><a href="#main-pooled-runner" id="toc-main-pooled-runner" class="nav-link" data-scroll-target="#main-pooled-runner"><span class="header-section-number">1.10.5</span> 10.5 Main pooled runner</a></li>
+  <li><a href="#supported-run-matrix" id="toc-supported-run-matrix" class="nav-link" data-scroll-target="#supported-run-matrix"><span class="header-section-number">1.10.6</span> 10.6 Supported run matrix</a></li>
+  <li><a href="#main-results-bundle-script" id="toc-main-results-bundle-script" class="nav-link" data-scroll-target="#main-results-bundle-script"><span class="header-section-number">1.10.7</span> 10.7 Main-results bundle script</a></li>
   </ul></li>
   <li><a href="#novelty-seeking-extensions-and-heterogeneity" id="toc-novelty-seeking-extensions-and-heterogeneity" class="nav-link" data-scroll-target="#novelty-seeking-extensions-and-heterogeneity"><span class="header-section-number">1.11</span> 11. Novelty-Seeking Extensions and Heterogeneity</a>
   <ul class="collapse">
@@ -1190,8 +1191,57 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>and are referenced from the main report where relevant.</p>
 </section>
-<section id="main-pooled-runner" class="level3" data-number="1.10.4">
-<h3 data-number="1.10.4" class="anchored" data-anchor-id="main-pooled-runner"><span class="header-section-number">1.10.4</span> 10.4 Main pooled runner</h3>
+<section id="dynamic-heterogeneity-event-study-for-pre-novelty-groups" class="level3" data-number="1.10.4">
+<h3 data-number="1.10.4" class="anchored" data-anchor-id="dynamic-heterogeneity-event-study-for-pre-novelty-groups"><span class="header-section-number">1.10.4</span> 10.4 Dynamic heterogeneity event study for pre-novelty groups</h3>
+<p>The original pre-novelty heterogeneity implementation was <strong>collapsed only</strong>: the lower-pre-novelty group (<code>novelty_pre_high == 0</code>) was the baseline subgroup, and the higher-pre-novelty group entered through additional post interactions. This is implemented in <a href="./home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:220">fit_collapsed_specs()</a>.</p>
+<p>In the May 2026 extension, the same logic was implemented period by period in the event-study specification so that the dynamic path matches the collapsed heterogeneity design rather than an ad hoc sample split.</p>
+<p>The event-study heterogeneity specification augments the binary DDD event study with:</p>
+<ul>
+<li><code>i(rel_t, treated_X_novelty_pre_high, ref=ref_period)</code></li>
+<li><code>i(rel_t, disp_X_novelty_pre_high, ref=ref_period)</code></li>
+<li><code>i(rel_t, treated_X_disp_X_novelty_pre_high, ref=ref_period)</code></li>
+</ul>
+<p>alongside the original baseline-path terms:</p>
+<ul>
+<li><code>i(rel_t, treated, ref=ref_period)</code></li>
+<li><code>i(rel_t, treated_X_disp, ref=ref_period)</code></li>
+<li><code>i(rel_t, disp_binary, ref=ref_period)</code></li>
+</ul>
+<p>This is implemented in:</p>
+<ul>
+<li><a href="./home/litao/Coffee/model-free/src/displacement_effect_estimation/specs.py:409">fit_event_study_specs()</a></li>
+</ul>
+<p>Interpretation:</p>
+<ul>
+<li>the <code>:treated_X_disp</code> path inside <code>event_binary_B_pre_novelty_split</code> is the <strong>lower-group dynamic blocked-buyer triple interaction</strong>;</li>
+<li>the <code>:treated_X_disp_X_novelty_pre_high</code> path is the <strong>high-group increment relative to the lower group</strong>;</li>
+<li>the high-group blocked-buyer path is therefore the period-by-period sum of those two coefficient paths.</li>
+</ul>
+<p>This mirrors the collapsed heterogeneity interpretation exactly:</p>
+<ul>
+<li>lower group = baseline coefficients;</li>
+<li>high group = baseline + incremental coefficients.</li>
+</ul>
+<p>Two pooled runs are now maintained for this extension:</p>
+<ul>
+<li>median split: <code>outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity</code></li>
+<li>quartile-tail split: <code>outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails</code></li>
+</ul>
+<p>The lower-group dynamic displacement plots saved from that exact event-study heterogeneity specification are:</p>
+<ul>
+<li><a href="./home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity/event_study_displacement_lower_group_median.png:1">event_study_displacement_lower_group_median.png</a></li>
+<li><a href="./home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails/event_study_displacement_lower_group_quartile_tails.png:1">event_study_displacement_lower_group_quartile_tails.png</a></li>
+</ul>
+<p>The resulting dynamic estimates line up with the collapsed heterogeneity table:</p>
+<ul>
+<li>under the median split, the lower-group post-period blocked-buyer path is strongly negative, approximately <code>-0.268</code>, <code>-0.269</code>, <code>-0.281</code>, and <code>-0.299</code> in periods <code>1</code> through <code>4</code>;</li>
+<li>under the quartile-tail split, the lower-group post-period blocked-buyer path is even more negative, approximately <code>-0.419</code>, <code>-0.397</code>, <code>-0.415</code>, and <code>-0.452</code>;</li>
+<li>the corresponding high-group increment path is strongly positive in post periods, consistent with the collapsed heterogeneity result that the high-pre-novelty subgroup reverses the sign of the lower-group effect.</li>
+</ul>
+<p>This extension was added because plotting the baseline event-study on a filtered heterogeneity sample does <strong>not</strong> reproduce the same estimand as the collapsed heterogeneity regression. The maintained implementation now uses the correct event-study analog of the heterogeneity specification already used in the report.</p>
+</section>
+<section id="main-pooled-runner" class="level3" data-number="1.10.5">
+<h3 data-number="1.10.5" class="anchored" data-anchor-id="main-pooled-runner"><span class="header-section-number">1.10.5</span> 10.5 Main pooled runner</h3>
 <p>The main estimator CLI is:</p>
 <ul>
 <li><a href="./home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:97">run.py</a></li>
@@ -1214,8 +1264,8 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="./home/litao/Coffee/model-free/src/displacement_effect_estimation/run.py:295">run.py</a></li>
 </ul>
 </section>
-<section id="supported-run-matrix" class="level3" data-number="1.10.5">
-<h3 data-number="1.10.5" class="anchored" data-anchor-id="supported-run-matrix"><span class="header-section-number">1.10.5</span> 10.5 Supported run matrix</h3>
+<section id="supported-run-matrix" class="level3" data-number="1.10.6">
+<h3 data-number="1.10.6" class="anchored" data-anchor-id="supported-run-matrix"><span class="header-section-number">1.10.6</span> 10.6 Supported run matrix</h3>
 <p>The maintained run matrix and examples are documented in:</p>
 <ul>
 <li><a href="./home/litao/Coffee/model-free/scripts/displacement_effect_estimation/RUN_VERSIONS.md:1">scripts/displacement_effect_estimation/RUN_VERSIONS.md</a></li>
@@ -1229,8 +1279,8 @@ ul.task-list li input[type="checkbox"] {
 <li>recency and duration filters</li>
 </ul>
 </section>
-<section id="main-results-bundle-script" class="level3" data-number="1.10.6">
-<h3 data-number="1.10.6" class="anchored" data-anchor-id="main-results-bundle-script"><span class="header-section-number">1.10.6</span> 10.6 Main-results bundle script</h3>
+<section id="main-results-bundle-script" class="level3" data-number="1.10.7">
+<h3 data-number="1.10.7" class="anchored" data-anchor-id="main-results-bundle-script"><span class="header-section-number">1.10.7</span> 10.7 Main-results bundle script</h3>
 <p>The most reproducible high-level script for the headline results is:</p>
 <ul>
 <li><a href="./home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1">run_main_results.sh</a></li>
