@@ -114,10 +114,49 @@ This is an **optional extension** for headline novelty-seeking (`--outcome varie
   - For each **member–closure** episode, compute the **pre-period** mean of the distinct novelty outcome (all `rel_t < 0` rows with non-missing outcome in that episode).
   - Form a binary indicator **high pre-novelty** vs **low** by comparing that episode mean to a cross-sectional threshold computed **across episodes** in the built estimation sample. The default threshold is the **sample median** of those episode means; set `spec.variety_pre_novelty_split_method` to **`"mode"`** in `config.json` to use instead the **statistical mode** of the episode means (after rounding to 10 decimal places so the mode is well defined for near-continuous values). **High** means strictly **above** the threshold; **at or below** counts as low.
   - The indicator is merged to all rows of the episode (constant within member–closure over `rel_t`).
-  - **Collapsed pooled DDD** is augmented with interactions of that indicator with the existing post-based treatment and displacement terms: `post × treated × high`, `post × blocked × high`, and `post × treated × blocked × high`. The original three coefficients continue to summarize the **low** pre-novelty subgroup; the three new terms are the **additional** components for the **high** subgroup. The continuous-score collapsed spec is unchanged; **event-study** specifications are unchanged in this version (heterogeneity read off the collapsed table only).
+  - **Collapsed pooled DDD** is augmented with interactions of that indicator with the existing post-based treatment and displacement terms: `post × treated × high`, `post × blocked × high`, and `post × treated × blocked × high`. The original three coefficients continue to summarize the **low** pre-novelty subgroup; the three new terms are the **additional** components for the **high** subgroup. The continuous-score collapsed spec is unchanged. The event-study output now also includes the lower-group displacement path and a saved lower-group plot for the selected split.
   - **Not supported together with** `--balanced-panel`, `--separate-effect`, or `--variety-seeking-mode` other than `distinct`.
 
 Suggested output directory label: `variety_seeking_distinct_pre_novelty_heterogeneity`.
+
+### 7. Assumption-gap diagnostic bundles
+
+The pooled DDD runner now writes the paper-style assumption diagnostics when the model is a DDD rather than a balanced DiD:
+
+- `ddd_binary_results_matched.csv`
+- `event_study_results_matched.csv`
+- `pretrend_joint_tests_matched.csv`
+- `matched_episode_support_summary.csv`
+- `blocked_gap_event_study_matched.csv`
+- `blocked_gap_event_study_plot_data_matched.csv`
+- `blocked_gap_event_study_matched.png`
+- `pretrend_bias_equality.csv`
+
+The main diagnostic bundles currently saved are:
+
+```bash
+./scripts/displacement_effect_estimation/run_with_logging.sh \
+  --outcome n_purchases \
+  --output-dir outputs/displacement_effect_estimation/assumption_gap_purchase
+
+./scripts/displacement_effect_estimation/run_with_logging.sh \
+  --outcome variety_seeking \
+  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety
+
+./scripts/displacement_effect_estimation/run_with_logging.sh \
+  --outcome variety_seeking \
+  --variety-pre-novelty-heterogeneity \
+  --customer-median-split true \
+  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_median
+
+./scripts/displacement_effect_estimation/run_with_logging.sh \
+  --outcome variety_seeking \
+  --variety-pre-novelty-heterogeneity \
+  --customer-median-split false \
+  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_quartile_tails
+```
+
+The large row-level `estimation_sample.csv` files in these assumption-gap directories are reproducible and intentionally ignored. The versioned files are the summaries, coefficient tables, plots, and logs.
 
 ## Supported Run Matrix
 

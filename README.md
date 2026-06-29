@@ -1,30 +1,57 @@
 # Coffee Model-Free Analysis
 
+This repository contains the model-free analysis of temporary Luckin Coffee store closures and later customer behavior. The current project focus is the 18-closure displacement design and the DDD effect on novelty seeking.
+
+## Main Entry Points
+
+- Technical record: `docs/technical_report.md`
+- Rendered technical report: `docs/technical_report.html`
+- Current results report: `reports/main_results.qmd`
+- Preliminary paper draft: `writeup/main.tex`
+- Archived older reports: `Archive/reports/`
+
 ## Project Structure
 
-```
+```text
 model-free/
-├── data/
-│   ├── processed/
-│   └── intermediate/
+├── Archive/
+│   └── reports/                         # Superseded reports and slides kept for history
+├── data/                                # Raw/processed data, ignored by git
 ├── docs/
-│   ├── impact_of_habit_breaking.md
-│   ├── impact_of_habit_breaking.qmd
-│   └── impact_of_habit_breaking.html
+│   ├── technical_report.qmd             # Quarto wrapper for the technical report
+│   ├── technical_report.md              # Detailed implementation and result ledger
+│   └── technical_report.html            # Rendered report
+├── literature/                          # Related-paper notes
 ├── outputs/
-├── plots/
+│   ├── customer-store/                  # Closure registries and descriptive panels
+│   ├── displacement_classification/     # Blocked-buyer model scores and diagnostics
+│   ├── displacement_effect_estimation/  # Main DDD/event-study outputs
+│   └── robustness/                      # Robustness and mechanism checks
+├── reports/
+│   └── main_results.qmd                 # Current 18-closure result report
 ├── scripts/
 │   ├── customer-store/
 │   ├── displacement_classification/
-│   └── displacement_effect_estimation/
-└── src/
-	├── customer-store/
-	├── displacement_classification/
-	└── displacement_effect_estimation/
+│   ├── displacement_effect_estimation/
+│   └── push_targeting_after_reopening/
+├── src/
+│   ├── customer-store/
+│   ├── displacement_classification/
+│   ├── displacement_effect_estimation/
+│   └── store/
+└── writeup/                             # Preliminary paper draft and bibliography
 ```
 
-## Research Questions
+## Current Analysis Status
 
-For research questions and identification details, see:
+The main analysis uses `outputs/customer-store/closure_pair_registry.csv`, the 18-closure registry. The older 22-closure registry and related outputs are preserved as robustness/history under `outputs/robustness/full_registry/`.
 
-- `docs/impact_of_habit_breaking.md`
+The headline implementation sequence is:
+
+1. Identify closure spells from store-level zero-demand runs.
+2. Build treated/control member-closure registries.
+3. Train the blocked-buyer classifier and export ex-ante scores.
+4. Estimate DDD and event-study models for purchase and novelty outcomes.
+5. Run robustness and mechanism checks, including matched/common-support diagnostics, missing-new-product exposure, cross-store substitution, and push targeting.
+
+For exact commands, code paths, output files, and result interpretations, use `docs/technical_report.md`.

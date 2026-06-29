@@ -4,8 +4,9 @@ format:
   html:
     toc: true
     number-sections: true
+    embed-resources: true
 execute:
   echo: false
 ---
 
-{{< include impact_of_habit_breaking.md >}}
+{{< include technical_report.md >}}

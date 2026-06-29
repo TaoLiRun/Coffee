@@ -1,10 +1,12 @@
 # Displacement Effect Estimation
 
-This module implements two parallel causal specifications on top of the existing displacement-model outputs:
+This module implements the causal specifications on top of the existing displacement-model outputs:
 
 1. Binary-label DDD (directly uses `predicted_displaced_t0_ex_ante`)
 2. Continuous-score DDD (`Post × Treated × displacement_prob`)
 3. Event-study ATT/DDD with closure-length heterogeneity and pre-trend joint tests
+4. Matched/common-support diagnostics for blocked vs. non-blocked episodes
+5. Blocked-gap event-study and pre-period bias-equality diagnostics
 
 ## Inputs
 
@@ -64,6 +66,14 @@ python run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new
 # Variety-seeking heterogeneity: compare bottom vs top quartile of pre-period novelty
 python run.py --outcome variety_seeking --variety-pre-novelty-heterogeneity \
   --customer-median-split false
+
+# Assumption-gap diagnostic bundle for purchase frequency
+python run.py --outcome n_purchases \
+  --output-dir outputs/displacement_effect_estimation/assumption_gap_purchase
+
+# Assumption-gap diagnostic bundle for member-first novelty seeking
+python run.py --outcome variety_seeking \
+  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety
 ```
 
 Behavior is controlled by `config.json`:
@@ -79,6 +89,7 @@ Behavior is controlled by `config.json`:
 - `spec.select_recency_consumers = 10` is only valid when `spec.separate_effect = true` and keeps consumers with `days_since_last_purchase < 10` from the cached `features_t0` file, while `order_result.csv` is still used to build event-time outcomes.
 - For `outcome=variety_seeking`, the default is an **unbalanced** panel and a **DDD** specification (aligned with `n_purchases`). Pass `--balanced-panel` for a balanced panel and DiD. With `--balanced-panel`, member-closure pairs are dropped when treated members purchase during the closure window or control members do not, unless you pass `--keep-period0-purchasers`.
 - `--output-dir ...` overrides `paths.output_dir` for a single run without changing the config file.
+- `--event-study-ref-period ...` changes the omitted relative period in event-study specifications. The default is `-1`.
 
 ## Outputs
 
@@ -93,10 +104,32 @@ Saved to `outputs/displacement_effect_estimation/`:
 - `event_study_results.csv`
 - `event_study_fit.csv`
 - `pretrend_joint_tests.csv`
+- `ddd_binary_results_matched.csv`
+- `event_study_results_matched.csv`
+- `pretrend_joint_tests_matched.csv`
+- `matched_episode_support_summary.csv`
+- `blocked_gap_event_study_matched.csv`
+- `blocked_gap_event_study_plot_data_matched.csv`
+- `blocked_gap_event_study_matched.png`
+- `pretrend_bias_equality.csv`
 - `summary.md`
 - `pre_period_novelty_episode_means.csv` and `pre_period_novelty_histogram.png` when `--variety-pre-novelty-heterogeneity` is used
+- `pre_period_purchase_frequency_group_summary_<split>.csv` and `pre_period_purchase_frequency_distribution_<split>.png` when `--variety-pre-novelty-heterogeneity` is used
 
 When `spec.separate_effect = true`, outputs are saved under
 `outputs/displacement_effect_estimation/separate_effect/<closure_event_id>/`
 with one subdirectory per closure/event, plus
 `outputs/displacement_effect_estimation/separate_effect/event_index.csv`.
+
+Large row-level assumption-gap samples named `estimation_sample.csv` are intentionally ignored under `outputs/displacement_effect_estimation/assumption_gap_*/`; the summary files, coefficient tables, plots, and logs are versioned.
+
+## Current Main Output Bundles
+
+- Purchase-frequency headline bundle: `outputs/displacement_effect_estimation/`
+- Member-first novelty DDD bundle: `outputs/displacement_effect_estimation/variety_seeking_unbalanced/`
+- Market-new novelty robustness: `outputs/displacement_effect_estimation/variety_seeking_distinct_only_new/`
+- Purchase assumption-gap diagnostics: `outputs/displacement_effect_estimation/assumption_gap_purchase/`
+- Novelty assumption-gap diagnostics: `outputs/displacement_effect_estimation/assumption_gap_variety/`
+- Pre-novelty heterogeneity diagnostics:
+  - `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_median/`
+  - `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_quartile_tails/`
