@@ -1,0 +1,804 @@
+\documentclass[letter,11pt]{article}
+
+\usepackage[toc,page,header]{appendix}            % for table of content in appendix
+\usepackage{minitoc}
+
+% Make the "Part I" text invisible
+\renewcommand \thepart{}
+\renewcommand \partname{}
+
+\usepackage{cmap}				            % search in PDF
+% \usepackage{mathtext} 			             % cyrillic in formulas
+% \usepackage[T2A]{fontenc}		          	% encoding
+
+\usepackage{tgpagella}              % font for accademic articles
+\usepackage[T1]{fontenc}           % https://tug.org/FontCatalogue/texgyrepagella/
+ 
+\usepackage[utf8]{inputenc}		         	% encoding for mac
+\usepackage[english]{babel}                  % this is for spellchecking
+
+\usepackage{verbatim}
+%%% math work
+\usepackage{amsmath, amsfonts, amssymb, amsthm, mathtools} % AMS
+\usepackage{icomma}                            % smart comma that adds a little space when needed
+\usepackage{dsfont}
+
+\usepackage{newpxtext, newpxmath}  
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\numberwithin{equation}{section}  % for equation numbering by section
+
+%% EQUATION NUMBERS
+%\mathtoolsset{showonlyrefs=true}      % Only shows equation numbers for equations being referenced to
+%\usepackage{leqno}                           % Equation numbers on the left
+
+%% COLORS
+\usepackage[usenames, dvipsnames, svgnames, table, rgb]{xcolor}
+\usepackage{colortbl}
+
+% defining new color with a convenient name
+\definecolor{BlueBottle}{RGB}{0, 130, 255}
+
+
+%% DECLARE YOUR OWN MATH OPERATOR (such as limits, sums, ...)
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+\def\code#1{\texttt{#1}}
+
+% declaring operatos with lim as in limits
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\plim}{plim}
+
+
+%% sign transition to a new line (for russian only)
+% \newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+% {\hbox{$\mathsurround=0pt #1$}}{}}
+
+
+%%% PICTURES
+\usepackage{graphicx}                                   % to add pictures
+\graphicspath{{./}{images2/}}                      % path to folder with images 
+\setlength\fboxsep{3pt}                                 % distance btw pic and border 
+\setlength\fboxrule{1pt}                                % thickness of border
+\usepackage{wrapfig}                                    % wrap figures with text
+\usepackage{float}	                                       % fixed figure location  
+\usepackage{pgfplots}    								
+\usepackage{layouts}
+\usepackage{caption}
+\newcommand\fnote[1]{\captionsetup{font=footnotesize}\caption*{#1}}
+
+
+%%% TABLES
+\usepackage{array, tabularx, tabulary, booktabs}            % for tables
+\usepackage{longtable}                                      % long tables
+\usepackage{multirow}                                       % merge rows in table
+\def\arraystretch{1.5} % 
+
+%%% THEOREMS
+\theoremstyle{plain}                         
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}                  
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{problem}{Problem}[section]
+
+
+%%% PROGRAMMING
+\usepackage{etoolbox}                     % logical operators
+
+%%% PAGE SETUP
+\usepackage{extsizes}                      % if you want to use 14pt instead of 12
+\usepackage{geometry}                    % easy way to set margins
+\geometry{top=20mm}
+\geometry{bottom=20mm}
+\geometry{left=20mm}
+\geometry{right=20mm}
+
+
+%\usepackage{fancyhdr} % headers and footers
+%	\pagestyle{fancy}
+%   \renewcommand{\headrulewidth}{0.1pt}   % line thickness for header
+% 	\rhead{Top right}
+% 	\chead{Top center}
+% 	\lhead{Top left}
+% 	\lfoot{Bottom left}
+%	\cfoot{Bottom center} % page number by default
+% 	\rfoot{Bottom right}
+
+%\rhead{\today}
+%\lhead{Research}
+%\chead{Francesco Gabriele}
+
+\usepackage{setspace}       % space between lines
+\onehalfspacing             % 1.5
+%\doublespacing             % 2
+%\singlespacing             % 1 by default
+
+
+\usepackage{lastpage}                   % how many pages in the document
+\usepackage{soul}                       % style
+\usepackage{enumitem} 					% 
+
+% set how references appear in the document
+\usepackage{hyperref}
+\hypersetup{			                   	   % hyperrefs
+	unicode=true,                              % cyrillics in PDF
+	pdftitle={Research},                      % Header
+	pdfauthor={Francesco Gabriele},                         % Author
+	pdfsubject={Economic PhD Research},                         % Topic
+	pdfcreator={Francesco Gabriele},                    % Maker
+	pdfproducer={Francesco Gabriele},               % Producer
+	pdfkeywords={},      % Key words
+	colorlinks=true,                 	       % false: links in boxes; true: color links
+	linkcolor=blue,                           % intra links
+	citecolor=blue,                           % links to bibliography
+	filecolor=blue,                         % links to files
+	urlcolor=blue                              % links to URL
+}
+
+\usepackage{csquotes}                       % more tools for links
+%\usepackage{cite}                           % use commands lite \cite{} or \citet{}
+
+% \usepackage[linesnumbered,ruled,vlined]{algorithm2e}                 % for algorhitm
+\usepackage{algorithm,algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+
+\usepackage{multicol}                       % multiple columns
+\usepackage{booktabs}                    %wrap-up text in tables
+\usepackage{tabulary}
+\usepackage{adjustbox}
+\usepackage{pdflscape}
+
+%% Graphics
+\usepackage{tikz}                           
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usetikzlibrary{arrows}
+
+% fancy arrows and captions for tikz // nicefrac
+\usetikzlibrary{arrows.meta}
+\usepackage{caption}
+\usepackage{nicefrac}
+
+%% Delete numbers in bibliography
+\makeatletter
+\renewcommand\@biblabel[1]{}
+\makeatother
+
+%% Rotate page
+\usepackage{lscape}
+
+% % define some new operators like expectation and variance
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathbb{V}ar}
+\newcommand{\Cov}{\mathbb{C}ov}
+\renewcommand{\P}{\mathbb{P}}
+
+% here's how to give a new command an argument
+\newcommand{\norm}[1]{\left|\left| #1 \right|\right|  }
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+% % the following allows to write \begin{pmatrix}[1.5] to set up the 
+% spacing locally
+%\makeatletter
+%\renewcommand*\env@matrix[1][\arraystretch]{%
+%	\edef\arraystretch{#1}%
+%	\hskip -\arraycolsep
+%	\let\@ifnextchar\new@ifnextchar
+%	\array{*\c@MaxMatrixCols c}}
+% \makeatother
+
+\usepackage{verbatim}
+\usepackage[gen]{eurosym} % sympol of euro according text style
+\usepackage{caption}
+\usepackage{subcaption} %allign figures
+\usepackage[bottom]{footmisc} %footnote at the bottom
+
+\makeatletter    % variation to modified footnotes
+\def\@xfootnote[#1]{%
+	\protected@xdef\@thefnmark{#1}%
+	\@footnotemark\@footnotetext}
+\makeatother
+
+\usepackage[apaciteclassic]{apacite}                 %bibligraphy reference
+\usepackage{appendix}                             %appendix
+\usepackage{chngcntr}                       % figure countering within appendix
+\usepackage{xcolor}                               % color of words 
+
+
+\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}  % new command for scalemath
+
+\setlength{\textfloatsep}{5pt plus 0.5pt minus 1.0pt}
+\setlength{\floatsep}{6.0pt plus 1.0pt minus 1.0pt}
+\setlength{\intextsep}{6.0pt plus 1.0pt minus 1.0pt}
+
+\newcommand{\squeezeup}{\vspace{-2.5mm}}    % to reduce space
+
+\newtheorem{prop}{Proposition}   % proposition
+\newtheorem{assumption}{Assumption} % assumption
+\newtheorem{prediction}{Prediction} % prediction
+\newtheorem{lem}{Lemma}   % lemma
+\newtheorem{definition}{Definition}    %definition
+\renewcommand{\qed}{\hfill\blacksquare}  % for proof
+
+
+
+\begin{document}
+  	
+% \newdimen\origiwspc%
+% \fontdimen2\font=0.25ex % inter word space	
+	
+\doparttoc % Tell to minitoc to generate a toc for the parts
+\faketableofcontents % Run a fake tableofcontents command for the partocs	
+
+\title{\LARGE What Happens After Purchase Intention of Customers is Blocked: \\Evidence from a Large Coffee Chain\footnote{Work in progress}}
+
+\author{\bfseries Francesco Gabriele\thanks{Hong Kong University of Science and Technology Business School, Department of Marketing.} \quad Tao Li \footnotemark[2]  \quad Chen Lin\thanks{Fudan University, Department of Marketing.} \quad Mengze Shi \footnotemark[2] \quad\thanks{Authors are ordered alphabetically}}
+\date{Draft Version: \today} 
+\maketitle
+
+\begin{abstract}
+\indexspace
+
+\noindent We study how temporary supply disruptions shape consumer demand and product exploration in a digital coffee retail setting. Leveraging detailed panel data on purchases and product assortments across 260 stores and 800,000 consumers, we exploit store closures during Covid-19 pandemic as exogenous shocks to purchasing opportunities. A triple-differences design isolates consumers whose purchase intentions are directly displaced. While overall demand recovers quickly after reopening, these consumers exhibit a sharp behavioral shift as they become less likely to explore new products. We rationalize this pattern with a goal-based mechanism. When an active purchase intention is interrupted, the underlying goal persists and intensifies, leading consumers to prioritize goal completion upon return. At the same time, displaced consumers miss exposure to newly introduced products, reducing subsequent exploration. This mechanism explains why supply disruptions have limited effects on purchase frequency but significant, heterogeneous effects on product choice. Our findings highlight the role of goal persistence and consumer heterogeneity in shaping demand under constraints and show that supply-side disruptions can have lasting effects on product discovery despite rapid demand recovery.
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+\newline
+%\noindent \textit{JEL classification}: C54, C93, D78, L81, Y4\\
+\textit{Keywords}: Customer Engagement, Customer Reactivation and Retention, Variety Seeking, Goal-Directed Consumption
+\end{abstract} 
+\thispagestyle{empty}   %  no page number
+
+\newpage
+\setcounter{page}{1}
+
+\section{Introduction}
+\label{section:1}
+
+\noindent Consumers often intend to purchase but are temporarily unable to do so due to supply constraints such as stock-outs or store closures. The natural benchmark is that such disruptions primarily shift demand over time, with consumers delaying purchases and resuming their usual behavior once constraints are lifted. Temporary supply shocks therefore affect the timing of purchases but not the underlying decision process. We study when this benchmark fails by distinguishing between consumers whose purchase intention is interrupted and those who simply would not have purchased during the disruption. When a closure blocks an active purchase intention, the interruption may affect not only when consumers buy, but also how they choose once they return.
+
+This distinction raises two central questions. On one hand, do blocked consumers reduce subsequent purchase frequency, consistent with weakened demand, or do they return to their prior activity? On the other hand, does the interruption affect product choice? Specifically, are blocked consumers more likely to explore new products relative to comparable non-blocked consumers? These questions determine whether temporary constraints merely reallocate demand across time or also reshape consumer choice.
+
+We address these questions in the context of a large-scale digital coffee retail platform, where we observe detailed panel data on individual purchases of 770,00 consumers, store-level product assortments and store operations across a network of 260 locations for 18 months. A key feature of the setting is the occurrence of temporary store closures during Covid-19 pandemic that interrupt consumers’ ability to transact at specific locations. These closures are driven by external operational constraints that affect store availability over time and are not targeted to individual consumers. As a result, they generate plausibly exogenous variation in purchasing opportunities at the store level, while leaving the broader demand environment largely unchanged. Because closures affect all potential customers of a given store simultaneously, they create sharp, localized disruptions that allow us to track how the same consumers adjust their behavior once constraints are lifted.
+
+A central challenge in this research setting is that the closure does not bind for all consumers. The disruption only affects those who would have purchased at the closed store during the closure period. To address this challenge, we use pre-disruption purchase behavior to construct a measure of ex-ante purchase intent at the store level. Consumers who frequently purchase from a given store prior to the disruption are more likely to have intended to purchase during the closure window. We exploit this variation in intent to implement a triple-differences design that compares (i) treated versus control consumers, (ii) before versus after the disruption, and (iii) high-intent versus low-intent consumers. This approach isolates the causal effect of displacement, which is the effect of preventing a consumer with an active purchase intention from completing a transaction, from the average effects of the disruption across the broader population.
+
+Our analysis yields three main findings. First of all, temporary disruptions have limited effects on aggregate demand. Purchase frequency declines mechanically during the closure but recovers quickly after reopening, indicating that these shocks do not generate persistent reductions in consumption. Secondly, the average effects on product choice suggest an increase in variety seeking after reopening. However, this pattern masks substantial heterogeneity across consumers. In addition, consumers whose purchases are directly displaced exhibit a qualitatively different response because they become significantly less likely to purchase newly introduced products after the disruption. This negative displacement effect is economically meaningful and only emerges when conditioning on ex-ante purchase intent.
+
+We interpret these findings through a goal-based mechanism with two complementary components. First, when an active purchase intention is blocked, the underlying goal remains active and may intensify during the disruption. Upon reopening, this leads consumers to prioritize goal completion, directing purchases toward familiar or previously chosen products. Second, displaced consumers miss exposure to new products introduced during the closure period. Because product discovery occurs through repeated interaction with the store’s assortment, missing this exposure window reduces awareness and adoption of newly introduced items. The interaction between goal persistence and missed exposure generates a reduction in exploration among high-intention consumers, even as overall demand recovers.
+
+Our paper contributes to the marketing literature along three dimensions. First, we study how temporary constraints interact with consumer intent to shape demand, highlighting a form of state dependence driven by persistent purchase goals rather than solely by past choices or habits. Second, we contribute to the literature on supply-side shocks by showing that their effects depend on whether the constraint binds for the consumer, emphasizing the importance of heterogeneity in exposure to disruptions. Third, we speak to the literature on product discovery by linking consumers’ exposure to the timing of assortment changes, and showing how interruptions in this exposure can affect subsequent adoption decisions. More broadly, our results suggest that understanding demand under temporary constraints requires going beyond average responses and explicitly accounting for how disruptions interact with consumer intent and information. This perspective provides a framework for analyzing environments in which purchasing opportunities are intermittently constrained, and highlights the role of exposure and timing in shaping consumer choice.
+
+\section{Behavioral Mechanisms}
+
+\subsection{Counterfactual Thinking and Goal Persistence}
+
+A growing literature in marketing and consumer behavior studies how consumers respond when intended purchases cannot be completed due to temporary constraints such as stockouts, unavailable products, or interruptions in access. The standard benchmark is that these disruptions primarily shift purchases across time, with consumers delaying consumption and resuming their prior behavior once constraints are lifted. Under this view, temporary supply-side disruptions affect the timing of purchases but do not fundamentally alter the underlying decision process. However, prior research in consumer psychology suggests that interrupted actions can generate persistent cognitive and motivational effects that extend beyond simple postponement.
+
+Our framework builds on the literature on counterfactual thinking and goal persistence. Counterfactual thinking refers to the mental simulation of how events could have unfolded differently under alternative circumstances \shortcite{epstude2008functional}. Importantly, this literature argues that counterfactual thoughts are not merely retrospective evaluations, but functional cognitive processes that shape future behavior by maintaining attention on unrealized goals and missed actions. When individuals are prevented from completing an intended action, they naturally construct upward counterfactuals such as ``I would have purchased if the store had remained open.'' These mental simulations increase the salience of the interrupted goal and motivate subsequent goal-completion behavior.
+
+This perspective is particularly relevant in our setting. Temporary store closures do not simply eliminate purchasing opportunities at random. For consumers with an active purchase intention, the closure interrupts an ongoing consumption objective. As a result, the disruption creates a counterfactual consumption episode in which consumers mentally represent the purchase they would have made absent the closure. We argue that this counterfactual process generates a form of goal persistence that shapes post-reopening behavior.
+
+We argue that counterfactual thinking represents the cognitive mechanism through which interrupted purchase intentions remain behaviorally active. When consumers are prevented from completing an intended purchase, they mentally simulate the forgone consumption episode. This counterfactual representation maintains the original consumption goal in an active state, leading consumers to return after reopening with more focused and less exploratory purchase behavior.
+
+Our mechanism is closely related to research on interrupted goals and implemental mindsets in consumer behavior. Prior work shows that unfulfilled goals remain cognitively active and continue to influence subsequent decisions until they are completed \shortcite<e.g.>{gollwitzer1990action, kruglanski2002theory, masicampo2011consider}. Similarly, research on shopping momentum demonstrates that consumers who enter an implemental mindset become more focused on goal completion and less deliberative in their subsequent choices \shortcite{dhar2007shopping}. In our context, consumers whose purchases are blocked by store closures may remain in a suspended implemental state during the disruption period. Once stores reopen, these consumers return with a more focused purchase objective, prioritizing completion of the interrupted consumption goal rather than exploring alternative products.
+
+This mechanism also relates to the literature on stockouts and constrained choice. \shortciteA{fitzsimons2000consumer} show that consumers’ responses to unavailable products depend critically on the strength of their commitment to the intended purchase. When commitment is high, constraints generate stronger behavioral reactions and alter subsequent decision-making. Our setting extends this insight by considering temporary store closures that interrupt not only access to a specific product, but the entire execution of a planned consumption episode. Rather than weakening demand, these interruptions may preserve or even intensify purchase intentions through counterfactual processing.
+
+The implications of this mechanism are central to our empirical findings. If blocked consumers engage in counterfactual thinking and maintain an active purchase goal, then closures should not substantially reduce subsequent purchase frequency. Instead, consumers should return once constraints are lifted and complete the intended consumption activity. At the same time, because post-reopening behavior is driven by goal completion, consumers should become less likely to deviate from the originally intended purchase path. Consequently, blocked consumers should exhibit lower product exploration and reduced novelty-seeking after reopening.
+
+\subsection{Missed Exposure and Product Discovery}
+
+In addition to goal persistence, we consider a complementary informational mechanism based on missed exposure to new products. Product discovery in retail environments often emerges through repeated interaction with evolving assortments, browsing behavior, and incidental exposure to available alternatives. Consumers do not necessarily discover new products through active search alone; rather, repeated marketplace interactions shape awareness, consideration sets, and subsequent experimentation decisions. As a result, temporary disruptions in marketplace access may reduce not only purchasing opportunities, but also consumers’ exposure to newly introduced products and evolving assortments.
+
+This mechanism is closely related to the literature on variety-seeking and exploratory consumption. Prior research shows that experimentation depends not only on intrinsic preferences for novelty, but also on the structure of the choice environment and the set of alternatives consumers are exposed to \shortcite<e.g.>{mcalister1982variety, kahn1995consumer, vantrijp1996variety}. In particular, variety-seeking often arises through repeated exposure to changing alternatives, which stimulates curiosity, learning, and experimentation. Consumers who interact more frequently with a retail environment accumulate broader knowledge of the assortment and become more likely to adopt newly introduced products over time. A related literature on consideration sets and consumer learning further suggests that product adoption critically depends on awareness and exposure. Consumers can only evaluate and adopt products that enter their consideration set, and marketplace interactions play an important role in determining which products become cognitively accessible \shortcite{hauser1990consideration, nedungadi1990consideration}. Temporary interruptions in store access may therefore reduce the likelihood that newly introduced products enter consumers’ active choice sets. Even when consumers return after the disruption, they may remain less informed about assortment changes that occurred during the closure period.
+
+Our setting provides a natural environment in which this mechanism may operate. Product assortments evolve continuously across stores and over time, with substantial heterogeneity in product availability and product introductions. Consumers who are unable to access stores during closure periods miss repeated opportunities to observe new offerings, promotional displays, and assortment updates. Relative to continuously exposed consumers, blocked consumers may therefore return with lower awareness of newly introduced items and weaker familiarity with the updated assortment. This reduction in exposure may subsequently lower the probability of novelty adoption after reopening.
+
+
+Importantly, the missed-exposure mechanism generates predictions that are conceptually distinct from the counterfactual-goal mechanism. The counterfactual-goal mechanism predicts that blocked consumers return with a more focused and goal-directed consumption process. Because the interrupted purchase intention remains cognitively active, consumers prioritize completion of the originally intended consumption objective and become less likely to deviate toward exploratory purchases. Under this mechanism, reduced experimentation reflects motivated goal completion.
+
+In contrast, the missed-exposure mechanism operates through informational frictions and differences in product awareness. Consumers may become less exploratory not because they are more focused on completing a prior goal, but because they are less informed about newly available products. The mechanism therefore reflects a reduction in assortment awareness rather than a change in motivational state. Distinguishing between these explanations is important because they imply different behavioral foundations for the observed reduction in novelty-seeking.
+
+Our empirical analysis evaluates the relative importance of these channels by combining exogenous variation in store closures with heterogeneity in ex-ante purchase intention. In particular, we exploit cross-event variation in the intensity of new product introductions during closure periods to test whether closures associated with greater missed exposure generate stronger reductions in subsequent exploration. This approach allows us to distinguish whether post-reopening behavior is primarily driven by persistent counterfactual purchase goals or by informational differences in exposure to new products.
+  
+
+\section{A Behavioral Micro-Foundation of Counterfactual Thinking}
+\label{section:2a} 
+
+Consider a consumer who visits a coffee store and chooses between familiar products and new products. Familiar products are items the consumer has purchased before, while new products are items the consumer has not yet tried. In a standard choice framework, the probability of choosing a new product depends on intrinsic preferences, variety-seeking motives, and idiosyncratic taste shocks.
+
+Our key departure is that a temporary closure can alter the consumer’s attentional state. For consumers with an active purchase intention, the closure does not simply remove a transaction opportunity. It interrupts an intended consumption episode. This interruption induces counterfactual thinking: the consumer mentally represents the purchase she would have made had the store remained open. The counterfactual does not necessarily make one specific product more attractive. Instead, it reactivates the consumer’s familiar consumption routine.
+
+This distinction is important. In a coffee setting, the interrupted goal is often not ``buy product $j$'' in a narrow sense, but rather ``complete my usual coffee purchase.'' The relevant object of salience is therefore the familiar consumption path: the set of products, routines, and choices that the consumer has previously experienced. Counterfactual thinking increases the cognitive accessibility of this familiar path. When the store reopens, the consumer returns with a more focused consumption objective, placing greater attentional weight on familiar products and less relative attention on unfamiliar alternatives.
+
+The model can be summarized in three steps.
+
+First, before the closure, the consumer has a familiar consumption routine formed through past purchases. This routine defines a set of familiar products that are cognitively accessible and easy to choose. New products may still be attractive, but they require attention, discovery, and willingness to deviate from the routine.
+
+Second, the closure blocks the consumer’s intended purchase. For consumers who would have purchased during the closure period, this generates a counterfactual representation: ``I would have bought my usual coffee if the store had been open.'' This representation keeps the familiar routine active during the disruption.
+
+Third, after reopening, the consumer makes a product choice under distorted attention. Familiar products receive an additional salience weight because they are linked to the interrupted consumption goal. New products do not receive this salience boost because they were not part of the counterfactual consumption script. As a result, the probability of choosing a familiar product rises, and the probability of novelty-seeking falls.
+
+The framework does not impose a signed prediction on purchase frequency after reopening. Because the blocked intention may lead to delayed goal completion, substitution, or discouragement, the purchase-incidence effect is an empirical object. The formal predictions instead concern novelty-seeking. First, at the population level, blocked intention should reduce novelty-seeking because counterfactual thinking increases the salience of old products. Second, this reduction should be stronger for low-novelty consumers, widening the novelty gap between high- and low-novelty types.
+
+This framework clarifies the behavioral distinction between counterfactual thinking and goal-focused behavior. Counterfactual thinking is the cognitive process generated by the interruption. It makes the unrealized consumption episode mentally accessible. Goal-focused behavior is the observable consequence: consumers return to complete the familiar consumption routine, reducing exploration.
+
+It also distinguishes the counterfactual-goal mechanism from the missed-exposure mechanism. Under the counterfactual-goal mechanism, consumers are aware of alternatives but pay less attention to them because the familiar routine is salient. Under the missed-exposure mechanism, consumers fail to explore because new products are less likely to enter their consideration set. Both mechanisms predict lower novelty-seeking, but they operate through different primitives: salience and motivation in the first case, information and awareness in the second.
+
+
+\subsection{A Behavioral Framework}
+\label{section:behavioral_framework}
+
+The discussion above implies a simple modeling restriction. When a consumer's intended coffee purchase is blocked, the relevant counterfactual is not an arbitrary product draw. The consumer thinks about something she has purchased in the past: the old product, routine, or familiar consumption path that would have been completed if the store had remained open. We therefore remove the notation that assigns probabilities to new-versus-old counterfactual content and assume that counterfactual thinking works through the persistent salience of old products. The model begins with one consumer type and then introduces heterogeneity in the strength of this old-product salience.
+
+\subsubsection{Setup}
+
+Consider a consumer facing closure event $e$ and post-reopening period $t$. Let
+\begin{equation}
+    C_e \in \{0,1\}
+\end{equation}
+indicate whether the consumer's focal store is closed during event $e$. Closure exposure can affect all treated consumers, regardless of whether they had an active purchase intention during the closure. Let
+\begin{equation}
+    I_e \in \{0,1\}
+\end{equation}
+indicate whether the consumer had a purchase intention during the closure window, meaning that she would have purchased from the focal store absent the closure. The blocked-intention state is
+\begin{equation}
+    B_e = C_e I_e .
+    \label{eq:model_blocked_intention}
+\end{equation}
+Thus, $C_e$ captures baseline closure exposure, while $B_e$ captures the incremental case in which an intended purchase is prevented from being completed.
+
+Let $P_{et}\in\{0,1\}$ indicate whether the consumer purchases after reopening. Purchase probability is
+\begin{equation}
+    \Pr(P_{et}=1)
+    =
+    \Lambda\left(
+        \alpha^P_{et}
+        + \beta_P C_e
+        + \kappa B_e
+    \right),
+    \label{eq:model_purchase_incidence}
+\end{equation}
+where $\Lambda(\cdot)$ is the logistic CDF. The parameter $\beta_P$ captures the baseline closure-exposure effect on purchase incidence, while $\kappa$ captures the incremental effect of blocked intention. The model does not sign either parameter. If blocked consumers return to complete the intended purchase, then $\kappa$ may be positive. If the counterfactual memory vanishes or offsetting forces dominate, then $\kappa$ may be zero. If consumers substitute away or become discouraged by the interruption, then $\kappa$ may be negative. Purchase incidence is therefore an empirical object rather than a formal prediction of the model.
+
+\subsubsection{One consumer type}
+
+Let $A^O_{et}\in\{0,1\}$ indicate whether at least one old product enters the consumer's post-reopening consideration set. Old products are products the consumer purchased before the closure. The key carryover parameter is $\lambda\geq 0$. It measures whether the counterfactual representation of the forgone purchase remains accessible after reopening. If $\lambda=0$, the counterfactual memory trace vanishes and blocked intention has no post-reopening salience effect. If $\lambda>0$, the old product or old routine represented during closure becomes more accessible after reopening. This formulation follows memory-based consideration models in which accessibility affects consideration and choice without necessarily changing primitive product evaluations \shortcite{nedungadi1990consideration}.
+
+Old-product consideration is given by
+\begin{equation}
+    \Pr(A^O_{et}=1)
+    =
+    \Lambda\left(
+        \alpha^O_{et}
+        + \beta_O C_e
+        + \lambda B_e
+    \right),
+    \label{eq:model_old_consideration_one_type}
+\end{equation}
+where $\beta_O$ captures the baseline effect of closure exposure on old-product consideration and is unrestricted. The blocked-intention effect on the log-odds of old-product consideration is therefore
+\begin{equation}
+    \Delta^O
+    \equiv
+    \frac{\partial}{\partial B_e}
+    \log
+    \left(
+    \frac{\Pr(A^O_{et}=1)}{1-\Pr(A^O_{et}=1)}
+    \right)
+    =
+    \lambda .
+    \label{eq:model_delta_old_one_type}
+\end{equation}
+This replaces the earlier formulation in which the effect depended on the probability that the counterfactual was about a new product. Here, blocked intention increases the log-odds of old-product consideration directly because the counterfactual is assumed to be about something purchased in the past.
+
+To connect consideration to observed novelty-seeking, let $N_{et}\in\{0,1\}$ indicate whether the purchased product is new to the consumer, conditional on purchase. After consideration is formed, product utilities are stable:
+\begin{equation}
+    u_{jt}=v_{jt}+\varepsilon_{jt}.
+    \label{eq:model_utility_stable}
+\end{equation}
+Closure exposure and blocked intention do not enter $v_{jt}$. They affect observed choice by changing which products are cognitively accessible. In particular, because old and new products compete for limited attention and choice, greater old-product salience reduces the relative probability that a new product is chosen. A compact logit representation is
+\begin{equation}
+    \Pr(N_{et}=1\mid P_{et}=1)
+    =
+    \frac{\sum_{j\in\mathcal N_t}\exp(v_{jt})}
+    {\sum_{k\in\mathcal O_t}\exp(v_{kt}+\lambda B_e)
+    +\sum_{j\in\mathcal N_t}\exp(v_{jt})},
+    \label{eq:model_new_purchase_one_type}
+\end{equation}
+where $\mathcal O_t$ is the set of old products and $\mathcal N_t$ is the set of products new to the consumer. Equation \eqref{eq:model_new_purchase_one_type} is not meant to impose that utilities change. Instead, the salience term summarizes the increased accessibility of old products in the post-reopening choice process. It implies
+\begin{equation}
+    \frac{\partial}{\partial B_e}
+    \Pr(N_{et}=1\mid P_{et}=1)<0
+    \qquad \text{if } \lambda>0.
+    \label{eq:model_negative_novelty_derivative}
+\end{equation}
+
+\begin{prediction}[Population-level reduction in novelty-seeking]
+If counterfactual salience persists after reopening, $\lambda>0$, blocked intention raises the log-odds of old-product consideration and reduces the probability of choosing a new product conditional on purchase. Therefore, in the empirical triple-differences design, the population-level displacement effect on novelty-seeking is negative:
+\begin{equation}
+    \delta^D_N < 0.
+\end{equation}
+If $\lambda=0$, the counterfactual memory trace does not carry over, and the model predicts no blocked-intention effect on novelty-seeking through this channel.
+\end{prediction}
+
+\subsubsection{Two consumer types}
+
+Now allow consumers to differ in intrinsic novelty seeking. Let
+\begin{equation}
+    \tau\in\{H,L\},
+\end{equation}
+where $H$ denotes high novelty-seeking consumers and $L$ denotes low novelty-seeking consumers. Let $\nu^\tau$ denote the consumer's baseline tendency to consider and choose new products, with
+\begin{equation}
+    \nu^H>\nu^L,
+    \label{eq:model_type_ordering}
+\end{equation}
+consistent with the view that novelty seeking is an individual-difference tendency that predicts exploratory consumption and product switching \shortcite{vantrijp1996variety,baumgartner1996exploratory}.
+
+The strength of old-product salience is also type-specific. Low-novelty consumers are more likely to think about old products and routines when a purchase is blocked, so
+\begin{equation}
+    \Delta^{O,L}=\lambda^L
+    >
+    \Delta^{O,H}=\lambda^H
+    \geq 0 .
+    \label{eq:model_lambda_type_ordering}
+\end{equation}
+Equivalently, blocked intention raises the log-odds of old-product consideration more for low-novelty consumers than for high-novelty consumers. A type-specific version of old-product consideration is
+\begin{equation}
+    \Pr(A^O_{et}=1\mid \tau)
+    =
+    \Lambda\left(
+        \alpha^O_{et}
+        + \beta_O C_e
+        - \nu^\tau
+        + \lambda^\tau B_e
+    \right).
+    \label{eq:model_old_consideration_two_type}
+\end{equation}
+The term $-\nu^\tau$ captures that high-novelty consumers are less oriented toward old products at baseline, while $\lambda^\tau B_e$ captures the type-specific increase in old-product salience induced by blocked intention.
+
+For novelty-seeking, the same limited-attention logic implies the reduced-form log-odds representation
+\begin{equation}
+    \log
+    \left(
+    \frac{\Pr(A^N_{et}=1\mid \tau)}{1-\Pr(A^N_{et}=1\mid \tau)}
+    \right)
+    =
+    \alpha^N_{et}
+    + \beta_N C_e
+    + \nu^\tau
+    - \lambda^\tau B_e,
+    \label{eq:model_new_consideration_two_type}
+\end{equation}
+where $A^N_{et}$ indicates that at least one new product enters the consumer's consideration set. The negative sign on $\lambda^\tau B_e$ reflects the crowd-out of new-product consideration by persistent old-product salience.
+
+Without blocked intention, the high-low gap in the log-odds of new-product consideration is
+\begin{equation}
+    G_0 = \nu^H-\nu^L .
+\end{equation}
+With blocked intention, the gap becomes
+\begin{align}
+    G_1
+    &=
+    (\nu^H-\lambda^H)
+    -
+    (\nu^L-\lambda^L) \\
+    &=
+    (\nu^H-\nu^L)
+    +
+    (\lambda^L-\lambda^H).
+    \label{eq:model_gap_widening}
+\end{align}
+Because $\lambda^L>\lambda^H$, blocked intention widens the novelty gap between high- and low-novelty consumers.
+
+\begin{prediction}[Blocked intention widens the novelty gap]
+If counterfactual salience persists and low-novelty consumers think more about old products, $\lambda^L>\lambda^H$, then blocked intention reduces novelty-seeking more strongly for low-novelty consumers than for high-novelty consumers. The high-low novelty gap increases by
+\begin{equation}
+    G_1-G_0=\lambda^L-\lambda^H>0.
+\end{equation}
+In an empirical specification with a low-novelty interaction, the model predicts a negative incremental low-type effect,
+\begin{equation}
+    \delta^D_{N\times Low}<0,
+\end{equation}
+because the old-product salience generated by blocked intention is stronger for low-novelty consumers.
+\end{prediction}
+
+\section{Setting and Data}
+\label{section:2}   
+
+\noindent We study consumer behavior using transaction-level data from a large Chinese quick-service coffee chain, where purchases are conducted primarily through a mobile application. The data span June 2020 to December 2021 and include approximately 10.6 million transactions from 779,000 customers.
+
+The platform operates a dense network of physical stores with 260 locations and offers a dynamic product assortment that varies across stores and over time. Product availability is highly heterogeneous since a given product appears in 169 stores on average over its lifecycle, but is available in only 59 stores on a given day. This substantial variation implies that consumers’ exposure to products depends critically on where and when they interact with the platform. The data track individual purchase histories at a high frequency, including the timing of transactions, store choice and product-level decisions. Consumers repeatedly interact with a relatively small set of nearby stores, generating persistent patterns in both purchasing frequency and product choice. This structure enables us to construct measures of baseline demand, store dependence and product exploration at the individual level.
+\\
+
+\noindent A central feature of the setting is the presence of temporary store closures, which occur at the store-day level and prevent all consumers from transacting at the affected location. These closures arise from external operational constraints associated with Covid-19-related restrictions and generate sharp disruptions in purchasing opportunities. Because closures are not targeted to individual consumers and affect all potential customers of a store simultaneously, they provide plausibly exogenous variation in access to the platform.
+
+Specifically, we focus on 18 unexpected store closures and construct a matched treatment-control design. Treatment customers are defined as those whose preferred store, identified based on pre-closure purchasing behavior, is the store that closes. Control customers are defined as those whose preferred store is one of a set of matched stores that remain open. The matching procedure ensures comparability across treated and control stores. For each closure, we select up to five control stores with similar store set-up times and exclude stores that are already used as controls for earlier closures. We then assign customers to treatment or control based on their preferred pre-closure store. To guarantee that store assignment is meaningful, we restrict attention to customers with at least five pre-closure purchase days and a preferred-store purchase share of at least 80\%. The resulting panel contains 40,148 member-event pairs and 321,184 member-event-period observations for purchase frequency. For novelty-seeking, the estimation sample counts 99,644 observations as the outcome is defined only for periods in which a purchase occurs. This setting generates rich identifying variation along three dimensions. First, we observe the same consumers before and after a disruption, allowing for within-consumer comparisons. Second, closures vary across stores and over time, providing cross-sectional and temporal variation in exposure to constraints. Third, consumers differ in their reliance on specific stores, creating heterogeneity in the extent to which a closure constitutes a binding constraint.
+
+Furthermore, the combination of repeated interactions, localized store dependence and time-varying product assortments creates an environment in which temporary disruptions can affect both the level and composition of demand. In particular, closures not only restrict purchasing opportunities but also alter consumers’ exposure to evolving assortments and interrupt ongoing purchase processes. This structure allows us to study how temporary supply constraints affect consumer behavior along two margins: purchase frequency and product exploration. More broadly, the setting provides a natural laboratory to examine how consumers adjust when a planned purchase cannot be executed, and whether such interruptions have persistent effects on subsequent choices.
+\\
+
+[I WOULD ADD:
+- EXPLAINING HOW DEFINE CONTROL/TREATMENT
+- SUMMARY STATISTICS + CONTROL/TREATMENT COMPARISON
+- A CLOSURE GRAPH SHOWING THE EFFECT OF PANDEMIC SHOOT-DOWN ON PURCHASES] 
+
+\section{Empirical Analysis}
+\label{section:3}   
+
+\noindent The central challenge in this setting is that not all treated customers are equally affected by a store closure. While all customers assigned to a treated store are exposed to the disruption, only a subset would have made a purchase during the closure window absent the interruption. We refer to these customers as blocked buyers. Conceptually, the blocked-buyer indicator captures more than purchase intensity. It serves as a revealed preference proxy for an active purchase goal. Repeated purchases from the chain reflect not only habit or inertia, but may also indicate a persistently active consumption objective. Moreover, recent purchasing activity can place consumers in an implemental mindset that increases the likelihood of follow-through \shortcite<e.g.,>{gollwitzer1990action, kruglanski2002theory, dhar2007shopping,  Kruglanski2020}.
+
+To consider this distinction, we classify each member-event pair using a predictive XGBoost model trained on pre-closure behavior \shortcite{Levine2025}. The model estimates the probability that a consumer would have made a purchase during the closure window in the absence of the disruption. It achieves about 73\% accuracy on pre-treatment data. This measure allows us to identify the subset of customers for whom the closure constitutes a binding constraint.
+
+This distinction is central to our empirical design. If temporary interruptions weaken demand, the effect should be most pronounced among blocked buyers, since these are the consumers whose active purchase goals are directly disrupted. In contrast, for customers without a pending purchase, closures represent a non-binding shock that affects exposure but does not interrupt a planned action. The empirical strategy that follows leverages this distinction to separate the effect of general disruptions from the causal effect of blocking an active purchase. Specifically, we focus on how temporary store closures affect consumer behavior along two dimensions: (i) purchase frequency and (ii) product choice, with a focus on consumers’ propensity to explore new products.
+
+\subsection{Outcomes}
+\label{section:3.1}  
+
+\noindent Let $i$ index consumers, $e$ closure events, $t$ time, and let $L_e$ denote the duration in days of closure event $e$. For each event, we define two outcome variables over symmetric time windows of length $L_e$ before and after the closure.
+
+\paragraph{Purchase frequency.}
+We measure purchase intensity using purchase frequency, defined as the number of purchase days per calendar day within each event-length window. For consumer $i$ and event $e$, we define purchase frequency as
+\begin{equation}
+	\text{Y}^P_{iet} = \frac{1}{L_e} \sum_{t \in \mathcal{W}_e} \mathbb{1}\{ \text{Purchase}_{it} = 1 \},
+\end{equation}
+where $\mathcal{W}_e$ denotes the set of days in the relevant window pre- or post-closure and $\mathbb{1}\{\cdot\}$ is an indicator function equal to one if consumer $i$ makes at least one purchase on day $t$. This measure captures th extensive margin of demand, that is how frequently consumers engage in purchasing activity. By normalizing by the length of the window, we ensure that purchase frequency is comparable across closure events of different durations.
+
+\paragraph{Novelty-seeking.}
+To study the composition of demand, we construct a measure of product exploration based on consumers’ adoption of new products. For each consumer $i$ and event $e$, we define novelty-seeking as
+\begin{equation}
+	\text{Y}^V_{iet} = \frac{\sum_{t \in \mathcal{W}_e} \sum_{j} \mathbb{1}\{ \text{Purchase}_{ijt} = 1 \ \text{and} \ j \text{ is new for } i \}}{\sum_{t \in \mathcal{W}_e} \sum_{j} \mathbb{1}\{ \text{Purchase}_{ijt} = 1 \}},
+\end{equation}
+where $\text{Purchase}_{ijt}$ indicates whether consumer $i$ purchases product $j$ at time $t$. A product is defined as new if its purchase in period $t$ corresponds to the first time consumer $i$ ever purchases product $j$ in the data. This outcome measures the share of purchases devoted to new products within a given window, and therefore reflects consumers’ propensity to explore the assortment. Intuitively, higher values of $\text{Y}^V_{iet}$ indicate greater experimentation, while lower values reflect more focused or habitual consumption. By construction, novelty-seeking is only defined for consumers who make at least one purchase in the window. For consumers with no purchases, the denominator is zero and the outcome is treated as missing. This ensures that the measure captures variation in product choice conditional on participation, rather than conflating exploration with changes in purchase frequency.
+
+These two outcomes allow us to separately analyze the effects of closures on the level and composition of demand. Purchase frequency captures whether consumers return to purchasing at similar rates after a disruption, while novelty-seeking captures whether they adjust how they allocate purchases across products. This distinction is central to our analysis as it allows to uncover differential responses along the extensive and choice margins.
+
+\subsubsection{Purchase Frequency}
+\label{section:3.1.1}  
+
+\noindent In this setting a temporary store closure can affect post-reopening behavior through baseline demand and through blocking a planned purchase. The planned choice is a drink purchase from the chain during the closure window. Let $C_{iet} \in \{0, 1\}$ indicate whether member $i$ makes at least one purchase from the chain in event period $t$ for closure event $e$. We model the purchase decision through a latent utility framework, where the utility of buying from the chain is:
+\begin{equation}
+	U^P_{iet} = \alpha^P_{et} + \mu^P_{ie} + \gamma^P C_{ie,t-1} + \varepsilon^P_{iet}.
+\end{equation}
+The observed purchase decision is then determined by whether this latent utility exceeds a threshold (normalized to zero), so that $C_{iet} = 1$ if $U^P_{iet} \geq 0$. In the utility function $\alpha^P_{et}$ captures the baseline demand for the chain in event $e$ at time $t$. It reflects time-varying factors that affect all consumers exposed to the event, for instance overall demand conditions, seasonality, or changes in the attractiveness of the chain after reopening. The term $\mu^P_{ie}$ represents member-event specific heterogeneity in demand. It captures persistent differences across consumers in their propensity to purchase from the chain, such as preferences, habits, or proximity to the store. By allowing this term to vary across $(i,e)$ pairs, we account for the fact that different consumers may rely on the chain to different degrees.
+The error $\varepsilon^P_{iet}$ is an idiosyncratic shock that captures unobserved determinants of purchase utility.
+
+The dynamic component $\gamma^P C_{ie,t-1}$ models the state dependence in purchasing behavior. In particular, $C_{ie,t-1}$ indicates whether the member purchased from the chain in the previous event period, while $\gamma^P$ measures the extent to which past purchases affect current utility. When $\gamma^P > 0$, prior purchases increase the likelihood of purchasing again, reflecting habit formation or persistence in consumption. When $\gamma^P = 0$, there is no carryover effect from past behavior. Intuitively, $\gamma^P C_{ie,t-1}$ implies that current purchasing decisions depend on recent purchase history. A recent purchase from the chain increases familiarity, reinforces habits, or maintains the consumer's engagement with the brand, thereby raising the likelihood of purchasing again. This dynamic structure is crucial for understanding the impact of closures. Because store closures interrupt purchasing opportunities, they can alter the realized purchase history and therefore affect future utility through the lagged term.
+
+\subsubsection{Effect of Closure}
+\label{section:3.1.2}  
+
+\noindent Temporary store closures can affect post-reopening purchase behavior through two distinct channels. On one hand, closures may affect baseline demand. This baseline-demand effect (denoted by $B$) operates through changes in $\alpha^P_{et}$ after reopening. For example, consumers may discover substitutes during the closure, update their beliefs about convenience and respond to reopening promotions. These forces can shift demand independently of any specific purchase being blocked. On the other hand, closures may affect realized purchase history. This blocked-purchase effect (denoted by $D$) arises for consumers who would have purchased during the closure period but are unable to do so. In this case, the closure changes the realization of $C_{iet}$, which in turn affects future utility through the dynamic term. To see this more clearly, consider a consumer who would have purchased during the closure absent the disruption. In the absence of closure, we would observe:
+\begin{equation}
+	C_{ie0}(0) = 1,
+\end{equation}
+whereas under closure:
+\begin{equation}
+	C_{ie0}(1) = 0.
+\end{equation}
+As a result, at reopening, the consumer’s lagged purchase term is lower under closure than in the no-closure counterfactual. When $\gamma^P \neq 0$, this implies that post-reopening utility is lower by $\gamma^P$ relative to the counterfactual in which the purchase was not blocked. This mechanism highlights that closures do not only affect contemporaneous purchasing opportunities, but also alter the state variable entering future decisions. The blocked-purchase effect should therefore be interpreted as the average effect of having a planned purchase opportunity disrupted, operating through the dynamic dependence in purchase behavior. 
+
+If consumers are able to substitute to another store of the same chain during the closure, the change in realized purchase history is attenuated and the effect is correspondingly smaller. In the extreme case with no within-chain substitution, the effect is maximal. This framework implies that closures can affect purchase frequency both through shifts in baseline demand and through changes in purchase history that propagate dynamically over time. Distinguishing between these two channels is central to our empirical analysis.
+
+\subsubsection{Novelty-Seeking}
+\label{section:3.2.1}  
+
+\noindent Conditional on purchasing, closures may also affect the composition of demand, in particular consumers' propensity to try novel products. Let $N_{iet} \in \{0,1\}$ indicate whether member $i$ chooses a new-to-them product in period $t$ of event $e$. We model again this decision through a latent utility framework, where the tendency to explore is given by:
+\begin{equation}
+	U^V_{iet} = \alpha^V_{et} + \mu^V_{ie} + \lambda^V H_{ie,t-1} + \xi G_{ie} + \eta M_{ie} + \varepsilon^V_{iet}.
+\end{equation}
+The observed novelty choice is then determined by whether this latent utility exceeds the zero threshold, so that $N_{iet} = 1$ if $U^V_{iet} \geq 0$. Each term in the utility function captures a distinct driver of product exploration. Similarly, $\alpha^V_{et}$ represents the baseline tendency to explore new products at the time of event $e$ and period $t$. This component reflects aggregate shifts in exploration behavior, for example due to changes in the assortment, seasonality or general post-reopening dynamics. The term $\mu^V_{ie}$ captures member-event heterogeneity in novelty-seeking. This allows for persistent differences across consumers in their intrinsic tendency to try new products. The component $\lambda^V H_{ie,t-1}$ introduces state dependence in product choice. $H_{ie,t-1}$ captures recent product-choice history, while $\lambda^V$ reflects how past behavior influences current exploration. For instance, if consumers tend to repeat previous choices, $\lambda^V$ may be negative, consistent with inertia in product selection. Finally, $  \varepsilon^V_{iet} $ is the latent utility idiosyncratic shock.
+
+\subsubsection{Mechanisms Driven by Closure}
+\label{section:3.2.2}  
+
+\noindent Closures introduce two additional mechanisms that affect novelty-seeking. The first mechanism operates through $G_{ie}$, which captures the persistence of a blocked purchase goal. When a consumer's purchase is disrupted during the closure, the underlying goal may remain active after reopening. This focused goal completion mechanism implies that consumers may prioritize completing the intended purchase rather than exploring alternatives. The coefficient $\xi$ measures the extent to which lingering purchase goals reduce exploration by shifting attention toward familiar products.
+
+The second mechanism works through $M_{ie}$, which accounts for missed exposure to product assortment changes during the closure. Because consumers are unable to interact with the store while it is closed, they may fail to observe newly introduced products. This missed menu exposure mechanism reduces awareness of new options and can therefore lower subsequent novelty-seeking. The coefficient $\eta$ captures the effect of this reduced exposure on exploration behavior.
+
+This framework separates two conceptually distinct channels through which closures affect product choice. The baseline term $\alpha^V_{et}$ captures general changes in exploration after reopening, while the addition of terms $G_{ie}$ and $M_{ie}$ models how the disruption of a planned purchase and the loss of exposure to new products affect behavior. It is worth highlighting how these mechanisms operate in opposite directions relative to standard intuition. While disruptions may break routines and increase experimentation for some consumers, the presence of a blocked purchase goal and reduced exposure to new products can lead to more focused and less exploratory behavior among affected consumers. The empirical goal is to separate a baseline post-reopening shift in exploration from the additional effect of having a planned purchase blocked. By leveraging variation in $G_{ie}$ and $M_{ie}$, we are able to isolate how closures affect not only whether consumers return to purchasing, but also how they allocate their purchases across products.
+
+
+\subsection{Triple Difference-in-Differences}
+\label{section:3.3}  
+
+\noindent To quantify the causal effect of blocking a planned purchase, we estimate a triple difference-in-differences design that compares three dimensions of variation: (i) treated versus control customers, (ii) behavior before and after reopening, and (iii) customers whose purchase was blocked versus those whose purchase was not blocked. Formally, we estimate the following pooled specification:
+\begin{equation}
+	Y_{iet} = \delta^B \cdot \text{Post} \times \text{Treated}
+	+ \beta \cdot \text{Post} \times \text{Blocked}
+	+ \delta^D \cdot \text{Post} \times \text{Treated} \times \text{Blocked}
+	+ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet},
+\end{equation}
+where $Y_{iet}$ denotes the outcome of interest for member $i$ in period $t$ of event $e$. The indicator $\text{Post}$ captures periods after reopening, $\text{Treated}$ identifies customers exposed to a store closure, and $\text{Blocked}$ identifies customers whose purchase would have occurred during the closure window absent the disruption. The specification includes member-closure fixed effects $\phi_{ie}$, relative-period fixed effects $\omega_t$ and calendar-month fixed effects $\gamma_m$. Standard errors are clustered at the consumer level.
+\\
+
+[CONSISTENT SYMBOLS OF DDD]
+\\
+
+The coefficient of primary interest is $\delta^D$. It captures the additional post-reopening effect for blocked treated customers. This term isolates the causal effect of having a planned purchase interrupted, over and above general post-closure shifts that affect treated customers more broadly. In contrast, $\delta^B$ accounts for the post-reopening treatment effect for non-blocked customers. This coefficient reflects baseline demand shifts associated with closures, such as changes in consumer beliefs, substitution patterns or responses to reopening conditions, that are not tied to a blocked purchase. The parameter $\beta$ captures differences in post-reopening behavior between blocked and non-blocked customers that are common across treated and control groups. This term absorbs general differences in behavior across these groups that are not driven by treatment exposure.
+
+This specification separates the overall effect of closures into two components: a baseline demand effect ($\delta^B$) and a blocked-purchase effect ($\delta^D$). This decomposition allows to isolate the behavioral consequences of interrupting a planned purchase from broader changes in demand conditions.
+
+\subsubsection{Identification Assumptions}
+\label{section:3.3.1} 
+
+\noindent The identification of the blocked-purchase effect relies on a set of assumptions that extend the standard difference-in-differences framework to the triple-differences setting. First, we require that parallel triple differences hold. In the absence of closures, the difference between blocked and non-blocked customers would have evolved similarly across treated and control groups. This condition ensures that the triple interaction term isolates the causal effect of the disruption rather than pre-existing trends.
+
+Second, we assume that baseline demand shifts do not separately affect blocked treated customers. That is, any post-reopening changes in prices, promotions, convenience or perceived quality affect blocked and non-blocked treated customers in a similar way. Under this assumption, such changes are captured by the baseline treatment effect $\delta^B$ rather than the triple interaction term.
+
+Third, we assume that the blocked status and controls are valid. Blocked-buyer status is determined using pre-closure behavior, ensuring that it is not endogenous to post-reopening outcomes. In addition, matched control stores provide the appropriate counterfactual for treated customers, allowing us to isolate the effect of the closure.
+
+We assess these assumptions using event-study evidence. For purchase frequency, pre-trend tests based on treatment-control comparisons do not reject the null of parallel trends. For novelty-seeking, both the average treatment effect and the blocked-buyer dynamic specifications also fail to reject parallel pre-trends. These results support the validity of the identification strategy and suggest that the triple interaction term captures the causal effect of blocking a planned purchase rather than reflecting underlying differences in trends across groups.
+\\
+
+[NEED MORE WORK ON TESTING IDENTIFICATION ASSUMPTIONS + OTHER ASSUMPTIONS OF IDENTIFICATION?]
+
+
+\section{Results}
+\label{section:4}  
+
+\noindent We begin by examining whether temporary store closures affect how frequently customers purchase from the chain after reopening. Table~\ref{TableA} reports the estimates from the triple difference-in-differences specification introduced in Section~\ref{section:3.3}.
+
+\begin{table}[h!]
+	\centering
+	\caption{Effect of store closures on purchase frequency}
+	\label{TableA}
+	\begin{tabular}{lcc}
+		\hline
+		\textbf{Coefficient} & \textbf{Estimate} & \textbf{SE} \\
+		\hline
+		Post $\times$ Treated ($\delta^B$) & 0.0009 & \small0.0007 \\
+		Post $\times$ Blocked ($\beta$) & -0.0344*** & \small0.0011 \\
+		Post $\times$ Treated $\times$ Blocked ($\delta^D$) & 0.0058** & \small0.0025 \\
+		\hline
+		Observations & \multicolumn{1}{c}{321,184} & \\
+		\hline
+	\end{tabular}\vspace{2mm}
+\fnote{Notes: *** $p<0.01$, ** $p<0.05$, * $p<0.1$. Standard errors clustered at the individual level.}
+\end{table}
+
+The estimates reveal three main patterns. The baseline treatment effect $\delta^B$ is small and statistically indistinguishable from zero. For consumers whose purchase opportunities were not binding, temporary closures do not lead to persistent changes in purchase frequency after reopening. In other words, there is no evidence of a general demand loss driven by the disruption itself.
+
+The coefficient $\beta$ is negative and highly significant, reflecting strong mean reversion in purchase frequency among high-propensity consumers. Customers who are more likely to purchase exhibit higher pre-event activity and subsequently revert toward their typical purchase levels. This pattern is observed in both treated and control groups and therefore does not reflect a causal effect of closures.
+
+The triple interaction coefficient $\delta^D$ is positive and statistically significant. This estimate captures the causal effect of having a planned purchase blocked by the closure. It indicates that customers whose purchase was interrupted slightly increase their purchase frequency after reopening relative to comparable blocked customers in the control group.
+
+These results provide no evidence that blocking a purchase weakens subsequent demand. Instead, the estimates are consistent with a modest rebound effect, whereby unfulfilled purchase intentions carry over and lead to slightly higher activity after the constraint is lifted. This interpretation is reinforced by the dynamic event-study analysis. Pre-period coefficients do not reject the null of parallel trends, while post-reopening estimates are positive in the periods immediately following reopening. This pattern further supports the conclusion that closures do not reduce purchase frequency and may potentially generate a small positive rebound among affected consumers.
+
+We next examine how temporary store closures affect consumers’ propensity to try new products. Table~\ref{TableB} reports the estimates from the triple difference-in-differences specification applied to novelty-seeking.
+
+\begin{table}[h!]
+	\centering
+	\caption{Effect of store closures on novelty-seeking}
+	\label{TableB}
+	\begin{tabular}{lcc}
+		\hline
+		\textbf{Coefficient} & \textbf{Estimate} & \textbf{SE} \\
+		\hline
+		Post $\times$ Treated ($\delta^B$) & 0.0313*** & \small0.0120 \\
+		Post $\times$ Blocked ($\beta$) & 0.0381*** & \small0.0064 \\
+		Post $\times$ Treated $\times$ Blocked ($\delta^D$) & -0.0415*** & \small0.0145 \\
+		\hline
+		Observations & \multicolumn{1}{c}{99,644} &\\
+		\hline
+	\end{tabular}
+\vspace{2mm}
+\fnote{Notes: *** $p<0.01$, ** $p<0.05$, * $p<0.1$. Standard errors clustered at the individual level.}
+\end{table}
+
+The estimates reveal a stark contrast between average responses to closures and the behavior of consumers whose purchase intentions are directly disrupted. The baseline effect $\delta^B$ is positive and statistically different from zero. This indicates that, on average, consumers exposed to closures become more likely to try new products after reopening. This pattern is consistent with the idea that disruptions break routine consumption and increase experimentation, leading consumers to explore a broader set of products.
+
+The coefficient $\beta$ is also positive and significant, suggesting that high-propensity consumers are overall more likely to try new products. This reflects a mechanical effect: consumers who purchase more frequently are naturally more exposed to the product assortment and therefore accumulate more first-time product trials over time.
+
+However, the key result is captured by the negative and highly significant triple interaction coefficient $\delta^D$. This coefficient measures the causal effect of blocking a planned purchase on subsequent exploration behavior. The negative estimate implies that, conditional on exposure, consumers whose purchase was interrupted become significantly less likely to try new products after reopening relative to comparable blocked consumers in the control group. These findings show a clear divergence between average effects and displacement effects. While closures increase exploration on average, they reduce exploration for the subset of consumers whose purchase intentions are directly blocked. This channel stresses the importance of conditioning on whether the disruption constitutes a binding constraint.
+
+From an economic perspective, the negative displacement effect is consistent with a shift toward more focused consumption following an interrupted purchase. Consumers who were unable to complete a planned transaction return to the market with a more targeted objective, prioritizing familiar products over experimentation. This behavior is consistent with the goal-persistence mechanism outlined in Section \ref{section:3.2.2}, whereby unfulfilled purchase intentions carry over and shape subsequent choices. This interpretation is further supported by the event-study results. Pre-trend tests do not reject the parallel trends assumption, while the post-reopening effect for blocked treated consumers remains persistently negative. These patterns suggest that the observed decline in exploration is not driven by pre-existing differences, but originates from disrupted purchase intentions.
+
+Overall, these empirical results show the asymmetric effects of temporary closures on demand. While store closures do not decrease purchase frequency, they substantially alter the composition of demand by reducing product exploration among affected consumers.
+
+We further assess the robustness of our findings by replacing the binary blocked-buyer indicator with the model’s continuous measure of ex-ante blocked-purchase propensity. This approach allows to exploit variation in the likelihood that a purchase would have been blocked, rather than relying on a discrete classification. The results confirm the documented patterns. The interaction between treatment exposure and the propensity score is positive and statistically significant for purchase frequency ($ +0.0076^{***} $), while negative and statistically significant for novelty-seeking ($ -0.0452^{**} $). These estimates indicate that the effect of closures becomes more positive for purchase frequency and more negative for exploration as the likelihood of a blocked purchase increases. These estimates reinforce the interpretation that the effects of closures are driven by whether the disruption constitutes a binding constraint. As purchase propensity rises, closures increasingly reflect the interruption of an active purchase intention, leading to a modest rebound in purchasing activity but a pronounced reduction in product exploration.
+\\
+
+[LATER ON - HETEROGENEITY ANALYSIS] 
+
+\section{Why Does This Happen? Two Mechanisms}
+\label{section:5} 
+
+\subsection{Mechanism 1: Blocked Goals Create Focused Rebound}
+\label{section:5.1} 
+
+\noindent We propose a mechanism based on the persistence of active purchase goals. When a store closure blocks an intended purchase, the underlying goal need not disappear. Instead, the interruption may leave the goal cognitively active, increasing its salience and shaping subsequent behavior once purchasing opportunities are restored.
+
+This idea comes from a large literature in psychology showing that unfulfilled goals remain mentally active, trigger counterfactual thinking about the missed action, and intensify the desire to complete the interrupted task \shortcite<e.g.,>{Brehm1966, Clee1980, fitzsimons2000consumer,epstude2008functional,masicampo2011consider,Kappes2016}. In our context, a consumer who is prevented from completing a purchase during a closure may return after reopening with a more focused objective, prioritizing the completion of the original purchase rather than exploring alternatives. This mechanism naturally accounts for the main empirical findings. First, blocked customers do not reduce their purchase frequency after reopening. Because the underlying purchase goal persists, the missed transaction is effectively deferred rather than abandoned, leading to stable or slightly increased post-reopening activity. Second, blocked customers become less likely to try new products. Because the return visit is oriented toward completing a previously intended purchase, consumers are less inclined to deviate from familiar choices and experiment with new items.
+
+\subsubsection{Implementation and Findings}
+\label{section:5.1.1} 
+
+\noindent A direct implication of this mechanism is that some consumers should continue to pursue their purchase goal even during the closure period. In particular, if the goal remains active, consumers may substitute toward other stores of the same chain in order to complete the intended purchase. In the data, we observe that a non-trivial fraction of treated customers make purchases at alternative stores during the closure window. Specifically, 519 treated member-events involve at least one same-chain purchase at a different store while the focal store is closed, corresponding to 7.0\% of treated member-events.
+
+To assess whether such substitution drives the results, we re-estimate the triple difference-in-differences specification after excluding all treated member-events with any during-closure purchases at alternative stores within the chain. This restriction isolates consumers whose purchase opportunities are fully blocked. The results remain qualitatively unchanged. For purchase frequency, the estimated displacement effect remains positive ($\delta^D = +0.0052^{**}$), while for novelty-seeking it remains negative ($\delta^D = -0.0323^{**}$). These estimates are slightly attenuated relative to the baseline, but preserve the same sign and statistical significance. This evidence supports the interpretation that the observed patterns are not driven by substitution across stores, but rather reflect the persistence of blocked purchase goals. Even when substitution opportunities are removed, consumers whose purchases are interrupted exhibit a rebound in activity and a reduction in exploration, consistent with a focused return to complete the original goal.  
+
+\subsection{Mechanism 2: Missed Exposure to New Products}
+\label{section:5.2} 
+
+\noindent A second potential explanation for the decline in novelty-seeking is that treated customers are less exposed to new products during the closure period. While control customers continue to visit open stores and observe evolving assortments, treated customers are unable to interact with the store while it is closed and may therefore miss newly introduced items. If this mechanism is operative, treated customers should return after reopening with lower awareness of the updated product assortment and may therefore be less likely to try new products. In contrast to the goal-based mechanism, which operates through the persistence of purchase intentions, this channel operates through differences in information and exposure.
+
+\subsubsection{Implementation and Findings}
+\label{section:5.2.1} 
+
+\noindent To evaluate this mechanism, we construct a measure of product introduction intensity using matched control stores that remain open during each closure event. For each closure $e$, we first identify the set of matched control stores that are comparable to the treated store but remain open during the closure window. Second, within each control store, we count the number of products sold during the closure window that were not sold in the immediately preceding window of equal length. This captures the introduction of new products over the closure period. Then, we average this measure across matched control stores to obtain a closure-level measure of introduction intensity. Finally, we estimate the key triple difference-in-differences coefficient separately for each closure event and relate the estimated novelty effect to the corresponding introduction intensity.
+
+Across the 18 closure events in the data, matched control stores introduce on average 9.3 new products during the closure window, with substantial variation across events, ranging from 1.8 to 15.4 new products. This variation provides a natural source of cross-event heterogeneity to test the missed exposure mechanism.
+
+If missed exposure were the dominant driver of the decline in novelty-seeking, closures with greater product introduction intensity should exhibit more negative novelty effects. That is, the reduction in exploration should be strongest when treated customers miss more new product introductions.
+\\
+
+[NEED MORE ACCURATE ANALYSIS ON THIS PART PERHAPS]
+\\
+
+The evidence indicates that missed exposure is unlikely to be the main mechanism behind the observed decline in novelty-seeking. Instead, the results are more consistent with the goal-based mechanism, whereby the interruption of an active purchase leads to more focused behavior upon return. This interpretation is supported both by the lack of correlation between introduction intensity and novelty effects and by the persistence of the main results across alternative specifications.
+ 
+
+\section{Conclusion}
+\label{section:7}
+
+\noindent This paper studies how consumers respond when their purchase intentions are temporarily blocked. Using panel data from a large-scale digital coffee retail platform, we exploit store closures as exogenous disruptions to purchasing opportunities and combine this variation with a triple-differences design to isolate heterogeneous responses across consumers. This approach allows us to move beyond average treatment effects and focus on how supply shocks interact with underlying consumer intent. Our main finding is that the impact of supply disruptions is fundamentally heterogeneous. While overall demand recovers quickly after reopening, suggesting that temporary constraints do not generate persistent reductions in consumption, then the composition of demand changes in systematic ways. In particular, we show that high-intention consumers whose purchases are directly displaced during the closure exhibit a markedly different behavioral adjustment: they become less likely to explore new products after the disruption. This negative displacement effect contrasts with average patterns in the data and highlights the importance of conditioning on consumer intent to understand the full impact of supply shocks.
+
+We interpret these findings through a goal-based mechanism. When an active purchase intention is interrupted, the underlying goal does not disappear. Instead, it remains cognitively active and can intensify. Upon reopening, this leads consumers to prioritize goal completion, directing their purchases toward familiar or previously chosen products. At the same time, displaced consumers miss exposure to newly introduced products during the disruption period. Because they are not present in the marketplace when assortment changes occur, they return with less information about new offerings and are therefore less likely to explore. The combination of goal persistence and missed exposure provides a unified explanation for the observed reduction in novelty seeking among high-intention consumers, despite the absence of long-run effects on overall purchase frequency.
+
+Our findings contribute to the marketing literature in several ways. First, we provide empirical evidence on the role of goal persistence and state dependence in shaping consumer behavior under temporary constraints. While prior work has emphasized habit formation and inertia, our results highlight the importance of actively maintained purchase goals and their behavioral consequences when disrupted. Second, we show that supply-side shocks can have distinct effects on the level and composition of demand, and that these effects depend critically on consumer heterogeneity. By focusing on displaced consumers, we uncover behavioral responses that are masked in aggregate analyses. Furthermore, our study contributes to a broader understanding of product discovery by showing how missed exposure to assortment changes can have lasting effects on consumer choice, even when demand levels recover quickly.
+
+From a managerial perspective, our results suggest that demand recovery following disruptions may be incomplete in important dimensions. Although aggregate sales may rebound, firms should be aware that certain segments of consumers, particularly those with high purchase intent, may disproportionately revert to familiar products. This can limit the effectiveness of new product introductions and reduce the overall rate of product discovery. To address this, firms may benefit from designing targeted interventions that not only reactivate purchasing but also restore exposure to new products, for example through personalized recommendations or targeted communications following disruptions. Overall, our study shows that understanding demand dynamics requires jointly considering supply constraints, consumer goals and product exposure. Temporary disruptions do not simply shift demand over time, they reshape how consumers make choices once constraints are lifted. By highlighting the role of consumer heterogeneity and behavioral mechanisms, our results provide a more nuanced view of how demand adjusts to shocks and offer new insights into the interplay between supply-side conditions and consumer decision-making.
+
+\pagebreak
+\clearpage  
+
+% Reference
+\newpage
+\bibliographystyle{apacite}
+\bibliography{References}
+
+
+% Online Appenix
+\clearpage
+\appendix
+
+\part{Online Appendix} % Start the appendix part
+\addcontentsline{toc}{section}{Table of Contents} % Add the appendix text to the document TOC
+\parttoc % Insert the appendix TOC
+
+\pagestyle{plain}
+\pagenumbering{roman}
+\setcounter{page}{1}
+\numberwithin{table}{section}
+\numberwithin{figure}{section}
+\setcounter{footnote}{0}
+
+\clearpage
+
+\section{AAA}
+\label{section:A}
+
+\subsection{aaa}
+\label{section:A.01}         
+
+
+\end{document}
+
+
