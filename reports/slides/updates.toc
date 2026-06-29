@@ -1,2 +1,0 @@
-\beamer@sectionintoc {1}{Updates}{3}{0}{1}
-\beamer@sectionintoc {2}{Mechanism}{9}{0}{2}
