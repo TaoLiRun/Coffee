@@ -26,6 +26,13 @@ def save_outputs(
     event_terms: pd.DataFrame,
     event_fit: pd.DataFrame,
     pretrend_tests: pd.DataFrame,
+    matched_binary_terms: pd.DataFrame | None = None,
+    matched_event_terms: pd.DataFrame | None = None,
+    matched_pretrend_tests: pd.DataFrame | None = None,
+    matched_support: pd.DataFrame | None = None,
+    blocked_gap_terms: pd.DataFrame | None = None,
+    blocked_gap_fit: pd.DataFrame | None = None,
+    pretrend_bias_tests: pd.DataFrame | None = None,
     summary_title: str = "# Displacement Effect Estimation Summary",
     summary_notes: list[str] | None = None,
 ) -> None:
@@ -39,6 +46,20 @@ def save_outputs(
     event_terms.to_csv(output_dir / "event_study_results.csv", index=False)
     event_fit.to_csv(output_dir / "event_study_fit.csv", index=False)
     pretrend_tests.to_csv(output_dir / "pretrend_joint_tests.csv", index=False)
+    if matched_binary_terms is not None:
+        matched_binary_terms.to_csv(output_dir / "ddd_binary_results_matched.csv", index=False)
+    if matched_event_terms is not None:
+        matched_event_terms.to_csv(output_dir / "event_study_results_matched.csv", index=False)
+    if matched_pretrend_tests is not None:
+        matched_pretrend_tests.to_csv(output_dir / "pretrend_joint_tests_matched.csv", index=False)
+    if matched_support is not None:
+        matched_support.to_csv(output_dir / "matched_episode_support_summary.csv", index=False)
+    if blocked_gap_terms is not None:
+        blocked_gap_terms.to_csv(output_dir / "blocked_gap_event_study_matched.csv", index=False)
+    if blocked_gap_fit is not None:
+        blocked_gap_fit.to_csv(output_dir / "blocked_gap_event_study_fit_matched.csv", index=False)
+    if pretrend_bias_tests is not None:
+        pretrend_bias_tests.to_csv(output_dir / "pretrend_bias_equality.csv", index=False)
 
     comparison = pd.concat(
         [
@@ -71,6 +92,42 @@ def save_outputs(
         "## Pre-trend Joint Tests",
         _table_to_markdown(pretrend_tests),
     ]
+    if matched_support is not None:
+        lines.extend([
+            "",
+            "## Matched-Sample Support",
+            _table_to_markdown(matched_support),
+        ])
+    if matched_binary_terms is not None:
+        lines.extend([
+            "",
+            "## Matched Binary Specs",
+            _table_to_markdown(matched_binary_terms),
+        ])
+    if matched_event_terms is not None:
+        lines.extend([
+            "",
+            "## Matched Event-study Specs",
+            _table_to_markdown(matched_event_terms),
+        ])
+    if matched_pretrend_tests is not None:
+        lines.extend([
+            "",
+            "## Matched Pre-trend Joint Tests",
+            _table_to_markdown(matched_pretrend_tests),
+        ])
+    if blocked_gap_terms is not None:
+        lines.extend([
+            "",
+            "## Blocked Gap Event Study",
+            _table_to_markdown(blocked_gap_terms),
+        ])
+    if pretrend_bias_tests is not None:
+        lines.extend([
+            "",
+            "## Pre-period Bias Equality Tests",
+            _table_to_markdown(pretrend_bias_tests),
+        ])
     if summary_notes:
         lines[7:7] = [*summary_notes, ""]
     (output_dir / "summary.md").write_text("\n".join(lines), encoding="utf-8")
@@ -402,4 +459,153 @@ def save_pre_novelty_histogram(
     ax.grid(True, alpha=0.25)
     fig.tight_layout()
     fig.savefig(output_dir / "pre_period_novelty_histogram.png", dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_blocked_gap_event_study_plot(
+    *,
+    output_dir: Path,
+    event_terms: pd.DataFrame,
+) -> None:
+    """Save treated/control blocked-minus-non-blocked diagnostic paths."""
+    required = {"spec", "term", "coef", "se"}
+    missing = required - set(event_terms.columns)
+    if missing:
+        raise ValueError(
+            f"event_terms missing required columns for blocked-gap plot: {sorted(missing)}"
+        )
+
+    plot_df = event_terms.copy()
+    plot_df["term"] = plot_df["term"].astype(str)
+    plot_df["rel_t"] = plot_df["term"].map(_extract_rel_t)
+    plot_df = plot_df.loc[(plot_df["spec"] == "event_blocked_gap") & plot_df["rel_t"].notna()].copy()
+    if plot_df.empty:
+        return
+
+    plot_df["rel_t"] = plot_df["rel_t"].astype(int)
+    plot_df["path"] = np.where(
+        plot_df["term"].str.endswith(":blocked_treated_gap"),
+        "treated_blocked_minus_nonblocked",
+        "control_blocked_minus_nonblocked",
+    )
+    plot_df["ci_low"] = plot_df["coef"] - 1.96 * plot_df["se"]
+    plot_df["ci_high"] = plot_df["coef"] + 1.96 * plot_df["se"]
+    plot_df.to_csv(output_dir / "blocked_gap_event_study_plot_data_matched.csv", index=False)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    color_map = {
+        "treated_blocked_minus_nonblocked": "#d95f02",
+        "control_blocked_minus_nonblocked": "#1b9e77",
+    }
+    for path_name, sub in plot_df.groupby("path", sort=False):
+        sub = sub.sort_values("rel_t")
+        x = sub["rel_t"].to_numpy()
+        y = sub["coef"].to_numpy()
+        ci_low = sub["ci_low"].to_numpy()
+        ci_high = sub["ci_high"].to_numpy()
+        color = color_map.get(path_name, "#4d4d4d")
+        ax.plot(x, y, "o-", color=color, linewidth=2, markersize=5, label=path_name.replace("_", " "))
+        ax.fill_between(x, ci_low, ci_high, color=color, alpha=0.18)
+
+    ax.axhline(y=0, color="black", linewidth=1, alpha=0.8)
+    ax.axvline(x=0, color="gray", linestyle="--", linewidth=1.2, alpha=0.8)
+    ax.set_xlabel("Relative period t")
+    ax.set_ylabel("Blocked minus non-blocked coefficient")
+    ax.set_title("Blocked-minus-non-blocked event study (matched sample)")
+    ax.set_xticks(sorted(plot_df["rel_t"].unique().tolist()))
+    ax.grid(True, axis="y", alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_dir / "blocked_gap_event_study_matched.png", dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_pre_period_purchase_frequency_group_diagnostics(
+    *,
+    output_dir: Path,
+    sample: pd.DataFrame,
+    split_label: str,
+) -> None:
+    """Save pre-period episode-level purchase-frequency summaries and plot by novelty group."""
+    required = {
+        "member_id",
+        "dept_id",
+        "closure_start",
+        "rel_t",
+        "purchase_frequency",
+        "novelty_pre_group",
+        "novelty_pre_selected_for_heterogeneity",
+    }
+    missing = required - set(sample.columns)
+    if missing:
+        raise ValueError(
+            f"sample missing required columns for purchase-frequency group diagnostics: {sorted(missing)}"
+        )
+
+    key_cols = ["member_id", "dept_id", "closure_start"]
+    pre = sample.loc[sample["rel_t"] < 0].copy()
+    if pre.empty:
+        raise ValueError("No pre-period rows available for purchase-frequency group diagnostics.")
+
+    episode_df = (
+        pre.groupby(key_cols + ["novelty_pre_group"], sort=False)["purchase_frequency"]
+        .mean()
+        .reset_index(name="pre_period_purchase_frequency")
+    )
+    episode_df = episode_df[episode_df["novelty_pre_group"].isin(["baseline", "high"])].copy()
+    if episode_df.empty:
+        raise ValueError("No retained baseline/high episodes available for purchase-frequency diagnostics.")
+
+    summary_rows: list[dict] = []
+    for group_name, sub in episode_df.groupby("novelty_pre_group", sort=False):
+        vals = sub["pre_period_purchase_frequency"].astype(float)
+        summary_rows.append(
+            {
+                "split_label": split_label,
+                "group": group_name,
+                "n_episodes": int(len(vals)),
+                "mean": float(vals.mean()),
+                "sd": float(vals.std(ddof=0)),
+                "median": float(vals.median()),
+                "p25": float(vals.quantile(0.25)),
+                "p75": float(vals.quantile(0.75)),
+                "min": float(vals.min()),
+                "max": float(vals.max()),
+            }
+        )
+    summary_df = pd.DataFrame(summary_rows)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    summary_df.to_csv(
+        output_dir / f"pre_period_purchase_frequency_group_summary_{split_label}.csv",
+        index=False,
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    colors = {"baseline": "#4575b4", "high": "#d73027"}
+    for group_name, sub in episode_df.groupby("novelty_pre_group", sort=False):
+        vals = sub["pre_period_purchase_frequency"].astype(float).to_numpy()
+        if vals.size == 0:
+            continue
+        bins = max(10, min(30, int(np.sqrt(vals.size)) + 5))
+        ax.hist(
+            vals,
+            bins=bins,
+            alpha=0.4,
+            color=colors.get(group_name, "#4d4d4d"),
+            label=group_name,
+            density=False,
+        )
+    ax.set_xlabel("Pre-period episode-level purchase frequency")
+    ax.set_ylabel("Episodes")
+    ax.set_title(f"Pre-period purchase frequency by novelty group ({split_label})")
+    ax.grid(True, axis="y", alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(
+        output_dir / f"pre_period_purchase_frequency_distribution_{split_label}.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
     plt.close(fig)

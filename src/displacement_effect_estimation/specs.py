@@ -730,3 +730,138 @@ def fit_event_study_specs(
     ))
 
     return pd.DataFrame(rows), pd.DataFrame(fit_rows), pd.DataFrame(pre_rows)
+
+
+def fit_blocked_gap_event_study(
+    df: pd.DataFrame,
+    outcome: str,
+    cluster_col: str = "member_id",
+    ref_period: int = -1,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Event-study diagnostic comparing blocked vs non-blocked paths separately
+    within treated and control groups on a matched sample.
+    """
+    _assert_columns(df, [
+        outcome, "treated", "disp_binary",
+        "event_fe_id", "rel_t", "calendar_month", cluster_col,
+    ])
+
+    df = df.copy()
+    df["blocked_treated_gap"] = df["treated"] * df["disp_binary"]
+    df["blocked_control_gap"] = (1 - df["treated"]) * df["disp_binary"]
+    rel_t_values = sorted(int(t) for t in df["rel_t"].unique())
+    if ref_period not in rel_t_values:
+        raise ValueError(
+            f"ref_period={ref_period} is not present in rel_t values {rel_t_values}"
+        )
+
+    vcov = {"CRV1": cluster_col}
+    fe_str = "event_fe_id + rel_t + calendar_month"
+    spec = "event_blocked_gap"
+    formula = (
+        f"{outcome} ~ "
+        f"i(rel_t, blocked_treated_gap, ref={ref_period}) + "
+        f"i(rel_t, blocked_control_gap, ref={ref_period}) "
+        f"| {fe_str}"
+    )
+    fit = pf.feols(formula, data=df, vcov=vcov)
+    rows = _tidy_rows_suffix(fit, ":blocked_treated_gap", spec)
+    rows.extend(_tidy_rows_suffix(fit, ":blocked_control_gap", spec))
+    fit_rows = [_fit_row(fit, spec, formula)]
+    return pd.DataFrame(rows), pd.DataFrame(fit_rows)
+
+
+def fit_pretrend_bias_equality_tests(
+    df: pd.DataFrame,
+    outcome: str,
+    cluster_col: str = "member_id",
+) -> pd.DataFrame:
+    """
+    Pre-period linear trend diagnostic for DDD:
+    compare treated-control trend bias across blocked and non-blocked groups.
+    """
+    _assert_columns(df, [outcome, "treated", "disp_binary", "rel_t", cluster_col])
+
+    pre = df.loc[df["rel_t"] < 0, [outcome, "treated", "disp_binary", "rel_t", cluster_col]].copy()
+    pre = pre.dropna(subset=[outcome, "treated", "disp_binary", "rel_t", cluster_col]).copy()
+    if pre.empty:
+        return pd.DataFrame(columns=["spec", "test", "term", "coef", "se", "pvalue", "n"])
+
+    pre["pre_time"] = pre["rel_t"].astype(float)
+    pre["treated_X_pre_time"] = pre["treated"] * pre["pre_time"]
+    pre["disp_X_pre_time"] = pre["disp_binary"] * pre["pre_time"]
+    pre["treated_X_disp_X_pre_time"] = pre["treated"] * pre["disp_binary"] * pre["pre_time"]
+
+    model = smf.ols(
+        formula=(
+            f"{outcome} ~ treated + disp_binary + pre_time + "
+            "treated:disp_binary + treated_X_pre_time + disp_X_pre_time + treated_X_disp_X_pre_time"
+        ),
+        data=pre,
+    ).fit(
+        cov_type="cluster",
+        cov_kwds={"groups": pre[cluster_col]},
+    )
+
+    spec = "pretrend_bias_equality"
+    term_map = {
+        "treated_X_pre_time": "non_blocked_treated_control_bias",
+        "treated_X_pre_time + treated_X_disp_X_pre_time = 0": "blocked_treated_control_bias",
+        "treated_X_disp_X_pre_time": "bias_equality_difference",
+    }
+    rows: list[dict] = []
+
+    if "treated_X_pre_time" in model.params.index:
+        rows.append(
+            {
+                "spec": spec,
+                "test": "pretrend_bias_linear",
+                "term": term_map["treated_X_pre_time"],
+                "coef": float(model.params["treated_X_pre_time"]),
+                "se": float(model.bse["treated_X_pre_time"]),
+                "pvalue": float(model.pvalues["treated_X_pre_time"]),
+                "n": int(model.nobs),
+            }
+        )
+
+    if "treated_X_disp_X_pre_time" in model.params.index:
+        rows.append(
+            {
+                "spec": spec,
+                "test": "pretrend_bias_linear",
+                "term": term_map["treated_X_disp_X_pre_time"],
+                "coef": float(model.params["treated_X_disp_X_pre_time"]),
+                "se": float(model.bse["treated_X_disp_X_pre_time"]),
+                "pvalue": float(model.pvalues["treated_X_disp_X_pre_time"]),
+                "n": int(model.nobs),
+            }
+        )
+
+    try:
+        wald = model.t_test("treated_X_pre_time + treated_X_disp_X_pre_time = 0")
+        rows.append(
+            {
+                "spec": spec,
+                "test": "pretrend_bias_linear",
+                "term": term_map["treated_X_pre_time + treated_X_disp_X_pre_time = 0"],
+                "coef": float(wald.effect.item()),
+                "se": float(wald.sd.item()),
+                "pvalue": float(wald.pvalue.item() if hasattr(wald.pvalue, "item") else wald.pvalue),
+                "n": int(model.nobs),
+            }
+        )
+    except Exception:
+        rows.append(
+            {
+                "spec": spec,
+                "test": "pretrend_bias_linear",
+                "term": term_map["treated_X_pre_time + treated_X_disp_X_pre_time = 0"],
+                "coef": float("nan"),
+                "se": float("nan"),
+                "pvalue": float("nan"),
+                "n": int(model.nobs),
+            }
+        )
+
+    return pd.DataFrame(rows)

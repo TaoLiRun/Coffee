@@ -7,15 +7,27 @@ from pathlib import Path
 
 import pandas as pd
 
-from data import build_estimation_sample, get_project_root, load_config
+from data import (
+    build_estimation_sample,
+    build_matched_episode_sample,
+    get_project_root,
+    load_config,
+)
 from report import (
+    save_blocked_gap_event_study_plot,
     save_event_study_plots,
     save_lower_group_displacement_event_study_plot,
     save_outputs,
     save_pre_novelty_histogram,
+    save_pre_period_purchase_frequency_group_diagnostics,
     save_variety_panel_plot,
 )
-from specs import fit_collapsed_specs, fit_event_study_specs
+from specs import (
+    fit_blocked_gap_event_study,
+    fit_collapsed_specs,
+    fit_event_study_specs,
+    fit_pretrend_bias_equality_tests,
+)
 
 
 def setup_logging(log_file: Path, log_level: str = "INFO") -> logging.Logger:
@@ -385,6 +397,56 @@ def main() -> None:
         pd.DataFrame(event_index_rows).to_csv(separate_dir / "event_index.csv", index=False)
         logger.info("Saved separate-event outputs to: %s", separate_dir)
     else:
+        matched_sample = pd.DataFrame()
+        matched_support = pd.DataFrame()
+        matched_results: dict[str, pd.DataFrame] | None = None
+        blocked_gap_terms = pd.DataFrame()
+        blocked_gap_fit = pd.DataFrame()
+        if not use_did:
+            matched_sample, matched_support = build_matched_episode_sample(
+                sample=sample,
+                outcome_col=args.outcome,
+            )
+            logger.info(
+                "Built matched sample: rows=%s episode_rows=%s",
+                f"{len(matched_sample):,}",
+                f"{matched_sample[['member_id','dept_id','closure_start']].drop_duplicates().shape[0]:,}",
+            )
+            if not matched_sample.empty:
+                matched_results = fit_spec_bundle(
+                    sample=matched_sample,
+                    outcome=args.outcome,
+                    cluster_col=args.cluster_col,
+                    include_length_heterogeneity=True,
+                    use_did=use_did,
+                    variety_pre_novelty_heterogeneity=False,
+                    event_study_ref_period=args.event_study_ref_period,
+                )
+                blocked_gap_terms, blocked_gap_fit = fit_blocked_gap_event_study(
+                    df=matched_sample,
+                    outcome=args.outcome,
+                    cluster_col=args.cluster_col,
+                    ref_period=args.event_study_ref_period,
+                )
+        pretrend_bias_full = fit_pretrend_bias_equality_tests(
+            df=sample,
+            outcome=args.outcome,
+            cluster_col=args.cluster_col,
+        ) if not use_did else pd.DataFrame()
+        pretrend_bias_full["sample_scope"] = "full"
+        pretrend_bias_matched = pd.DataFrame()
+        if not use_did and not matched_sample.empty:
+            pretrend_bias_matched = fit_pretrend_bias_equality_tests(
+                df=matched_sample,
+                outcome=args.outcome,
+                cluster_col=args.cluster_col,
+            )
+            pretrend_bias_matched["sample_scope"] = "matched"
+        pretrend_bias_tests = pd.concat(
+            [pretrend_bias_full, pretrend_bias_matched],
+            ignore_index=True,
+        ) if (not pretrend_bias_full.empty or not pretrend_bias_matched.empty) else pd.DataFrame()
+
         results = fit_spec_bundle(
             sample=sample,
             outcome=args.outcome,
@@ -418,12 +480,24 @@ def main() -> None:
             event_terms=results["event_terms"],
             event_fit=results["event_fit"],
             pretrend_tests=results["pretrend_tests"],
+            matched_binary_terms=matched_results["binary_terms"] if matched_results is not None else None,
+            matched_event_terms=matched_results["event_terms"] if matched_results is not None else None,
+            matched_pretrend_tests=matched_results["pretrend_tests"] if matched_results is not None else None,
+            matched_support=matched_support if not matched_support.empty else None,
+            blocked_gap_terms=blocked_gap_terms if not blocked_gap_terms.empty else None,
+            blocked_gap_fit=blocked_gap_fit if not blocked_gap_fit.empty else None,
+            pretrend_bias_tests=pretrend_bias_tests if not pretrend_bias_tests.empty else None,
             summary_notes=agg_notes,
         )
         save_event_study_plots(
             output_dir=out_dir,
             event_terms=results["event_terms"],
         )
+        if not blocked_gap_terms.empty:
+            save_blocked_gap_event_study_plot(
+                output_dir=out_dir,
+                event_terms=blocked_gap_terms,
+            )
         if args.variety_pre_novelty_heterogeneity:
             save_pre_novelty_histogram(
                 output_dir=out_dir,
@@ -433,6 +507,11 @@ def main() -> None:
             save_lower_group_displacement_event_study_plot(
                 output_dir=out_dir,
                 event_terms=results["event_terms"],
+                split_label=split_label,
+            )
+            save_pre_period_purchase_frequency_group_diagnostics(
+                output_dir=out_dir,
+                sample=sample,
                 split_label=split_label,
             )
         if args.outcome == "variety_seeking":

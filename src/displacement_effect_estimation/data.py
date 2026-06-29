@@ -24,11 +24,13 @@ _BASE_OUTPUT_COLS = [
     "treated",
     "displacement_prob",
     "disp_binary",
+    "days_since_last_purchase",
     "closure_event_id",
     "period_start",
     "calendar_month",
     "rel_t",
     "post",
+    "purchase_frequency",
 ]
 
 
@@ -606,6 +608,185 @@ def _build_closure_event_id(*, dept_id: object, closure_start: object) -> str:
     return f"dept_{dept_id}_closure_{closure_start}"
 
 
+def _episode_key_cols() -> list[str]:
+    return ["member_id", "dept_id", "closure_start"]
+
+
+def build_episode_feature_frame(
+    *,
+    sample: pd.DataFrame,
+    outcome_col: str,
+) -> pd.DataFrame:
+    """
+    Episode-level pre-period features used by matching and comparability checks.
+
+    Returns one row per member-closure episode with deterministic pre-period
+    summaries derived from the estimation sample.
+    """
+    key_cols = _episode_key_cols()
+    required = set(key_cols + ["treated", "disp_binary", "rel_t", "purchase_frequency", "days_since_last_purchase"])
+    missing = required - set(sample.columns)
+    if missing:
+        raise ValueError(
+            f"sample missing required columns for episode feature frame: {sorted(missing)}"
+        )
+
+    base_cols = key_cols + ["treated", "disp_binary", "days_since_last_purchase"]
+    episode_base = sample[base_cols].drop_duplicates(subset=key_cols).copy()
+
+    pre = sample.loc[sample["rel_t"] < 0].copy()
+    if pre.empty:
+        raise ValueError("No pre-period rows available for episode feature construction.")
+
+    pre = pre.sort_values(key_cols + ["rel_t"])
+    pre_freq = (
+        pre.groupby(key_cols, sort=False)["purchase_frequency"]
+        .agg(
+            pre_purchase_frequency_mean="mean",
+            pre_purchase_frequency_sd=lambda x: float(x.std(ddof=0)),
+            pre_purchase_frequency_active_share=lambda x: float((x > 0).mean()),
+        )
+        .reset_index()
+    )
+    pre_last = (
+        pre.groupby(key_cols, sort=False)
+        .tail(1)[key_cols + ["purchase_frequency"]]
+        .rename(columns={"purchase_frequency": "pre_purchase_frequency_last"})
+    )
+
+    feature_df = episode_base.merge(pre_freq, on=key_cols, how="left", validate="one_to_one")
+    feature_df = feature_df.merge(pre_last, on=key_cols, how="left", validate="one_to_one")
+
+    if outcome_col in pre.columns:
+        pre_outcome = pre.groupby(key_cols, sort=False)[outcome_col].agg(
+            pre_outcome_mean="mean",
+            pre_outcome_nonmissing_share=lambda x: float(x.notna().mean()),
+            pre_outcome_nonmissing_count=lambda x: int(x.notna().sum()),
+        )
+        feature_df = feature_df.merge(
+            pre_outcome.reset_index(),
+            on=key_cols,
+            how="left",
+            validate="one_to_one",
+        )
+    else:
+        feature_df["pre_outcome_mean"] = np.nan
+        feature_df["pre_outcome_nonmissing_share"] = np.nan
+        feature_df["pre_outcome_nonmissing_count"] = np.nan
+
+    numeric_fill_cols = [
+        "pre_purchase_frequency_mean",
+        "pre_purchase_frequency_sd",
+        "pre_purchase_frequency_active_share",
+        "pre_purchase_frequency_last",
+        "pre_outcome_mean",
+        "pre_outcome_nonmissing_share",
+        "pre_outcome_nonmissing_count",
+    ]
+    for col in numeric_fill_cols:
+        if col in feature_df.columns:
+            feature_df[col] = pd.to_numeric(feature_df[col], errors="coerce")
+    feature_df["pre_purchase_frequency_sd"] = feature_df["pre_purchase_frequency_sd"].fillna(0.0)
+    feature_df["pre_outcome_nonmissing_count"] = feature_df["pre_outcome_nonmissing_count"].fillna(0.0)
+    return feature_df
+
+
+def _coarsen_series(s: pd.Series, n_bins: int = 4) -> pd.Series:
+    """Return integer-ish bins for deterministic coarsened exact matching."""
+    ser = pd.to_numeric(s, errors="coerce")
+    if ser.notna().sum() <= 1 or float(ser.nunique(dropna=True)) <= 1:
+        return pd.Series(np.where(ser.notna(), "all", "missing"), index=s.index, dtype="object")
+    try:
+        binned = pd.qcut(ser.rank(method="first"), q=min(n_bins, int(ser.notna().sum())), duplicates="drop")
+        return binned.astype(str).fillna("missing")
+    except ValueError:
+        return pd.Series(np.where(ser.notna(), "all", "missing"), index=s.index, dtype="object")
+
+
+def build_matched_episode_sample(
+    *,
+    sample: pd.DataFrame,
+    outcome_col: str,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Build a deterministic common-support subsample that balances blocked and
+    non-blocked episodes within treatment status using coarsened exact cells.
+    """
+    key_cols = _episode_key_cols()
+    feature_df = build_episode_feature_frame(sample=sample, outcome_col=outcome_col)
+    work = feature_df.copy()
+
+    match_features = [
+        "pre_purchase_frequency_mean",
+        "pre_purchase_frequency_last",
+        "days_since_last_purchase",
+    ]
+    if outcome_col != "n_purchases":
+        match_features.append("pre_outcome_nonmissing_share")
+
+    for col in match_features:
+        work[f"{col}_bin"] = _coarsen_series(work[col])
+
+    work["match_cell"] = work["treated"].astype(str)
+    for col in match_features:
+        work["match_cell"] = work["match_cell"] + "|" + work[f"{col}_bin"].astype(str)
+
+    keep_parts: list[pd.DataFrame] = []
+    support_rows: list[dict] = []
+    sort_cols = key_cols
+    for treated_value, treated_frame in work.groupby("treated", sort=True):
+        for match_cell, cell_df in treated_frame.groupby("match_cell", sort=False):
+            blocked = cell_df[cell_df["disp_binary"] == 1].sort_values(sort_cols)
+            non_blocked = cell_df[cell_df["disp_binary"] == 0].sort_values(sort_cols)
+            n_keep = min(len(blocked), len(non_blocked))
+            support_rows.append(
+                {
+                    "treated": int(treated_value),
+                    "match_cell": match_cell,
+                    "blocked_available": int(len(blocked)),
+                    "non_blocked_available": int(len(non_blocked)),
+                    "retained_per_group": int(n_keep),
+                    "common_support": int(n_keep > 0),
+                }
+            )
+            if n_keep <= 0:
+                continue
+            keep_parts.append(blocked.head(n_keep)[key_cols + ["treated", "disp_binary"]])
+            keep_parts.append(non_blocked.head(n_keep)[key_cols + ["treated", "disp_binary"]])
+
+    if keep_parts:
+        keep_df = pd.concat(keep_parts, ignore_index=True).drop_duplicates(subset=key_cols)
+        matched_sample = sample.merge(keep_df[key_cols], on=key_cols, how="inner")
+    else:
+        matched_sample = sample.iloc[0:0].copy()
+
+    support_df = pd.DataFrame(support_rows)
+    overall_row = {
+        "treated": "all",
+        "match_cell": "__overall__",
+        "blocked_available": int(work["disp_binary"].sum()),
+        "non_blocked_available": int((work["disp_binary"] == 0).sum()),
+        "retained_per_group": int(keep_df["disp_binary"].sum()) if keep_parts else 0,
+        "common_support": int(not matched_sample.empty),
+        "episodes_before": int(feature_df.shape[0]),
+        "episodes_after": int(matched_sample[key_cols].drop_duplicates().shape[0]),
+        "blocked_retained": int(
+            matched_sample.loc[matched_sample["disp_binary"] == 1, key_cols].drop_duplicates().shape[0]
+        ) if not matched_sample.empty else 0,
+        "non_blocked_retained": int(
+            matched_sample.loc[matched_sample["disp_binary"] == 0, key_cols].drop_duplicates().shape[0]
+        ) if not matched_sample.empty else 0,
+        "treated_retained": int(
+            matched_sample.loc[matched_sample["treated"] == 1, key_cols].drop_duplicates().shape[0]
+        ) if not matched_sample.empty else 0,
+        "control_retained": int(
+            matched_sample.loc[matched_sample["treated"] == 0, key_cols].drop_duplicates().shape[0]
+        ) if not matched_sample.empty else 0,
+    }
+    support_df = pd.concat([support_df, pd.DataFrame([overall_row])], ignore_index=True, sort=False)
+    return matched_sample, support_df
+
+
 def build_variety_period0_rows(
     *,
     sample: pd.DataFrame,
@@ -846,7 +1027,7 @@ def build_estimation_sample(
         commodity_df: pd.DataFrame | None = None
         first_purchase_df: pd.DataFrame | None = None
     else:  # variety_seeking
-        orders = None
+        orders = load_orders_for_behavior_members(member_ids=scoped_member_ids, cfg=cfg)
         commodity_df = load_commodity_orders_for_members(member_ids=scoped_member_ids, cfg=cfg)
         first_purchase_df = _compute_first_purchase_dates(commodity_df)
         product_first_seen_df = (
@@ -983,11 +1164,20 @@ def build_estimation_sample(
                     counts = pd.DataFrame(columns=["member_id", "_purchase_days"])
                 block = member_frame.merge(counts, on="member_id", how="left")
                 block["_purchase_days"] = block["_purchase_days"].fillna(0)
+                block["purchase_frequency"] = block["_purchase_days"] / float(closure_bin_days)
                 if outcome == "n_purchases":
-                    block["n_purchases"] = block["_purchase_days"] / float(closure_bin_days)
+                    block["n_purchases"] = block["purchase_frequency"]
                 else:
                     block["purchase_incidence_binary"] = (block["_purchase_days"] > 0).astype(int)
             else:  # variety_seeking
+                win_orders = _slice_by_date(sorted_df=orders, start_date=start_dt, end_date=end_dt) if orders is not None else pd.DataFrame()
+                if not win_orders.empty:
+                    win_orders = win_orders[win_orders["member_id"].isin(members)]
+                    counts = (
+                        win_orders.groupby("member_id")["date"].nunique().rename("_purchase_days").reset_index()
+                    )
+                else:
+                    counts = pd.DataFrame(columns=["member_id", "_purchase_days"])
                 vs_result = _compute_variety_seeking_for_window(
                     commodity_df=commodity_df,
                     first_purchase_df=first_purchase_df,
@@ -1000,6 +1190,9 @@ def build_estimation_sample(
                     prev_window_end=prev_end,
                 )
                 block = member_frame.merge(vs_result, on="member_id", how="left")
+                block = block.merge(counts, on="member_id", how="left")
+                block["_purchase_days"] = block["_purchase_days"].fillna(0)
+                block["purchase_frequency"] = block["_purchase_days"] / float(closure_bin_days)
 
             block["rel_t"] = int(rel_t)
             block["post"] = (block["rel_t"] > 0).astype(int)

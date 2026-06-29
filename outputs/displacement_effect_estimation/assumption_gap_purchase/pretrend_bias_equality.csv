@@ -1,0 +1,7 @@
+spec,test,term,coef,se,pvalue,n,sample_scope
+pretrend_bias_equality,pretrend_bias_linear,non_blocked_treated_control_bias,0.0008355304504765021,0.0003470476025430939,0.01606047048520032,160592,full
+pretrend_bias_equality,pretrend_bias_linear,bias_equality_difference,-0.0012527597183485647,0.0012523156248777736,0.3171389240168726,160592,full
+pretrend_bias_equality,pretrend_bias_linear,blocked_treated_control_bias,-0.0004172292678720625,0.0012032673792146556,0.7287814510848982,160592,full
+pretrend_bias_equality,pretrend_bias_linear,non_blocked_treated_control_bias,0.005479761586763407,0.001199754130191875,4.938021537586856e-06,50536,matched
+pretrend_bias_equality,pretrend_bias_linear,bias_equality_difference,-0.0021888006916427182,0.0017908717598409916,0.22163258934089602,50536,matched
+pretrend_bias_equality,pretrend_bias_linear,blocked_treated_control_bias,0.0032909608951206884,0.00132959079693095,0.013317343041034735,50536,matched

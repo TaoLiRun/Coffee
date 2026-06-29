@@ -1,0 +1,6 @@
+spec,formula,n,r2,r2_within
+event_att,"variety_seeking ~ i(rel_t, treated, ref=-1) | event_fe_id + rel_t + calendar_month",44508,0.5690272999414514,0.00034993852943121517
+event_binary_B,"variety_seeking ~ i(rel_t, treated,       ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,   ref=-1) | event_fe_id + rel_t + calendar_month",44508,0.5737684593746795,0.011347155564812805
+event_binary_B_pre_novelty_split,"variety_seeking ~ i(rel_t, treated, ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary, ref=-1) + i(rel_t, treated_X_novelty_pre_high, ref=-1) + i(rel_t, disp_X_novelty_pre_high, ref=-1) + i(rel_t, treated_X_disp_X_novelty_pre_high, ref=-1) | event_fe_id + rel_t + calendar_month",44508,0.6082860292678272,0.09141137044620085
+event_binary_D,"variety_seeking ~ i(rel_t, treated,        ref=-1) + i(rel_t, treated_X_disp, ref=-1) + i(rel_t, disp_binary,    ref=-1) + i(rel_t, treated_X_len,  ref=-1) + i(rel_t, disp_X_len,     ref=-1) + i(rel_t, tXdXlen,        ref=-1) | event_fe_id + rel_t + calendar_month",44508,0.5741760241208194,0.012292510394658174
+event_score_C,"variety_seeking ~ i(rel_t, treated,                   ref=-1) + i(rel_t, treated_X_score,           ref=-1) + i(rel_t, displacement_prob_centered, ref=-1) | event_fe_id + rel_t + calendar_month",44508,0.574428395704516,0.012877891485203907

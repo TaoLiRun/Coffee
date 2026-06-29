@@ -1,0 +1,2 @@
+spec,formula,n,r2,r2_within
+event_blocked_gap,"n_purchases ~ i(rel_t, blocked_treated_gap, ref=-1) + i(rel_t, blocked_control_gap, ref=-1) | event_fe_id + rel_t + calendar_month",101072,0.45084013833028747,0.0028884760856430214
