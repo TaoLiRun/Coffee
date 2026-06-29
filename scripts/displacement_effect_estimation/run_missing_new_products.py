@@ -25,7 +25,7 @@ from run import fit_spec_bundle
 
 
 MAIN_REGISTRY_REL = "outputs/customer-store/closure_pair_registry.csv"
-OUTPUT_ROOT_REL = "outputs/robustness/missing_new_products"
+OUTPUT_ROOT_REL = "outputs/05_robustness/missing_new_products"
 T_HORIZON = 4
 LENGTH_BINS: list[tuple[int, int]] = [(10, 14), (15, 19), (20, 24), (25, 29)]
 MECHANISM_ALPHA = 0.05

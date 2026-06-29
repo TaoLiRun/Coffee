@@ -118,7 +118,9 @@ The main derived objects are:
 - closure-pair registry: `outputs/customer-store/closure_pair_registry.csv`
 - full pre-estimation classifier panel with scores: `outputs/displacement_classification/panel_with_scores_*.parquet`
 - ex-ante closure-window score file: `outputs/displacement_classification/displacement_scores_t0_ex_ante.csv`
-- final estimation samples and regression outputs under `outputs/displacement_effect_estimation/...`
+- paper-facing 18-closure estimation samples and regression outputs under `outputs/03_main_18_closures/...`
+- identification diagnostics under `outputs/04_diagnostics_18_closures/...`
+- robustness and mechanism checks under `outputs/05_robustness/...`
 
 ---
 
@@ -868,7 +870,7 @@ The earlier selector only matched one of those formats, so the pooled purchase b
 
 and recorded in:
 
-- [run_manifest.json](/home/litao/Coffee/model-free/outputs/displacement_effect_estimation/metadata/run_manifest.json:1)
+- [run_manifest.json](/home/litao/Coffee/model-free/outputs/03_main_18_closures/metadata/run_manifest.json:1)
 
 The refreshed diagnostic conclusions are:
 
@@ -994,13 +996,13 @@ This mirrors the collapsed heterogeneity interpretation exactly:
 
 Two pooled runs are now maintained for this extension:
 
-- median split: `outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity`
-- quartile-tail split: `outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails`
+- median split: `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median`
+- quartile-tail split: `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails`
 
 The lower-group dynamic displacement plots saved from that exact event-study heterogeneity specification are:
 
-- [event_study_displacement_lower_group_median.png](/home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity/event_study_displacement_lower_group_median.png:1)
-- [event_study_displacement_lower_group_quartile_tails.png](/home/litao/Coffee/model-free/outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails/event_study_displacement_lower_group_quartile_tails.png:1)
+- [event_study_displacement_lower_group_median.png](/home/litao/Coffee/model-free/outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median/event_study_displacement_lower_group_median.png:1)
+- [event_study_displacement_lower_group_quartile_tails.png](/home/litao/Coffee/model-free/outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails/event_study_displacement_lower_group_quartile_tails.png:1)
 
 The resulting dynamic estimates line up with the collapsed heterogeneity table:
 
@@ -1348,13 +1350,13 @@ This writes outputs such as:
 The following new output bundles were generated to validate the implementation:
 
 - purchase-frequency assumption-test bundle:
-  - `outputs/displacement_effect_estimation/assumption_gap_purchase`
+  - `outputs/04_diagnostics_18_closures/purchase_common_support`
 - novelty-seeking assumption-test bundle:
-  - `outputs/displacement_effect_estimation/assumption_gap_variety`
+  - `outputs/04_diagnostics_18_closures/novelty_common_support`
 - novelty heterogeneity median-split bundle:
-  - `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_median`
+  - `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_median`
 - novelty heterogeneity quartile-tail bundle:
-  - `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_quartile_tails`
+  - `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_quartile_tails`
 
 ### 17.6 First-pass results
 
@@ -1398,31 +1400,85 @@ The main empirical story now rests on the **18-closure sample** in `outputs/cust
 - Purchase frequency: the full-sample DDD triple interaction is small and positive (`+0.0058`, `p = 0.021`), but the matched/common-support diagnostics attenuate it and show remaining dynamic pretrend fragility. This result is useful background, not the cleanest paper result.
 - Member-first novelty seeking: the full-sample DDD triple interaction is negative (`-0.0415`, `p = 0.004`) and the standard event-study pretrend diagnostics are much cleaner than purchase frequency. This is the strongest result for the paper's DDD novelty-seeking emphasis.
 - Market-new novelty seeking: the negative DDD result also appears when novelty is defined as buying products newly introduced to the market/catalog window (`-0.0417`, `p < 0.001`), so the product-choice result is not only a member-history artifact.
-- Matched/common-support diagnostics: novelty pretrends remain more supportive than purchase pretrends, but matched DDD estimates are smaller and imprecise. This should be reported as an important limitation of the blocked-vs-non-blocked comparison.
+- Matched/common-support diagnostics: novelty pretrends remain more supportive than purchase pretrends, but matched DDD estimates are smaller and imprecise. These matched results are **not added to the paper yet**; they are kept as technical identification diagnostics and should be discussed only if the paper later adds an identification-limitation subsection or appendix.
 - Pre-novelty heterogeneity: the estimated heterogeneity is large, but the high pre-novelty group has lower pre-period purchase frequency. Treat this as descriptive heterogeneity, not a clean causal subgroup design.
 
-The older **22-closure full-registry results** are preserved under `outputs/robustness/full_registry`. They are useful for showing that the broad sign pattern was not created by moving from 22 to 18 closures, but the paper should use the 18-closure registry as the main sample because it removes the four early-February events that were later judged weaker for the headline design.
+The older **22-closure full-registry results** are preserved under `outputs/05_robustness/full_registry_22`. They are useful for showing that the broad sign pattern was not created by moving from 22 to 18 closures, but the paper should use the 18-closure registry as the main sample because it removes the four early-February events that were later judged weaker for the headline design.
 
-### 18.2 Result ledger
+### 18.2 Output organization
+
+The output folders are now organized by role rather than by run history:
+
+| Folder | Role | Main use |
+|---|---|---|
+| `outputs/store/` | Store closure detection | Closure spells, university flags, and store-level support files. |
+| `outputs/customer-store/` | Treatment/control registry | Main 18-closure registry and older full 22-closure registry. |
+| `outputs/displacement_classification/` | Blocked-buyer classifier | Ex-ante scores, duration-specific models, accuracy audits, and feature importance. |
+| `outputs/03_main_18_closures/` | Paper-facing main estimates | Purchase-frequency, purchase-incidence, member-first novelty, and market-new novelty DDD/event-study bundles. |
+| `outputs/04_diagnostics_18_closures/` | Identification diagnostics | Common-support/matched diagnostics, pre-novelty heterogeneity, blocked-gap event studies, and legacy separate-effect diagnostics. |
+| `outputs/05_robustness/` | Robustness and mechanisms | Full 22-closure registry, horizon robustness, cross-store exclusion, missing-new-product checks, push-targeting checks, and legacy outputs. |
+
+Each of these folders now has a local `README.md` explaining the folder contents and current paper role.
+
+### 18.3 Main 18-closure sample and classifier diagnostics
+
+The main purchase-frequency bundle is `outputs/03_main_18_closures/purchase_frequency_ddd_h4/`. Its `estimation_sample.csv` contains:
+
+- `321,184` member-event-period rows;
+- `40,148` member-closure episodes, one unique member per episode;
+- `18` closure events;
+- `7,390` treated member-events and `32,758` control member-events;
+- `10,865` predicted blocked episodes and `29,283` non-blocked episodes;
+- among treated episodes, `2,041` are predicted blocked (`27.6%`);
+- among control episodes, `8,824` are blocked in the matched open-store window (`26.9%`);
+- closure durations range from `10` to `29` days, with mean duration `16.9` days.
+
+Average purchase frequency is `0.0493` purchase days per calendar day in pre periods and `0.0408` in post periods. The member-first novelty bundle uses the same `321,184` panel rows, but novelty is non-missing only when the member purchases in the relevant window: `105,854` non-missing novelty rows overall, with pre mean `0.4978` and post mean `0.4639`. The market-new novelty measure has the same non-missing rows, with pre mean `0.1456` and post mean `0.2039`.
+
+The blocked-buyer classifier artifacts are saved under `outputs/displacement_classification/`. Across the 13 duration-specific prediction audits, weighted by evaluation-sample size:
+
+| Evaluation sample | N | Accuracy | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|---:|
+| Control, during closure (`t0`) | 36,766 | 0.752 | 0.524 | 0.544 | 0.525 |
+| Control, pre period (`t-1`) | 36,766 | 0.766 | 0.638 | 0.559 | 0.592 |
+| Treatment, pre period (`t-1`) | 8,092 | 0.776 | 0.636 | 0.545 | 0.579 |
+| Overall weighted average | 81,624 | 0.761 | 0.586 | 0.551 | 0.561 |
+
+The most important classifier features, aggregating `variable_importance_*.csv` across duration-specific models, are:
+
+| Feature | Mean importance | Median rank | Mean rank |
+|---|---:|---:|---:|
+| `purchases_per_week_last_4w` | 28.49 | 1 | 1.23 |
+| `purchases_per_week_last_2w` | 11.54 | 2 | 7.00 |
+| `total_purchase_days_pre` | 9.03 | 3 | 3.54 |
+| `days_since_last_purchase` | 9.54 | 4 | 4.08 |
+| `preferred_store_ratio` | 3.38 | 7 | 7.31 |
+| `purchases_per_week_all_pre` | 3.26 | 7 | 13.00 |
+| `total_orders_pre` | 2.93 | 8 | 15.69 |
+| `purchases_per_week_last_1w` | 4.14 | 8 | 17.08 |
+
+Interpretation: the classifier mainly uses recent purchase intensity, total pre-period purchase days, recency since the last purchase, and dependence on the preferred store. This matches the intended construct: blocked status is an ex-ante proxy for whether a member likely had an active purchase intention during the closure window.
+
+### 18.4 Result ledger
 
 | Analysis | Implementing files / scripts | Output location | Main result | Paper use |
 |---|---|---|---|---|
-| Main purchase-frequency DDD | `src/displacement_effect_estimation/run.py`, `data.py`, `specs.py`, `report.py`; wrapper `scripts/displacement_effect_estimation/run_with_logging.sh` | `outputs/displacement_effect_estimation/` | 18 closures, 321,184 rows, 40,148 members. Binary DDD triple `+0.0058` (`SE = 0.0025`, `p = 0.021`). Score triple `+0.0076` (`p = 0.040`). Displacement pretrend rejects (`p = 0.0025`). | Background and contrast. It says purchase quantity does not show habit-breaking in the expected negative direction, but identification is less clean. |
-| Main member-first novelty DDD | Same estimator, `--outcome variety_seeking`, default distinct mode | `outputs/displacement_effect_estimation/variety_seeking_unbalanced/` | 99,644 outcome rows. Binary DDD triple `-0.0415` (`SE = 0.0145`, `p = 0.004`). Score triple `-0.0452` (`p = 0.040`). Displacement pretrend does not reject (`p = 0.797`). | Core paper result. This is the cleanest evidence that blocked purchase intention changes what customers buy. |
-| Market-new novelty robustness | Same estimator, `--outcome variety_seeking --variety-seeking-mode distinct-only-new` | `outputs/displacement_effect_estimation/variety_seeking_distinct_only_new/` | Binary DDD triple `-0.0417` (`SE = 0.0115`, `p < 0.001`). Score triple `-0.0486` (`p = 0.005`). | Strong robustness for product-choice novelty. Useful in paper or appendix. |
-| Purchase incidence | Same estimator, `--outcome purchase_incidence_binary` | `outputs/displacement_effect_estimation/purchase_incidence_binary/` | Binary purchase-extensive-margin output exists as a supplementary quantity check. | Technical backup unless the paper needs an extensive-margin purchase result. |
-| Assumption-gap purchase diagnostics | New matcher and tests in `data.py` and `specs.py`; output writer in `report.py` | `outputs/displacement_effect_estimation/assumption_gap_purchase/` | Full triple `+0.0058` (`p = 0.021`), matched triple `-0.0041` (`p = 0.237`). Matched support keeps 12,634 episodes, split 6,317 blocked and 6,317 non-blocked. Linear bias-equality does not reject, but matched displacement pretrend rejects (`p = 0.024`). | Important caveat. Do not oversell purchase-frequency rebound as a clean causal effect. |
-| Assumption-gap novelty diagnostics | Same new diagnostics as above | `outputs/displacement_effect_estimation/assumption_gap_variety/` | Full triple `-0.0415` (`p = 0.004`), matched triple `-0.0211` (`p = 0.331`). Matched support keeps 10,956 episodes, split 5,478 and 5,478. Linear bias-equality does not reject; matched displacement pretrend does not reject (`p = 0.662`). | Paper-supporting diagnostic, but report attenuation under matching. |
-| Pre-novelty heterogeneity, median split | Same estimator with `--variety-pre-novelty-heterogeneity --customer-median-split true` | `outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity/` and `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_median/` | Low-group triple about `-0.263`; high-group increment about `+0.492`, implying a high-group triple around `+0.230`. The assumption-gap comparability output shows baseline mean pre-period purchase frequency `0.0966` versus high group `0.0537`. | Descriptive heterogeneity. Use only with a clear caveat about baseline purchase-frequency imbalance. |
-| Pre-novelty heterogeneity, quartile tails | Same estimator with `--customer-median-split false` | `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_quartile_tails/` | Low-group triple about `-0.410`; high-group increment about `+0.738`, implying a high-group triple around `+0.329`. Baseline mean pre-period purchase frequency `0.0948`; high group `0.0290`. | Appendix-style heterogeneity only. Strong imbalance makes causal interpretation weak. |
-| Cross-store treated exclusion | `scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py` | `outputs/robustness/excluding_cross_store_treated/` | Excludes 519 treated member-events, a 7.02% treated exclusion rate. Purchase triple remains positive (`+0.0052`, `p = 0.043`). | Robustness showing the purchase result is not only driven by treated customers who bought at other Luckin stores during closure. |
-| Missing new products / menu exposure | `scripts/displacement_effect_estimation/run_missing_new_products.py`, `menu_features.py`, `control_menu_features.py` | `outputs/robustness/missing_new_products/` | Control stores introduced on average 9.34 products during closures. Closure-level intro correlations with effects are weak: purchase `0.088`, novelty `0.050`; within-bin novelty correlation `-0.049`. Formal novelty 4-way test is near zero (`p = 0.962`). | Mechanism/caveat. Missed menu exposure alone does not explain the novelty DDD pattern. |
-| Push targeting after reopening | `scripts/push_targeting_after_reopening/run_push_targeting_analysis.py` | `outputs/robustness/push_targeting_after_reopening/` | 40,148 member-events, 446,602 filtered push records. Predicted blocked buyers receive fewer pushes in both treated and control groups. Treatment-control gap differences are insignificant for `n_push` (`p = 0.464`) and coupon counts (`p = 0.735`), but significant for some intensity/composition measures. | Diagnostic caveat. Do not claim push targeting is fully ruled out; say the observed targeting differences do not line up cleanly with the main novelty DDD. |
-| Full 22-closure registry | Same estimator with archived/full registry configuration | `outputs/robustness/full_registry/` | Purchase triple `+0.0049` (`p = 0.043`). Member-first novelty triple `-0.0386` (`p = 0.0048`). | Robustness/back history. Shows the broad results predate the 18-closure refinement. |
-| Horizon robustness | Same estimator with `--t-horizon 1` and `--t-horizon 2` | `outputs/displacement_effect_estimation_t-horizon_1/`, `outputs/displacement_effect_estimation_t-horizon_2/` | 22-closure purchase triple is `+0.0059` at horizon 1 (`p = 0.056`) and `+0.0046` at horizon 2 (`p = 0.086`). | Technical backup. Useful for understanding horizon sensitivity. |
-| Separate closure effects | Same estimator with `--separate-effect` | `outputs/robustness/full_registry/separate_effect/` and related folders | Per-closure estimates are heterogeneous; old reports noted only a small subset of closures have individually significant purchase effects. | Appendix/back-up only. The paper should avoid over-reading individual closure estimates. |
+| Main purchase-frequency DDD | `src/displacement_effect_estimation/run.py`, `data.py`, `specs.py`, `report.py`; wrappers `scripts/displacement_effect_estimation/run_with_logging.sh` and `run_main_results.sh` | `outputs/03_main_18_closures/purchase_frequency_ddd_h4/` | 18 closures, 321,184 rows, 40,148 member-events. Binary DDD triple `+0.0058` (`SE = 0.0025`, `p = 0.021`). Score triple `+0.0076` (`p = 0.040`). Displacement pretrend rejects (`p = 0.0025`). | Background and contrast. It says purchase quantity does not show habit-breaking in the expected negative direction, but identification is less clean. |
+| Main member-first novelty DDD | Same estimator, `--outcome variety_seeking`, default distinct mode | `outputs/03_main_18_closures/novelty_member_first_ddd_h4/` | 99,644 collapsed outcome observations. Binary DDD triple `-0.0415` (`SE = 0.0145`, `p = 0.004`). Score triple `-0.0452` (`p = 0.040`). Displacement pretrend does not reject (`p = 0.797`). | Core paper result. This is the cleanest evidence that blocked purchase intention changes what customers buy. |
+| Market-new novelty robustness | Same estimator, `--outcome variety_seeking --variety-seeking-mode distinct-only-new` | `outputs/03_main_18_closures/novelty_market_new_ddd_h4/` | Binary DDD triple `-0.0417` (`SE = 0.0115`, `p < 0.001`). Score triple `-0.0486` (`p = 0.005`). Displacement pretrend does not reject (`p = 0.515`). | Strong robustness for product-choice novelty. Add to paper as a robustness result and figure. |
+| Purchase incidence | Same estimator, `--outcome purchase_incidence_binary` | `outputs/03_main_18_closures/purchase_incidence_ddd_h4/` | Binary purchase-extensive-margin output exists as a supplementary quantity check. | Technical backup unless the paper needs an extensive-margin purchase result. |
+| Assumption-gap purchase diagnostics | New matcher and tests in `data.py` and `specs.py`; output writer in `report.py` | `outputs/04_diagnostics_18_closures/purchase_common_support/` | Full triple `+0.0058` (`p = 0.021`), matched triple `-0.0041` (`p = 0.237`). Matched support keeps 12,634 episodes, split 6,317 blocked and 6,317 non-blocked. Linear bias-equality does not reject, but matched displacement pretrend rejects (`p = 0.024`). | Important caveat. Not added to the current paper as a main result. |
+| Assumption-gap novelty diagnostics | Same diagnostics as above | `outputs/04_diagnostics_18_closures/novelty_common_support/` | Full triple `-0.0415` (`p = 0.004`), matched triple `-0.0211` (`p = 0.331`). Matched support keeps 10,956 episodes, split 5,478 and 5,478. Linear bias-equality does not reject; matched displacement pretrend does not reject (`p = 0.662`). | Paper-supporting diagnostic, but not added to the current paper yet because the matched estimate is smaller and imprecise. |
+| Pre-novelty heterogeneity, median split | Same estimator with `--variety-pre-novelty-heterogeneity --customer-median-split true` | `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median/` and `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_median/` | Low-group triple about `-0.263`; high-group increment about `+0.492`, implying a high-group triple around `+0.230`. Baseline mean pre-period purchase frequency is `0.0966` versus high group `0.0537`. | Descriptive heterogeneity. Use only with a clear caveat about baseline purchase-frequency imbalance. |
+| Pre-novelty heterogeneity, quartile tails | Same estimator with `--customer-median-split false` | `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails/` and `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_quartile_tails/` | Low-group triple about `-0.410`; high-group increment about `+0.738`, implying a high-group triple around `+0.329`. Baseline mean pre-period purchase frequency is `0.0948`; high group `0.0290`. | Appendix-style heterogeneity only. Strong imbalance makes causal interpretation weak. |
+| Cross-store treated exclusion | `scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py` | `outputs/05_robustness/excluding_cross_store_treated/` | Excludes 519 treated member-events, a 7.02% treated exclusion rate. Purchase triple remains positive (`+0.0052`, `p = 0.043`); novelty remains negative (`-0.0323`, `p = 0.036`). | Mechanism/robustness check showing results are not only driven by treated customers who bought at other Luckin stores during closure. |
+| Missing new products / menu exposure | `scripts/displacement_effect_estimation/run_missing_new_products.py`, `menu_features.py`, `control_menu_features.py` | `outputs/05_robustness/missing_new_products/` | Control stores introduced on average 9.34 products during closures. Closure-level intro correlations with effects are weak: purchase `0.088`, novelty `0.050`; within-bin novelty correlation `-0.049`. Formal novelty 4-way test is near zero (`p = 0.962`). | Mechanism/caveat. Missed menu exposure alone does not explain the novelty DDD pattern, but this is not proof that exposure is irrelevant. |
+| Push targeting after reopening | `scripts/push_targeting_after_reopening/run_push_targeting_analysis.py` | `outputs/05_robustness/push_targeting_after_reopening/` | 40,148 member-events, 446,602 filtered push records. Predicted blocked buyers receive fewer pushes in both treated and control groups. Treatment-control gap differences are insignificant for `n_push` (`p = 0.464`) and coupon counts (`p = 0.735`), but significant for some intensity/composition measures. | Diagnostic caveat. Do not claim push targeting is fully ruled out; say observed targeting differences do not line up cleanly with the main novelty DDD. |
+| Full 22-closure registry | Same estimator with archived/full registry configuration | `outputs/05_robustness/full_registry_22/` | Purchase triple `+0.0049` (`p = 0.043`). Member-first novelty triple `-0.0386` (`p = 0.0048`). | Robustness/back history. Shows the broad results predate the 18-closure refinement. |
+| Horizon robustness | Same estimator with `--t-horizon 1` and `--t-horizon 2` | `outputs/05_robustness/horizon_h1_full_registry_22/`, `outputs/05_robustness/horizon_h2_full_registry_22/` | 22-closure purchase triple is `+0.0059` at horizon 1 (`p = 0.056`) and `+0.0046` at horizon 2 (`p = 0.086`). | Technical backup. Useful for understanding horizon sensitivity. |
+| Separate closure effects | Same estimator with `--separate-effect` | `outputs/05_robustness/full_registry_22/separate_effect/` and related folders; 18-closure legacy diagnostic in `outputs/04_diagnostics_18_closures/separate_effect_duration10_recency10/` | Per-closure estimates are heterogeneous; old reports noted only a small subset of closures have individually significant purchase effects. | Appendix/back-up only. The paper should avoid over-reading individual closure estimates. |
 
-### 18.3 Interim descriptive results to remember
+### 18.5 Interim descriptive results to remember
 
 Store closure detection starts from a broad zero-demand proxy. The raw closure table contains 101 spells. University or college locations account for 60 closures, with much longer average duration (`65.7` days) than other locations (`22.8` days). This is why the later analysis avoids treating long university spells as the main source of quasi-experimental disruption.
 
@@ -1430,15 +1486,15 @@ The customer-store registry then narrows the design. The main registry contains 
 
 The blocked-buyer classifier produces `outputs/displacement_classification/displacement_scores_t0_ex_ante.csv` with 44,858 member-closure rows in the full scored registry. Classification artifacts include train/evaluation audits, feature importance tables, and label-balance checks under `outputs/displacement_classification/`. The most important practical point is that blocked status is predicted ex ante for treated episodes and observed in the matched closure window for control episodes.
 
-### 18.4 What should go into the paper
+### 18.6 What should go into the paper
 
-The paper should foreground the DDD effect on novelty seeking. The most defensible sequence is:
+The paper should foreground the DDD effect on novelty seeking. The current paper-facing sequence is:
 
 1. Explain the blocked-buyer DDD design and the distinction between general treatment effects and blocked-purchase-intention effects.
 2. Show the main purchase-frequency result as a contrast: quantity does not fall after closure for blocked buyers, so the evidence is not a simple habit-breaking decline in purchasing.
 3. Present member-first novelty seeking as the central result: blocked treated customers become less likely to try new products relative to comparable blocked controls.
-4. Add market-new novelty as a robustness check.
-5. Discuss the matched/common-support diagnostics honestly: novelty has cleaner pretrend diagnostics than purchase frequency, but matched estimates are smaller and imprecise.
+4. Add market-new novelty as a robustness check, including the event-study figure.
+5. Keep matched/common-support results in the technical report for now. They are not current paper main results because the matched estimates are smaller and imprecise.
 6. Use menu-exposure and push-targeting checks as mechanism/caveat evidence, not as definitive mechanism tests.
 
 The technical report, rather than the paper, should retain the full implementation record: all run modes, file locations, interim sample summaries, full-registry history, horizon checks, per-closure effects, generated logs, and diagnostic plots.

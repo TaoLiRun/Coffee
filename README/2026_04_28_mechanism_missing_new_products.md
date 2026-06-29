@@ -20,9 +20,9 @@ so the menu-feature code can use the main-sample closure registry through the sa
 
 Outputs are saved under:
 
-- [outputs/robustness/missing_new_products/menu_features](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/menu_features)
-- [outputs/robustness/missing_new_products/separate_effects](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/separate_effects)
-- [outputs/robustness/missing_new_products/effect_vs_introductions](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/effect_vs_introductions)
+- [outputs/05_robustness/missing_new_products/menu_features](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/menu_features)
+- [outputs/05_robustness/missing_new_products/separate_effects](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/separate_effects)
+- [outputs/05_robustness/missing_new_products/effect_vs_introductions](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/effect_vs_introductions)
 
 For the closure-level comparison, I use the key DDD estimate from the binary collapsed specification:
 
@@ -45,8 +45,8 @@ Using [src/displacement_effect_estimation/control_menu_features.py](/home/litao/
 
 The detailed outputs are:
 
-- [outputs/robustness/missing_new_products/menu_features/control_menu_introductions_during_closure.csv](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/menu_features/control_menu_introductions_during_closure.csv)
-- [outputs/robustness/missing_new_products/menu_features/control_menu_introductions_during_closure_detail.csv](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/menu_features/control_menu_introductions_during_closure_detail.csv)
+- [outputs/05_robustness/missing_new_products/menu_features/control_menu_introductions_during_closure.csv](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/menu_features/control_menu_introductions_during_closure.csv)
+- [outputs/05_robustness/missing_new_products/menu_features/control_menu_introductions_during_closure_detail.csv](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/menu_features/control_menu_introductions_during_closure_detail.csv)
 
 ## 2. Ran store-level DDD separately for both outcomes
 
@@ -54,25 +54,25 @@ I ran separate-effect DDD for all **18** selected closures for both outcomes.
 
 Store-level outputs are in:
 
-- [outputs/robustness/missing_new_products/separate_effects/n_purchases](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/separate_effects/n_purchases)
-- [outputs/robustness/missing_new_products/separate_effects/variety_seeking_unbalanced](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/separate_effects/variety_seeking_unbalanced)
+- [outputs/05_robustness/missing_new_products/separate_effects/n_purchases](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/separate_effects/n_purchases)
+- [outputs/05_robustness/missing_new_products/separate_effects/variety_seeking_unbalanced](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/separate_effects/variety_seeking_unbalanced)
 
 The event indexes are:
 
-- [outputs/robustness/missing_new_products/separate_effects/n_purchases/event_index.csv](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/separate_effects/n_purchases/event_index.csv)
-- [outputs/robustness/missing_new_products/separate_effects/variety_seeking_unbalanced/event_index.csv](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/separate_effects/variety_seeking_unbalanced/event_index.csv)
+- [outputs/05_robustness/missing_new_products/separate_effects/n_purchases/event_index.csv](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/separate_effects/n_purchases/event_index.csv)
+- [outputs/05_robustness/missing_new_products/separate_effects/variety_seeking_unbalanced/event_index.csv](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/separate_effects/variety_seeking_unbalanced/event_index.csv)
 
 ## 3. Do more control-store introductions line up with more prominent effects?
 
 The merged closure-level comparison is:
 
-- [outputs/robustness/missing_new_products/effect_vs_introductions/closure_level_effects_vs_control_introductions.csv](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/effect_vs_introductions/closure_level_effects_vs_control_introductions.csv)
+- [outputs/05_robustness/missing_new_products/effect_vs_introductions/closure_level_effects_vs_control_introductions.csv](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/effect_vs_introductions/closure_level_effects_vs_control_introductions.csv)
 
 The summary and scatter plots are:
 
-- [outputs/robustness/missing_new_products/effect_vs_introductions/summary.md](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/effect_vs_introductions/summary.md)
-- [outputs/robustness/missing_new_products/effect_vs_introductions/n_purchases_binary_coef_vs_avg_introductions.png](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/effect_vs_introductions/n_purchases_binary_coef_vs_avg_introductions.png)
-- [outputs/robustness/missing_new_products/effect_vs_introductions/variety_seeking_unbalanced_binary_coef_vs_avg_introductions.png](/home/litao/Coffee/model-free/outputs/robustness/missing_new_products/effect_vs_introductions/variety_seeking_unbalanced_binary_coef_vs_avg_introductions.png)
+- [outputs/05_robustness/missing_new_products/effect_vs_introductions/summary.md](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/effect_vs_introductions/summary.md)
+- [outputs/05_robustness/missing_new_products/effect_vs_introductions/n_purchases_binary_coef_vs_avg_introductions.png](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/effect_vs_introductions/n_purchases_binary_coef_vs_avg_introductions.png)
+- [outputs/05_robustness/missing_new_products/effect_vs_introductions/variety_seeking_unbalanced_binary_coef_vs_avg_introductions.png](/home/litao/Coffee/model-free/outputs/05_robustness/missing_new_products/effect_vs_introductions/variety_seeking_unbalanced_binary_coef_vs_avg_introductions.png)
 
 ### A. `n_purchases`
 

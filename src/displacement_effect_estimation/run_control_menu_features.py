@@ -39,7 +39,7 @@ def setup_logging(log_file: Path, log_level: str = "INFO") -> logging.Logger:
 
 def main() -> None:
     project_root = get_project_root()
-    default_output_dir = "outputs/displacement_effect_estimation/menu_features"
+    default_output_dir = "outputs/04_diagnostics_18_closures/menu_features"
 
     parser = argparse.ArgumentParser(
         description="Construct control-store introduced-product counts during each treatment closure."

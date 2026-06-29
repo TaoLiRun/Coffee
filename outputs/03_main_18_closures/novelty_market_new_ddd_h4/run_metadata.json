@@ -1,0 +1,12 @@
+{
+  "generated_at_utc": "2026-05-13T07:31:30.424848+00:00",
+  "git_commit": "47d885a85d7929d138143ed88abf249a48a04ff1",
+  "outcome": "variety_seeking",
+  "variety_seeking_mode": "distinct-only-new",
+  "t_horizon": 4,
+  "definition": "Among distinct products in the current rel_t window: share whose global first-sale date falls in the union of this window and the chronologically previous panel window (inclusive); leftmost pre uses current window only. Period-0 plot uses union of closure window and rel_t=-1 window.",
+  "closure_registry": "outputs/customer-store/closure_pair_registry.csv",
+  "require_balanced_panel": false,
+  "model": "DDD",
+  "executed_command": "conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new --output-dir outputs/03_main_18_closures/novelty_market_new_ddd_h4 --log-file outputs/03_main_18_closures/novelty_market_new_ddd_h4/logs/run.log"
+}

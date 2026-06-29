@@ -15,7 +15,7 @@ conda run -n JAX-py python src/displacement_effect_estimation/run.py
 It forwards all CLI flags to `run.py` and writes the shell log to:
 
 ```text
-outputs/displacement_effect_estimation/logs/run.log
+outputs/03_main_18_closures/purchase_frequency_ddd_h4/logs/run.log
 ```
 
 ## Default Run
@@ -35,11 +35,11 @@ you get:
 - DDD model
 - no closure-duration filter
 - no recency filter
-- outputs under `outputs/displacement_effect_estimation`
+- outputs under `outputs/03_main_18_closures/purchase_frequency_ddd_h4`
 
 The previous 22-closure registry is preserved at
 `outputs/customer-store/closure_pair_registry_full.csv`, with archived result bundles under
-`outputs/robustness/full_registry`.
+`outputs/05_robustness/full_registry_22`.
 
 ## Main Run Dimensions
 
@@ -137,23 +137,23 @@ The main diagnostic bundles currently saved are:
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome n_purchases \
-  --output-dir outputs/displacement_effect_estimation/assumption_gap_purchase
+  --output-dir outputs/04_diagnostics_18_closures/purchase_common_support
 
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
-  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety
+  --output-dir outputs/04_diagnostics_18_closures/novelty_common_support
 
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
   --variety-pre-novelty-heterogeneity \
   --customer-median-split true \
-  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_median
+  --output-dir outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_median
 
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
   --variety-pre-novelty-heterogeneity \
   --customer-median-split false \
-  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_quartile_tails
+  --output-dir outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_quartile_tails
 ```
 
 The large row-level `estimation_sample.csv` files in these assumption-gap directories are reproducible and intentionally ignored. The versioned files are the summaries, coefficient tables, plots, and logs.
@@ -173,7 +173,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --no-unbalanced-panel \
-  --output-dir outputs/displacement_effect_estimation/balanced_did
+  --output-dir outputs/04_diagnostics_18_closures/purchase_balanced_did
 ```
 
 3. Separate effect by closure event, DDD
@@ -181,7 +181,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --separate-effect \
-  --output-dir outputs/displacement_effect_estimation/separate_effect
+  --output-dir outputs/04_diagnostics_18_closures/purchase_separate_effect
 ```
 
 4. Separate effect with recency filter
@@ -190,7 +190,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --separate-effect \
   --select-recency-consumers 10 \
-  --output-dir outputs/displacement_effect_estimation/separate_effect_r10
+  --output-dir outputs/04_diagnostics_18_closures/purchase_separate_effect_recency10
 ```
 
 5. Separate effect for one closure duration
@@ -199,7 +199,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --separate-effect \
   --closure-duration-days 10 \
-  --output-dir outputs/displacement_effect_estimation/separate_effect_d10
+  --output-dir outputs/04_diagnostics_18_closures/purchase_separate_effect_duration10
 ```
 
 6. Separate effect for one closure duration plus recency filter
@@ -209,7 +209,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
   --separate-effect \
   --closure-duration-days 10 \
   --select-recency-consumers 10 \
-  --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
+  --output-dir outputs/04_diagnostics_18_closures/separate_effect_duration10_recency10
 ```
 
 ### `variety_seeking`
@@ -219,7 +219,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ```bash
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking
+  --output-dir outputs/03_main_18_closures/novelty_member_first_ddd_h4
 ```
 
 2. Aggregate, unbalanced-panel DDD, `instance` mode
@@ -228,7 +228,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
   --variety-seeking-mode instance \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
+  --output-dir outputs/04_diagnostics_18_closures/novelty_instance
 ```
 
 3. Aggregate, unbalanced-panel DDD, `distinct-only-new` mode
@@ -237,7 +237,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
   --variety-seeking-mode distinct-only-new \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
+  --output-dir outputs/03_main_18_closures/novelty_market_new_ddd_h4
 ```
 
 4. Aggregate, balanced-panel DiD
@@ -246,7 +246,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
   --balanced-panel \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_balanced
+  --output-dir outputs/04_diagnostics_18_closures/novelty_balanced_did
 ```
 
 5. Aggregate, keep period-0 purchasers (only relevant with `--balanced-panel`)
@@ -256,7 +256,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
   --outcome variety_seeking \
   --balanced-panel \
   --keep-period0-purchasers \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_keep_p0
+  --output-dir outputs/04_diagnostics_18_closures/novelty_balanced_keep_period0
 ```
 
 6. Separate effect by closure event
@@ -265,7 +265,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
 ./scripts/displacement_effect_estimation/run_with_logging.sh \
   --outcome variety_seeking \
   --separate-effect \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_separate
+  --output-dir outputs/04_diagnostics_18_closures/novelty_separate_effect
 ```
 
 7. Separate effect with recency filter
@@ -275,7 +275,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
   --outcome variety_seeking \
   --separate-effect \
   --select-recency-consumers 10 \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_separate_r10
+  --output-dir outputs/04_diagnostics_18_closures/novelty_separate_effect_recency10
 ```
 
 8. Separate effect with explicit unbalanced panel (same as default)
@@ -285,7 +285,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
   --outcome variety_seeking \
   --separate-effect \
   --no-balanced-panel \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_separate_unbalanced
+  --output-dir outputs/04_diagnostics_18_closures/novelty_separate_effect_unbalanced
 ```
 
 9. Aggregate, unbalanced-panel DDD, `distinct` mode, pre-novelty heterogeneity (collapsed DDD with `post` × treatment × displacement × high/low pre-novelty split)
@@ -295,7 +295,7 @@ The large row-level `estimation_sample.csv` files in these assumption-gap direct
   --outcome variety_seeking \
   --variety-seeking-mode distinct \
   --variety-pre-novelty-heterogeneity \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity
+  --output-dir outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median
 ```
 
 Use `spec.variety_pre_novelty_split_method` in `config.json` (`"median"` default, or `"mode"`) to choose the cross-episode threshold for the episode-level pre-period mean distinct novelty measure.
@@ -328,10 +328,10 @@ Use `spec.variety_pre_novelty_split_method` in `config.json` (`"median"` default
 
 To keep runs easy to compare, it helps to encode the key choices in `--output-dir`, for example:
 
-- `balanced_did`
-- `separate_effect`
-- `separate_effect_d10_r10`
-- `variety_seeking_instance`
-- `variety_seeking_distinct_only_new`
-- `variety_seeking_balanced`
-- `variety_seeking_distinct_pre_novelty_heterogeneity`
+- `outputs/03_main_18_closures/purchase_frequency_ddd_h4`
+- `outputs/03_main_18_closures/novelty_member_first_ddd_h4`
+- `outputs/03_main_18_closures/novelty_market_new_ddd_h4`
+- `outputs/04_diagnostics_18_closures/purchase_common_support`
+- `outputs/04_diagnostics_18_closures/novelty_common_support`
+- `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median`
+- `outputs/05_robustness/full_registry_22/<legacy_run_name>`

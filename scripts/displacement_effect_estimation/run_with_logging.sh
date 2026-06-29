@@ -26,7 +26,7 @@
 #
 # Aggregate DiD effect (balanced panel, only members purchasing in every pre-period):
 #   ./run_with_logging.sh --no-unbalanced-panel \
-#       --output-dir outputs/displacement_effect_estimation/balanced_did
+#       --output-dir outputs/04_diagnostics_18_closures/purchase_balanced_did
 #
 # Separate effect for each closure/event:
 #   ./run_with_logging.sh --separate-effect
@@ -39,25 +39,25 @@
 # a custom output directory:
 #   ./run_with_logging.sh --separate-effect --closure-duration-days 10 \
 #       --select-recency-consumers 10 \
-#       --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
+#       --output-dir outputs/04_diagnostics_18_closures/separate_effect_duration10_recency10
 #
 # Variety-seeking, distinct mode (unbalanced panel, DDD by default):
 #   ./run_with_logging.sh --outcome variety_seeking \
-#       --output-dir outputs/displacement_effect_estimation/variety_seeking
+#       --output-dir outputs/03_main_18_closures/novelty_member_first_ddd_h4
 #
 # Variety-seeking, instance mode (each purchase row counted separately):
 #   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode instance \
-#       --output-dir outputs/displacement_effect_estimation/variety_seeking_instance
+#       --output-dir outputs/04_diagnostics_18_closures/novelty_instance
 #
 # Variety-seeking, distinct-only-new mode (share of distinct in-window products whose
 # global first sale falls in this window or the previous panel window):
 #   ./run_with_logging.sh --outcome variety_seeking --variety-seeking-mode distinct-only-new \
-#       --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
+#       --output-dir outputs/03_main_18_closures/novelty_market_new_ddd_h4
 #
 # Variety-seeking, balanced panel (DiD; also applies period-0 contrast filter unless
 # --keep-period0-purchasers):
 #   ./run_with_logging.sh --outcome variety_seeking --balanced-panel \
-#       --output-dir outputs/displacement_effect_estimation/variety_seeking_balanced
+#       --output-dir outputs/04_diagnostics_18_closures/novelty_balanced_did
 #
 # Invalid:
 #   ./run_with_logging.sh --select-recency-consumers 10
@@ -66,7 +66,7 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SRC_DIR="$PROJECT_ROOT/src/displacement_effect_estimation"
-LOG_DIR="$PROJECT_ROOT/outputs/displacement_effect_estimation/logs"
+LOG_DIR="$PROJECT_ROOT/outputs/03_main_18_closures/purchase_frequency_ddd_h4/logs"
 UV_ENV_PYTHON="$PROJECT_ROOT/JAX-py/bin/python"
 mkdir -p "$LOG_DIR"
 

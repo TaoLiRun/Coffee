@@ -5,7 +5,7 @@
     "push_data_dir": "../data/data1031",
     "push_file_pattern": "sleep_push_result_*.csv",
     "processed_dir": "data/processed",
-    "output_dir": "outputs/robustness/push_targeting_after_reopening"
+    "output_dir": "outputs/05_robustness/push_targeting_after_reopening"
   },
   "outputs": {
     "push_records": "main_post_reopening_push_records.parquet",

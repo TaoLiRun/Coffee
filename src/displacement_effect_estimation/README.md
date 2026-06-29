@@ -45,7 +45,7 @@ python run.py --outcome n_purchases --t-horizon 4
 
 # Aggregate binary purchase-incidence outcome with supplementary logit in collapsed DDD
 python run.py --outcome purchase_incidence_binary --t-horizon 4 \
-  --output-dir outputs/displacement_effect_estimation/purchase_incidence_binary
+  --output-dir outputs/03_main_18_closures/purchase_incidence_ddd_h4
 
 # Separate effect for each closure/event
 python run.py --outcome n_purchases --t-horizon 4 --separate-effect
@@ -54,14 +54,14 @@ python run.py --outcome n_purchases --t-horizon 4 --separate-effect
 python run.py --outcome n_purchases --t-horizon 4 --separate-effect --select-recency-consumers 10
 
 # Separate effect for 10-day closures only, saved to a custom folder
-python run.py --outcome n_purchases --t-horizon 4 --separate-effect --closure-duration-days 10 --select-recency-consumers 10 --output-dir outputs/displacement_effect_estimation/separate_effect_d10_r10
+python run.py --outcome n_purchases --t-horizon 4 --separate-effect --closure-duration-days 10 --select-recency-consumers 10 --output-dir outputs/04_diagnostics_18_closures/separate_effect_duration10_recency10
 
 # Variety-seeking: keep period-0 purchasers when using --balanced-panel (otherwise that filter applies)
 python run.py --outcome variety_seeking --balanced-panel --keep-period0-purchasers
 
 # Variety-seeking: global catalog-age share (distinct products in-window)
 python run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new \
-  --output-dir outputs/displacement_effect_estimation/variety_seeking_distinct_only_new
+  --output-dir outputs/03_main_18_closures/novelty_market_new_ddd_h4
 
 # Variety-seeking heterogeneity: compare bottom vs top quartile of pre-period novelty
 python run.py --outcome variety_seeking --variety-pre-novelty-heterogeneity \
@@ -69,11 +69,11 @@ python run.py --outcome variety_seeking --variety-pre-novelty-heterogeneity \
 
 # Assumption-gap diagnostic bundle for purchase frequency
 python run.py --outcome n_purchases \
-  --output-dir outputs/displacement_effect_estimation/assumption_gap_purchase
+  --output-dir outputs/04_diagnostics_18_closures/purchase_common_support
 
 # Assumption-gap diagnostic bundle for member-first novelty seeking
 python run.py --outcome variety_seeking \
-  --output-dir outputs/displacement_effect_estimation/assumption_gap_variety
+  --output-dir outputs/04_diagnostics_18_closures/novelty_common_support
 ```
 
 Behavior is controlled by `config.json`:
@@ -93,7 +93,7 @@ Behavior is controlled by `config.json`:
 
 ## Outputs
 
-Saved to `outputs/displacement_effect_estimation/`:
+Paper-facing output bundles are saved under `outputs/03_main_18_closures/`. Identification diagnostics are saved under `outputs/04_diagnostics_18_closures/`. Each run bundle contains:
 
 - `estimation_sample.csv`
 - `ddd_binary_results.csv`
@@ -117,19 +117,22 @@ Saved to `outputs/displacement_effect_estimation/`:
 - `pre_period_purchase_frequency_group_summary_<split>.csv` and `pre_period_purchase_frequency_distribution_<split>.png` when `--variety-pre-novelty-heterogeneity` is used
 
 When `spec.separate_effect = true`, outputs are saved under
-`outputs/displacement_effect_estimation/separate_effect/<closure_event_id>/`
+`<output-dir>/separate_effect/<closure_event_id>/`
 with one subdirectory per closure/event, plus
-`outputs/displacement_effect_estimation/separate_effect/event_index.csv`.
+`<output-dir>/separate_effect/event_index.csv`.
 
-Large row-level assumption-gap samples named `estimation_sample.csv` are intentionally ignored under `outputs/displacement_effect_estimation/assumption_gap_*/`; the summary files, coefficient tables, plots, and logs are versioned.
+Large row-level assumption-gap samples named `estimation_sample.csv` are intentionally ignored under `outputs/04_diagnostics_18_closures/*common_support*/`; the summary files, coefficient tables, plots, and logs are versioned.
 
 ## Current Main Output Bundles
 
-- Purchase-frequency headline bundle: `outputs/displacement_effect_estimation/`
-- Member-first novelty DDD bundle: `outputs/displacement_effect_estimation/variety_seeking_unbalanced/`
-- Market-new novelty robustness: `outputs/displacement_effect_estimation/variety_seeking_distinct_only_new/`
-- Purchase assumption-gap diagnostics: `outputs/displacement_effect_estimation/assumption_gap_purchase/`
-- Novelty assumption-gap diagnostics: `outputs/displacement_effect_estimation/assumption_gap_variety/`
+- Purchase-frequency headline bundle: `outputs/03_main_18_closures/purchase_frequency_ddd_h4/`
+- Purchase-incidence backup bundle: `outputs/03_main_18_closures/purchase_incidence_ddd_h4/`
+- Member-first novelty DDD bundle: `outputs/03_main_18_closures/novelty_member_first_ddd_h4/`
+- Market-new novelty robustness: `outputs/03_main_18_closures/novelty_market_new_ddd_h4/`
+- Purchase assumption-gap diagnostics: `outputs/04_diagnostics_18_closures/purchase_common_support/`
+- Novelty assumption-gap diagnostics: `outputs/04_diagnostics_18_closures/novelty_common_support/`
 - Pre-novelty heterogeneity diagnostics:
-  - `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_median/`
-  - `outputs/displacement_effect_estimation/assumption_gap_variety_heterogeneity_quartile_tails/`
+  - `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median/`
+  - `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails/`
+  - `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_median/`
+  - `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_quartile_tails/`

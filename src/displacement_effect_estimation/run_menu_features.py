@@ -41,7 +41,7 @@ def main() -> None:
     cfg = load_config()
     default_t_horizon = int(cfg.get("spec", {}).get("t_horizon", 4))
     project_root = get_project_root()
-    default_output_dir = "outputs/displacement_effect_estimation/menu_features"
+    default_output_dir = "outputs/04_diagnostics_18_closures/menu_features"
 
     parser = argparse.ArgumentParser(
         description="Construct closure-level, horizon-specific menu-change features."

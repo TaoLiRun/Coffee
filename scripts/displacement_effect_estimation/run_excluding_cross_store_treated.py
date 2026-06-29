@@ -248,7 +248,7 @@ def main() -> None:
     from specs import fit_collapsed_specs, fit_event_study_specs
 
     cfg = load_config()
-    output_dir = project_root / "outputs/robustness/excluding_cross_store_treated"
+    output_dir = project_root / "outputs/05_robustness/excluding_cross_store_treated"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     sample = build_estimation_sample(
@@ -318,7 +318,7 @@ def main() -> None:
     )
 
     main_event = pd.read_csv(
-        project_root / "outputs/displacement_effect_estimation/event_study_results.csv",
+        project_root / "outputs/03_main_18_closures/purchase_frequency_ddd_h4/event_study_results.csv",
         encoding="utf-8-sig",
     )
     filtered_event = event_df.copy()
@@ -401,7 +401,7 @@ def main() -> None:
 
     # Save corresponding n_purchases overall-effect before-vs-after in one file
     main_binary = pd.read_csv(
-        project_root / "outputs/displacement_effect_estimation/ddd_binary_results.csv",
+        project_root / "outputs/03_main_18_closures/purchase_frequency_ddd_h4/ddd_binary_results.csv",
         encoding="utf-8-sig",
     )
     filtered_binary = coef_df.copy()

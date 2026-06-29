@@ -172,7 +172,7 @@ Did closures reduce how often customers buy from the chain after reopening?
 
 The dynamic evidence for the blocked-buyer estimand is more cautious than the collapsed post coefficient alone. In the purchase-frequency event-study displacement path, the joint pretrend test for the triple-difference coefficients rejects ($p = 0.0025$), driven by a negative estimate at $rel_t=-2$. The post-reopening displacement coefficients are positive in periods 1 and 3, which is directionally consistent with rebound rather than habit decay, but the pre-period deviation means this dynamic evidence should be treated as suggestive rather than cleanly identified.
 
-![](../outputs/displacement_effect_estimation/event_study_displacement.png)
+![](../outputs/03_main_18_closures/purchase_frequency_ddd_h4/event_study_displacement.png)
 
 ## Novelty-Seeking
 
@@ -194,7 +194,7 @@ Did closures change whether customers tried new products?
 
 For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative. The coefficient path is also visually consistent with that interpretation: the pre-period blocked-buyer displacement estimates have wide confidence intervals covering zero, while the post-period coefficients turn negative in the direction implied by the collapsed DDD.
 
-![](../outputs/displacement_effect_estimation/variety_seeking_unbalanced/event_study_displacement.png)
+![](../outputs/03_main_18_closures/novelty_member_first_ddd_h4/event_study_displacement.png)
 
 ### Heterogeneity by pre-period novelty (distinct measure)
 
@@ -235,7 +235,7 @@ The **augmented** collapsed specification (`binary_collapsed_pre_novelty_split`)
 
 The dynamic event-study analog now matches that same heterogeneity specification period by period: the lower group is the baseline path, and the higher-pre-novelty group enters through period-specific increments. Under the median split, the lower-group blocked-buyer displacement path is strongly negative in all four post periods, around `-0.268`, `-0.269`, `-0.281`, and `-0.299`.
 
-![](../outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity/event_study_displacement_lower_group_median.png)
+![](../outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median/event_study_displacement_lower_group_median.png)
 
 ### Tail-only split: bottom quartile vs top quartile
 
@@ -243,7 +243,7 @@ If we instead set `customer_median_split = false`, the heterogeneity sample keep
 
 The histogram below shows the **full population distribution** of episode-level pre-period novelty used to define these cutoffs. The regression keeps only the bottom- and top-quartile tails; the middle 50% are omitted from the tail-only heterogeneity estimation.
 
-![](../outputs/displacement_effect_estimation/pre_period_novelty_histogram.png)
+![](../outputs/04_diagnostics_18_closures/pre_period_novelty_distribution/pre_period_novelty_histogram.png)
 
 On this tail-only sample, the **standard** collapsed DDD is:
 
@@ -276,7 +276,7 @@ The **augmented** collapsed specification reports:
 
 The dynamic event-study analog is sharper as well. For the bottom-quartile lower group, the blocked-buyer displacement path is strongly negative in each post period, around `-0.419`, `-0.397`, `-0.415`, and `-0.452`.
 
-![](../outputs/displacement_effect_estimation/variety_seeking_distinct_pre_novelty_heterogeneity_quartile_tails/event_study_displacement_lower_group_quartile_tails.png)
+![](../outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails/event_study_displacement_lower_group_quartile_tails.png)
 
 ## Market-new share (distinct-only-new)
 
@@ -296,7 +296,7 @@ We re-estimate the same pooled triple-difference specification with this outcome
 
 The event-study diagnostics for this market-new outcome also support the headline interpretation: the pretrend tests do not reject at the headline level for either the ATT version ($p = 0.177$) or the blocked-buyer displacement version ($p = 0.515$), while the post-period displacement coefficients are negative in sign.
 
-![](../outputs/displacement_effect_estimation/variety_seeking_distinct_only_new/event_study_displacement.png)
+![](../outputs/03_main_18_closures/novelty_market_new_ddd_h4/event_study_displacement.png)
 
 ## Continuous Propensity Version
 

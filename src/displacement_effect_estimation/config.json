@@ -4,7 +4,7 @@
     "score_file": "outputs/displacement_classification/displacement_scores_t0_ex_ante.csv",
     "feature_t0_cache_dir": "../outputs/displacement_classification/cache",
     "feature_cache_key": "ae32158f08a99abd",
-    "output_dir": "outputs/displacement_effect_estimation",
+    "output_dir": "outputs/03_main_18_closures/purchase_frequency_ddd_h4",
     "commodity_processed_file": "data/processed/order_commodity_result_processed.csv"
   },
   "spec": {

@@ -25,8 +25,10 @@ model-free/
 ├── outputs/
 │   ├── customer-store/                  # Closure registries and descriptive panels
 │   ├── displacement_classification/     # Blocked-buyer model scores and diagnostics
-│   ├── displacement_effect_estimation/  # Main DDD/event-study outputs
-│   └── robustness/                      # Robustness and mechanism checks
+│   ├── 03_main_18_closures/             # Paper-facing 18-closure DDD/event-study outputs
+│   ├── 04_diagnostics_18_closures/      # Common-support and identification diagnostics
+│   ├── 05_robustness/                   # Robustness, mechanism checks, and older 22-closure runs
+│   └── README.md                        # Output folder guide
 ├── reports/
 │   └── main_results.qmd                 # Current 18-closure result report
 ├── scripts/
@@ -44,7 +46,13 @@ model-free/
 
 ## Current Analysis Status
 
-The main analysis uses `outputs/customer-store/closure_pair_registry.csv`, the 18-closure registry. The older 22-closure registry and related outputs are preserved as robustness/history under `outputs/robustness/full_registry/`.
+The main analysis uses `outputs/customer-store/closure_pair_registry.csv`, the 18-closure registry. The older 22-closure registry and related outputs are preserved as robustness/history under `outputs/05_robustness/full_registry_22/`.
+
+The current output organization is:
+
+- `outputs/03_main_18_closures/`: paper-facing purchase-frequency, purchase-incidence, member-first novelty, and market-new novelty results.
+- `outputs/04_diagnostics_18_closures/`: matched/common-support diagnostics, blocked-gap event studies, pre-novelty heterogeneity checks, and technical backup.
+- `outputs/05_robustness/`: 22-closure full-registry history, horizon robustness, cross-store exclusion, missing-new-product checks, push-targeting checks, and legacy runs.
 
 The headline implementation sequence is:
 

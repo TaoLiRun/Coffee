@@ -11,15 +11,15 @@ FULL_REGISTRY_REL="outputs/customer-store/closure_pair_registry_full.csv"
 REGISTRY_PATH="$PROJECT_ROOT/$REGISTRY_REL"
 FULL_REGISTRY_PATH="$PROJECT_ROOT/$FULL_REGISTRY_REL"
 
-OUTPUT_ROOT="$PROJECT_ROOT/outputs/displacement_effect_estimation"
-PURCHASE_OUTPUT_REL="outputs/displacement_effect_estimation"
-PURCHASE_BINARY_OUTPUT_REL="outputs/displacement_effect_estimation/purchase_incidence_binary"
-VARIETY_OUTPUT_REL="outputs/displacement_effect_estimation/variety_seeking_unbalanced"
+OUTPUT_ROOT="$PROJECT_ROOT/outputs/03_main_18_closures"
+PURCHASE_OUTPUT_REL="outputs/03_main_18_closures/purchase_frequency_ddd_h4"
+PURCHASE_BINARY_OUTPUT_REL="outputs/03_main_18_closures/purchase_incidence_ddd_h4"
+VARIETY_OUTPUT_REL="outputs/03_main_18_closures/novelty_member_first_ddd_h4"
 PURCHASE_OUTPUT_DIR="$PROJECT_ROOT/$PURCHASE_OUTPUT_REL"
 PURCHASE_BINARY_OUTPUT_DIR="$PROJECT_ROOT/$PURCHASE_BINARY_OUTPUT_REL"
 VARIETY_OUTPUT_DIR="$PROJECT_ROOT/$VARIETY_OUTPUT_REL"
 METADATA_DIR="$OUTPUT_ROOT/metadata"
-SNAPSHOT_REL="outputs/displacement_effect_estimation/metadata/closure_pair_registry.csv"
+SNAPSHOT_REL="outputs/03_main_18_closures/metadata/closure_pair_registry.csv"
 SNAPSHOT_PATH="$PROJECT_ROOT/$SNAPSHOT_REL"
 MANIFEST_PATH="$METADATA_DIR/run_manifest.json"
 REPORT_BODY_PATH="$PROJECT_ROOT/reports/main_results_body.md"
@@ -194,7 +194,7 @@ echo "Running main-sample novelty-seeking result..."
 )
 validate_estimation_bundle "$VARIETY_OUTPUT_DIR"
 
-"${PYTHON_CMD[@]}" -c 'from datetime import datetime, timezone; import json, sys; from pathlib import Path; manifest_path = Path(sys.argv[1]); branch = sys.argv[4].strip() or None; commit = sys.argv[5].strip() or None; expected_main = int(sys.argv[9]); expected_excluded = int(sys.argv[10]); manifest = {"generated_at_utc": datetime.now(timezone.utc).isoformat(), "source_registry_path": sys.argv[2], "registry_snapshot_path": sys.argv[3], "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv", "purchase_result_path": "outputs/displacement_effect_estimation", "purchase_binary_result_path": "outputs/displacement_effect_estimation/purchase_incidence_binary", "novelty_result_path": "outputs/displacement_effect_estimation/variety_seeking_unbalanced", "expected_main_closure_count": expected_main, "excluded_closure_count": expected_excluded, "executed_commands": [sys.argv[6], sys.argv[7], sys.argv[8]], "git_branch": branch, "git_commit": commit}; manifest_path.write_text(json.dumps(manifest, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")' \
+"${PYTHON_CMD[@]}" -c 'from datetime import datetime, timezone; import json, sys; from pathlib import Path; manifest_path = Path(sys.argv[1]); branch = sys.argv[4].strip() or None; commit = sys.argv[5].strip() or None; expected_main = int(sys.argv[9]); expected_excluded = int(sys.argv[10]); manifest = {"generated_at_utc": datetime.now(timezone.utc).isoformat(), "source_registry_path": sys.argv[2], "registry_snapshot_path": sys.argv[3], "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv", "purchase_result_path": "outputs/03_main_18_closures/purchase_frequency_ddd_h4", "purchase_binary_result_path": "outputs/03_main_18_closures/purchase_incidence_ddd_h4", "novelty_result_path": "outputs/03_main_18_closures/novelty_member_first_ddd_h4", "expected_main_closure_count": expected_main, "excluded_closure_count": expected_excluded, "executed_commands": [sys.argv[6], sys.argv[7], sys.argv[8]], "git_branch": branch, "git_commit": commit}; manifest_path.write_text(json.dumps(manifest, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")' \
   "$MANIFEST_PATH" "$REGISTRY_REL" "$SNAPSHOT_REL" "$BRANCH" "$COMMIT" "$PURCHASE_COMMAND" "$PURCHASE_BINARY_COMMAND" "$VARIETY_COMMAND" "$EXPECTED_MAIN_CLOSURES" "$EXPECTED_EXCLUDED_CLOSURES"
 
 python_eval "$PROJECT_ROOT" "$REPORT_BODY_PATH" <<'PY'
@@ -281,10 +281,10 @@ full_registry = pd.read_csv(
 main_closure_count = closure_count(main_registry)
 excluded_closure_count = closure_count(full_registry) - main_closure_count
 
-purchase_full_dir = project_root / "outputs/robustness/full_registry/n_purchases"
-purchase_main_dir = project_root / "outputs/displacement_effect_estimation"
-variety_full_dir = project_root / "outputs/robustness/full_registry/variety_seeking_unbalanced"
-variety_main_dir = project_root / "outputs/displacement_effect_estimation/variety_seeking_unbalanced"
+purchase_full_dir = project_root / "outputs/05_robustness/full_registry_22/n_purchases"
+purchase_main_dir = project_root / "outputs/03_main_18_closures/purchase_frequency_ddd_h4"
+variety_full_dir = project_root / "outputs/05_robustness/full_registry_22/variety_seeking_unbalanced"
+variety_main_dir = project_root / "outputs/03_main_18_closures/novelty_member_first_ddd_h4"
 
 purchase_full_terms = load_terms(purchase_full_dir)
 purchase_main_terms = load_terms(purchase_main_dir)
