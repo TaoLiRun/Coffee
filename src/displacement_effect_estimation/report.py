@@ -337,7 +337,6 @@ def save_variety_panel_plot(
         period0 = period0[
             ["member_id", "dept_id", "closure_start", "closure_end", "group", "treated", "rel_t", "variety_seeking"]
         ].copy()
-        period0["variety_seeking"] = period0["variety_seeking"].fillna(0.0)
 
     panel_for_plot = pd.concat([base, period0], ignore_index=True)
 

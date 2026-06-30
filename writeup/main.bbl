@@ -29,6 +29,34 @@ Baumgartner, H.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Bordalo%
+, Gennaioli%
+\BCBL {}\ \protect \BOthers {.}}{%
+Bordalo%
+, Gennaioli%
+\BCBL {}\ \protect \BOthers {.}}{%
+{\protect \APACyear {2026}}%
+}]{%
+bordalo2026cognitive}
+\APACinsertmetastar {%
+bordalo2026cognitive}%
+\begin{APACrefauthors}%
+Bordalo, P.%
+, Gennaioli, N.%
+, Lanzani, G.%
+\BCBL {}\ \BBA {} Shleifer, A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2026}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {A cognitive theory of reasoning and choice} {A cognitive
+  theory of reasoning and choice}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{The Quarterly Journal of Economics}{}{}{qjag023}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Brehm%
 }{%
 Brehm%
@@ -80,10 +108,10 @@ Clee, M\BPBI A.%
 \bibitem [\protect \citeauthoryear {%
 Dhar%
 , Huber%
-\BCBL {}\ \BBA {} Khan%
-}{%
+\BCBL {}\ \protect \BOthers {.}}{%
 Dhar%
-\ \protect \BOthers {.}}{%
+, Huber%
+\BCBL {}\ \protect \BOthers {.}}{%
 {\protect \APACyear {2007}}%
 }]{%
 dhar2007shopping}
@@ -155,6 +183,33 @@ Fitzsimons, G\BPBI J.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Gehring%
+\ \BBA {} Schaudt%
+}{%
+Gehring%
+\ \BBA {} Schaudt%
+}{%
+{\protect \APACyear {2026}}%
+}]{%
+gehring2026insuring}
+\APACinsertmetastar {%
+gehring2026insuring}%
+\begin{APACrefauthors}%
+Gehring, K.%
+\BCBT {}\ \BBA {} Schaudt, P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2026}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Insuring peace: Index-based livestock insurance,
+  droughts, and conflict} {Insuring peace: Index-based livestock insurance,
+  droughts, and conflict}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{The Quarterly Journal of Economics}{}{}{qjag005}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Gollwitzer%
 }{%
 Gollwitzer%
@@ -183,53 +238,26 @@ Gollwitzer, P\BPBI M.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Hauser%
-\ \BBA {} Wernerfelt%
+Gruber%
 }{%
-Hauser%
-\ \BBA {} Wernerfelt%
+Gruber%
 }{%
-{\protect \APACyear {1990}}%
+{\protect \APACyear {1994}}%
 }]{%
-hauser1990consideration}
+Gruber1994}
 \APACinsertmetastar {%
-hauser1990consideration}%
+Gruber1994}%
 \begin{APACrefauthors}%
-Hauser, J\BPBI R.%
-\BCBT {}\ \BBA {} Wernerfelt, B.%
+Gruber, J.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
-\APACrefYearMonthDay{1990}{}{}.
+\APACrefYearMonthDay{1994}{}{}.
 \newblock
-{\BBOQ}\APACrefatitle {Consideration-Set Heuristics} {Consideration-set
-  heuristics}.{\BBCQ}
+{\BBOQ}\APACrefatitle {The Incidence of Mandated Maternity Benefits} {The
+  incidence of mandated maternity benefits}.{\BBCQ}
 \newblock
-\APACjournalVolNumPages{Journal of Marketing Research}{27}{4}{393--407}.
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
-Kahn%
-}{%
-Kahn%
-}{%
-{\protect \APACyear {1995}}%
-}]{%
-kahn1995consumer}
-\APACinsertmetastar {%
-kahn1995consumer}%
-\begin{APACrefauthors}%
-Kahn, B\BPBI E.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{1995}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Consumer Variety-Seeking Among Goods and Services}
-  {Consumer variety-seeking among goods and services}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Journal of Retailing and Consumer
-  Services}{2}{3}{139--148}.
+\APACjournalVolNumPages{American Economic Review}{84}{3}{622--641}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -261,9 +289,11 @@ Kappes, H\BPBI B.%
 
 \bibitem [\protect \citeauthoryear {%
 Kruglanski%
-\ \protect \BOthers {.}}{%
+, Shah%
+\BCBL {}\ \protect \BOthers {.}}{%
 Kruglanski%
-\ \protect \BOthers {.}}{%
+, Shah%
+\BCBL {}\ \protect \BOthers {.}}{%
 {\protect \APACyear {2002}}%
 }]{%
 kruglanski2002theory}
@@ -370,32 +400,6 @@ Masicampo, E\BPBI J.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-McAlister%
-\ \BBA {} Pessemier%
-}{%
-McAlister%
-\ \BBA {} Pessemier%
-}{%
-{\protect \APACyear {1982}}%
-}]{%
-mcalister1982variety}
-\APACinsertmetastar {%
-mcalister1982variety}%
-\begin{APACrefauthors}%
-McAlister, L.%
-\BCBT {}\ \BBA {} Pessemier, E.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{1982}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Variety Seeking Behavior: An Interdisciplinary Review}
-  {Variety seeking behavior: An interdisciplinary review}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Journal of Consumer Research}{9}{3}{311--322}.
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
 Nedungadi%
 }{%
 Nedungadi%
@@ -422,10 +426,10 @@ Nedungadi, P.%
 \bibitem [\protect \citeauthoryear {%
 Van~Trijp%
 , Hoyer%
-\BCBL {}\ \BBA {} Inman%
-}{%
+\BCBL {}\ \protect \BOthers {.}}{%
 Van~Trijp%
-\ \protect \BOthers {.}}{%
+, Hoyer%
+\BCBL {}\ \protect \BOthers {.}}{%
 {\protect \APACyear {1996}}%
 }]{%
 vantrijp1996variety}

@@ -1405,6 +1405,17 @@ The main empirical story now rests on the **18-closure sample** in `outputs/cust
 
 The older **22-closure full-registry results** are preserved under `outputs/05_robustness/full_registry_22`. They are useful for showing that the broad sign pattern was not created by moving from 22 to 18 closures, but the paper should use the 18-closure registry as the main sample because it removes the four early-February events that were later judged weaker for the headline design.
 
+#### Results kept in the technical report, not the current paper
+
+These analyses are useful for project memory and for future robustness work, but they should not be paper-facing until the narrative decides how to handle the caveats:
+
+- **Matched/common-support diagnostics**: purchase-frequency matched estimates reverse sign and are insignificant (`-0.0041`, `p = 0.237`), and the matched purchase displacement pretrend still rejects (`p = 0.024`). Novelty matched estimates keep the negative sign but attenuate and become imprecise (`-0.0211`, `p = 0.331`). These diagnostics are important caveats, not current main-paper evidence.
+- **Purchase-frequency displacement dynamics**: the full-sample purchase DDD is positive, but the blocked-buyer event-study pretrend rejects. This result is useful only as background showing no demand collapse; it should not be emphasized as a clean causal mechanism result.
+- **Pre-novelty heterogeneity comparability checks**: the heterogeneity estimates are large and directionally consistent with the mechanism, but high- and low-pre-novelty groups differ substantially in baseline purchase frequency. Keep the comparability details here unless the paper adds a careful limitations paragraph for the heterogeneity design.
+- **Menu-exposure / missing-new-product checks**: the formal tests do not show that missed exposure explains the novelty DDD. This is useful as a diagnostic, but it does not provide clean proof of the proposed mechanism.
+- **Push-targeting diagnostics**: observed push differences do not line up cleanly with the main novelty DDD, but some push intensity/composition differences remain. Treat this as a caveat rather than a result that rules out targeting.
+- **Full 22-closure registry, horizon robustness, purchase-incidence, and separate-closure estimates**: these are useful reproducibility and history checks, but they would distract from the main 18-closure novelty result in the current manuscript.
+
 ### 18.2 Output organization
 
 The output folders are now organized by role rather than by run history:
@@ -1493,8 +1504,8 @@ The paper should foreground the DDD effect on novelty seeking. The current paper
 1. Explain the blocked-buyer DDD design and the distinction between general treatment effects and blocked-purchase-intention effects.
 2. Show the main purchase-frequency result as a contrast: quantity does not fall after closure for blocked buyers, so the evidence is not a simple habit-breaking decline in purchasing.
 3. Present member-first novelty seeking as the central result: blocked treated customers become less likely to try new products relative to comparable blocked controls.
-4. Add market-new novelty as a robustness check, including the event-study figure.
+4. Add market-new novelty as a robustness check.
 5. Keep matched/common-support results in the technical report for now. They are not current paper main results because the matched estimates are smaller and imprecise.
-6. Use menu-exposure and push-targeting checks as mechanism/caveat evidence, not as definitive mechanism tests.
+6. Keep menu-exposure and push-targeting checks in the technical report for now. Use them only if the paper later adds a broader caveats or alternative-mechanisms appendix.
 
 The technical report, rather than the paper, should retain the full implementation record: all run modes, file locations, interim sample summaries, full-registry history, horizon checks, per-closure effects, generated logs, and diagnostic plots.
