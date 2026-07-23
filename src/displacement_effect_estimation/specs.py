@@ -86,11 +86,17 @@ def _assert_columns(df: pd.DataFrame, required: list[str]) -> None:
         raise ValueError(f"DataFrame is missing required columns: {missing}")
 
 
-def _tidy_row(fit, term: str, spec: str) -> dict:
-    """Extract one named coefficient row from a pyfixest result."""
+def _tidy_row(
+    fit,
+    term: str,
+    spec: str,
+    estimand: str | None = None,
+) -> dict:
+    """Extract one named coefficient row, including its 95% confidence interval."""
     tidy = fit.tidy()
     row: dict = {
         "spec":      spec,
+        "estimand":  estimand,
         "term":      term,
         "n":         fit._N,
         "r2_within": fit._r2_within,
@@ -99,8 +105,11 @@ def _tidy_row(fit, term: str, spec: str) -> dict:
         row["coef"]   = float(tidy.loc[term, "Estimate"])
         row["se"]     = float(tidy.loc[term, "Std. Error"])
         row["pvalue"] = float(tidy.loc[term, "Pr(>|t|)"])
+        row["ci_low"] = float(tidy.loc[term, "2.5%"])
+        row["ci_high"] = float(tidy.loc[term, "97.5%"])
     else:
         row["coef"] = row["se"] = row["pvalue"] = float("nan")
+        row["ci_low"] = row["ci_high"] = float("nan")
     return row
 
 
@@ -117,10 +126,13 @@ def _tidy_rows_suffix(fit, suffix: str, spec: str) -> list[dict]:
         if str(term).endswith(suffix):
             out.append({
                 "spec":      spec,
+                "estimand":  None,
                 "term":      str(term),
                 "coef":      float(tidy.loc[term, "Estimate"]),
                 "se":        float(tidy.loc[term, "Std. Error"]),
                 "pvalue":    float(tidy.loc[term, "Pr(>|t|)"]),
+                "ci_low":    float(tidy.loc[term, "2.5%"]),
+                "ci_high":   float(tidy.loc[term, "97.5%"]),
                 "n":         fit._N,
                 "r2_within": fit._r2_within,
             })
@@ -243,9 +255,9 @@ def fit_collapsed_specs(
             + beta    * post * D_{ie}
             + phi_{ie} + omega_t + gamma_m + nu_{iet}
 
-    delta^B : baseline-demand effect (non-displaced treated vs control)
-    delta^D : displacement effect (additional reduction for displaced)
-    beta    : post-period level shift for displaced consumers (all groups)
+    delta^B : low-predicted-incidence treatment effect
+    delta^D : high-minus-low treatment-effect differential
+    beta    : high-minus-low post shift common to treated and control groups
 
     Spec C collapsed
     ----------------
@@ -300,7 +312,8 @@ def fit_collapsed_specs(
     df["post_X_treated_X_score"] = df["post"] * df["treated"] * df["displacement_prob_centered"]
 
     # ------------------------------------------------------------------
-    # Spec B collapsed
+    # Spec B collapsed. This parameterization estimates the low-group effect
+    # and high-minus-low differential directly.
     # ------------------------------------------------------------------
     spec    = "binary_collapsed"
     formula = (
@@ -310,8 +323,48 @@ def fit_collapsed_specs(
     )
     fit = pf.feols(formula, data=df, vcov=vcov)
     fit_rows.append(_fit_row(fit, spec, formula))
-    for term in ("post_X_treated", "post_X_disp", "post_X_treated_X_disp"):
-        rows.append(_tidy_row(fit, term, spec))
+    for term, estimand in (
+        ("post_X_treated", "low_predicted_incidence_effect_delta_b"),
+        ("post_X_disp", "common_high_minus_low_post_shift"),
+        ("post_X_treated_X_disp", "high_minus_low_ddd"),
+    ):
+        rows.append(_tidy_row(fit, term, spec, estimand))
+
+    # ------------------------------------------------------------------
+    # Algebraically equivalent group-effect parameterization
+    # ------------------------------------------------------------------
+    # post_X_treated is exactly the sum of these mutually exclusive columns.
+    # The group fit therefore uses the same sample, regressors, fixed effects,
+    # and clustering as the original DDD while estimating the high-group
+    # treatment effect (delta^B + delta^D) directly with valid inference.
+    df["post_X_treated_X_low"] = (
+        df["post"] * df["treated"] * (1 - df["disp_binary"])
+    )
+    df["post_X_treated_X_high"] = (
+        df["post"] * df["treated"] * df["disp_binary"]
+    )
+    group_spec = "binary_collapsed_group_effects"
+    group_formula = (
+        f"{outcome} ~ "
+        "post_X_treated_X_low + post_X_disp + post_X_treated_X_high"
+        f" | {fe_str}"
+    )
+    group_fit = pf.feols(group_formula, data=df, vcov=vcov)
+    fit_rows.append(_fit_row(group_fit, group_spec, group_formula))
+
+    delta_b = float(fit.tidy().loc["post_X_treated", "Estimate"])
+    delta_d = float(fit.tidy().loc["post_X_treated_X_disp", "Estimate"])
+    low_coef = float(group_fit.tidy().loc["post_X_treated_X_low", "Estimate"])
+    high_coef = float(group_fit.tidy().loc["post_X_treated_X_high", "Estimate"])
+    assert np.isclose(low_coef, delta_b)
+    assert np.isclose(high_coef, delta_b + delta_d)
+    assert group_fit._N == fit._N
+
+    for term, estimand in (
+        ("post_X_treated_X_low", "low_predicted_incidence_effect"),
+        ("post_X_treated_X_high", "high_predicted_incidence_effect"),
+    ):
+        rows.append(_tidy_row(group_fit, term, group_spec, estimand))
 
     if variety_pre_novelty_heterogeneity:
         _assert_columns(df, ["novelty_pre_high"])

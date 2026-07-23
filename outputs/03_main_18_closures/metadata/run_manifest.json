@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-05-24T08:04:43.733304+00:00",
+  "generated_at_utc": "2026-07-23T04:18:54.405416+00:00",
   "source_registry_path": "outputs/customer-store/closure_pair_registry.csv",
   "registry_snapshot_path": "outputs/03_main_18_closures/metadata/closure_pair_registry.csv",
   "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv",
@@ -14,5 +14,5 @@
     "conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome variety_seeking --output-dir outputs/03_main_18_closures/novelty_member_first_ddd_h4 --log-file outputs/03_main_18_closures/novelty_member_first_ddd_h4/logs/run.log"
   ],
   "git_branch": "issue-4/further-selection",
-  "git_commit": "6c7b49a0a14d87c117803c82d18d5898962da03f"
+  "git_commit": "4bbac42734c021ada7b9e4bcb040b5f4371a549c"
 }

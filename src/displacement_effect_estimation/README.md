@@ -123,6 +123,23 @@ with one subdirectory per closure/event, plus
 
 Large row-level assumption-gap samples named `estimation_sample.csv` are intentionally ignored under `outputs/04_diagnostics_18_closures/*common_support*/`; the summary files, coefficient tables, plots, and logs are versioned.
 
+For pooled binary DDD runs, `ddd_binary_results.csv` is an estimand-level
+long-form file. In addition to the original terms, it includes the following
+paper-facing estimands, each with `coef`, `se`, `pvalue`, `ci_low`, and
+`ci_high`:
+
+- `low_predicted_incidence_effect`: the low-predicted-incidence treatment
+  effect, $\delta^B$;
+- `high_predicted_incidence_effect`: the high-predicted-incidence treatment
+  effect, $\delta^B+\delta^D$, estimated directly in an algebraically
+  equivalent parameterization;
+- `high_minus_low_ddd`: the DDD contrast, $\delta^D$.
+
+The high-group effect is not reconstructed from rounded coefficient output.
+The runner verifies that the low-group estimate equals $\delta^B$, the
+high-group estimate equals $\delta^B+\delta^D$, and the two parameterizations
+use the same sample.
+
 ## Current Main Output Bundles
 
 - Purchase-frequency headline bundle: `outputs/03_main_18_closures/purchase_frequency_ddd_h4/`

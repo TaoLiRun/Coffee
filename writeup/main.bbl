@@ -31,10 +31,11 @@ Baumgartner, H.%
 \bibitem [\protect \citeauthoryear {%
 Bordalo%
 , Gennaioli%
-\BCBL {}\ \protect \BOthers {.}}{%
+, Lanzani%
+\BCBL {}\ \BBA {} Shleifer%
+}{%
 Bordalo%
-, Gennaioli%
-\BCBL {}\ \protect \BOthers {.}}{%
+\ \protect \BOthers {.}}{%
 {\protect \APACyear {2026}}%
 }]{%
 bordalo2026cognitive}
@@ -108,10 +109,10 @@ Clee, M\BPBI A.%
 \bibitem [\protect \citeauthoryear {%
 Dhar%
 , Huber%
-\BCBL {}\ \protect \BOthers {.}}{%
+\BCBL {}\ \BBA {} Khan%
+}{%
 Dhar%
-, Huber%
-\BCBL {}\ \protect \BOthers {.}}{%
+\ \protect \BOthers {.}}{%
 {\protect \APACyear {2007}}%
 }]{%
 dhar2007shopping}
@@ -289,11 +290,9 @@ Kappes, H\BPBI B.%
 
 \bibitem [\protect \citeauthoryear {%
 Kruglanski%
-, Shah%
-\BCBL {}\ \protect \BOthers {.}}{%
+\ \protect \BOthers {.}}{%
 Kruglanski%
-, Shah%
-\BCBL {}\ \protect \BOthers {.}}{%
+\ \protect \BOthers {.}}{%
 {\protect \APACyear {2002}}%
 }]{%
 kruglanski2002theory}
@@ -316,32 +315,6 @@ Kruglanski, A\BPBI W.%
 \newblock
 \APACjournalVolNumPages{Advances in Experimental Social
   Psychology}{34}{}{331--378}.
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
-Kruglanski%
-\ \BBA {} Szumowska%
-}{%
-Kruglanski%
-\ \BBA {} Szumowska%
-}{%
-{\protect \APACyear {2020}}%
-}]{%
-Kruglanski2020}
-\APACinsertmetastar {%
-Kruglanski2020}%
-\begin{APACrefauthors}%
-Kruglanski, A\BPBI W.%
-\BCBT {}\ \BBA {} Szumowska, E.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2020}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Habitual Behavior Is Goal-Driven} {Habitual behavior is
-  goal-driven}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Current Opinion in Psychology}{36}{}{46--50}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -426,10 +399,10 @@ Nedungadi, P.%
 \bibitem [\protect \citeauthoryear {%
 Van~Trijp%
 , Hoyer%
-\BCBL {}\ \protect \BOthers {.}}{%
+\BCBL {}\ \BBA {} Inman%
+}{%
 Van~Trijp%
-, Hoyer%
-\BCBL {}\ \protect \BOthers {.}}{%
+\ \protect \BOthers {.}}{%
 {\protect \APACyear {1996}}%
 }]{%
 vantrijp1996variety}

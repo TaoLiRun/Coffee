@@ -1,4 +1,4 @@
-\babel@toc {english}{}\relax 
+\babel@toc {english}{}
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
 \contentsline {section}{\numberline {2}Behavioral Mechanism and Micro-Foundation}{2}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Counterfactual Thinking and Goal Persistence}{2}{subsection.2.1}%
@@ -9,26 +9,32 @@
 \contentsline {subsubsection}{\numberline {2.2.3}Two consumer types}{7}{subsubsection.2.2.3}%
 \contentsline {section}{\numberline {3}Setting and Data}{8}{section.3}%
 \contentsline {section}{\numberline {4}Empirical Strategy and Results}{11}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Classifying Purchase Intention}{11}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Outcomes}{12}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.1}Classifying Predicted Purchase Incidence}{11}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Outcomes}{11}{subsection.4.2}%
 \contentsline {paragraph}{\relax Purchase frequency.}{12}{section*.5}%
-\contentsline {paragraph}{\relax Novelty-seeking.}{13}{section*.6}%
-\contentsline {subsection}{\numberline {4.3}Triple Difference-in-Differences}{13}{subsection.4.3}%
+\contentsline {paragraph}{\relax Novelty-seeking.}{12}{section*.6}%
+\contentsline {subsection}{\numberline {4.3}Triple Difference-in-Differences}{14}{subsection.4.3}%
 \contentsline {subsubsection}{\numberline {4.3.1}Identification Assumptions and Diagnostic Tests}{14}{subsubsection.4.3.1}%
 \contentsline {subsection}{\numberline {4.4}Main Results}{15}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Robustness Checks}{17}{subsection.4.5}%
-\contentsline {section}{\numberline {5}Why Does This Happen? Goal Persistence and Consumer Type}{18}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Blocked Goals Create Focused Rebound}{18}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Implementation and Findings}{18}{subsubsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.2}Heterogeneity by Pre-Period Novelty}{19}{subsection.5.2}%
-\contentsline {section}{\numberline {6}Conclusion}{20}{section.6}%
-\contentsline {section}{References}{22}{section*.10}%
+\contentsline {paragraph}{\relax Purchase frequency.}{15}{section*.9}%
+\contentsline {paragraph}{\relax Novelty-seeking.}{15}{section*.10}%
+\contentsline {subsection}{\numberline {4.5}Robustness Checks}{16}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Why Does This Happen? Goal Persistence and Consumer Type}{17}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Blocked Goals Create Focused Rebound}{17}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Implementation and Findings}{17}{subsubsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.2}Heterogeneity by Pre-Period Novelty}{17}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Conclusion}{19}{section.6}%
+\contentsline {section}{References}{20}{section*.12}%
 \contentsline {part}{\hspace {1em}Online Appendix}{i}{part.1}%
 \contentsline {xpart}{Online Appendix}{i}{part.1}%
-\contentsline {section}{Table of Contents}{i}{section*.11}%
+\contentsline {section}{Table of Contents}{i}{section*.13}%
 \contentsline {section}{\numberline {A}Data Construction and Measurement}{ii}{appendix.A}%
 \contentsline {subsection}{\numberline {A.1}Closure Registry and Member-Event Sample}{ii}{subsection.A.1}%
 \contentsline {subsection}{\numberline {A.2}Outcome Timing and Variable Definitions}{iii}{subsection.A.2}%
-\contentsline {subsection}{\numberline {A.3}Purchase-Intention Classifier}{iv}{subsection.A.3}%
-\contentsline {section}{\numberline {B}Identification Diagnostics}{v}{appendix.B}%
-\contentsline {subsection}{\numberline {B.1}Pretrend Tests}{v}{subsection.B.1}%
+\contentsline {subsection}{\numberline {A.3}Predicted Purchase-Incidence Classifier}{iv}{subsection.A.3}%
+\contentsline {section}{\numberline {B}Identification Diagnostics}{vi}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Pretrend Tests}{vi}{subsection.B.1}%
+\contentsline {section}{\numberline {C}Additional Results}{viii}{appendix.C}%
+\contentsline {subsection}{\numberline {C.1}Complete Main Specifications}{viii}{subsection.C.1}%
+\contentsline {subsubsection}{\numberline {C.1.1}Continuous predicted-incidence score}{ix}{subsubsection.C.1.1}%
+\contentsline {subsection}{\numberline {C.2}Alternative Outcome Definition: New-Product-Seeking}{x}{subsection.C.2}%

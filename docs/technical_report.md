@@ -27,7 +27,7 @@ The project asks:
 2. If not, does the closure still change **what** they buy, especially their willingness to try new products?
 3. Can we separate a general post-closure shift in demand from the more specific effect of having an active purchase intention blocked?
 
-The write-up in [main_results.qmd](/home/litao/Coffee/model-free/reports/main_results.qmd:1) frames the key estimand as the additional post-reopening effect for treated customers who were genuinely due to purchase during the closure.
+The write-up in [main_results.qmd](/home/litao/Coffee/model-free/reports/main_results.qmd:1) frames the key estimand as the high-minus-low post-reopening treatment-effect differential. Under parallel triple trends and comparable general closure effects, it is the incremental response associated with interrupting a likely purchase; it is not the total effect for high-predicted-incidence customers.
 
 ### 1.2 Core conceptual distinction
 
@@ -1069,6 +1069,34 @@ See especially:
 - output validation: [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:96)
 - purchase / incidence / novelty runs: [run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:168)
 
+### 10.8 Paper-facing write-up exhibits
+
+The regression-output figures in Section 10.3 are diagnostic event-study plots. The current manuscript also uses a separate paper-facing exhibit generator:
+
+- [generate_paper_exhibits.py](/home/litao/Coffee/model-free/scripts/writeup/generate_paper_exhibits.py:1)
+
+This script now writes two descriptive figures to `writeup/figures/`.
+
+First, [write_closure_shock_figure()](/home/litao/Coffee/model-free/scripts/writeup/generate_paper_exhibits.py:250) writes:
+
+- [closure_shock_purchase_frequency.png](/home/litao/Coffee/model-free/writeup/figures/closure_shock_purchase_frequency.png:1)
+
+This figure replaces the earlier combined purchase-frequency/novelty figure. The old combined exhibit, `closure_shock_purchase_novelty.png`, should not be used in the paper because the novelty outcome is conditional on purchase and is not the cleanest way to show the closure shock. The manuscript now uses the single-panel purchase-frequency plot only to show the first-stage supply interruption: treated purchase frequency falls sharply in period `0`, while the control path remains available. After reopening, treated purchase frequency returns close to the control path, so the paper frames the main question as product choice after interruption rather than a permanent purchase-frequency collapse.
+
+Second, [write_novelty_intention_paths_figure()](/home/litao/Coffee/model-free/scripts/writeup/generate_paper_exhibits.py:285) writes:
+
+- [novelty_intention_paths.png](/home/litao/Coffee/model-free/writeup/figures/novelty_intention_paths.png:1)
+
+This figure is the model-free descriptive counterpart to the main novelty-seeking DDD result. It loads the member-first novelty estimation sample, omits `rel_t = 0`, and plots average `variety_seeking` by predicted purchase-incidence status, treatment status, and relative period. The left panel shows low-predicted-incidence member-events; the right panel shows high-predicted-incidence member-events. Open markers track controls and solid markers track treated customers.
+
+The raw pattern is:
+
+- among low-predicted-incidence member-events, treated and control customers have almost identical pre-closure novelty-seeking rates, and treated customers become more likely than controls to try new products after reopening;
+- among high-predicted-incidence member-events, treated customers start with higher novelty-seeking rates than controls, but the treatment-control gap narrows after reopening;
+- in pre/post averages, the low-predicted-incidence treatment-control gap changes from about `-0.1` percentage points to `+2.5` percentage points, while the high-predicted-incidence gap changes from about `+4.6` percentage points to `+3.0` percentage points, implying a raw DDD decline of about `4.2` percentage points.
+
+In the manuscript, this figure is placed directly after the `Outcomes` discussion and before `Triple Difference-in-Differences`, without adding a new section heading. The surrounding text explains that the high-group DiD contains both the low-group effect and the high-minus-low contrast; it does not interpret the raw DDD as the total effect for the high group. See [main.tex](/home/litao/Coffee/model-free/writeup/main.tex:641).
+
 ---
 
 ## 11. Novelty-Seeking Extensions and Heterogeneity
@@ -1398,7 +1426,7 @@ This section is the project memory aid. It records which analyses are completed,
 The main empirical story now rests on the **18-closure sample** in `outputs/customer-store/closure_pair_registry.csv`. The current headline results are:
 
 - Purchase frequency: the full-sample DDD triple interaction is small and positive (`+0.0058`, `p = 0.021`), but the matched/common-support diagnostics attenuate it and show remaining dynamic pretrend fragility. This result is useful background, not the cleanest paper result.
-- Member-first novelty seeking: the full-sample DDD triple interaction is negative (`-0.0415`, `p = 0.004`) and the standard event-study pretrend diagnostics are much cleaner than purchase frequency. This is the strongest result for the paper's DDD novelty-seeking emphasis.
+- Member-first novelty seeking: the full-sample high-minus-low DDD is negative (`-0.0415`, `p = 0.004`) and the standard event-study pretrend diagnostics are much cleaner than purchase frequency. The direct high-predicted-incidence effect is `-0.0102` (`p = 0.217`). Thus the strongest paper result is a significant differential, not a significant absolute decline for the high group.
 - Market-new novelty seeking: the negative DDD result also appears when novelty is defined as buying products newly introduced to the market/catalog window (`-0.0417`, `p < 0.001`), so the product-choice result is not only a member-history artifact.
 - Matched/common-support diagnostics: novelty pretrends remain more supportive than purchase pretrends, but matched DDD estimates are smaller and imprecise. These matched results are **not added to the paper yet**; they are kept as technical identification diagnostics and should be discussed only if the paper later adds an identification-limitation subsection or appendix.
 - Pre-novelty heterogeneity: the estimated heterogeneity is large, but the high pre-novelty group has lower pre-period purchase frequency. Treat this as descriptive heterogeneity, not a clean causal subgroup design.
@@ -1501,11 +1529,14 @@ The blocked-buyer classifier produces `outputs/displacement_classification/displ
 
 The paper should foreground the DDD effect on novelty seeking. The current paper-facing sequence is:
 
-1. Explain the blocked-buyer DDD design and the distinction between general treatment effects and blocked-purchase-intention effects.
-2. Show the main purchase-frequency result as a contrast: quantity does not fall after closure for blocked buyers, so the evidence is not a simple habit-breaking decline in purchasing.
-3. Present member-first novelty seeking as the central result: blocked treated customers become less likely to try new products relative to comparable blocked controls.
-4. Add market-new novelty as a robustness check.
-5. Keep matched/common-support results in the technical report for now. They are not current paper main results because the matched estimates are smaller and imprecise.
-6. Keep menu-exposure and push-targeting checks in the technical report for now. Use them only if the paper later adds a broader caveats or alternative-mechanisms appendix.
+1. Establish the closure shock with the single-panel purchase-frequency figure. This figure should show only the first-stage interruption, not the novelty outcome.
+2. Define purchase frequency and novelty-seeking in the `Outcomes` subsection.
+3. Immediately after defining novelty-seeking, show the model-free novelty paths by predicted purchase-intention status. The discussion should walk through the left and right panels and explain how the two panel-specific DiD comparisons motivate the DDD design.
+4. Introduce the blocked-buyer DDD design and the distinction between general treatment effects and blocked-purchase-intention effects.
+5. Present member-first novelty seeking as the central regression result: the post-reopening response is lower for high- than for low-predicted-incidence episodes. State the direct high-group estimate separately and describe the causal differential as conditional on parallel triple trends and comparable general closure effects.
+6. Use purchase frequency as contrast and background. Quantity does not fall after closure for blocked buyers, so the evidence is not a simple habit-breaking decline in purchase incidence or frequency.
+7. Add market-new novelty as a robustness check.
+8. Keep matched/common-support results in the technical report for now. They are not current paper main results because the matched estimates are smaller and imprecise.
+9. Keep menu-exposure and push-targeting checks in the technical report for now. Use them only if the paper later adds a broader caveats or alternative-mechanisms appendix.
 
 The technical report, rather than the paper, should retain the full implementation record: all run modes, file locations, interim sample summaries, full-registry history, horizon checks, per-closure effects, generated logs, and diagnostic plots.

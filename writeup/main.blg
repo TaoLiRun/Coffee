@@ -1,215 +1,56 @@
-This is BibTeX, Version 0.99d
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: apacite.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: References.bib
 apacite.bst [2013/07/21 v6.03 APA bibliography style]
-You can't mess with entries here for entry Levine2025
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry epstude2008functional
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry gollwitzer1990action
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry masicampo2011consider
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry dhar2007shopping
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry fitzsimons2000consumer
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry bordalo2026cognitive
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry nedungadi1990consideration
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry vantrijp1996variety
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry baumgartner1996exploratory
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry Gruber1994
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry gehring2026insuring
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry Brehm1966
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry Clee1980
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry Kappes2016
-while executing---line 5056 of file apacite.bst
-You can't mess with entries here for entry gollwitzer1990action
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry bordalo2026cognitive
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry masicampo2011consider
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry Clee1980
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry fitzsimons2000consumer
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry baumgartner1996exploratory
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry epstude2008functional
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry Gruber1994
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry gehring2026insuring
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry Kappes2016
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry nedungadi1990consideration
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry dhar2007shopping
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry Levine2025
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry Brehm1966
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry vantrijp1996variety
-while executing---line 5061 of file apacite.bst
-You can't mess with entries here for entry baumgartner1996exploratory
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry baumgartner1996exploratory
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry bordalo2026cognitive
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry bordalo2026cognitive
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Brehm1966
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Brehm1966
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Clee1980
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Clee1980
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry dhar2007shopping
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry dhar2007shopping
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry epstude2008functional
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry epstude2008functional
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry fitzsimons2000consumer
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry fitzsimons2000consumer
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry gehring2026insuring
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry gehring2026insuring
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry gollwitzer1990action
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry gollwitzer1990action
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Gruber1994
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Gruber1994
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Kappes2016
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Kappes2016
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Levine2025
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry Levine2025
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry masicampo2011consider
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry masicampo2011consider
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry nedungadi1990consideration
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry nedungadi1990consideration
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry vantrijp1996variety
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry vantrijp1996variety
-while executing---line 5064 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5066 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5068 of file apacite.bst
-You can't mess with entries here for entry baumgartner1996exploratory
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry baumgartner1996exploratory
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry bordalo2026cognitive
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry bordalo2026cognitive
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Brehm1966
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Brehm1966
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Clee1980
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Clee1980
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry dhar2007shopping
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry dhar2007shopping
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry epstude2008functional
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry epstude2008functional
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry fitzsimons2000consumer
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry fitzsimons2000consumer
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry gehring2026insuring
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry gehring2026insuring
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry gollwitzer1990action
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry gollwitzer1990action
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Gruber1994
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Gruber1994
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Kappes2016
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Kappes2016
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Kruglanski2020
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry kruglanski2002theory
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Levine2025
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry Levine2025
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry masicampo2011consider
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry masicampo2011consider
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry nedungadi1990consideration
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry nedungadi1990consideration
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry vantrijp1996variety
-while executing---line 5069 of file apacite.bst
-You can't mess with entries here for entry vantrijp1996variety
-while executing---line 5069 of file apacite.bst
-(There were 104 error messages)
+You've used 16 entries,
+            6951 wiz_defined-function locations,
+            1373 strings with 13173 characters,
+and the built_in function-call counts, 29088 in all, are:
+= -- 3642
+> -- 243
+< -- 1281
++ -- 1379
+- -- 32
+* -- 1829
+:= -- 5165
+add.period$ -- 65
+call.type$ -- 16
+change.case$ -- 273
+chr.to.int$ -- 0
+cite$ -- 32
+duplicate$ -- 806
+empty$ -- 1185
+format.name$ -- 403
+if$ -- 5625
+int.to.chr$ -- 0
+int.to.str$ -- 48
+missing$ -- 0
+newline$ -- 397
+num.names$ -- 130
+pop$ -- 454
+preamble$ -- 1
+purify$ -- 64
+quote$ -- 0
+skip$ -- 1992
+stack$ -- 0
+substring$ -- 1533
+swap$ -- 487
+text.length$ -- 39
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 1344
+warning$ -- 0
+while$ -- 135
+width$ -- 0
+write$ -- 487

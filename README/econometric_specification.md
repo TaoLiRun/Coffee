@@ -14,11 +14,11 @@ For each member-event pair $(i,e)$:
 
 - $T_{ie} = 1$ if member $i$ belongs to the treatment group for event $e$, meaning the member's preferred pre-closure store is the store that closes.
 - $T_{ie} = 0$ if member $i$ belongs to the matched control group, meaning the member's preferred pre-closure store remains open.
-- $D_{ie} = 1$ if member $i$ is classified ex ante as a blocked buyer for event $e$, meaning the model predicts that this member would have made a purchase during the closure window if access had not been disrupted.
+- $D_{ie} = 1$ if member $i$ has high predicted purchase incidence for event $e$: the ex-ante model predicts at least one purchase during the closure window if access is not disrupted.
 - $D_{ie} = 0$ otherwise.
 - $Post_t = 1[t > 0]$.
 
-The blocked-buyer classifier is trained only on pre-closure information and then applied ex ante. Its role is to separate members whose purchase routine was plausibly interrupted from those whose purchase timing would not have put them in the closure window anyway.
+The predicted purchase-incidence classifier is trained only on pre-closure information and then applied ex ante. It separates member-events with high and low predicted closure-window purchase incidence. A likely interrupted purchase occurs only when a high-predicted-incidence member-event is treated.
 
 The panel excludes $t = 0$ from the regression sample. Identification comes from comparing pre-closure periods to post-reopening periods.
 
@@ -89,7 +89,7 @@ For a blocked treated member, the closure creates an access shock at $t = 0$. In
 - $C_{ie0}(0) = 1$ without the closure,
 - $C_{ie0}(1) = 0$ with the closure.
 
-Then at $t = 1$, holding baseline demand fixed, the deterministic part of utility falls by $\gamma^P$. If the member substitutes to another store of the same chain during the closure, this gap is smaller. Therefore, the blocked-purchase effect in this project should be interpreted as the average post-reopening consequence of having a purchase opportunity disrupted, not necessarily as the effect of literally making zero chain purchases during the closure.
+Then at $t = 1$, holding baseline demand fixed, the deterministic part of utility falls by $\gamma^P$. If the member substitutes to another store of the same chain during the closure, this gap is smaller. Therefore, the empirical contrast should be interpreted as the average post-reopening consequence associated with disrupted access, not necessarily as the effect of literally making zero chain purchases during the closure.
 
 ### 3.3 Novelty decision
 
@@ -111,19 +111,17 @@ First, a blocked purchase can create a focused rebound. After reopening, some bl
 
 Second, members whose preferred store was closed may miss exposure to newly introduced items during the closure window. If matched control stores remained active and displayed new products, blocked treated members return with less recent assortment exposure, which can also reduce novelty.
 
-At the same time, closures can shift baseline exploration even for non-blocked members. A routine disruption can move some members away from autopilot and toward broader menu search after reopening.
+At the same time, closures can shift baseline exploration even for low-predicted-incidence members. A routine disruption can move some members away from autopilot and toward broader menu search after reopening.
 
 ## 4. Mechanisms of interest
 
 For both outcomes, we separate two reduced-form mechanisms.
 
-### 4.1 Blocked-purchase effect
+### 4.1 Incremental interruption contrast
 
-$D$ is the additional post-reopening effect caused by having a purchase due during the closure window and therefore having one's purchase path disrupted.
+The paper's causal DDD estimand is the difference between post-reopening treatment effects for high- and low-predicted-incidence episodes. Under the assumptions below, it captures the incremental response associated with interrupting a likely purchase.
 
-For purchase frequency, $D$ captures whether a blocked purchase weakens later chain purchasing, leaves it unchanged, or creates a rebound.
-
-For novelty-seeking, $D$ captures whether a blocked purchase pushes members toward familiar items or toward experimentation after reopening, potentially through focused goal completion or missed exposure to newly introduced products.
+For purchase frequency, this contrast indicates whether the high-predicted-incidence response is lower, the same, or higher than the low-predicted-incidence response. For novelty-seeking, it indicates whether the high-predicted-incidence response is relatively more focused on familiar items or more exploratory.
 
 ### 4.2 Baseline-demand effect
 
@@ -142,18 +140,18 @@ The empirical goal is to distinguish $D$ from $B$.
 
 There are four relevant groups:
 
-- treated, non-blocked;
-- treated, blocked;
-- control, non-blocked;
-- control, blocked.
+- treated, low predicted purchase incidence;
+- treated, high predicted purchase incidence;
+- control, low predicted purchase incidence;
+- control, high predicted purchase incidence.
 
 Let $\Delta Y_{g}$ denote the pre/post change in an outcome for group $g$.
 
-For non-blocked treated members:
+For low-predicted-incidence treated members:
 
 $\Delta Y_{T,0} = B_{T,0} + Trend_{T,0}$.
 
-For blocked treated members:
+For high-predicted-incidence treated members:
 
 $\Delta Y_{T,1} = D_{T,1} + B_{T,1} + Trend_{T,1}$.
 
@@ -162,11 +160,11 @@ For the two control groups:
 - $\Delta Y_{C,0} = Trend_{C,0}$,
 - $\Delta Y_{C,1} = Trend_{C,1}$.
 
-The first DiD among non-blocked members is:
+The first DiD among low-predicted-incidence members is:
 
 $\Delta Y_{T,0} - \Delta Y_{C,0} = B_{T,0} + Trend_{T,0} - Trend_{C,0}$.
 
-The first DiD among blocked members is:
+The first DiD among high-predicted-incidence members is:
 
 $\Delta Y_{T,1} - \Delta Y_{C,1} = D_{T,1} + B_{T,1} + Trend_{T,1} - Trend_{C,1}$.
 
@@ -176,7 +174,7 @@ $[(\Delta Y_{T,1} - \Delta Y_{C,1}) - (\Delta Y_{T,0} - \Delta Y_{C,0})]$
 
 $= D_{T,1} + (B_{T,1} - B_{T,0}) + [(Trend_{T,1} - Trend_{C,1}) - (Trend_{T,0} - Trend_{C,0})]$.
 
-Under the identification assumptions below, this isolates the blocked-purchase effect $D$.
+Under parallel triple trends and comparable general closure effects, this isolates the incremental response associated with interrupting a likely purchase.
 
 ## 6. Main estimating equation
 
@@ -200,11 +198,11 @@ Standard errors are clustered at the member level.
 
 The role of each coefficient is:
 
-- $\delta^B$: post-reopening treatment effect for non-blocked members.
-- $\beta$: common post shift for blocked members in both treatment and control groups.
-- $\delta^D$: additional post-reopening effect for blocked treated members relative to the other three groups.
+- $\delta^B$: post-reopening treatment effect for low-predicted-incidence members.
+- $\beta$: high-minus-low post shift common to treatment and control members; it is not a treatment effect.
+- $\delta^D$: high-minus-low differential between the two post-reopening treatment effects.
 
-This last coefficient is the main estimand.
+The high-predicted-incidence treatment effect is $\delta^B+\delta^D$, not $\delta^D$. The DDD differential is the causal estimand under the stated assumptions.
 
 ## 7. Interpretation by outcome
 
@@ -212,24 +210,21 @@ This last coefficient is the main estimand.
 
 When $Y_{iet} = Y^P_{iet}$:
 
-- $\delta^B$ measures whether treatment members without a purchase due change their post-reopening purchase rate relative to matched controls.
-- $\beta$ captures the fact that blocked members are higher-intensity purchasers even without a closure effect, so they can mechanically show stronger mean reversion.
-- $\delta^D < 0$ would be evidence that missing a purchase weakens later purchasing.
-- $\delta^D = 0$ would mean no detectable blocked-purchase effect on later purchase frequency.
-- $\delta^D > 0$ would mean blocked treated members rebound more strongly than comparable blocked controls.
+- $\delta^B$ measures the low-predicted-incidence treatment effect.
+- $\delta^B+\delta^D$ measures the high-predicted-incidence treatment effect.
+- $\delta^D$ measures how much larger or smaller the high-group effect is than the low-group effect. It is not an absolute effect for the high group.
 
 ### 7.2 Novelty-seeking outcome
 
 When $Y_{iet} = Y^V_{iet}$:
 
-- $\delta^B$ measures whether treated non-blocked members become more or less exploratory after reopening.
-- $\beta$ captures level differences in experimentation for blocked members independent of treatment.
-- $\delta^D < 0$ means blocked treated members shift toward familiar products after reopening.
-- $\delta^D > 0$ means blocked treated members become more exploratory after reopening.
+- $\delta^B$ measures the low-predicted-incidence novelty effect.
+- $\delta^B+\delta^D$ measures the high-predicted-incidence novelty effect.
+- $\delta^D < 0$ means the high-group novelty response is lower than the low-group response; it does not alone establish a decline for the high group.
 
 ## 8. Continuous-score robustness specification
 
-Because blocked status is predicted rather than observed, a useful robustness specification replaces the binary blocked indicator with a centered ex ante blocked probability $\tilde{p}_{ie}$:
+Because purchase incidence is predicted rather than observed, a useful robustness specification replaces the binary high-predicted-incidence indicator with a centered ex-ante predicted purchase probability $\tilde{p}_{ie}$:
 
 ```math
 Y_{iet}
@@ -300,7 +295,7 @@ The DDD interpretation of $\delta^D$ relies on the following assumptions.
 
 ### A1. Parallel trends across treatment and control
 
-Absent the closure, treated and matched control members would have evolved similarly within each blocked-status group, or at least the treatment-control trend gap would have been the same for blocked and non-blocked members.
+Absent the closure, treated and matched control members would have evolved similarly within each predicted-incidence group, or at least the treatment-control trend gap would have been the same for high- and low-predicted-incidence members.
 
 Formally, the DDD only needs:
 
@@ -308,17 +303,17 @@ $Trend_{T,1} - Trend_{C,1} = Trend_{T,0} - Trend_{C,0}$.
 
 This is the key parallel-trends condition.
 
-### A2. Equal baseline effect across blocked and non-blocked treated members
+### A2. Comparable general closure effects
 
-Any closure-induced shift in baseline demand that is unrelated to the interruption of a due purchase affects blocked and non-blocked treated members similarly:
+Any closure-induced shift in baseline demand that is unrelated to the interruption of a likely purchase affects high- and low-predicted-incidence treated members similarly:
 
 $B_{T,1} = B_{T,0}$.
 
-If this fails, $\delta^D$ mixes the blocked-purchase effect with heterogeneous baseline effects.
+For example, general effects may arise from convenience, promotions, substitution opportunities, or perceptions of the store. If this condition fails, $\delta^D$ mixes the incremental interruption response with heterogeneous general closure effects.
 
-### A3. Ex ante blocked classification
+### A3. Ex ante predicted purchase incidence
 
-Blocked status must be determined using only pre-closure information. It should proxy for whether a purchase was due during the closure window, not encode post-treatment behavior.
+Predicted purchase incidence must be determined using only pre-closure information. It should proxy for whether a purchase was likely during the closure window, not encode post-treatment behavior.
 
 ### A4. Stable measurement across groups and periods
 
@@ -332,20 +327,18 @@ One member-event's treatment status should not substantially alter another membe
 
 Three threats are especially important in this setting.
 
-First, blocked and non-blocked treated members may respond differently to the closure even absent purchase interruption. For example, frequent buyers may be more promotion-sensitive, more exposed to app messages, or more likely to learn about alternative stores. That would violate A2.
+First, high- and low-predicted-incidence treated members may respond differently to the closure even absent a likely purchase interruption. For example, frequent buyers may be more promotion-sensitive, more exposed to app messages, or more likely to learn about alternative stores. That would violate A2.
 
-Second, blocked status is predicted with error. Misclassification attenuates the binary DDD coefficient toward zero and makes the score-based specification especially useful as a robustness check.
+Second, predicted purchase incidence is measured with error. Misclassification attenuates the binary DDD coefficient toward zero and makes the score-based specification especially useful as a robustness check.
 
-Third, treated members can substitute to another store in the same chain during the closure. This does not invalidate the design, but it means the blocked-purchase effect is an average reduced-form effect of disrupted access, not a literal no-purchase effect for every blocked treated member.
+Third, treated members can substitute to another store in the same chain during the closure. This does not invalidate the design, but it means the incremental interruption contrast is an average reduced-form effect of disrupted access, not a literal no-purchase effect for every high-predicted-incidence treated member.
 
 ## 13. Economic interpretation
 
 The econometric design answers two distinct questions.
 
-First, does a temporary closure create a general post-reopening shift in chain demand or menu exploration even for members who did not have a purchase due during the closure? That is $\delta^B$.
+First, does a temporary closure create a general post-reopening shift in chain demand or menu exploration for low-predicted-incidence members? That is $\delta^B$.
 
-Second, among members whose purchase timing made them exposed to the closure, does the disrupted purchase path have an additional persistent effect after reopening? That is $\delta^D$.
+Second, is the treatment effect larger or smaller for high-predicted-incidence members? That is $\delta^D$. The corresponding high-group treatment effect is $\delta^B+\delta^D$.
 
-For purchase frequency, $\delta^D$ is the reduced-form measure of whether a blocked coffee purchase breaks the buying habit, leaves it intact, or induces a rebound.
-
-For novelty-seeking, $\delta^D$ is the reduced-form measure of whether a blocked coffee purchase narrows members back toward familiar items or instead encourages experimentation after the store reopens.
+Under parallel triple trends and comparable general closure effects, $\delta^D$ is the reduced-form incremental response associated with interrupting a likely coffee purchase. For novelty-seeking, a negative value means that this incremental response shifts the high group's outcome lower relative to the low group; the high-group total must be reported separately.

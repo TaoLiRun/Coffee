@@ -100,6 +100,7 @@ validate_estimation_bundle() {
 from pathlib import Path
 import sys
 
+import numpy as np
 import pandas as pd
 
 output_dir = Path(sys.argv[1])
@@ -150,6 +151,58 @@ terms = set(binary["term"].astype(str))
 missing_terms = sorted(required_terms - terms)
 if missing_terms:
     raise SystemExit(f"{output_dir}: ddd_binary_results.csv is missing terms {missing_terms}.")
+
+required_columns = {"estimand", "coef", "se", "pvalue", "ci_low", "ci_high", "n"}
+missing_columns = sorted(required_columns - set(binary.columns))
+if missing_columns:
+    raise SystemExit(
+        f"{output_dir}: ddd_binary_results.csv is missing required columns {missing_columns}."
+    )
+
+required_estimands = {
+    "low_predicted_incidence_effect",
+    "high_predicted_incidence_effect",
+    "high_minus_low_ddd",
+}
+estimands = set(binary["estimand"].dropna().astype(str))
+missing_estimands = sorted(required_estimands - estimands)
+if missing_estimands:
+    raise SystemExit(
+        f"{output_dir}: ddd_binary_results.csv is missing estimands {missing_estimands}."
+    )
+
+def one_row(estimand: str) -> pd.Series:
+    rows = binary.loc[binary["estimand"] == estimand]
+    if len(rows) != 1:
+        raise SystemExit(
+            f"{output_dir}: expected one row for {estimand}, found {len(rows)}."
+        )
+    return rows.iloc[0]
+
+low = one_row("low_predicted_incidence_effect")
+high = one_row("high_predicted_incidence_effect")
+ddd = one_row("high_minus_low_ddd")
+delta_b = binary.loc[
+    (binary["spec"] == "binary_collapsed")
+    & (binary["term"] == "post_X_treated")
+]
+if len(delta_b) != 1:
+    raise SystemExit(f"{output_dir}: could not uniquely recover delta^B.")
+
+if not np.isclose(float(low["coef"]), float(delta_b.iloc[0]["coef"])):
+    raise SystemExit(f"{output_dir}: low-group effect does not equal delta^B.")
+if not np.isclose(float(high["coef"]), float(low["coef"]) + float(ddd["coef"])):
+    raise SystemExit(f"{output_dir}: high-group effect does not equal delta^B + delta^D.")
+if int(high["n"]) != int(ddd["n"]):
+    raise SystemExit(f"{output_dir}: group-effect and original DDD samples differ.")
+
+for estimand, row in {
+    "low_predicted_incidence_effect": low,
+    "high_predicted_incidence_effect": high,
+    "high_minus_low_ddd": ddd,
+}.items():
+    if row[["se", "pvalue", "ci_low", "ci_high"]].isna().any():
+        raise SystemExit(f"{output_dir}: {estimand} is missing uncertainty information.")
 PY
 }
 

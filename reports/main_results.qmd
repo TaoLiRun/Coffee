@@ -136,17 +136,17 @@ Here:
 - $\gamma_m$ are calendar-month fixed effects,
 - standard errors are clustered at the member level.
 
-The coefficient of interest is **$\delta^D$**, the additional post-reopening effect for blocked treatment customers. This is the estimated consequence of having a due purchase interrupted, over and above general post-closure shifts that affect treated customers more broadly.
+The low-predicted-incidence treatment effect is **$\delta^B$**. The high-predicted-incidence treatment effect is **$\delta^B+\delta^D$**. Therefore **$\delta^D$ is the high-minus-low treatment-effect differential**, not the total effect for high-predicted-incidence customers.
 
-The other key coefficient is **$\delta^B$**, the post-reopening treatment effect for non-blocked customers. It captures general baseline-demand shifts that are not tied to a blocked purchase.
+Under parallel triple trends and comparable general closure effects, the high-minus-low differential identifies the incremental response associated with interrupting a likely purchase. The latter assumption says that, absent the interruption, general closure effects such as convenience, promotions, substitution opportunities, or store perceptions would have been comparable across the high- and low-predicted-incidence groups.
 
 ## Identification Assumptions
 
-The triple interaction identifies the blocked-purchase effect if:
+The triple interaction identifies the incremental interruption contrast if:
 
-- **Parallel triple differences hold**: without the closure, the blocked-versus-non-blocked gap would have evolved similarly in treatment and control groups.
-- **Baseline-demand shifts do not differentially hit blocked treated customers**: any post-reopening change in prices, promotions, convenience, or perceived quality affects blocked and non-blocked treated customers similarly, so it is absorbed by the baseline treatment effect rather than the triple interaction.
-- **Blocked status and controls are valid**: blocked-buyer status is determined from pre-closure behavior, and the matched control stores provide the relevant counterfactual for treated customers.
+- **Parallel triple differences hold**: without the closure, the treated-control gap for high-predicted-incidence customers would have evolved like the gap for low-predicted-incidence customers.
+- **General closure effects are comparable**: absent a likely interrupted purchase, post-reopening changes in prices, promotions, convenience, or perceived quality affect high- and low-predicted-incidence treated customers similarly.
+- **Predicted purchase incidence and controls are valid**: the score is determined from pre-closure behavior, and the matched control stores provide the relevant counterfactual for treated customers.
 
 The event-study evidence is informative about these assumptions, but it is mixed rather than uniformly reassuring. For purchase frequency, the blocked-buyer triple-difference event study shows a significant pre-period deviation at $rel_t=-2$ and rejects the joint displacement pretrend test. For novelty-seeking, by contrast, both the ATT and blocked-buyer dynamic pretrend tests do not reject at the headline level.
 
@@ -156,19 +156,19 @@ The event-study evidence is informative about these assumptions, but it is mixed
 
 Did closures reduce how often customers buy from the chain after reopening?
 
-| Coefficient | Estimate | SE | |
+| Effect | Estimate | SE | |
 |---|---:|---:|---|
-| post × treated ($\delta^B$) | +0.00089 | 0.00067 | |
-| post × blocked ($\beta$) | −0.03437 | 0.00114 | *** |
-| post × treated × blocked ($\delta^D$) | +0.00583 | 0.00252 | ** |
+| Low-predicted-incidence effect ($\delta^B$) | +0.00089 | 0.00067 | |
+| High-predicted-incidence effect ($\delta^B+\delta^D$) | +0.00672 | 0.00243 | *** |
+| High-minus-low DDD ($\delta^D$) | +0.00583 | 0.00252 | ** |
 
 *321,184 observations; * p<0.1, ** p<0.05, *** p<0.01.*
 
 **What this means:**
 
-- **No general demand loss from closure itself** ($\delta^B \approx 0$): treatment customers who were not due to buy during the closure return at essentially the same purchase rate as matched controls.
-- **Blocked buyers show strong mean reversion** ($\beta = -0.034$): high-intensity customers buy more before the event and then drift back toward their usual level afterward, even in the control group. This is not a closure effect.
-- **No evidence that a blocked purchase weakens later buying** ($\delta^D = +0.0058$): if anything, blocked treatment customers buy slightly more after reopening than equally frequent blocked controls.
+- **No general demand loss from closure itself** ($\delta^B \approx 0$): the low-predicted-incidence effect is near zero.
+- **High predicted purchase incidence** has a positive direct purchase-frequency effect of $+0.0067$ ($p=0.006$).
+- **The high-minus-low contrast** is $+0.0058$ ($p=0.021$). Because its pretrend rejects, it is descriptive supporting evidence, not the report's cleanest causal result.
 
 The dynamic evidence for the blocked-buyer estimand is more cautious than the collapsed post coefficient alone. In the purchase-frequency event-study displacement path, the joint pretrend test for the triple-difference coefficients rejects ($p = 0.0025$), driven by a negative estimate at $rel_t=-2$. The post-reopening displacement coefficients are positive in periods 1 and 3, which is directionally consistent with rebound rather than habit decay, but the pre-period deviation means this dynamic evidence should be treated as suggestive rather than cleanly identified.
 
@@ -178,21 +178,21 @@ The dynamic evidence for the blocked-buyer estimand is more cautious than the co
 
 Did closures change whether customers tried new products?
 
-| Coefficient | Estimate | SE | |
+| Effect | Estimate | SE | |
 |---|---:|---:|---|
-| post × treated ($\delta^B$) | +0.03129 | 0.01200 | *** |
-| post × blocked ($\beta$) | +0.03808 | 0.00639 | *** |
-| post × treated × blocked ($\delta^D$) | −0.04149 | 0.01450 | *** |
+| Low-predicted-incidence effect ($\delta^B$) | +0.03129 | 0.01200 | *** |
+| High-predicted-incidence effect ($\delta^B+\delta^D$) | −0.01020 | 0.00826 | |
+| High-minus-low DDD ($\delta^D$) | −0.04149 | 0.01450 | *** |
 
 *99,644 observations; * p<0.1, ** p<0.05, *** p<0.01.*
 
 **What this means:**
 
-- **Non-blocked treatment customers become more exploratory** ($\delta^B = +0.031$): when routine is disturbed but no specific purchase was blocked, customers become more willing to try new items.
-- **Blocked buyers are more exploratory in general** ($\beta = +0.038$): frequent buyers encounter the menu more often and naturally accumulate more first-time product trials.
-- **Blocked treatment customers become less exploratory after reopening** ($\delta^D = -0.041$): once a due purchase was interrupted, customers return in a more focused mode and shift toward familiar products relative to comparable blocked controls.
+- **Low-predicted-incidence episodes become more exploratory** ($\delta^B = +0.031$).
+- **The direct high-predicted-incidence effect** is a $-0.010$ change ($p=0.217$), so it is not statistically distinguishable from zero.
+- **The high-minus-low DDD** is $-0.041$ ($p=0.004$): under the stated assumptions, this is the incremental response associated with interrupting a likely purchase.
 
-For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the blocked-buyer dynamic test), while the collapsed post effect remains clearly negative. The coefficient path is also visually consistent with that interpretation: the pre-period blocked-buyer displacement estimates have wide confidence intervals covering zero, while the post-period coefficients turn negative in the direction implied by the collapsed DDD.
+For novelty-seeking, the event-study pretrend tests do not reject parallel pre-trends at the headline level ($p = 0.186$ for the ATT version and $p = 0.797$ for the high-minus-low dynamic test). The pre-period high-minus-low estimates have wide confidence intervals covering zero, while the post-period coefficients turn negative in the direction implied by the collapsed DDD.
 
 ![](../outputs/03_main_18_closures/novelty_member_first_ddd_h4/event_study_displacement.png)
 
@@ -200,7 +200,7 @@ For novelty-seeking, the event-study pretrend tests do not reject parallel pre-t
 
 Customers differ in how exploratory they are **before** the closure episode. To ask whether the triple-difference pattern is stronger for habitually more novelty-seeking shoppers, we split each member–closure episode at the **sample median** of the episode’s **pre-period** mean distinct novelty share (all $rel_t<0$ windows with non-missing outcomes). Episodes without any valid pre-period novelty observation are dropped. This yields **25,894** episodes with a defined split (**12,189** above the median), and **95,986** panel rows enter the pooled regressions (member–closure periods with non-missing novelty outcomes on the restricted episode set).
 
-We then augment the collapsed triple-difference specification by interacting a high-pre-novelty indicator with each existing post interaction—analogous in structure to the quadruple-difference heterogeneity in Levine and Hristakeva’s Stop \& Shop strike analysis (section 5.3, “Heterogeneity in Trip Displacement Effects”), where a moderator enters interactions with each post term in the baseline displacement specification. The first three coefficients in the augmented regression are the post effects **for the below-median pre-novelty subgroup** ($H=0$); the next three are **increments** for the above-median subgroup ($H=1$). Implied effects for $H=1$ are sums of the corresponding pair (e.g.\ the blocked-treatment triple for the high subgroup is $\delta^D_{\text{low}} + \delta^D_{H}$ on `post` $\times$ `treated` $\times$ `blocked`).
+We then augment the collapsed triple-difference specification by interacting a high-pre-novelty indicator with each existing post interaction. The first three coefficients are the high-minus-low DDD components for the below-median pre-novelty subgroup ($H=0$); the next three are increments for the above-median subgroup ($H=1$). We report the directly estimated contrasts and their standard errors, not unreported linear combinations.
 
 On this restricted sample, the **standard** collapsed DDD (without heterogeneity interactions) is close to the headline estimates:
 
@@ -223,15 +223,7 @@ The **augmented** collapsed specification (`binary_collapsed_pre_novelty_split`)
 | post × blocked × $H$ | −0.30876 | 0.00719 | *** |
 | post × treated × blocked × $H$ | +0.49234 | 0.02376 | *** |
 
-**Implied coefficients for the above-median pre-novelty subgroup ($H=1$):**
-
-| Coefficient | Implied estimate |
-|---|---:|
-| post × treated | −0.22085 |
-| post × blocked | −0.17866 |
-| post × treated × blocked | +0.22958 |
-
-**Read:** Among customers who were **less** novelty-seeking before the episode, the blocked-buyer pattern is **strongly negative** on novelty (−0.26 on the triple interaction). Among those who were **more** novelty-seeking ex ante, the incremental interactions flip the sign of that triple to a **positive** net effect (+0.23), while the baseline post terms for $H=1$ are also shifted by large negative increments on `post`×`treated` and `post`×`blocked`. Substantively, the closure’s association with “focused,” less exploratory buying after reopening is concentrated in the **low** pre-novelty segment; high pre-novelty customers show a different (and noisier to interpret) decomposition, so this split should be read as descriptive heterogeneity rather than a separate causal estimand.
+**Read:** Among customers who were **less** novelty-seeking before the episode, the high-minus-low contrast is strongly negative (−0.26). For those who were more novelty-seeking ex ante, the increment is positive (+0.49). This split is descriptive heterogeneity rather than a separate causal estimand.
 
 The dynamic event-study analog now matches that same heterogeneity specification period by period: the lower group is the baseline path, and the higher-pre-novelty group enters through period-specific increments. Under the median split, the lower-group blocked-buyer displacement path is strongly negative in all four post periods, around `-0.268`, `-0.269`, `-0.281`, and `-0.299`.
 
@@ -264,15 +256,7 @@ The **augmented** collapsed specification reports:
 | post × blocked × $H$ | −0.55632 | 0.01368 | *** |
 | post × treated × blocked × $H$ | +0.73847 | 0.03685 | *** |
 
-**Implied coefficients for the top-quartile subgroup ($H=1$):**
-
-| Coefficient | Implied estimate |
-|---|---:|
-| post × treated | −0.28582 |
-| post × blocked | −0.34453 |
-| post × treated × blocked | +0.32861 |
-
-**Read:** the same qualitative pattern holds, but it is sharper: the low-novelty tail has a strongly negative blocked-buyer novelty effect, while the top-novelty tail flips to a clearly positive implied triple interaction.
+**Read:** the same qualitative pattern holds, but it is sharper: the low-novelty tail has a strongly negative high-minus-low DDD, while the top-novelty increment is positive. This split remains descriptive.
 
 The dynamic event-study analog is sharper as well. For the bottom-quartile lower group, the blocked-buyer displacement path is strongly negative in each post period, around `-0.419`, `-0.397`, `-0.415`, and `-0.452`.
 
@@ -292,7 +276,7 @@ We re-estimate the same pooled triple-difference specification with this outcome
 
 * p<0.1, ** p<0.05, *** p<0.01.*
 
-**Read:** The blocked-buyer triple interaction is again **negative** (−0.042): blocked treatment customers allocate purchases toward products that were **not** chain-new in the adjacent-window sense, relative to comparable blocked controls, while non-blocked treated customers show a positive baseline shift ($\delta^B$). The pattern is qualitatively similar to member-first novelty-seeking, with a somewhat smaller baseline treatment effect than the headline +0.031 estimate.
+**Read:** The high-minus-low DDD is again **negative** (−0.042). Under the stated assumptions, this is the incremental response associated with interrupting a likely purchase; it is not the total high-predicted-incidence effect. The pattern is qualitatively similar to member-first novelty-seeking.
 
 The event-study diagnostics for this market-new outcome also support the headline interpretation: the pretrend tests do not reject at the headline level for either the ATT version ($p = 0.177$) or the blocked-buyer displacement version ($p = 0.515$), while the post-period displacement coefficients are negative in sign.
 
@@ -305,8 +289,8 @@ The same qualitative patterns appear when the binary blocked-buyer indicator is 
 - Purchase frequency: post × treated × score = **+0.00759** ($p = 0.040$)
 - Novelty-seeking: post × treated × score = **−0.04523** ($p = 0.040$)
 
-That is, the estimated treatment effect becomes more positive for purchase frequency and more negative for novelty-seeking as ex ante blocked-purchase propensity rises.
+That is, the high-minus-low treatment-effect contrast becomes more positive for purchase frequency and more negative for novelty-seeking as ex-ante predicted purchase incidence rises.
 
 # Conclusion
 
-Temporary store closures do not show evidence of breaking later coffee demand among blocked buyers in the pooled purchase-frequency post specification. The more robust pattern is instead in product choice: after a blocked purchase, customers return in a less exploratory and more focused mode, and that result appears in both the member-first novelty measure and the market-new novelty measure. Within novelty-seeking, the effect is especially strong for customers in the lower pre-novelty group, both in the collapsed heterogeneity regressions and in the dynamic lower-group event-study paths.
+Temporary store closures do not show evidence of breaking later coffee demand in the pooled purchase-frequency post specification. The clearest result is instead a product-choice differential: the post-reopening novelty response is 4.15 percentage points lower for high- than for low-predicted-incidence episodes. Under parallel triple trends and comparable general closure effects, this is the incremental response associated with interrupting a likely purchase. The direct high-group novelty effect is a 1.02-point decline and is not statistically distinguishable from zero. The member-first and market-new novelty measures both support the negative high-minus-low differential.

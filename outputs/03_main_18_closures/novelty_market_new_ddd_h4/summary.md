@@ -14,18 +14,20 @@
 
 
 ## Binary Specs
-| spec             | term                  |     n |   r2_within |        coef |         se |      pvalue |
-|:-----------------|:----------------------|------:|------------:|------------:|-----------:|------------:|
-| binary_collapsed | post_X_treated        | 99644 | 0.000755907 |  0.00804591 | 0.00916266 | 0.379888    |
-| binary_collapsed | post_X_disp           | 99644 | 0.000755907 |  0.0300485  | 0.00500086 | 1.89819e-09 |
-| binary_collapsed | post_X_treated_X_disp | 99644 | 0.000755907 | -0.0417174  | 0.0114672  | 0.000275368 |
+| spec                           | estimand                               | term                  |     n |   r2_within |        coef |         se |      pvalue |      ci_low |    ci_high |
+|:-------------------------------|:---------------------------------------|:----------------------|------:|------------:|------------:|-----------:|------------:|------------:|-----------:|
+| binary_collapsed               | low_predicted_incidence_effect_delta_b | post_X_treated        | 99644 | 0.000755907 |  0.00804591 | 0.00916266 | 0.379888    | -0.0099135  |  0.0260053 |
+| binary_collapsed               | common_high_minus_low_post_shift       | post_X_disp           | 99644 | 0.000755907 |  0.0300485  | 0.00500086 | 1.89818e-09 |  0.0202465  |  0.0398505 |
+| binary_collapsed               | high_minus_low_ddd                     | post_X_treated_X_disp | 99644 | 0.000755907 | -0.0417174  | 0.0114672  | 0.000275367 | -0.0641938  | -0.019241  |
+| binary_collapsed_group_effects | low_predicted_incidence_effect         | post_X_treated_X_low  | 99644 | 0.000755907 |  0.00804591 | 0.00916266 | 0.379888    | -0.00991351 |  0.0260053 |
+| binary_collapsed_group_effects | high_predicted_incidence_effect        | post_X_treated_X_high | 99644 | 0.000755907 | -0.0336715  | 0.00691959 | 1.14557e-06 | -0.0472343  | -0.0201086 |
 
 ## Score Spec
-| spec            | term                   |     n |   r2_within |       coef |         se |      pvalue |
-|:----------------|:-----------------------|------:|------------:|-----------:|-----------:|------------:|
-| score_collapsed | post_X_treated         | 99644 | 0.000702329 | -0.0033179 | 0.00779034 | 0.670186    |
-| score_collapsed | post_X_score           | 99644 | 0.000702329 |  0.046849  | 0.00774491 | 1.47958e-09 |
-| score_collapsed | post_X_treated_X_score | 99644 | 0.000702329 | -0.0486139 | 0.0174677  | 0.00538903  |
+| spec            | estimand   | term                   |     n |   r2_within |        coef |         se |      pvalue |     ci_low |    ci_high |
+|:----------------|:-----------|:-----------------------|------:|------------:|------------:|-----------:|------------:|-----------:|-----------:|
+| score_collapsed |            | post_X_treated         | 99644 | 0.000702329 | -0.00331789 | 0.00779033 | 0.670185    | -0.0185875 |  0.0119517 |
+| score_collapsed |            | post_X_score           | 99644 | 0.000702329 |  0.046849   | 0.0077449  | 1.47957e-09 |  0.0316685 |  0.0620295 |
+| score_collapsed |            | post_X_treated_X_score | 99644 | 0.000702329 | -0.0486139  | 0.0174677  | 0.00538895  | -0.0828517 | -0.0143761 |
 
 ## Event-study Specs
 | spec           | term                                                              |         coef |         se |      pvalue |     n |   r2_within |
