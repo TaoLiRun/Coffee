@@ -206,7 +206,7 @@ def save_event_study_plots(
     event_terms: pd.DataFrame,
 ) -> None:
     """Save coefficient plots for the main event-study effects."""
-    required = {"spec", "term", "coef", "se"}
+    required = {"spec", "term", "coef", "se", "ci_low", "ci_high"}
     missing = required - set(event_terms.columns)
     if missing:
         raise ValueError(f"event_terms missing required columns for event-study plots: {sorted(missing)}")
@@ -220,8 +220,9 @@ def save_event_study_plots(
         return
 
     plot_df["rel_t"] = plot_df["rel_t"].astype(int)
-    plot_df["ci_low"] = plot_df["coef"] - 1.96 * plot_df["se"]
-    plot_df["ci_high"] = plot_df["coef"] + 1.96 * plot_df["se"]
+    # Preserve the estimator's confidence limits. In particular, clustered
+    # fits can use finite-cluster degrees of freedom, so a hard-coded normal
+    # critical value would make the plots disagree with the saved results.
     plot_df.to_csv(output_dir / "event_study_plot_data.csv", index=False)
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -266,7 +267,7 @@ def save_lower_group_displacement_event_study_plot(
     heterogeneity pipeline, where `novelty_pre_high == 0` identifies the lower
     group under either the full-sample median split or the quartile-tail split.
     """
-    required_event = {"spec", "term", "coef", "se"}
+    required_event = {"spec", "term", "coef", "se", "ci_low", "ci_high"}
     missing_event = required_event - set(event_terms.columns)
     if missing_event:
         raise ValueError(
@@ -286,9 +287,6 @@ def save_lower_group_displacement_event_study_plot(
         return
 
     plot_df["rel_t"] = plot_df["rel_t"].astype(int)
-    plot_df["ci_low"] = plot_df["coef"] - 1.96 * plot_df["se"]
-    plot_df["ci_high"] = plot_df["coef"] + 1.96 * plot_df["se"]
-
     fig, ax = plt.subplots(figsize=(8, 5))
     x = plot_df["rel_t"].to_numpy()
     y = plot_df["coef"].to_numpy()
@@ -467,7 +465,7 @@ def save_blocked_gap_event_study_plot(
     event_terms: pd.DataFrame,
 ) -> None:
     """Save treated/control blocked-minus-non-blocked diagnostic paths."""
-    required = {"spec", "term", "coef", "se"}
+    required = {"spec", "term", "coef", "se", "ci_low", "ci_high"}
     missing = required - set(event_terms.columns)
     if missing:
         raise ValueError(
@@ -487,8 +485,6 @@ def save_blocked_gap_event_study_plot(
         "treated_blocked_minus_nonblocked",
         "control_blocked_minus_nonblocked",
     )
-    plot_df["ci_low"] = plot_df["coef"] - 1.96 * plot_df["se"]
-    plot_df["ci_high"] = plot_df["coef"] + 1.96 * plot_df["se"]
     plot_df.to_csv(output_dir / "blocked_gap_event_study_plot_data_matched.csv", index=False)
 
     fig, ax = plt.subplots(figsize=(8, 5))

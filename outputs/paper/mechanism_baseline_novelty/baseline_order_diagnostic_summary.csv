@@ -1,0 +1,6 @@
+statistic,value
+pearson_novelty_raw_orders,-0.24830959870491748
+spearman_novelty_raw_orders,-0.32643795852626717
+pearson_novelty_log_orders,-0.3291597094856086
+spearman_novelty_log_orders,-0.32643795852626717
+eligible_episodes,18525.0

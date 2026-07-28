@@ -1,3 +1,0 @@
-spec,formula,n,r2,r2_within
-binary_collapsed,variety_seeking ~ post_X_treated + post_X_disp + post_X_treated_X_disp | event_fe_id + rel_t + calendar_month,95986,0.41182047950200473,0.000566364043688039
-binary_collapsed_pre_novelty_split,variety_seeking ~ post_X_treated + post_X_disp + post_X_treated_X_disp + post_X_treated_X_novelty_pre_high + post_X_disp_X_novelty_pre_high + post_X_treated_X_disp_X_novelty_pre_high | event_fe_id + rel_t + calendar_month,95986,0.431435822443874,0.03389672124538723

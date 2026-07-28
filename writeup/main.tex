@@ -246,7 +246,7 @@
 \begin{abstract}
 \indexspace
 
-\noindent Temporary supply disruptions can affect not only when consumers buy but also what they choose after access returns. We study 18 store closures at a large Chinese coffee chain during the Covid-19 pandemic. A triple-differences design compares post-reopening changes for episodes with high versus low predicted purchase incidence. Purchase-day frequency rises 0.58 percentage points more per day for high-predicted-incidence episodes, although differential pretrends make this evidence descriptive. Novelty-seeking---the share of purchased products not previously chosen by the consumer---responds 4.15 percentage points less for high-predicted-incidence episodes. Under parallel triple trends and comparable general closure effects, this differential identifies the incremental response to interrupting a likely purchase. Heterogeneity by prior novelty-seeking is consistent with goal persistence: the forgone purchase remains salient and focuses returning consumers on familiar products.
+\noindent Temporary supply disruptions can affect not only when consumers buy but also what they choose after access returns. We study 18 store closures at a large Chinese coffee chain during the Covid-19 pandemic. A triple-differences design compares post-reopening changes for episodes with high versus low predicted purchase incidence. Purchase-day frequency rises 0.58 percentage points more per day for high-predicted-incidence episodes, but its pretrend test rejects equality, so we treat this estimate as descriptive. Novelty-seeking---the share of distinct purchased products not previously chosen by the consumer---responds 4.15 percentage points less for high-predicted-incidence episodes, a magnitude equal to 8.3\% of its pre-period mean. Under parallel triple trends and comparable general closure effects, this novelty differential identifies the incremental response to interrupting a likely purchase. Goal persistence is one possible interpretation of the product-choice response, but the data do not directly identify the psychological mechanism.
 \par\smallskip
 %\noindent \textit{JEL classification}: C54, C93, D78, L81, Y4\\
 \textit{Keywords}: Customer Engagement, Customer Reactivation and Retention, Variety Seeking, Goal-Directed Consumption
@@ -263,19 +263,19 @@
 
 This distinction raises two central questions. Do interruptions to likely purchases reduce subsequent purchase frequency, or do consumers return to their prior activity? Does the post-reopening product-choice response differ between high- and low-predicted-incidence episodes? These questions determine whether temporary constraints merely reallocate demand across time or also reshape consumer choice.
 
-We address these questions in the context of a large-scale digital coffee retail platform, where we observe detailed panel data on individual purchases of 770,00 consumers, store-level product assortments and store operations across a network of 260 locations for 18 months. A key feature of the setting is the occurrence of temporary store closures during Covid-19 pandemic that interrupt consumers’ ability to transact at specific locations. These closures are driven by external operational constraints that affect store availability over time and are not targeted to individual consumers. As a result, they generate plausibly exogenous variation in purchasing opportunities at the store level, while leaving the broader demand environment largely unchanged. Because closures affect all potential customers of a given store simultaneously, they create sharp, localized disruptions that allow us to track how the same consumers adjust their behavior once constraints are lifted.
+We address these questions using panel data from a large digital coffee retailer. The data cover 779,744 consumers and 260 stores from June 1, 2020 through December 31, 2021. Temporary store closures during the Covid-19 pandemic interrupt access to specific locations but are not targeted to individual consumers. They therefore create sharp, localized disruptions that allow us to track how the same consumers adjust after access returns.
 
 A central challenge is that the closure does not bind equally for all consumers. We use pre-disruption purchase behavior to construct an ex-ante prediction of purchase incidence during the closure window. We then estimate a triple-differences design that compares (i) treated versus control consumers, (ii) before versus after reopening, and (iii) high versus low predicted purchase incidence. The resulting high-minus-low contrast isolates the incremental response associated with interrupting a likely purchase only under the identifying assumptions stated below; it is not the total treatment effect for high-predicted-incidence episodes.
 
-Our analysis yields two main results. First, purchase frequency rises by 0.67 percentage points per calendar day for high-predicted-incidence episodes and by 0.09 points for low-predicted-incidence episodes. The high-minus-low DDD is therefore 0.58 points (SE 0.25; $p=0.021$). Because its pretrend test rejects equality, we interpret this result as descriptive evidence of post-reopening recovery rather than a clean causal rebound.
+Our analysis yields two main results. First, purchase frequency rises by 0.67 percentage points per calendar day for high-predicted-incidence episodes and by 0.09 points for low-predicted-incidence episodes. The high-minus-low DDD is therefore 0.58 points. Because its pretrend test rejects equality, we interpret this result as descriptive evidence of post-reopening recovery rather than a clean causal rebound.
 
-Second, novelty-seeking---the share of distinct products in the basket that the consumer has not purchased before---rises by 3.13 percentage points for low-predicted-incidence episodes. The corresponding high-group effect is a statistically insignificant 1.02-point decline. The DDD is $-4.15$ points (SE 1.45; $p=0.004$): after netting out the low-group closure response, interrupting a likely purchase shifts choices toward products already familiar to the consumer.
+Second, novelty-seeking---the share of distinct products in the basket that the consumer has not purchased before---rises by 3.13 percentage points for low-predicted-incidence episodes. The corresponding high-group point estimate is a 1.02-point decline. Their difference is a $-4.15$-point DDD, or 8.3\% of the 49.78\% pre-period novelty mean. Economically, the interruption more than offsets the low group's increase in exploration and leaves the high group's product-choice response slightly negative.
 
 As a robustness check on the outcome definition, the appendix replaces novelty-seeking with new-product-seeking, which measures the share of purchased products that have appeared recently in the transaction data. The alternative measure produces the same qualitative conclusion; Appendix~\ref{app:new_product_seeking} reports the estimates and discusses their interpretation.
 
-One interpretation is a goal-based mechanism. When a likely purchase is interrupted, the underlying goal may remain active. Upon reopening, consumers may prioritize goal completion and direct purchases toward familiar products. Heterogeneity by pre-disruption novelty-seeking is consistent with this interpretation, although it remains descriptive.
+One interpretation is a goal-based mechanism. When a likely purchase is interrupted, the underlying goal may remain active. Upon reopening, consumers may prioritize goal completion and direct purchases toward familiar products. Consistent with this interpretation, the fitted novelty DDD is $-4.24$ points for a consumer one standard deviation below mean baseline novelty, $-1.30$ points at the mean and $+1.63$ points one standard deviation above the mean, holding baseline order history fixed. Thus, moving from one standard deviation below to one standard deviation above mean baseline novelty changes the fitted interruption response by 5.88 points. These fitted values summarize an exploratory continuous interaction rather than separately estimated subgroup effects.
 
-Our paper contributes to the marketing literature along three dimensions. First, we study how temporary constraints interact with consumer intent to shape demand, highlighting a form of state dependence driven by persistent purchase goals rather than solely by past choices or habits. Second, we contribute to the literature on supply-side shocks by showing that their effects depend on whether the constraint binds for the consumer, emphasizing the importance of heterogeneity in exposure to disruptions. The closest applied benchmark is \shortciteA{Levine2025}, who study a temporary grocery strike and use predicted trip displacement to distinguish baseline demand changes from the effect of an interrupted shopping trip. We use the same basic logic of separating exposure from binding interruption, but shift the object of interest from store choice and trip counts to product exploration within a changing digital assortment. Third, we speak to the literature on product discovery by showing how temporary interruptions can change exploration even when demand levels recover quickly. More broadly, our results suggest that understanding demand under temporary constraints requires going beyond average responses and explicitly accounting for how disruptions interact with consumer intent. This perspective provides a framework for analyzing environments in which purchasing opportunities are intermittently constrained, and highlights the role of consumer goals in shaping choice.
+Our paper contributes to the marketing literature along three dimensions. First, we study how temporary constraints interact with consumer intent to shape demand, providing evidence of state dependence that is consistent with, but does not uniquely identify, persistent purchase goals. Second, we contribute to the literature on supply-side shocks by showing that their effects depend on whether the constraint binds for the consumer, emphasizing the importance of heterogeneity in exposure to disruptions. The closest applied benchmark is \shortciteA{Levine2025}, who study a temporary grocery strike and use predicted trip displacement to distinguish baseline demand changes from the effect of an interrupted shopping trip. We use the same basic logic of separating exposure from binding interruption, but shift the object of interest from store choice and trip counts to product exploration within a changing digital assortment. Third, we speak to the literature on product discovery by showing how temporary interruptions can change exploration even when demand levels recover quickly. More broadly, our results suggest that understanding demand under temporary constraints requires going beyond average responses and explicitly accounting for how disruptions interact with consumer intent.
 
 \section{Behavioral Mechanism and Micro-Foundation}
 \label{section:mechanism_model}
@@ -296,7 +296,7 @@ This mechanism also relates to the literature on stockouts and constrained choic
 
 A recent cognitive theory of reasoning and choice provides useful language for this channel. \shortciteA{bordalo2026cognitive} argue that decision makers first recognize the kind of problem they face using contextual cues and past experiences, and that this categorization determines which attributes receive attention. Applied to our setting, a closure can change the post-reopening problem from ordinary exploration in a coffee assortment to completion of an interrupted purchase routine. The mechanism therefore does not require consumers' tastes or information to change. Instead, the same consumer may place more attention on familiar products because the closure makes the familiar consumption path the natural category through which the next purchase is represented.
 
-The implications of this mechanism are central to our empirical findings. If consumers whose purchase intention is blocked engage in counterfactual thinking and maintain an active purchase goal, then closures should not substantially reduce subsequent purchase frequency. Instead, consumers should return once constraints are lifted and complete the intended consumption activity. At the same time, because post-reopening behavior is driven by goal completion, consumers should become less likely to deviate from the originally intended purchase path. Consequently, consumers whose purchase intention is blocked should exhibit lower product exploration and reduced novelty-seeking after reopening.
+The implications of this mechanism are central to our empirical findings. If consumers whose purchase intention is blocked engage in counterfactual thinking and maintain an active purchase goal, they may return once constraints are lifted and complete the intended consumption activity. Because substitution or discouragement may offset this response, however, the framework does not impose a signed prediction on subsequent purchase frequency. At the same time, because post-reopening behavior is driven by goal completion, consumers should become less likely to deviate from the originally intended purchase path. Consequently, consumers whose purchase intention is blocked should exhibit lower product exploration and reduced novelty-seeking after reopening.
 
 \iffalse
 \subsection{Missed Exposure and Product Discovery}
@@ -312,7 +312,7 @@ Importantly, the missed-exposure mechanism generates predictions that are concep
 
 In contrast, the missed-exposure mechanism operates through informational frictions and differences in product awareness. Consumers may become less exploratory not because they are more focused on completing a prior goal, but because they are less informed about newly available products. The mechanism therefore reflects a reduction in assortment awareness rather than a change in motivational state. Distinguishing between these explanations is important because they imply different behavioral foundations for the observed reduction in novelty-seeking.
 
-Our empirical analysis evaluates the relative importance of these channels by combining exogenous variation in store closures with heterogeneity in ex-ante purchase intention. In particular, we exploit cross-event variation in the intensity of new product introductions during closure periods to test whether closures associated with greater missed exposure generate stronger reductions in subsequent exploration. This approach allows us to distinguish whether post-reopening behavior is primarily driven by persistent counterfactual purchase goals or by informational differences in exposure to new products.
+Our empirical analysis evaluates the relative importance of these channels by combining plausibly external variation in store access with heterogeneity in ex-ante purchase intention. In particular, we exploit cross-event variation in the intensity of new product introductions during closure periods to test whether closures associated with greater missed exposure generate stronger reductions in subsequent exploration. This approach allows us to distinguish whether post-reopening behavior is primarily driven by persistent counterfactual purchase goals or by informational differences in exposure to new products.
 \fi
   
 
@@ -341,225 +341,218 @@ It also distinguishes the counterfactual-goal mechanism from the missed-exposure
 
 
 \paragraph{Mapping to notation.}
-The discussion above implies a simple modeling restriction. When a consumer's intended coffee purchase is blocked, the relevant counterfactual is not an arbitrary product draw. The consumer thinks about something she has purchased in the past: the old product, routine, or familiar consumption path that would have been completed if the store had remained open. We therefore remove the notation that assigns probabilities to new-versus-old counterfactual content and assume that counterfactual thinking works through the persistent salience of old products. The model begins with one consumer type and then introduces heterogeneity in the strength of this old-product salience.
+The discussion above implies a simple modeling restriction. When a consumer's intended coffee purchase is blocked, the familiar consumption path that would otherwise have been completed remains cognitively accessible after reopening. The model represents this carryover as greater relative attention to familiar products. It first derives the average novelty-seeking prediction and then allows the strength of this response to vary with baseline novelty-seeking.
 
 \subsubsection{Setup}
 
-Consider a consumer facing closure event $e$ and post-reopening period $t$. Let
+Consider consumer $i$, closure event $e$ and relative period $t$. Let
 \begin{equation}
-    C_e \in \{0,1\}
+    R_t=\mathbb{1}\{t>0\}
 \end{equation}
-indicate whether the consumer's focal store is closed during event $e$. Closure exposure can affect all treated consumers, regardless of whether they had an active purchase intention during the closure. Let
-\begin{equation}
-    I_e \in \{0,1\}
-\end{equation}
-indicate whether the consumer had a purchase intention during the closure window, meaning that she would have purchased from the focal store absent the closure. The blocked-intention state is
-\begin{equation}
-    B_e = C_e I_e .
-    \label{eq:model_blocked_intention}
-\end{equation}
-Thus, $C_e$ captures baseline closure exposure, while $B_e$ captures the incremental case in which an intended purchase is prevented from being completed.
+indicate a post-reopening period, and let $C_{ie}\in\{0,1\}$ indicate that the consumer's focal store closes during event $e$. Thus, $C_{ie}=1$ for treated episodes and $C_{ie}=0$ for control episodes whose focal stores remain open.
 
-Let $P_{et}\in\{0,1\}$ indicate whether the consumer purchases after reopening. Purchase probability is
+Let
 \begin{equation}
-    \Pr(P_{et}=1)
+    I_{ie}\in\{0,1\}
+\end{equation}
+denote the latent event that the consumer would have completed the relevant purchase during the closure window had the store remained open. This counterfactual intention is not observed for treated consumers. Instead, define the ex-ante purchase-incidence score
+\begin{equation}
+    s_{ie}
+    =\Pr\left(I_{ie}=1\mid\mathcal F^{pre}_{ie}\right)
+    \in[0,1],
+    \label{eq:model_intention_score}
+\end{equation}
+where $\mathcal F^{pre}_{ie}$ contains information available before the closure window. Keeping $C_{ie}$ and $s_{ie}$ separate preserves the closure-exposure and purchase-propensity dimensions required by the triple-differences comparison.
+
+Let $P_{iet}\in\{0,1\}$ indicate whether the consumer purchases in relative period $t$. A purchase-incidence equation consistent with the empirical comparison is
+\begin{equation}
+\begin{split}
+    \Pr(P_{iet}=1)
     =
-    \Lambda\left(
-        \alpha^P_{et}
-        + \beta_P C_e
-        + \kappa B_e
-    \right),
-    \label{eq:model_purchase_incidence}
+    \Lambda\Big(
+        \alpha^P_{ie}+\omega^P_t
+        +R_t\big[
+            \beta_P C_{ie}
+            +\rho_Ps_{ie}
+            +\kappa_P(C_{ie}\times s_{ie})
+        \big]
+    \Big),
+    \label{eq:model_purchase_incidence_score}
+\end{split}
 \end{equation}
-where $\Lambda(\cdot)$ is the logistic CDF. The parameter $\beta_P$ captures the baseline closure-exposure effect on purchase incidence, while $\kappa$ captures the incremental effect of blocked intention. The model does not sign either parameter. If blocked consumers return to complete the intended purchase, then $\kappa$ may be positive. If the counterfactual memory vanishes or offsetting forces dominate, then $\kappa$ may be zero. If consumers substitute away or become discouraged by the interruption, then $\kappa$ may be negative. Purchase incidence is therefore an empirical object rather than a formal prediction of the model.
+where $\Lambda(\cdot)$ is the logistic CDF. Delayed goal completion may make $\kappa_P$ positive, whereas substitution or discouragement may make it negative. The model therefore imposes no signed prediction on purchase frequency.
 
-\subsubsection{One consumer type}
+We next model product choice conditional on purchase. Let $Y^N_{iet}$ indicate whether a randomly selected distinct product purchased by consumer $i$ in period $t$ is new to that consumer. Its conditional expectation is the expected share of distinct purchased products that are new, corresponding to the empirical novelty-seeking outcome.
 
-Let $A^O_{et}\in\{0,1\}$ indicate whether at least one old product enters the consumer's post-reopening consideration set. Old products are products the consumer purchased before the closure. The key carryover parameter is $\lambda\geq 0$. It measures whether the counterfactual representation of the forgone purchase remains accessible after reopening. If $\lambda=0$, the counterfactual memory trace vanishes and blocked intention has no post-reopening salience effect. If $\lambda>0$, the old product or old routine represented during closure becomes more accessible after reopening. This formulation follows memory-based consideration models in which accessibility affects consideration and choice without necessarily changing primitive product evaluations \shortcite{nedungadi1990consideration}.
+\subsubsection{Novelty-seeking}
 
-Old-product consideration is given by
+Let
 \begin{equation}
-    \Pr(A^O_{et}=1)
-    =
-    \Lambda\left(
-        \alpha^O_{et}
-        + \beta_O C_e
-        + \lambda B_e
-    \right),
-    \label{eq:model_old_consideration_one_type}
+    V^N_{iet}=\sum_{j\in\mathcal N_{it}}\exp(v_{ijt})
+    \qquad\text{and}\qquad
+    V^O_{iet}=\sum_{k\in\mathcal O_{it}}\exp(v_{ikt})
 \end{equation}
-where $\beta_O$ captures the baseline effect of closure exposure on old-product consideration and is unrestricted. The blocked-intention effect on the log-odds of old-product consideration is therefore
+denote the inclusive values of products that are new and familiar to the consumer, respectively. Absent a blocked intention, the probability that a purchased product is new is
 \begin{equation}
-    \Delta^O
-    \equiv
-    \frac{\partial}{\partial B_e}
-    \log
-    \left(
-    \frac{\Pr(A^O_{et}=1)}{1-\Pr(A^O_{et}=1)}
-    \right)
-    =
-    \lambda .
-    \label{eq:model_delta_old_one_type}
+    q^0_{iet}
+    =\frac{V^N_{iet}}{V^N_{iet}+V^O_{iet}}.
+    \label{eq:model_unblocked_novelty}
 \end{equation}
-This replaces the earlier formulation in which the effect depended on the probability that the counterfactual was about a new product. Here, blocked intention increases the log-odds of old-product consideration directly because the counterfactual is assumed to be about something purchased in the past.
-
-To connect consideration to observed novelty-seeking, let $N_{et}\in\{0,1\}$ indicate whether the purchased product is new to the consumer, conditional on purchase. After consideration is formed, product utilities are stable:
+When an intended purchase is blocked, the associated familiar routine remains accessible after reopening. We represent this carryover by multiplying the decision weight on familiar products by $\exp(\psi)$, where $\psi>0$. This is a relative salience weight, not a change in primitive product evaluations \shortcite{nedungadi1990consideration}. The probability of choosing a new product following a blocked intention is then
 \begin{equation}
-    u_{jt}=v_{jt}+\varepsilon_{jt}.
-    \label{eq:model_utility_stable}
+    q^B_{iet}
+    =\frac{V^N_{iet}}
+    {V^N_{iet}+\exp(\psi)V^O_{iet}}
+    <q^0_{iet}.
+    \label{eq:model_blocked_novelty}
 \end{equation}
-Closure exposure and blocked intention do not enter $v_{jt}$. They affect observed choice by changing which products are cognitively accessible. In particular, because old and new products compete for limited attention and choice, greater old-product salience reduces the relative probability that a new product is chosen. A compact logit representation is
+Suppressing indices, define the displacement of novelty-seeking as
 \begin{equation}
-    \Pr(N_{et}=1\mid P_{et}=1)
-    =
-    \frac{\sum_{j\in\mathcal N_t}\exp(v_{jt})}
-    {\sum_{k\in\mathcal O_t}\exp(v_{kt}+\lambda B_e)
-    +\sum_{j\in\mathcal N_t}\exp(v_{jt})},
-    \label{eq:model_new_purchase_one_type}
+    g\equiv q^0-q^B>0.
+    \label{eq:model_novelty_displacement}
 \end{equation}
-where $\mathcal O_t$ is the set of old products and $\mathcal N_t$ is the set of products new to the consumer. Equation \eqref{eq:model_new_purchase_one_type} is not meant to impose that utilities change. Instead, the salience term summarizes the increased accessibility of old products in the post-reopening choice process. It implies
+For exposition, first treat $g$ as common across consumers. Let $m_{iet}(R_t,C_{ie},s_{ie})$ collect baseline novelty-seeking and lower-order post-period effects. The behavioral channel adds a novelty reduction only when the period is post-reopening, the consumer is treated and the latent purchase intention was blocked:
 \begin{equation}
-    \frac{\partial}{\partial B_e}
-    \Pr(N_{et}=1\mid P_{et}=1)<0
-    \qquad \text{if } \lambda>0.
-    \label{eq:model_negative_novelty_derivative}
+\begin{split}
+    E\left[Y^N_{iet}\mid
+        R_t,C_{ie},I_{ie},s_{ie},P_{iet}=1\right]
+    =m_{iet}(R_t,C_{ie},s_{ie})
+    -R_tC_{ie}I_{ie}g.
+    \label{eq:model_novelty_latent_intention}
+\end{split}
+\end{equation}
+Using $E(I_{ie}\mid s_{ie})=s_{ie}$ gives
+\begin{equation}
+\begin{split}
+    E\left[Y^N_{iet}\mid
+        R_t,C_{ie},s_{ie},P_{iet}=1\right]
+    =m_{iet}(R_t,C_{ie},s_{ie})
+    -R_tC_{ie}s_{ie}g.
+    \label{eq:model_novelty_score}
+\end{split}
 \end{equation}
 
-\begin{prediction}[Population-level reduction in novelty-seeking]
-If counterfactual salience persists after reopening, $\lambda>0$, blocked intention raises the log-odds of old-product consideration and reduces the probability of choosing a new product conditional on purchase. Therefore, in the empirical triple-differences design, the population-level displacement effect on novelty-seeking is negative:
+Write $\Delta_C\Delta_R q(s)$ for the treated-control difference between post- and pre-period expected novelty-seeking at score $s$. If the lower-order component does not independently generate an additional post-by-treatment-by-score interaction, then
 \begin{equation}
-    \delta^D_N < 0.
+    \frac{\partial}{\partial s}
+    \left[\Delta_C\Delta_R
+    E(Y^N_{iet}\mid s,P_{iet}=1)\right]
+    =-g<0.
+    \label{eq:model_negative_continuous_ddd}
 \end{equation}
-If $\lambda=0$, the counterfactual memory trace does not carry over, and the model predicts no blocked-intention effect on novelty-seeking through this channel.
+For two incidence values $s_H>s_L$, the corresponding finite difference is
+\begin{equation}
+    \mathcal D(s_H,s_L)=-(s_H-s_L)g<0.
+    \label{eq:model_finite_ddd}
+\end{equation}
+
+\begin{prediction}[Purchase-propensity DDD in novelty-seeking]
+If a blocked intended purchase shifts attention toward the familiar consumption routine, the treated-control post-reopening change in novelty-seeking becomes more negative as ex-ante purchase incidence increases. Equivalently, the high-minus-low purchase-propensity DDD is negative. This prediction concerns product choice conditional on purchase and does not impose a sign on post-reopening purchase frequency.
 \end{prediction}
 
-\subsubsection{Two consumer types}
+\subsubsection{Heterogeneity in baseline novelty-seeking}
 
-Now allow consumers to differ in intrinsic novelty seeking. Let
+Let $N_{ie}$ denote the consumer's standardized baseline novelty-seeking, with higher values indicating a stronger orientation toward new products. Consumers with higher baseline novelty-seeking rely less heavily on established consumption routines \shortcite{vantrijp1996variety,baumgartner1996exploratory}. We capture this idea by allowing the displacement to vary with $N_{ie}$:
 \begin{equation}
-    \tau\in\{H,L\},
+    g(N_{ie})>0,
+    \qquad
+    g'(N_{ie})<0.
+    \label{eq:model_displacement_gradient}
 \end{equation}
-where $H$ denotes high novelty-seeking consumers and $L$ denotes low novelty-seeking consumers. Let $\nu^\tau$ denote the consumer's baseline tendency to consider and choose new products, with
+The first inequality says that familiar-routine salience lowers novelty-seeking. The second is the central heterogeneity restriction: the displacement is smaller for consumers with stronger baseline novelty orientation. The conditional mean becomes
 \begin{equation}
-    \nu^H>\nu^L,
-    \label{eq:model_type_ordering}
+\begin{split}
+    E\left[Y^N_{iet}\mid
+        R_t,C_{ie},s_{ie},N_{ie},P_{iet}=1\right]
+    =m_{iet}(R_t,C_{ie},s_{ie},N_{ie})
+    -R_tC_{ie}s_{ie}g(N_{ie}).
+    \label{eq:model_heterogeneous_mean}
+\end{split}
 \end{equation}
-consistent with the view that novelty seeking is an individual-difference tendency that predicts exploratory consumption and product switching \shortcite{vantrijp1996variety,baumgartner1996exploratory}.
+The heterogeneity comparative static is therefore
+\begin{equation}
+    \frac{\partial}{\partial N}
+    \left\{
+        \frac{\partial}{\partial s}
+        \left[\Delta_C\Delta_R
+        E(Y^N_{iet}\mid s,N,P_{iet}=1)\right]
+    \right\}
+    =-g'(N)>0.
+    \label{eq:model_heterogeneity_derivative}
+\end{equation}
 
-The strength of old-product salience is also type-specific. Low-novelty consumers are more likely to think about old products and routines when a purchase is blocked, so
-\begin{equation}
-    \Delta^{O,L}=\lambda^L
-    >
-    \Delta^{O,H}=\lambda^H
-    \geq 0 .
-    \label{eq:model_lambda_type_ordering}
-\end{equation}
-Equivalently, blocked intention raises the log-odds of old-product consideration more for low-novelty consumers than for high-novelty consumers. A type-specific version of old-product consideration is
-\begin{equation}
-    \Pr(A^O_{et}=1\mid \tau)
-    =
-    \Lambda\left(
-        \alpha^O_{et}
-        + \beta_O C_e
-        - \nu^\tau
-        + \lambda^\tau B_e
-    \right).
-    \label{eq:model_old_consideration_two_type}
-\end{equation}
-The term $-\nu^\tau$ captures that high-novelty consumers are less oriented toward old products at baseline, while $\lambda^\tau B_e$ captures the type-specific increase in old-product salience induced by blocked intention.
-
-For novelty-seeking, the same limited-attention logic implies the reduced-form log-odds representation
-\begin{equation}
-    \log
-    \left(
-    \frac{\Pr(A^N_{et}=1\mid \tau)}{1-\Pr(A^N_{et}=1\mid \tau)}
-    \right)
-    =
-    \alpha^N_{et}
-    + \beta_N C_e
-    + \nu^\tau
-    - \lambda^\tau B_e,
-    \label{eq:model_new_consideration_two_type}
-\end{equation}
-where $A^N_{et}$ indicates that at least one new product enters the consumer's consideration set. The negative sign on $\lambda^\tau B_e$ reflects the crowd-out of new-product consideration by persistent old-product salience.
-
-Without blocked intention, the high-low gap in the log-odds of new-product consideration is
-\begin{equation}
-    G_0 = \nu^H-\nu^L .
-\end{equation}
-With blocked intention, the gap becomes
-\begin{align}
-    G_1
-    &=
-    (\nu^H-\lambda^H)
-    -
-    (\nu^L-\lambda^L) \\
-    &=
-    (\nu^H-\nu^L)
-    +
-    (\lambda^L-\lambda^H).
-    \label{eq:model_gap_widening}
-\end{align}
-Because $\lambda^L>\lambda^H$, blocked intention widens the novelty gap between high- and low-novelty consumers.
-
-\begin{prediction}[Blocked intention widens the novelty gap]
-If counterfactual salience persists and low-novelty consumers think more about old products, $\lambda^L>\lambda^H$, then blocked intention reduces novelty-seeking more strongly for low-novelty consumers than for high-novelty consumers. The high-low novelty gap increases by
-\begin{equation}
-    G_1-G_0=\lambda^L-\lambda^H>0.
-\end{equation}
-In an empirical specification with a low-novelty interaction, the model predicts a negative incremental low-type effect,
-\begin{equation}
-    \delta^D_{N\times Low}<0,
-\end{equation}
-because the old-product salience generated by blocked intention is stronger for low-novelty consumers. Equivalently, in a specification where low-novelty consumers are the omitted group, the incremental effect for high-novelty consumers should be positive.
+\begin{prediction}[Heterogeneity by baseline novelty-seeking]
+The purchase-propensity DDD increases with baseline novelty-seeking because the familiar-routine response is weaker among consumers who are more oriented toward new products. The prediction concerns the heterogeneity slope, not the sign of the lower-order DDD coefficient at any particular value of baseline novelty.
 \end{prediction}
+
+\subsubsection{Mapping to the empirical interactions}
+
+The headline empirical specification replaces the continuous score with an indicator for high predicted purchase incidence. For $s_H>s_L$, equation~\eqref{eq:model_finite_ddd} implies a high-minus-low DDD proportional to $-(s_H-s_L)g(N_{ie})$. Differentiating this contrast with respect to baseline novelty gives
+\begin{equation}
+    \frac{\partial\mathcal D(s_H,s_L;N)}{\partial N}
+    =-(s_H-s_L)g'(N)>0.
+    \label{eq:model_binary_heterogeneity}
+\end{equation}
+This maps directly to the coefficient on
+\begin{equation}
+    \text{Post}\times\text{Treated}\times\text{High}
+    \times N_{ie}.
+\end{equation}
+The model's signed heterogeneity prediction is therefore
+\begin{equation}
+    \theta^D>0.
+    \label{eq:model_theta_prediction}
+\end{equation}
+The lower-order DDD coefficient is not part of this heterogeneity prediction. A specification using the continuous predicted-incidence score provides a less-coarsened analogue of the same comparative static.
 
 \section{Setting and Data}
 \label{section:2}   
 
-\noindent We study consumer behavior using transaction-level data from a large Chinese quick-service coffee chain, where purchases are conducted primarily through a mobile application. The data span June 2020 to December 2021 and include approximately 10.6 million transactions from 779,000 customers.
+\noindent We use administrative purchase records from a large Chinese quick-service coffee chain whose customers order primarily through a mobile application. The data cover June 1, 2020 through December 31, 2021---19 calendar months---and contain 7,312,498 orders, represented by 10,631,250 product-line records, from 779,744 customers at 260 stores. We observe the customer, purchase date, store and product for each order. The chain's assortment varies across stores and over time: a product appears in 169 stores on average over its observed lifecycle but in only 59 stores on a given day.
 
-The platform operates a dense network of physical stores with 260 locations and offers a dynamic product assortment that varies across stores and over time. Product availability is highly heterogeneous since a given product appears in 169 stores on average over its lifecycle, but is available in only 59 stores on a given day. This substantial variation implies that consumers’ exposure to products depends critically on where and when they interact with the platform. The data track individual purchase histories at a high frequency, including the timing of transactions, store choice and product-level decisions. Consumers repeatedly interact with a relatively small set of nearby stores, generating persistent patterns in both purchasing frequency and product choice. This structure enables us to construct measures of baseline demand, store dependence and product exploration at the individual level.
-\\
+Temporary store closures create the treatment variation. We identify consecutive store-day spells with no transactions and retain 18 closures lasting 10 to 29 days after applying the sample screens summarized in Appendix~\ref{app:closure_registry}. A treated customer is one whose preferred pre-closure store closes; a control customer has a preferred store among up to five matched stores that remain open. We select control stores by proximity in store setup date, without replacement and in closure-date order. Customer assignment requires at least five pre-closure purchase days and a preferred-store purchase share of at least 80\%. These restrictions make the focal store a meaningful source of treatment exposure, but matching on setup date alone does not ensure balance on every store or customer characteristic.
 
-\noindent A central feature of the setting is the presence of temporary store closures, which occur at the store-day level and prevent all consumers from transacting at the affected location. These closures arise from external operational constraints associated with Covid-19-related restrictions and generate sharp disruptions in purchasing opportunities. Because closures are not targeted to individual consumers and affect all potential customers of a store simultaneously, they provide plausibly exogenous variation in access to the platform.
-
-Specifically, we focus on 18 unexpected store closures and construct a matched treatment-control design. Treatment customers are defined as those whose preferred store, identified based on pre-closure purchasing behavior, is the store that closes. Control customers are defined as those whose preferred store is one of a set of matched stores that remain open. The matching procedure ensures comparability across treated and control stores. For each closure, we select up to five control stores with similar store set-up times and exclude stores that are already used as controls for earlier closures. We then assign customers to treatment or control based on their preferred pre-closure store. To guarantee that store assignment is meaningful, we restrict attention to customers with at least five pre-closure purchase days and a preferred-store purchase share of at least 80\%. The resulting panel contains 40,148 member-event pairs and 321,184 member-event-period observations for purchase frequency, including 7,390 treated and 32,758 control member-events. The classifier assigns 2,041 treated member-events, or 27.6\% of treated episodes, to the high-predicted-incidence group. Each product-choice outcome uses 99,644 observations because it is defined only for periods in which a purchase occurs. This setting generates rich identifying variation along three dimensions. First, we observe the same consumers before and after a disruption, allowing for within-consumer comparisons. Second, closures vary across stores and over time, providing cross-sectional and temporal variation in exposure to constraints. Third, consumers differ in their reliance on specific stores, creating heterogeneity in the extent to which a closure constitutes a binding constraint.
+The resulting sample contains 40,148 customer-closure episodes: 7,390 treated and 32,758 controls. Each episode contributes four pre-closure and four post-reopening windows, giving 321,184 observations for purchase frequency. The classifier places 2,041 treated episodes, or 27.6\%, above the high-predicted-incidence threshold. Treatment status is assigned through the customer's preferred pre-closure store, while the classifier and behavioral outcomes aggregate purchases across all stores in the chain. Product-choice outcomes are conditional on purchase and use 99,644 observations after the fixed-effects singleton restriction; Appendix~\ref{app:outcome_definitions} reports the complete observation flow.
 
 \begin{table}[h!]
 \centering
-\caption{Treatment-control balance before closure}
+\caption{Four-cell descriptive statistics before closure}
 \label{tab:treatment_control_balance}
 \small
 \begin{tabular}{lrrrr}
 \toprule
-Variable & Control mean & Treated mean & Difference & SE \\
+& \multicolumn{2}{c}{Low predicted incidence} & \multicolumn{2}{c}{High predicted incidence} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Variable & Control & Treated & Control & Treated \\
 \midrule
-Member-events & 32,758 & 7,390 & & \\
-Unique members & 32,758 & 7,390 & & \\
-Predicted purchase-incidence probability & 0.307 & 0.313 & 0.006 & 0.004 \\
-High-predicted-incidence share & 0.269 & 0.276 & 0.007 & 0.006 \\
-Pre-period purchase frequency & 0.050 & 0.046 & -0.003*** & 0.001 \\
-Pre-period novelty-seeking & 0.540 & 0.558 & 0.018*** & 0.006 \\
-Closure duration in days & 16.9 & 18.2 & 1.3*** & 0.1 \\
+Customer-closure episodes & 23,934 & 5,349 & 8,824 & 2,041 \\
+Predicted purchase-incidence probability & 0.135 & 0.132 & 0.773 & 0.785 \\
+& (0.141) & (0.139) & (0.157) & (0.158) \\
+Pre-period purchase frequency & 0.022 & 0.021 & 0.127 & 0.114 \\
+& (0.035) & (0.033) & (0.116) & (0.112) \\
+Pre-period novelty-seeking & 0.604 & 0.602 & 0.450 & 0.498 \\
+& (0.392) & (0.392) & (0.309) & (0.305) \\
+Episodes with at least one pre-period purchase & 12,317 & 2,745 & 8,798 & 2,034 \\
+Share of pre-period windows with a purchase & 0.214 & 0.211 & 0.751 & 0.753 \\
+Closure duration in days & 16.2 & 16.9 & 18.8 & 21.7 \\
+& (5.6) & (6.5) & (6.4) & (7.2) \\
 \bottomrule
 \end{tabular}
 \vspace{1mm}
-\fnote{Notes: The unit is a member-closure event. Pre-period purchase frequency is averaged over relative periods -4 to -1. Pre-period novelty-seeking is averaged over pre-period windows in which the member purchased at least one product. Difference is treatment minus control. Standard errors are heteroskedasticity-robust difference-in-means standard errors at the member-event level. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\fnote{Notes: The unit is a customer-closure episode. Standard deviations are in parentheses. Pre-period purchase frequency is first averaged over relative periods $-4$ through $-1$ within an episode. Pre-period novelty-seeking is averaged over purchasing windows and is reported for episodes with at least one pre-period purchase. The purchase share is the fraction of the four pre-period windows in which the customer purchases at least one product. High and low groups differ mechanically in purchase propensity; the relevant descriptive comparison is treated versus control within each predicted-incidence group. Closure duration is repeated at the episode level and is shown descriptively, without customer-level balance inference.}
 \end{table}
 
-Figure~\ref{fig:closure_shock_purchase_frequency} presents the raw closure shock in purchase frequency. Relative period 0 is the closure window. Purchase frequency falls sharply for treated customers during this window, confirming that closures create a binding local supply constraint. After reopening, treated purchase frequency returns close to the control path, so the main empirical question is not whether demand permanently collapses, but whether the interruption changes what consumers buy when they return.
+Table~\ref{tab:treatment_control_balance} displays the four cells that form the DDD. High-incidence episodes make at least one purchase in about three quarters of their pre-period windows, compared with about one fifth for low-incidence episodes. Because novelty-seeking is defined only in purchasing windows, these purchase probabilities also determine entry into the product-choice sample. Within the low-incidence stratum, treated and control episodes have similar pre-period purchase frequency and novelty-seeking. Differences are larger in the high-incidence stratum, particularly for closure duration and pre-period novelty, so the empirical design relies on fixed effects and the group-specific pretrend tests rather than level balance alone.
+
+Figure~\ref{fig:closure_shock_purchase_frequency} presents the raw closure shock in purchase frequency. Relative period 0 is the closure window. Treated purchase frequency falls from 0.039 purchase days per calendar day in period $-1$ to 0.007 during the closure, while the control mean is 0.036 during the same relative period. In the first post-reopening window, the treated and control means are 0.039 and 0.039, respectively. The raw paths therefore verify that the closure binds locally and that chain-wide purchasing returns near the comparison path after reopening; the regression analysis below evaluates subsequent purchasing and product choice.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.78\textwidth]{figures/closure_shock_purchase_frequency.png}
-	\caption{Raw closure shock in purchase frequency}
+	\caption{Store closures sharply reduce treated purchase frequency during the closure window}
 	\label{fig:closure_shock_purchase_frequency}
-\fnote{Notes: The figure plots treatment and control mean purchase frequency by relative event period for the 18-closure analysis sample. Relative period 0 is the closure window. Purchase frequency is purchase days per calendar day.}
+\fnote{Notes: The figure plots customer-weighted pooled means for the 18-closure analysis sample; each relative period contains 32,758 control and 7,390 treated customer-closure episodes. Bars are 95\% confidence intervals based on standard errors clustered by closure event. Relative period 0 is the closure window. Purchase frequency is the number of days with any purchase anywhere in the observed chain divided by the number of calendar days in the event-length window. Treatment is assigned through the focal pre-closure store, but the outcome includes purchases at other chain stores.}
 \end{figure}
-
-Furthermore, the combination of repeated interactions, localized store dependence and time-varying product assortments creates an environment in which temporary disruptions can affect both the level and composition of demand. In particular, closures restrict purchasing opportunities and interrupt ongoing purchase processes. This structure allows us to study how temporary supply constraints affect consumer behavior along two margins: purchase frequency and product exploration. More broadly, the setting provides a natural laboratory to examine how consumers adjust when a planned purchase cannot be executed, and whether such interruptions have persistent effects on subsequent choices.
-\\ 
 
 \section{Empirical Strategy and Results}
 \label{section:3}   
@@ -569,45 +562,28 @@ Furthermore, the combination of repeated interactions, localized store dependenc
 \subsection{Classifying Predicted Purchase Incidence}
 \label{section:classifier}
 
-\noindent We classify each member-event pair with a predictive XGBoost model trained on pre-closure behavior. The model estimates whether the member would make at least one purchase in a window with the same length as the closure. We train one model for each closure duration, since the probability of at least one purchase mechanically depends on the number of days in the prediction window. Training uses relative periods $-4$ through $-2$, validation uses the holdout pre-closure period $-1$, and an additional audit evaluates control customers in period $0$, where their matched stores remain open and actual purchase behavior is observed. For treated customers in period $0$, the focal store is closed, so the outcome is counterfactual and we use the predicted probability. We classify a member-event as high predicted purchase incidence when this probability is at least 0.5.
+\noindent We classify each member-event pair with a predictive XGBoost model trained on pre-closure behavior. The model estimates whether the member would make at least one chain purchase in a window with the same length as the closure. We train one model for each closure duration, since the probability of at least one purchase mechanically depends on the number of days in the prediction window. Training uses relative periods $-4$ through $-2$, validation uses the holdout pre-closure period $-1$, and an additional audit evaluates control customers in period $0$, when their matched stores remain open. For treated customers, the corresponding period-0 target absent the focal-store closure is counterfactual, so we use the predicted probability. We classify a member-event as high predicted purchase incidence when this probability is at least 0.5.
 
 The features use only information available before the prediction window: recent purchase frequency, recency since the last purchase, total pre-period purchase days, store loyalty, basket composition, discount and coupon use, day-of-week purchasing patterns, demographics and push-notification history.
 
-Table~\ref{tab:classifier_diagnostics} reports the validation results and the most important predictors. The classifier performs similarly for treated and control customers in the holdout pre-period, with accuracy around 77\%. Accuracy is also similar for control customers in period $0$, indicating that the model predicts purchase timing reasonably well in windows not used for training. The highest-ranked predictors are recent purchase intensity, total purchase history, recency and dependence on the preferred store. These patterns support the classifier's intended task: predicting purchase incidence during a closure-length window.
+Table~\ref{tab:classifier_diagnostics} reports validation results on the exact final 18-event cohort. The period-0 control audit is the closest observable counterpart to the treated counterfactual: its ROC-AUC is 0.781 and its PR-AUC is 0.583, compared with an observed purchase rate of 0.263. Its Brier score is 0.172, below the 0.194 score from assigning every observation the sample purchase rate. The model therefore ranks likely purchasers meaningfully. Its probabilities are nevertheless overconfident: the mean predicted probability is 0.307, and the calibration slope is 0.471 rather than one. At the 0.5 cutoff, sensitivity is 0.548, specificity is 0.830 and positive predictive value is 0.534; accuracy is 0.756 versus 0.737 for an always-negative rule. We therefore treat the classifier as informative but imperfect, use the binary split for interpretation, and retain the continuous score as a specification check. Appendix~\ref{app:classifier_details} reports confusion matrices, calibration, duration-specific performance, predictive tradeoffs across cutoffs and score overlap.
 
 \begin{table}[h!]
 \centering
-\caption{Purchase-intention classifier diagnostics}
+\caption{Purchase-incidence classifier performance on the final cohort}
 \label{tab:classifier_diagnostics}
 \small
-\begin{tabularx}{0.96\textwidth}{Xrrrrr}
+\begin{tabularx}{\textwidth}{Xrrrrrr}
 \toprule
-\multicolumn{6}{l}{\textit{Panel A: Prediction performance}} \\
-Evaluation sample & $N$ & Accuracy & Precision & Recall & F1 \\
+Evaluation sample & $N$ & Prevalence & ROC-AUC & PR-AUC & Brier & Calibration slope \\
 \midrule
-Control, during closure period 0 & 36,766 & 0.752 & 0.524 & 0.544 & 0.525 \\
-Control, pre-period -1 & 36,766 & 0.766 & 0.638 & 0.559 & 0.592 \\
-Treated, pre-period -1 & 8,092 & 0.776 & 0.636 & 0.545 & 0.579 \\
-Overall weighted average & 81,624 & 0.761 & 0.586 & 0.551 & 0.561 \\
-\bottomrule
-\end{tabularx}
-
-\vspace{2mm}
-\begin{tabularx}{0.90\textwidth}{Xrrr}
-\toprule
-\multicolumn{4}{l}{\textit{Panel B: Highest-ranked features}} \\
-Predictor family & Mean importance & Median rank & Mean rank \\
-\midrule
-Recent purchase frequency, last four weeks & 28.49 & 1 & 1.23 \\
-Recent purchase frequency, last two weeks & 11.54 & 2 & 7.00 \\
-Total pre-period purchase days & 9.03 & 3 & 3.54 \\
-Days since last purchase & 9.54 & 4 & 4.08 \\
-Preferred-store purchase share & 3.38 & 7 & 7.31 \\
-Average pre-period purchase frequency & 3.26 & 7 & 13.00 \\
+Control, period 0 & 32,758 & 0.263 & 0.781 & 0.583 & 0.172 & 0.471 \\
+Control, pre-period $-1$ & 32,758 & 0.308 & 0.814 & 0.677 & 0.164 & 0.536 \\
+Treated, pre-period $-1$ & 7,390 & 0.314 & 0.818 & 0.697 & 0.162 & 0.537 \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: Panel A aggregates the duration-specific prediction audits using evaluation-sample weights. The period-0 control audit is possible because matched control stores remain open during the treated-store closure window. Panel B aggregates gain-based feature importance across duration-specific models and reports readable labels for the highest-ranked engineered features. Classifier audits are computed before final estimation restrictions.}
+\fnote{Notes: All rows use the exact final 18-event cohort. Prevalence is the observed share purchasing at least once in the evaluation window. ROC-AUC measures ranking performance; PR-AUC should be compared with prevalence, the performance of an uninformative ranking. The Brier score is the mean squared probability error, for which lower values are better. The corresponding constant-prevalence Brier scores are 0.194, 0.213 and 0.216. Perfect calibration has intercept zero and slope one; the estimated intercepts are $-0.599$, $-0.309$ and $-0.276$, respectively. Period-0 outcomes are not observable for treated episodes absent the closure, so that validation is conducted only among controls.}
 \end{table}
 
 This distinction is central to our empirical design. The comparison between high- and low-predicted-incidence episodes separates general closure exposure from the additional response associated with a likely purchase interruption, subject to the identifying assumptions below. We focus on how temporary store closures affect consumer behavior along two dimensions: (i) purchase frequency and (ii) product choice, with a focus on consumers' propensity to explore new products.
@@ -618,14 +594,14 @@ This distinction is central to our empirical design. The comparison between high
 \noindent Let $i$ index consumers, $e$ closure events, $t$ time, and let $L_e$ denote the duration in days of closure event $e$. For each event, we construct relative periods $t=-4,\ldots,4$, where each period is a window of length $L_e$ and period 0 is the closure window. The main regressions omit period 0 and compare four pre-closure windows with four post-reopening windows. This construction produces a member-event-period panel in which each member-event contributes up to eight observations to the purchase-frequency analysis. We define two main outcomes on these windows.
 
 \paragraph{Purchase frequency.}
-We measure purchase intensity using purchase frequency, defined as the number of purchase days per calendar day within each event-length window. For consumer $i$ and event $e$, we define purchase frequency as
+We measure purchase intensity using purchase frequency, defined as the number of days with at least one purchase at any chain store per calendar day within each event-length window. For consumer $i$ and event $e$, we define purchase frequency as
 \begin{equation}
 	\text{Y}^P_{iet} = \frac{1}{L_e} \sum_{t \in \mathcal{W}_e} \mathbb{1}\{ \text{Purchase}_{it} = 1 \},
 \end{equation}
-where $\mathcal{W}_e$ denotes the set of days in the relevant window pre- or post-closure and $\mathbb{1}\{\cdot\}$ is an indicator equal to one if consumer $i$ makes at least one purchase on day $t$. This measure captures the extensive margin of demand. Normalizing by closure length makes purchase frequency comparable across closure events of different durations.
+where $\mathcal{W}_e$ denotes the set of days in the relevant window pre- or post-closure and $\mathbb{1}\{\cdot\}$ is an indicator equal to one if consumer $i$ makes at least one chain purchase on day $t$. Multiple orders on the same day count once. Normalizing by closure length makes purchase frequency comparable across closure events of different durations.
 
 \paragraph{Novelty-seeking.}
-To measure exploration relative to a consumer's own purchase history, let $\mathcal{J}_{iet}$ denote the set of distinct products that consumer $i$ purchases in event window $t$, and let $\mathcal{H}_{iet}^{-}$ denote the products the consumer purchased before that window. We define novelty-seeking as
+To measure exploration relative to a consumer's own purchase history, let $\mathcal{J}_{iet}$ denote the set of distinct products that consumer $i$ purchases across the chain in event window $t$, and let $\mathcal{H}_{iet}^{-}$ denote the products the consumer purchased anywhere in the chain before that window. We define novelty-seeking as
 \begin{equation}
 	\text{Y}^{N}_{iet}
 	= \frac{\left|\left\{j\in\mathcal{J}_{iet}:j\notin\mathcal{H}_{iet}^{-}\right\}\right|}
@@ -633,16 +609,16 @@ To measure exploration relative to a consumer's own purchase history, let $\math
 \end{equation}
 Each product counts once within a window, regardless of how many times the consumer purchases it. A higher value therefore indicates that a larger share of the consumer's distinct product set is new to that consumer. Novelty-seeking is defined only when a consumer purchases at least one product in the window; otherwise the denominator is zero and the outcome is missing. It therefore describes product composition conditional on purchasing, whereas purchase frequency captures the extensive margin. Appendix~\ref{app:new_product_seeking} uses new-product-seeking as an alternative outcome definition based on products that have appeared recently in the transaction data.
 
-Having defined the outcomes and predicted purchase-incidence status, we next plot the data for each group to visualize the variation behind the triple-differences design. Figure~\ref{fig:novelty_intention_paths} plots average novelty-seeking separately across the four groups used for estimation, omitting the closure window. The left panel shows the patterns for low-predicted-incidence member-events. The open markers track control customers, and the solid markers track treated customers. Before the closure, the two groups have nearly identical novelty-seeking rates and no systematic gap. After reopening, treated customers are more likely than control customers to try products unfamiliar to them. Under the parallel-trends assumption, the difference-in-differences between these two series identifies the low-group closure effect.
+Having defined the outcomes and predicted purchase-incidence status, we next plot the raw variation behind the triple-differences design. Figure~\ref{fig:novelty_intention_paths} shows customer-weighted mean novelty-seeking and closure-clustered confidence intervals for the four estimation cells, omitting the closure window. In the low-predicted-incidence panel, treated and control means are similar before closure, and the treated path is relatively higher in the first post-reopening windows. In the high-predicted-incidence panel, treated episodes begin at a higher level, but the treated-control gap narrows after reopening. The DDD below compares these changes rather than interpreting either level difference as causal.
 
-The right panel compares treated and control customers with high predicted purchase incidence. Before the closure, treated high-predicted-incidence customers have higher novelty-seeking rates than control high-predicted-incidence customers, but the two series move similarly through most of the pre-period. After reopening, the treatment-control gap narrows as novelty-seeking falls more for treated high-predicted-incidence customers. This post-reopening difference-in-differences contains both the low-group closure effect and the additional high-minus-low contrast. The triple-differences specification below subtracts the left-panel difference-in-differences from the right-panel difference-in-differences.
+These paths are descriptive for an additional reason: novelty-seeking is defined only in windows with a purchase, and the number of purchasing windows varies across cells and relative periods. Appendix Figure~\ref{fig:appendix_purchase_probability} displays the realized probability of at least one purchase in each window. These purchase probabilities determine which windows enter the novelty-seeking regression. The figure here provides intuition for the comparison; the coefficient estimates and event-study diagnostics provide the inferential evidence.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.96\textwidth]{figures/novelty_intention_paths.png}
-	\caption{Novelty-seeking paths by predicted purchase intention}
+	\caption{Raw novelty-seeking paths motivate the high-minus-low comparison}
 	\label{fig:novelty_intention_paths}
-\fnote{Notes: The figure plots treatment and control mean novelty-seeking by relative event period and predicted purchase-intention status for the 18-closure analysis sample. Novelty-seeking is the share of distinct products purchased in a window that are new to the consumer and is observed only in member-periods with purchases. Relative period 0, the closure window, is omitted because the main regressions compare pre-closure windows with post-reopening windows.}
+\fnote{Notes: The figure plots customer-weighted pooled means for the 18-closure analysis sample. Bars are 95\% confidence intervals based on standard errors clustered by closure event. Novelty-seeking is the share of distinct products purchased in a window that are new to the consumer and is observed only in purchasing windows. Across the eight plotted periods, observed-window counts range from 4,227 to 6,354 for control-low, 919 to 1,397 for treated-low, 4,918 to 7,469 for control-high and 1,171 to 1,714 for treated-high episodes. Relative period 0, the closure window, is omitted to match the main regressions.}
 \end{figure}
 
 
@@ -661,24 +637,26 @@ The logic follows the canonical triple-differences design in \shortciteA{Gruber1
 	+ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet},
 	\label{eq:main_ddd}
 \end{equation}
-where $Y_{iet}$ denotes the outcome of interest for member $i$ in period $t$ of event $e$. The indicator $\text{Post}$ captures periods after reopening, $\text{Treated}$ identifies customers exposed to a store closure, and $\text{High}$ identifies episodes with high predicted purchase incidence during the closure window. This indicator is defined ex ante for both treated and control member-events; only treated high-predicted-incidence episodes face a likely interrupted purchase. The specification includes member-closure fixed effects $\phi_{ie}$, relative-period fixed effects $\omega_t$ and calendar-month fixed effects $\gamma_m$. Standard errors are clustered at the consumer level.
+where $Y_{iet}$ denotes the outcome of interest for member $i$ in period $t$ of event $e$. The indicator $\text{Post}$ captures periods after reopening, $\text{Treated}$ identifies customers exposed to a store closure, and $\text{High}$ identifies episodes with high predicted purchase incidence during the closure window. This indicator is defined ex ante for both treated and control member-events; only treated high-predicted-incidence episodes face a likely interrupted purchase. The specification includes member-closure fixed effects $\phi_{ie}$, relative-period fixed effects $\omega_t$ and calendar-month fixed effects $\gamma_m$. Because treatment exposure is generated by a common store-closure shock, standard errors are clustered by closure event. The main specification therefore uses 18 clusters.
+
+The pooled design stacks the 18 closure events. In the retained sample, each customer appears in exactly one event, and no treated store is used as a control store. Closure windows can overlap in calendar time; calendar-month fixed effects absorb common monthly conditions, but do not make events equally weighted. The pooled coefficient is implicitly weighted by the customer-period observations contributed by each event, which range with the number of eligible customers. These features are part of the interpretation of the pooled estimand rather than evidence that each closure has a separately estimated effect.
 
 The low-predicted-incidence treatment effect is $\delta^B$. The high-predicted-incidence treatment effect is $\delta^B+\delta^D$. Thus $\delta^D$ is the high-minus-low treatment-effect differential, not the total effect for the high group. The parameter $\beta$ is a high-minus-low post shift common to treated and control episodes; it is not a treatment effect.
 
 \subsubsection{Identification Assumptions and Diagnostic Tests}
 \label{section:3.3.1} 
 
-\noindent The causal interpretation of the high-minus-low differential requires two assumptions beyond the usual implementation conditions. First, parallel triple trends must hold: absent the closure, the treated-control gap for high-predicted-incidence episodes would have evolved like the corresponding gap for low-predicted-incidence episodes.
+\noindent The causal interpretation of the high-minus-low differential requires two central assumptions. First, parallel triple trends must hold: absent the closure, the treated-control gap for high-predicted-incidence episodes would have evolved like the corresponding gap for low-predicted-incidence episodes.
 
 Second, we require \textit{comparable general closure effects}. A closure may affect customers for reasons other than interrupting a likely purchase---for example, by changing convenience, promotions, substitution opportunities or perceptions of the store. The low-predicted-incidence comparison captures these general effects. The high-predicted-incidence comparison contains the same general effects plus the consequence of a likely interrupted purchase. If general closure effects would otherwise be comparable across the two groups, subtracting the low-group response from the high-group response isolates the incremental response associated with the interruption.
 
-Third, predicted purchase incidence and the matched controls must be valid. The classifier uses only pre-closure behavior, and the matched control stores provide the counterfactual local-store path for treated customers. Under parallel triple trends and comparable general closure effects, $\delta^D$ identifies the incremental response associated with interrupting a likely purchase.
+Implementation additionally requires an ex-ante classifier and an informative control path. The classifier uses only pre-closure behavior, and the matched control stores remain open during the focal closure. Closure timing is not assigned to individual customers and is plausibly external to their product choices, but the data do not record each closure's cause or announcement date. We therefore do not rule out unobserved local operational shocks. Under parallel triple trends and comparable general closure effects, $\delta^D$ identifies the incremental response associated with interrupting a likely purchase.
 
-We assess these assumptions in the same order. First, Table~\ref{tab:treatment_control_balance} compares treatment and control member-events before closure. Treated and control episodes are similar in predicted purchase-incidence probability and high-predicted-incidence share, though treated episodes have slightly lower pre-period purchase frequency, slightly higher pre-period novelty-seeking and longer closure windows. These differences are not by themselves evidence against the design, but they motivate the fixed effects and pretrend checks below.
+We assess these assumptions in the same order. First, Table~\ref{tab:treatment_control_balance} compares treated and control episodes within each predicted-incidence group. The low-incidence cells have similar pre-period outcomes, while the high-incidence cells differ more in pre-period novelty and closure duration. These level differences motivate the fixed effects and group-specific pretrend checks below.
 
 Second, Figure~\ref{fig:closure_shock_purchase_frequency} verifies the first-stage shock. Purchase frequency falls sharply for treated customers during the closure window, while the control path remains available. This confirms that the closures create the intended local interruption while keeping the product-choice outcome conceptually separate from purchase incidence.
 
-Third, we test pre-period trends using the event-study version of the triple-difference specification. For purchase frequency, the average treatment pretrend does not reject equality ($p=0.895$), but the high-minus-low pretrend rejects ($p=0.002$). We therefore treat the positive purchase-frequency estimate as supporting evidence that purchase-day frequency recovers after reopening, not as the cleanest causal result. For novelty-seeking, the corresponding high-minus-low pretrend test does not reject ($p=0.797$). Appendix~\ref{app:identification_diagnostics} reports these diagnostics, including the pretrend test for the alternative new-product-seeking measure.
+Third, we test pre-period trends using the event-study version of the triple-difference specification. With closure-clustered inference, the purchase-frequency high-minus-low pretrend rejects equality ($p=0.035$), while its continuous-score counterpart is borderline ($p=0.050$). We therefore treat the positive purchase-frequency estimate as supporting evidence of recovery, not as the paper's cleanest causal result. For novelty-seeking, Appendix~\ref{app:identification_diagnostics} reports the three pre-period DDD coefficients, their confidence intervals and the joint test that they equal zero (Wald statistic $=0.837$, $p=0.841$). The appendix also plots the complete coefficient path and reports a common-support restriction. The matched estimates are smaller and imprecise, so this diagnostic tempers rather than strengthens the identifying case.
 
 
 \subsection{Main Results}
@@ -696,14 +674,14 @@ Third, we test pre-period trends using the event-study version of the triple-dif
 Effect & Purchase frequency & Novelty-seeking \\
 \midrule
 \multicolumn{3}{l}{\textit{Panel A. Closure effects within predicted-incidence group}} \\
-Low predicted purchase incidence ($\delta^B$) & 0.0009 & 0.0313*** \\
- & (0.0007) & (0.0120) \\
-High predicted purchase incidence ($\delta^B + \delta^D$) & 0.0067*** & -0.0102 \\
- & (0.0024) & (0.0083) \\
+Low predicted purchase incidence ($\delta^B$) & 0.0009 & 0.0313* \\
+ & (0.0024) & (0.0178) \\
+High predicted purchase incidence ($\delta^B + \delta^D$) & 0.0067 & -0.0102 \\
+ & (0.0045) & (0.0072) \\
 \addlinespace
 \multicolumn{3}{l}{\textit{Panel B. Incremental interruption contrast}} \\
-High minus low ($\delta^D$) & 0.0058** & -0.0415*** \\
- & (0.0025) & (0.0145) \\
+High minus low ($\delta^D$) & \textbf{0.0058*} & \textbf{-0.0415**} \\
+ & (0.0032) & (0.0184) \\
 \addlinespace
 Pre-period outcome mean & 0.0493 & 0.4978 \\
 Observations & 321,184 & 99,644 \\
@@ -712,84 +690,104 @@ Within $R^2$ & 0.013 & 0.001 \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: Panel A reports treated-control post contrasts within low- and high-predicted-incidence episodes. Panel B reports their difference, the triple-differences coefficient. Purchase frequency is purchase days per calendar day. Novelty-seeking is the share of distinct products purchased in a window that the consumer had not purchased before that window and is defined only for windows with a purchase. The high-group effects are estimated in algebraically equivalent parameterizations and have their own cluster-robust standard errors. Standard errors, clustered at the member level, are in parentheses. All regressions include member-closure, relative-period and calendar-month fixed effects and omit the closure window. $R^2$ includes the absorbed fixed effects; within $R^2$ is calculated after absorbing them. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\fnote{Notes: Panel A reports treated-control post contrasts within low- and high-predicted-incidence episodes. Panel B reports their difference, the triple-differences coefficient; boldface marks this focal estimand. Purchase frequency is purchase days per calendar day. Novelty-seeking is the share of distinct products purchased in a window that the consumer had not purchased before that window and is defined only for windows with a purchase. The high-group effects are estimated in algebraically equivalent parameterizations and have their own cluster-robust standard errors. Standard errors, clustered by closure event (18 clusters), are in parentheses. All regressions include member-closure, relative-period and calendar-month fixed effects and omit the closure window. $R^2$ includes the absorbed fixed effects; within $R^2$ is calculated after absorbing them. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
 \end{table}
 
 \paragraph{Purchase frequency.}
-The low-predicted-incidence treated-control post contrast is 0.09 percentage points per calendar day (SE 0.07; $p=0.180$). The high-group contrast is 0.67 points (SE 0.24; $p=0.006$), or 13.6\% of the pre-period mean. Their difference is 0.58 points per day (SE 0.25; $p=0.021$), about 11.8\% of the pre-period mean. The estimates therefore show no post-reopening purchase-frequency shortfall for the high-predicted-incidence group. They instead describe a relative rebound. The high-minus-low purchase pretrend rejects equality, however, so the DDD cannot cleanly distinguish an interruption-induced rebound from continuation of differential pre-closure dynamics.
+The low-predicted-incidence treated-control post contrast is 0.09 percentage points per calendar day (SE 0.24; $p=0.711$). The high-group contrast is 0.67 points (SE 0.45; $p=0.152$), or 13.6\% of the pre-period mean. Their difference is 0.58 points per day (SE 0.32; $p=0.086$), about 11.8\% of the pre-period mean. The point estimates describe a relative post-reopening rebound, but none of the group-specific contrasts is statistically distinguishable from zero at the 5\% level under closure-clustered inference. Together with the rejected high-minus-low purchase pretrend, this evidence is descriptive rather than a clean estimate of an interruption-induced recovery.
 
 \paragraph{Novelty-seeking.}
-For low-predicted-incidence episodes, the closure raises novelty-seeking by 3.13 percentage points (SE 1.20; $p=0.009$). This low-group contrast captures the product-choice response to general closure exposure. The high-group effect is a 1.02-point decline (SE 0.83; $p=0.217$), which is not statistically distinguishable from zero. The high-minus-low DDD is $-4.15$ points (SE 1.45; $p=0.004$), or 8.3\% of the pre-period outcome mean. Under parallel triple trends and comparable general closure effects, the interruption of a likely purchase therefore offsets the low group's increase in exploration. The result establishes a negative relative response, not a precisely estimated absolute decline in novelty-seeking for the high group.
+For low-predicted-incidence episodes, the treated-control contrast is a 3.13-percentage-point increase in novelty-seeking (SE 1.78; $p=0.098$). The high-group effect is a 1.02-point decline (SE 0.72; $p=0.175$). Neither group-specific contrast is statistically distinguishable from zero at the 5\% level. Their difference is $-4.15$ points (SE 1.84; $p=0.038$), or 8.3\% of the pre-period outcome mean. In economic terms, the differential more than offsets the 3.13-point low-group increase, leaving the high-group point estimate slightly negative. Under parallel triple trends and comparable general closure effects, this pattern indicates that interrupting a likely purchase offsets the relative increase in exploration observed for the low group. It does not establish a precisely estimated absolute decline for the high group.
 
-Appendix~\ref{app:new_product_seeking} checks whether this conclusion depends on defining novelty relative to the consumer's own history. The robustness analysis instead measures new-product-seeking using products that have appeared recently in the transaction data. Its estimates show the same qualitative reduction in exploration after a likely purchase is interrupted.
+Appendix~\ref{app:new_product_seeking} checks whether this conclusion depends on defining novelty relative to the consumer's own history. The robustness analysis instead measures new-product-seeking using products that have appeared recently in the transaction data. Its estimates show the same qualitative reduction in exploration after a likely purchase is interrupted. Section~\ref{section:5.1.1} examines whether the novelty response varies with consumers' baseline orientation toward familiar versus novel products.
 
 \subsection{Robustness Checks}
 \label{section:4.1}
 
-We further assess robustness by replacing the binary high-predicted-incidence indicator with the centered ex-ante predicted purchase-incidence score. The treatment-by-score interaction is positive for purchase frequency ($+0.0076$, SE $0.0037$) and negative for novelty-seeking ($-0.0452$, SE $0.0221$). A 10-percentage-point increase in predicted purchase incidence therefore changes the treated-control post contrast by approximately $+0.08$ percentage points per day for purchase frequency and $-0.45$ points for novelty-seeking. These continuous-score estimates reproduce the signs of the binary DDDs without imposing the 0.5 classification threshold. Appendix Table~\ref{tab:appendix_score_main_results} reports the complete specification, including the baseline treated-control contrast and the common post-score gradient. Appendix Table~\ref{tab:appendix_new_product_seeking} reports the corresponding binary and continuous estimates for new-product-seeking.
+We further assess robustness by replacing the binary high-predicted-incidence indicator with the centered ex-ante predicted purchase-incidence score. The treatment-by-score interaction is positive for purchase frequency ($+0.0076$, SE $0.0051$; $p=0.152$) and negative for novelty-seeking ($-0.0452$, SE $0.0276$; $p=0.120$). A 10-percentage-point increase in predicted purchase incidence changes the fitted treated-control post contrast by approximately $+0.08$ percentage points per day for purchase frequency and $-0.45$ points for novelty-seeking. The signs match the binary DDDs, but the continuous-score estimates are imprecise under closure-clustered inference. Appendix Table~\ref{tab:appendix_score_main_results} reports the complete specification. Appendix Table~\ref{tab:appendix_new_product_seeking} reports the corresponding binary and continuous estimates for new-product-seeking.
 
-\section{Why Does This Happen? Goal Persistence and Consumer Type}
+\section{A Potential Interpretation: Goal Persistence}
 \label{section:5} 
 
-\subsection{Blocked Goals Create Focused Rebound}
+\subsection{Blocked Goals and Familiar-Choice Salience}
 \label{section:5.1} 
 
 \noindent We propose a mechanism based on the persistence of active purchase goals. When a store closure blocks an intended purchase, the underlying goal need not disappear. Instead, the interruption may leave the goal cognitively active, increasing its salience and shaping subsequent behavior once purchasing opportunities are restored.
 
 This idea comes from a large literature in psychology showing that unfulfilled goals remain mentally active, trigger counterfactual thinking about the missed action, and intensify the desire to complete the interrupted task \shortcite<e.g.,>{Brehm1966, Clee1980, fitzsimons2000consumer,epstude2008functional,masicampo2011consider,Kappes2016}. In our context, a consumer whose likely purchase is interrupted may return after reopening with a more focused objective, prioritizing completion over exploration. This mechanism is consistent with the negative high-minus-low novelty differential. It does not imply, and the estimates do not establish, a statistically significant absolute novelty decline for high-predicted-incidence episodes.
 
-\subsubsection{Implementation and Findings}
+\subsubsection{Heterogeneity by Baseline Novelty-Seeking}
 \label{section:5.1.1} 
 
-\noindent A direct implication of this mechanism is that some consumers should continue to pursue their purchase goal even during the closure period. In particular, if the goal remains active, consumers may substitute toward other stores of the same chain in order to complete the intended purchase. In the data, we observe that a non-trivial fraction of treated customers make purchases at alternative stores during the closure window. Specifically, 519 treated member-events involve at least one same-chain purchase at a different store while the focal store is closed, corresponding to 7.0\% of treated member-events.
+\noindent Consumers with lower baseline novelty-seeking reveal a stronger orientation toward familiar products and established routines. When an expected purchase is interrupted, the salient counterfactual may therefore be more focused on the familiar product that would otherwise have been chosen. If this product-specific salience persists after reopening, the interruption should reduce novelty-seeking more strongly among these consumers.
 
-To assess whether such substitution drives the results, we re-estimate the triple difference-in-differences specification after excluding all treated member-events with any during-closure purchases at alternative stores within the chain. This restriction isolates consumers whose purchase opportunities are more likely to be interrupted. For purchase frequency, the high-minus-low DDD remains positive ($\delta^D = +0.0052^{**}$), while for novelty-seeking it remains negative ($\delta^D = -0.0323^{**}$). These contrasts are attenuated relative to the baseline but preserve the same sign and statistical significance. They are consistent with, but do not prove, a goal-persistence interpretation.
+\paragraph{Trait construction and distribution.}
+For each customer-closure episode, we first calculate novelty-seeking separately in relative periods $-8$ through $-1$ and then take the unweighted mean across periods in which the customer purchased. Each relative period has the length of its closure event, so these are eight closure-length windows rather than eight calendar weeks. We define the episode's \emph{baseline orders}, $O_{ie}$, as the total number of distinct orders that customer $i$ placed across all chain stores observed in the market during these same eight windows. An order is a distinct transaction, not a purchased product or a purchasing day. We require $O_{ie}\geq5$ to reduce the influence of very short purchase histories. The raw novelty measure ranges from zero, when every purchased product in these windows is familiar, to one, when every distinct product purchased in each purchasing window is new relative to the customer's earlier history.
 
-\subsection{Heterogeneity by Pre-Period Novelty}
-\label{section:5.2}
+Figure~\ref{fig:baseline_novelty_distribution} shows the resulting distribution across 18,525 eligible episodes. The mean is 0.508, the standard deviation is 0.269 and the median is 0.500. The 10th and 90th percentiles are 0.167 and 0.889; 3.3\% of episodes are at zero and 6.8\% are at one. Thus, the analysis uses broad variation over the full support rather than a comparison driven by a narrow part of the distribution. Among the 17,866 episodes with an observed novelty outcome, every treatment-by-predicted-incidence cell contains all 18 closures; cell sizes range from 1,489 to 7,951 episodes, and cell means range from 0.453 to 0.574.
 
-\noindent The goal-persistence mechanism predicts that the incremental interruption contrast should differ across consumer types. Consumers who were already less exploratory before the closure have a more familiar consumption path to complete when a likely purchase is interrupted. For these consumers, counterfactual thinking about the forgone purchase may make familiar products especially salient after reopening. In contrast, consumers with high pre-period novelty-seeking have a more exploratory routine, so the high-minus-low DDD may be less negative. This is descriptive heterogeneity, not a separate causal subgroup design.
+The raw data also show why the amount of baseline purchase history should be separated from baseline novelty. Across the 18,525 eligible episodes, the correlation between baseline novelty and $\log(1+O_{ie})$ is $-0.329$. Mean baseline novelty is 0.620 among episodes with exactly five orders and 0.365 among episodes with at least 20 orders; the share at the upper boundary of one falls from 19.3\% to 0.1\% across these groups. This model-free association may reflect both genuine differences between frequent and infrequent customers and the greater sampling variability of novelty measured from few orders. Either source can make order history independently relevant for heterogeneity in the post-period response.
 
-To test this prediction, we split member-closure episodes by pre-period novelty-seeking. For each episode, we compute the mean novelty-seeking rate over the four pre-closure windows in which the member makes a purchase. We then define $H_{ie}=1$ if this pre-period novelty mean is above the sample median, and $H_{ie}=0$ otherwise. The heterogeneity regression augments the main novelty-seeking specification as follows:
-\begin{equation}
-\begin{aligned}
-Y^V_{iet} ={}&
-\delta_L^B \cdot \text{Post} \times \text{Treated}
-+ \beta_L \cdot \text{Post} \times \text{High}
-+ \delta_L^D \cdot \text{Post} \times \text{Treated} \times \text{High} \\
-&+ \theta^B \cdot \text{Post} \times \text{Treated} \times H_{ie}
-+ \theta^\beta \cdot \text{Post} \times \text{High} \times H_{ie}
-+ \theta^D \cdot \text{Post} \times \text{Treated} \times \text{High} \times H_{ie} \\
-&+ \phi_{ie} + \omega_t + \gamma_m + \varepsilon_{iet}.
-\end{aligned}
-\label{eq:pre_novelty_heterogeneity}
-\end{equation}
-The omitted subgroup is low pre-novelty episodes. Thus $\delta_L^D$ is the high-minus-low DDD for low pre-novelty consumers, and $\theta^D$ is the increment in that contrast for high pre-novelty consumers. As in the main specification, member-closure fixed effects absorb time-invariant differences across episodes, while relative-period and calendar-month fixed effects absorb common time shocks. Standard errors are clustered at the member level.
-
-Table~\ref{tab:pre_novelty_heterogeneity} reports the two coefficients needed to interpret this heterogeneity. For low pre-novelty consumers, the high-minus-low DDD is $-26.3$ percentage points. The contrast is 49.2 points higher for high pre-novelty consumers. The sign reversal suggests that the overall negative novelty differential is concentrated among consumers whose pre-disruption behavior was already less exploratory, but it should be read as descriptive mechanism-consistent evidence.
-
-\begin{table}[h!]
+\begin{figure}[H]
 \centering
-\caption{Heterogeneity by pre-period novelty-seeking}
-\label{tab:pre_novelty_heterogeneity}
+\includegraphics[width=0.78\textwidth]{figures/baseline_novelty_distribution.png}
+\caption{Distribution of baseline novelty-seeking}
+\label{fig:baseline_novelty_distribution}
+\fnote{Notes: The figure shows ten equal-width bins of the raw episode-level baseline novelty measure. The measure is the mean of within-period novelty-seeking over purchasing periods from relative period $-8$ through $-1$. Eligible episodes have at least five orders across these eight closure-length periods. The last bin includes one. The vertical line marks the sample mean. The sample contains 18,525 eligible customer-closure episodes.}
+\end{figure}
+
+\paragraph{Econometric specification.}
+Let $N_{ie}$ denote standardized baseline novelty-seeking. We transform the baseline-order count as $Q_{ie}=[\log(1+O_{ie})-\overline{\log(1+O)}]/\operatorname{SD}[\log(1+O)]$. The logarithm compresses the right tail of the order-count distribution, and standardization gives $Q_{ie}$ mean zero and unit standard deviation. Appendix~\ref{app:no_baseline_order_adjustment} reports an otherwise identical specification that deletes the entire set of terms involving $Q_{ie}$. Retaining the Post, Treated and High definitions from equation~\eqref{eq:main_ddd}, our preferred specification is
+\begin{align}
+Y^N_{iet}
+={}& \delta^B(\text{Post}\times\text{Treated})
++\beta(\text{Post}\times\text{High})
++\delta^D(\text{Post}\times\text{Treated}\times\text{High}) \notag\\
+&+\eta_0(\text{Post}\times N_{ie})
++\eta_T(\text{Post}\times\text{Treated}\times N_{ie}) \notag\\
+&+\eta_H(\text{Post}\times\text{High}\times N_{ie})
++\theta^D(\text{Post}\times\text{Treated}\times\text{High}\times N_{ie}) \notag\\
+&+\text{Post}\times Q_{ie}
+\left(\kappa_0+\kappa_T\text{Treated}+\kappa_H\text{High}
++\kappa_D\text{Treated}\times\text{High}\right) \notag\\
+&+\phi_{ie}+\omega_t+\gamma_m+\varepsilon_{iet},
+\label{eq:baseline_novelty_heterogeneity}
+\end{align}
+where $Y^N_{iet}$ is novelty-seeking conditional on purchase. The first line is exactly the main DDD specification for this outcome. Member-closure fixed effects $\phi_{ie}$ absorb all time-invariant episode characteristics, $\omega_t$ are relative-period fixed effects and $\gamma_m$ are calendar-month fixed effects. The next two lines add the complete Post-by-baseline-novelty interaction hierarchy.
+
+The line involving $Q_{ie}$ allows post-period changes to vary flexibly with the amount of baseline purchase history. In the control, low-predicted-incidence cell, $\kappa_0$ is the change in the post-period outcome gradient associated with a one-standard-deviation increase in log baseline orders. The coefficients $\kappa_T$ and $\kappa_H$ allow that gradient to differ for treated and high-predicted-incidence episodes, respectively, while $\kappa_D$ allows the high-minus-low DDD itself to vary with baseline orders. The levels of $Q_{ie}$ and its group interactions are time-invariant and therefore absorbed by $\phi_{ie}$; their interactions with Post are the estimable terms. This complete hierarchy prevents $\theta^D$ from capturing heterogeneity associated with how many orders were available to measure baseline novelty. Because $N_{ie}$ and $Q_{ie}$ are standardized, $\delta^D$ is the high-minus-low DDD at mean baseline novelty and mean baseline order history. The parameter $\theta^D$ is the change in this DDD for a one-standard-deviation increase in baseline novelty, holding baseline order history fixed. Standard errors are clustered by closure event.
+
+\paragraph{Results.}
+Table~\ref{tab:baseline_novelty_heterogeneity} reports the two coefficients needed to interpret the heterogeneity. At mean baseline novelty and order history, the fitted interruption DDD is $-1.30$ percentage points (SE $=2.00$). More importantly, a one-standard-deviation increase in baseline novelty raises the DDD by 2.94 points (SE $=1.47$; one-sided $p=0.031$). One standard deviation is 0.269 on the raw baseline-novelty scale. Holding order history at its mean, the linear fit therefore moves from a $-4.24$-point DDD at raw baseline novelty of about 0.240---one standard deviation below the mean---to a $+1.63$-point DDD at raw baseline novelty of about 0.777---one standard deviation above the mean. This two-standard-deviation movement changes the fitted interruption response by 5.88 points. These fitted contrasts summarize the slope; they are not separately estimated subgroup effects.
+
+\begin{table}[H]
+\centering
+\caption{Baseline novelty-seeking and the interruption-related novelty response}
+\label{tab:baseline_novelty_heterogeneity}
 \small
-\begin{tabular}{lcc}
+\begin{tabularx}{\textwidth}{Xrrr}
 \toprule
-Parameter or effect & Estimate & SE \\
+Parameter & Estimate & SE & One-sided $p$ \\
 \midrule
-Low pre-novelty effect ($\delta_L^D$) & -0.263*** & 0.017 \\
-High pre-novelty increment ($\theta^D$) & 0.492*** & 0.024 \\
+DDD at mean baseline novelty and order history ($\delta^D$) & $-1.30$ & 2.00 & -- \\
+Change in DDD per SD of baseline novelty ($\theta^D$) & \textbf{2.94} & 1.47 & 0.031 \\
 \addlinespace
-Observations & 95,986 & \\
-Member-closure fixed effects & Yes & \\
-Relative-period and calendar-month fixed effects & Yes & \\
+Joint pretrend test for $\theta^D$ & \multicolumn{3}{r}{0.561} \\
+Observations & \multicolumn{3}{r}{79,578} \\
+Closure-event clusters & \multicolumn{3}{r}{18} \\
+$R^2$ & \multicolumn{3}{r}{0.411} \\
+Within $R^2$ & \multicolumn{3}{r}{0.039} \\
+Member-closure, relative-period and calendar-month fixed effects & \multicolumn{3}{r}{Yes} \\
+Post-by-baseline-order interaction hierarchy & \multicolumn{3}{r}{Yes} \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \vspace{1mm}
-\fnote{Notes: The dependent variable is novelty-seeking. Low and high pre-novelty groups are split at the sample median of episode-level pre-period novelty among members with observed pre-period novelty. The low pre-novelty row estimates $\delta_L^D$ in equation~\eqref{eq:pre_novelty_heterogeneity}; the high pre-novelty increment estimates $\theta^D$. Both are high-minus-low DDD contrasts, not total high-predicted-incidence effects. Standard errors are clustered at the member level. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\fnote{Notes: Estimates and standard errors are in percentage points. The dependent variable is novelty-seeking conditional on purchase. Baseline novelty-seeking is standardized over the 18,525 eligible episodes described in Figure~\ref{fig:baseline_novelty_distribution}. Baseline orders are distinct transactions during relative periods $-8$ through $-1$; the regression uses standardized $\log(1+\text{baseline orders})$. Boldface marks the focal heterogeneity coefficient, $\theta^D$. The directional p-value applies only to $\theta^D$ and tests the model-predicted alternative $\theta^D>0$. Standard errors use CRV1 clustering by the 18 closure events. The joint pretrend row reports the p-value for the null that the event-study interaction coefficients in relative periods $-4$, $-3$ and $-2$ are all zero.}
 \end{table}
 
-This heterogeneity evidence should be interpreted as mechanism-consistent rather than as a separate randomized test. Pre-period novelty types differ in baseline behavior by construction, and may also differ in purchase frequency or other dimensions of engagement. The table therefore does not prove that pre-period novelty type itself causes the response. It shows that the main novelty-seeking decline appears exactly where the goal-persistence mechanism predicts it should appear: among consumers for whom familiar products were already the dominant pre-closure consumption path.
+The event-study interaction does not reject a differential pretrend ($p=0.561$); Appendix Figure~\ref{fig:appendix_baseline_novelty_event_study} shows the full coefficient path and its uncertainty. The positive collapsed coefficient matches the model's signed prediction: lower-baseline-novelty customers exhibit the more negative interruption-related response. The result is suggestive rather than a direct mechanism test. Baseline novelty does not observe goal salience or counterfactual thinking, and this specification was selected after exploring alternative trait constructions. We therefore treat it as exploratory evidence consistent with familiar-choice salience, not as unique identification of that psychological channel.
+
+
 
 \iffalse
 \subsection{Mechanism 2: Missed Exposure to New Products}
@@ -808,18 +806,17 @@ If missed exposure were the dominant driver of the decline in novelty-seeking, c
 
 The evidence indicates that missed exposure is unlikely to be the main mechanism behind the observed decline in novelty-seeking. Instead, the results are more consistent with the goal-based mechanism, whereby the interruption of an active purchase leads to more focused behavior upon return. This interpretation is supported both by the lack of correlation between introduction intensity and novelty effects and by the persistence of the main results across alternative specifications.
 \fi
- 
 
 \section{Conclusion}
 \label{section:7}
 
 \noindent This paper studies how consumers respond when a temporary store closure is likely to interrupt a purchase. Using panel data from a large digital coffee chain, we estimate a triple-differences design that compares high- and low-predicted-incidence post-reopening responses. Purchase frequency is 0.58 percentage points per day higher for high- than for low-predicted-incidence episodes after reopening. Because the corresponding pretrend test rejects equality, this estimate is descriptive evidence of recovery rather than a clean causal rebound.
 
-The product-choice result is more credible under the design's pretrend diagnostics. Novelty-seeking responds 4.15 percentage points less for high- than for low-predicted-incidence episodes. The direct high-group effect is a statistically insignificant 1.02-point decline. Under parallel triple trends and comparable general closure effects, this DDD identifies the incremental response associated with interrupting a likely purchase. An appendix robustness check based on new-product-seeking yields the same qualitative conclusion when exploration is defined relative to products that have appeared recently in the transaction data.
+The product-choice result is more credible under the design's pretrend diagnostics. Novelty-seeking responds 4.15 percentage points less for high- than for low-predicted-incidence episodes. The direct high-group effect is a statistically insignificant 1.02-point decline. Under parallel triple trends and comparable general closure effects, this DDD identifies the incremental response associated with interrupting a likely purchase. An appendix robustness check based on new-product-seeking yields the same qualitative conclusion when exploration is defined relative to products that have appeared recently in the transaction data. Consistent with familiar-choice salience, the interruption-related narrowing of product exploration is stronger among consumers with lower baseline novelty-seeking.
 
-A goal-persistence mechanism is one interpretation: an interrupted likely purchase may make familiar products more salient upon return. The descriptive pre-period-novelty heterogeneity is consistent with this account, but neither the main DDD nor the heterogeneity regression isolates the psychological channel from other reasons that an interruption may reduce exploration.
+A goal-persistence mechanism is one interpretation: an interrupted likely purchase may make familiar products more salient upon return. The main DDD does not isolate this psychological channel from other reasons that an interruption may reduce exploration.
 
-Our findings contribute to the marketing literature in several ways. First, we provide empirical evidence on the role of goal persistence and state dependence in shaping consumer behavior under temporary constraints. While prior work has emphasized habit formation and inertia, our results highlight the importance of actively maintained purchase goals and their behavioral consequences when disrupted. Second, we show that supply-side shocks can have distinct effects on the level and composition of demand, and that these effects depend critically on consumer heterogeneity. By focusing on consumers for whom the closure likely binds, we uncover behavioral responses that are masked in aggregate analyses. Furthermore, our study contributes to a broader understanding of product discovery by showing how temporary interruptions can have lasting effects on consumer choice, even when demand levels recover quickly.
+Our findings contribute to the marketing literature in several ways. First, we show how a temporary constraint interacts with ex-ante purchase incidence to shape post-reopening behavior; persistent purchase goals are one possible account of the product-choice response rather than a separately identified mechanism. Second, we show that supply-side shocks can have distinct effects on the level and composition of demand, and that these effects depend critically on whether the constraint is likely to bind. By focusing on consumers for whom the closure likely interrupts a purchase, we uncover behavioral responses that can be masked in aggregate analyses. Furthermore, our study contributes to a broader understanding of product discovery by showing how temporary interruptions can change consumer choice even when demand levels recover quickly.
 
 From a managerial perspective, purchase-day frequency can recover while product discovery weakens. The novelty-seeking estimate is a relative effect, and the alternative new-product-seeking definition strengthens the evidence that exploration narrows after a likely purchase is interrupted. Firms should therefore monitor product discovery alongside post-disruption sales recovery. More generally, demand recovery is incomplete when customers return but narrow the set of products they consider.
 
@@ -852,45 +849,27 @@ From a managerial perspective, purchase-day frequency can recover while product 
 \section{Data Construction and Measurement}
 \label{app:data_construction}
 
-\noindent This appendix records the construction details that are needed to interpret the empirical design but are too mechanical for the main text. The unit of analysis is a member-closure event. A member can enter the analysis only through a closure event for which her pre-closure purchase history identifies a meaningful focal store.
+\noindent This appendix records construction details that are needed to interpret the empirical design but are too mechanical for the main text. The unit of assignment is a customer-closure episode. A customer enters through a closure event for which her pre-closure purchase history identifies a meaningful focal store; the outcomes then aggregate her purchases across the observed chain.
 
-\subsection{Closure Registry and Member-Event Sample}
+\subsection{Closure Registry and Customer-Episode Sample}
 \label{app:closure_registry}
 
-The closure registry starts from a store-day panel. A candidate closure is a consecutive spell in which a store records no transactions. The raw detection step identifies 101 zero-demand spells. Because many university and college locations have long closures that reflect campus operating calendars rather than short disruptions, the analysis excludes those locations. The maintained paper design then focuses on the 18-closure registry used for the headline estimates.
+The raw data contain 7,312,498 orders, represented by 10,631,250 product-line records, from 779,744 customers at 260 stores between June 1, 2020 and December 31, 2021. We aggregate these orders to a store-day panel and define a candidate closure as a consecutive spell in which a store records no transactions. This procedure identifies 101 zero-transaction spells.
 
-\begin{table}[H]
-\centering
-\caption{Sample construction for the 18-closure design}
-\label{tab:appendix_sample_construction}
-\small
-\begin{tabularx}{\textwidth}{p{5.0cm}>{\centering\arraybackslash}p{2.8cm}X}
-\toprule
-Step or object & Count & Description \\
-\midrule
-Transactions & 10.6 million & Raw purchase records from the coffee-chain transaction data. \\
-Customers & 779,000 & Customers observed in the transaction data. \\
-Stores & 260 & Physical stores in the operating network. \\
-Raw zero-demand closure spells & 101 & Consecutive store-day spells with no transactions. \\
-University or college closure spells excluded & 60 & Long campus-related closures removed from the main disruption design. \\
-Non-university spells before final registry filters & 41 & Raw non-university closure candidates before the treatment-control registry restrictions. \\
-Main retained registry & 18 closures & Headline registry used in the paper. Closure durations range from 10 to 29 days. \\
-Member-closure episodes & 40,148 & Final episode-level sample underlying the purchase-frequency panel. \\
-Treated episodes & 7,390 & Members whose pre-closure preferred store is the closing store. \\
-Control episodes & 32,758 & Members whose pre-closure preferred store is a matched open control store. \\
-Treated high-predicted-incidence episodes & 2,041 & Treated episodes with predicted closure-window purchase incidence above the classifier threshold, equal to 27.6\% of treated episodes. \\
-\bottomrule
-\end{tabularx}
-\vspace{1mm}
-\fnote{Notes: The full transaction counts describe the raw data environment. The final episode counts describe the main 18-closure estimation sample. Treatment and control assignment use pre-closure preferred stores and the same minimum purchase and store-loyalty restrictions for both groups.}
-\end{table}
+We first remove 60 spells at stores located in universities or colleges. These spells occur during summer periods in which COVID-19 policies may have kept students away from campus. Because the data cover purchases made in this city, we do not observe whether students continued to buy from the chain elsewhere. A campus store with no local transactions may therefore reflect the temporary absence of its customers rather than a supply disruption. Removing these spells avoids treating a seasonal loss of the local customer population as a store closure and leaves 41 non-campus candidates.
 
-For each closure, treated members are customers whose preferred pre-closure store is the store that closes. Control members are customers whose preferred pre-closure store is one of the matched control stores that remains open. Preferred stores are defined using pre-closure purchases, and the sample requires at least five pre-closure purchase days and a preferred-store purchase share of at least 80\%. These restrictions make store assignment behaviorally meaningful: the closure is a relevant local disruption only if the customer had repeatedly relied on that store before the event.
+We next exclude seven spells lasting 30 days or longer. The analysis is designed around short disruptions followed by a clearly observed reopening; longer spells are more likely to reflect seasonal shutdowns or persistent changes in store operations. They also produce much longer pre- and post-event windows, which are difficult to compare within the 19-month data period. Requiring closures to last strictly fewer than 30 days leaves 34 candidates.
+
+The remaining events must provide enough support for the treated-control comparison. We require at least one treated and one control customer and at least 50 customers in each group. These restrictions remove events for which the DDD is undefined or rests on a very small group. We also require the control purchase rate during the closure to be at least twice the treated rate. This screen is intended to distinguish a localized access disruption from a broader contraction in demand that affects treated and control customers alike. Together, the support and purchase-rate screens remove 12 events---eight for a low control purchase rate, two for insufficient group size and two for having no control customers---leaving 22 closures. Because the purchase-rate screen uses behavior realized during the closure, the full-registry sensitivity analysis remains important.
+
+The maintained headline sample excludes four additional events around the Lunar New Year period. Travel, holiday schedules and COVID-19-related mobility changes during this period can shift customer traffic independently of a store closure, and these events have weaker treatment-control fit. This restriction leaves 18 closures lasting 10 to 29 days. It is not generated by a coded ex-ante rule, so we retain the 22-event full-registry analysis as a sensitivity check. The novelty DDD keeps its sign in that broader registry, while the purchase-frequency estimate is less stable across broader sample definitions; the archived sensitivity analysis records those comparisons without changing the 18-event headline registry.
+
+For each retained closure, treated customers are those whose preferred pre-closure store is the store that closes. Control customers are those whose preferred store is one of the matched stores that remains open. We define the preferred store from pre-closure purchases and require at least five pre-closure purchase days and a preferred-store purchase share of at least 80\%. These restrictions ensure that the closing store was an economically meaningful source of access for treated customers. The final sample contains 40,148 customer-closure episodes: 7,390 treated and 32,758 controls. Of the treated episodes, 2,041, or 27.6\%, have high predicted purchase incidence during the closure window.
 
 \subsection{Outcome Timing and Variable Definitions}
 \label{app:outcome_definitions}
 
-Each closure event defines relative periods $t=-4,\ldots,4$. Every relative period has the same length as the closure, denoted $L_e$, and period $0$ is the closure window itself. The main post-reopening regressions omit period $0$ and compare four pre-closure windows with four post-reopening windows. This convention produces 321,184 member-event-period observations for purchase frequency. Product-choice outcomes are observed only when a member purchases in the corresponding window; both novelty regressions use 99,644 observations after the final estimation restrictions.
+Each closure event defines relative periods $t=-4,\ldots,4$. Every relative period has the same length as the closure, denoted $L_e$, and period $0$ is the closure window itself. The main post-reopening regressions omit period $0$ and compare four pre-closure windows with four post-reopening windows. This convention produces 321,184 customer-episode-period observations for purchase frequency. Customers make at least one purchase in 105,854 of these rows, so novelty-seeking is defined in those rows. The episode fixed effects then remove 6,210 rows belonging to episodes with only one product-choice period, leaving 99,644 observations in each main product-choice regression. Table~\ref{tab:treatment_control_balance} reports pre-period purchase probabilities across the four DDD cells.
 
 \begin{table}[H]
 \centering
@@ -906,19 +885,33 @@ Control & Preferred pre-closure store is a matched store that remains open. & Co
 High predicted purchase incidence & Ex-ante predicted probability of at least one purchase during the closure-length window is at least 0.5. & Predicted closure-window purchase incidence. It is defined before observing post-reopening outcomes. \\
 Likely interrupted purchase & Treated $\times$ High predicted purchase incidence. & The closure is predicted to bind: the customer is exposed to the closure and likely would have purchased during the closure window. \\
 Post & Relative periods $1$ through $4$. & Post-reopening windows. Period $0$ is the closure window and is omitted from the main DDD regressions. \\
-Purchase frequency & Purchase days in the relative-period window divided by $L_e$. & Extensive-margin purchase intensity, normalized for closure length. \\
-Novelty-seeking & Share of distinct products purchased in the window that the consumer had not purchased before that window. & Product exploration relative to the consumer's own history, conditional on purchase. \\
-New-product-seeking & Share of distinct products purchased whose first observed sale occurs in the current or immediately previous event window. & Adoption of recently appearing products, conditional on purchase. First observed sale need not equal the formal catalog launch date. \\
+Purchase frequency & Days with at least one purchase at any chain store in the relative-period window, divided by $L_e$. & Chain-wide extensive-margin purchase intensity, normalized for closure length; multiple orders on one day count once. \\
+Novelty-seeking & Share of distinct products purchased anywhere in the chain in the window that the customer had not previously purchased anywhere in the chain. & Chain-wide product exploration relative to the customer's own observed history, conditional on purchase. \\
+Baseline novelty-seeking & Episode-level mean novelty-seeking over relative periods $-8$ through $-1$, restricted to episodes with at least five orders over those periods and standardized over eligible episodes. & Revealed baseline orientation toward familiar versus novel products. Relative periods are closure-length windows, not calendar weeks. \\
+New-product-seeking & Share of distinct products purchased anywhere in the chain whose first observed chain sale occurs in the current or immediately previous event window. & Adoption of recently appearing products, conditional on purchase. First observed sale need not equal the formal catalog launch date. \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
 \fnote{Notes: The main text uses ``high predicted purchase incidence'' for episodes with a score above the threshold. A likely interrupted purchase occurs only for treated high-predicted-incidence episodes, because controls retain access to their focal store.}
 \end{table}
 
+\subsection{Purchase Probability and the Novelty-Seeking Sample}
+\label{app:purchase_probability}
+
+Novelty-seeking is defined only in customer-episode windows containing a purchase. Figure~\ref{fig:appendix_purchase_probability} therefore plots the realized probability of at least one purchase in each DDD cell and relative period. This is also the probability that a window enters the novelty-seeking sample. Purchase probability is much higher among high-predicted-incidence episodes, as expected from a classifier designed to predict purchasing. The informative comparison is treated versus control within each incidence stratum, where the paths are close. High-incidence purchase probability falls from 0.66--0.85 across the pre-periods to roughly 0.56--0.61 after reopening, whereas low-incidence purchase probability remains near 0.17--0.27. The conditional novelty regressions thus compare purchasing windows drawn from a population whose composition changes over time. Similar treated and control purchase-probability paths reduce concern about differential sample entry, but they do not establish that the observed purchasers are compositionally identical. The main estimates therefore retain a conditional-on-purchase interpretation.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.96\textwidth]{figures/purchase_probability_paths.png}
+	\caption{Purchase probability evolves similarly for treated and control episodes within predicted-incidence groups}
+	\label{fig:appendix_purchase_probability}
+\fnote{Notes: The figure plots the share of customer-closure windows containing at least one purchase anywhere in the observed chain. This is also the share of windows in which novelty-seeking is defined. Each relative period contains 23,934 control-low, 5,349 treated-low, 8,824 control-high and 2,041 treated-high episodes. Bars are 95\% confidence intervals based on standard errors clustered by closure event. Means are customer weighted. Relative period 0 is omitted to match the main regressions.}
+\end{figure}
+
 \subsection{Predicted Purchase-Incidence Classifier}
 \label{app:classifier_details}
 
-The classifier separates closure exposure from likely purchase interruption. It predicts whether a member would purchase at least once in a window with the same length as the closure. This target depends mechanically on window length, so the implementation trains one XGBoost model for each observed closure duration. Training uses pre-closure relative periods $-4$ through $-2$, validation uses the holdout pre-period $-1$, and an additional audit uses control customers in period $0$ because their matched focal stores remain open. The period-$0$ audit is a validation exercise; the DDD uses the ex-ante predicted score.
+The classifier separates closure exposure from likely purchase interruption. It predicts whether a customer would purchase at least once anywhere in the chain in a window with the same length as the closure. This target depends mechanically on window length, so the implementation trains one XGBoost model for each observed closure duration. Training uses pre-closure relative periods $-4$ through $-2$, validation uses the holdout pre-period $-1$, and an additional audit uses control customers in period $0$ because their matched focal stores remain open. The period-$0$ audit is a validation exercise; the DDD uses the ex-ante predicted score.
 
 \begin{table}[H]
 \centering
@@ -929,19 +922,102 @@ The classifier separates closure exposure from likely purchase interruption. It 
 \toprule
 Component & Implementation \\
 \midrule
-Prediction target & Indicator for at least one purchase in a closure-length window. \\
+Prediction target & Indicator for at least one purchase anywhere in the chain in a closure-length window. \\
 Model family & XGBoost binary classifier, estimated separately by closure duration. \\
 Training windows & Relative periods $-4$, $-3$ and $-2$. \\
 Holdout validation & Relative period $-1$, separately audited for treated and control customers. \\
 Additional audit & Control customers in period $0$, where the matched control store remains open and actual purchase behavior is observed. \\
-Scored sample & Treated and control member-closure episodes in the ex-ante period-$0$ panel. \\
+Scored sample & Treated and control customer-closure episodes in the ex-ante period-$0$ panel. \\
 Classification rule & High predicted purchase incidence equals one if the predicted period-$0$ purchase probability is at least 0.5. \\
 Feature families & Recent purchase frequency, recency, total purchase history, preferred-store loyalty, basket composition, discount and coupon use, day-of-week purchasing patterns, demographics and push-notification history. \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: The prediction-performance table in the main text reports accuracy, precision, recall and F1 for the main validation slices. The appendix table emphasizes timing and information sets, because these are the key design concerns for interpreting the classifier as ex ante.}
+\fnote{Notes: The performance table in the main text and the diagnostics below use the exact final 18-event cohort. The implementation table emphasizes timing and information sets, because these are the key design concerns for interpreting the classifier as ex ante. The 0.5 cutoff is fixed in the classifier configuration and is not selected using the post-reopening outcomes.}
 \end{table}
+
+\begin{table}[H]
+\centering
+\caption{Purchase-incidence classification at the 0.5 cutoff}
+\label{tab:appendix_classifier_confusion}
+\scriptsize
+\begin{tabularx}{\textwidth}{Xrrrrrrrrrrr}
+\toprule
+Evaluation sample & TN & FP & FN & TP & Accuracy & Benchmark & Sensitivity & Specificity & PPV & NPV & F1 \\
+\midrule
+Control, $t=0$ & 20,045 & 4,111 & 3,889 & 4,713 & 0.756 & 0.737 & 0.548 & 0.830 & 0.534 & 0.838 & 0.541 \\
+Control, $t=-1$ & 19,456 & 3,214 & 4,321 & 5,767 & 0.770 & 0.692 & 0.572 & 0.858 & 0.642 & 0.818 & 0.605 \\
+Treated, $t=-1$ & 4,368 & 698 & 971 & 1,353 & 0.774 & 0.686 & 0.582 & 0.862 & 0.660 & 0.818 & 0.619 \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: $t=0$ is the closure window and $t=-1$ is the holdout pre-period. TN, FP, FN and TP denote true negatives, false positives, false negatives and true positives. Benchmark is the accuracy of predicting no purchase for every episode. Sensitivity is TP/(TP+FN), specificity is TN/(TN+FP), PPV is TP/(TP+FP), and NPV is TN/(TN+FN). All rows use the exact final cohort.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{figures/classifier_calibration.png}
+\caption{Calibration of predicted purchase incidence}
+\label{fig:appendix_classifier_calibration}
+\fnote{Notes: Each point is one decile of predicted purchase probability in the exact final cohort. The horizontal coordinate is the decile's mean prediction and the vertical coordinate is its observed purchase rate. The dashed 45-degree line denotes perfect calibration. The flatter empirical paths show that the raw probabilities are too dispersed, although they continue to rank purchase incidence.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Period-0 control performance by closure duration}
+\label{tab:appendix_classifier_duration}
+\small
+\begin{tabularx}{0.94\textwidth}{Xrrrrrr}
+\toprule
+Duration & $N$ & Prevalence & ROC-AUC & PR-AUC & Brier & Calibration slope \\
+\midrule
+10 days & 1,244 & 0.210 & 0.774 & 0.501 & 0.157 & 0.461 \\
+11 days & 5,020 & 0.246 & 0.783 & 0.585 & 0.152 & 0.548 \\
+12 days & 3,164 & 0.196 & 0.786 & 0.508 & 0.154 & 0.432 \\
+13 days & 1,662 & 0.238 & 0.780 & 0.525 & 0.179 & 0.388 \\
+14 days & 5,232 & 0.230 & 0.783 & 0.555 & 0.148 & 0.592 \\
+15 days & 551 & 0.376 & 0.754 & 0.686 & 0.210 & 0.374 \\
+16 days & 2,416 & 0.300 & 0.794 & 0.646 & 0.176 & 0.448 \\
+17 days & 2,783 & 0.304 & 0.789 & 0.627 & 0.183 & 0.478 \\
+18 days & 3,176 & 0.224 & 0.786 & 0.569 & 0.155 & 0.537 \\
+26 days & 4,645 & 0.299 & 0.761 & 0.592 & 0.208 & 0.494 \\
+28 days & 1,891 & 0.347 & 0.791 & 0.689 & 0.199 & 0.489 \\
+29 days & 974 & 0.359 & 0.739 & 0.611 & 0.232 & 0.331 \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: This table evaluates control customers in period 0 separately for each duration-specific classifier. Duration 25 does not occur in the final 18-event registry and is excluded even though a sensitivity-run artifact exists in the classifier output directory. Definitions follow Table~\ref{tab:classifier_diagnostics}.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Predictive tradeoffs across classification cutoffs}
+\label{tab:appendix_classifier_thresholds}
+\small
+\begin{tabularx}{0.88\textwidth}{Xrrrrr}
+\toprule
+Cutoff & Predicted high & Accuracy & Sensitivity & Specificity & PPV \\
+\midrule
+0.30 & 0.391 & 0.712 & 0.695 & 0.718 & 0.468 \\
+0.40 & 0.325 & 0.738 & 0.620 & 0.780 & 0.502 \\
+0.50 & 0.269 & 0.756 & 0.548 & 0.830 & 0.534 \\
+0.60 & 0.216 & 0.770 & 0.474 & 0.875 & 0.575 \\
+0.70 & 0.170 & 0.777 & 0.398 & 0.911 & 0.615 \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: The evaluation sample is the exact-cohort period-0 controls. Predicted high is the share classified above the stated probability cutoff. These are predictive tradeoffs, not DDD estimates. The main 0.5 rule is configured before estimation; the continuous-score DDD avoids discretizing the score.}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.76\textwidth]{figures/classifier_score_overlap.png}
+\caption{Overlap in predicted period-0 purchase incidence}
+\label{fig:appendix_classifier_overlap}
+\fnote{Notes: The figure shows density histograms of the ex-ante score in the exact final cohort. Mean predicted incidence is 0.307 for controls and 0.313 for treated episodes; the median is 0.172 and 0.174, respectively. The shares at or above 0.5 are 26.9\% and 27.6\%. The similar distributions indicate strong score overlap across treatment arms, although overlap does not validate calibration for the unobserved treated period-0 counterfactual.}
+\end{figure}
+
+The classifier discriminates reasonably well in every production duration: period-0 control ROC-AUC ranges from 0.739 to 0.794. Calibration is consistently weaker, with duration-specific slopes from 0.331 to 0.592. Changing the cutoff produces the expected sensitivity-specificity tradeoff rather than revealing a uniquely preferred threshold. These diagnostics motivate cautious language for the binary group and the continuous-score robustness specification; they do not turn predicted incidence into a direct measure of psychological intention.
 
 \clearpage
 
@@ -953,38 +1029,150 @@ Feature families & Recent purchase frequency, recency, total purchase history, p
 \subsection{Pretrend Tests}
 \label{app:pretrend_tests}
 
-Table~\ref{tab:appendix_pretrend_tests} reports joint tests from the event-study analog of the main DDD specification. Each test uses the three pre-reopening event-time coefficients relative to period $-1$. The average treatment pretrend tests whether treated and control consumers move similarly before the closure. The baseline treatment pretrend tests the treated-control pretrend among low-predicted-incidence episodes. The high-minus-low DDD pretrend tests the pre-period coefficients on the treated-by-high-predicted-incidence interaction, which is the event-study analog of $\delta^D$. The continuous-slope test replaces the binary indicator with the predicted purchase-incidence score.
+For the main novelty-seeking result, we estimate the event-study analog of equation~\eqref{eq:main_ddd}:
+\begin{equation}
+\begin{split}
+Y^N_{iet}={}&\alpha_{ie}+\lambda_t+\gamma_m
++\sum_{\ell\in\{-4,-3,-2,1,2,3,4\}}
+\Big[
+\delta^B_{\ell}\,\text{Treated}_{ie}
++\beta_{\ell}\,\text{High}_{ie} \\
+&\hspace{37mm}
++\delta^D_{\ell}\big(\text{Treated}_{ie}\times\text{High}_{ie}\big)
+\Big]\mathbb{1}\{t=\ell\}+\varepsilon_{iet}.
+\end{split}
+\label{eq:novelty_event_study}
+\end{equation}
+Period $-1$ is the omitted reference period, and period 0 is the closure window and is excluded. The coefficient $\delta^D_{\ell}$ is the high-minus-low DDD at relative period $\ell$. The pretrend test is the joint null
+$H_0:\delta^D_{-4}=\delta^D_{-3}=\delta^D_{-2}=0$.
 
 \begin{table}[H]
 \centering
-\caption{Pretrend diagnostics for event-study specifications}
+\caption{Novelty-seeking DDD pretrend coefficients and joint test}
 \label{tab:appendix_pretrend_tests}
 \small
-\begin{tabularx}{\textwidth}{p{3.2cm}p{6.7cm}rr}
+\begin{tabularx}{0.82\textwidth}{Xrrr}
 \toprule
-Outcome & Test & Restrictions & $p$-value \\
+\multicolumn{4}{l}{\textit{Panel A: Pre-period high-minus-low DDD coefficients}} \\
+Relative period & DDD estimate & SE & 95\% CI \\
 \midrule
-Purchase frequency & Average treated-control pretrend & 3 & 0.895 \\
-Purchase frequency & Baseline treatment pretrend for low-predicted-incidence episodes & 3 & 0.055 \\
-Purchase frequency & High-minus-low DDD pretrend & 3 & 0.002 \\
-Purchase frequency & Continuous incidence-slope pretrend & 3 & 0.007 \\
+$-4$ & 2.23 & 2.73 & $[-3.52,\ 7.98]$ \\
+$-3$ & 2.64 & 3.44 & $[-4.61,\ 9.90]$ \\
+$-2$ & 1.60 & 1.98 & $[-2.57,\ 5.77]$ \\
 \addlinespace
-Novelty-seeking & Average treated-control pretrend & 3 & 0.186 \\
-Novelty-seeking & Baseline treatment pretrend for low-predicted-incidence episodes & 3 & 0.477 \\
-Novelty-seeking & High-minus-low DDD pretrend & 3 & 0.797 \\
-Novelty-seeking & Continuous incidence-slope pretrend & 3 & 0.778 \\
-\addlinespace
-New-product-seeking & Average treated-control pretrend & 3 & 0.177 \\
-New-product-seeking & Baseline treatment pretrend for low-predicted-incidence episodes & 3 & 0.990 \\
-New-product-seeking & High-minus-low DDD pretrend & 3 & 0.515 \\
-New-product-seeking & Continuous incidence-slope pretrend & 3 & 0.721 \\
+\multicolumn{4}{l}{\textit{Panel B: Joint test}} \\
+Null hypothesis & Wald statistic & Restrictions & $p$-value \\
+\midrule
+$\delta^D_{-4}=\delta^D_{-3}=\delta^D_{-2}=0$ & 0.837 & 3 & 0.841 \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: The table reports joint Wald tests of pre-reopening coefficients in event-study specifications. Purchase frequency uses 321,184 member-event-period observations. Novelty-seeking and new-product-seeking use 99,644 observations because product-choice outcomes are defined only in windows with purchases. Standard errors are clustered at the individual level.}
+\fnote{Notes: Coefficients and standard errors are in percentage points. The dependent variable is novelty-seeking, defined only in windows with a purchase. The regression uses 99,644 observations and includes customer-closure, relative-period and calendar-month fixed effects. Period $-1$ is the omitted reference, and period 0 is excluded. Standard errors are clustered by closure event (18 clusters). The joint Wald test uses the closure-clustered covariance matrix.}
 \end{table}
 
-The pretrend diagnostics support the product-choice interpretation more strongly than the purchase-frequency interpretation. For purchase frequency, the average treated-control pretrend is flat, but the high-minus-low DDD pretrend rejects equality. This is why the purchase-frequency result is interpreted cautiously as descriptive evidence of recovery rather than as the paper's cleanest causal estimate. For novelty-seeking, the high-minus-low DDD pretrend does not reject, and the same is true when the binary indicator is replaced by the continuous predicted purchase-incidence score. New-product-seeking shows the same pattern.
+The three novelty-seeking lead estimates are positive, between 1.60 and 2.64 percentage points, and each confidence interval includes zero. The joint test does not reject that all three are zero. This is evidence against a pronounced differential pretrend in the observed pre-closure windows, but it does not prove the identifying assumption. Replacing the binary high-incidence indicator with the continuous predicted-incidence score likewise does not reject a differential pretrend (Wald statistic $=1.781$, $p=0.619$). For transparency about the other outcomes, the purchase-frequency high-minus-low test rejects ($p=0.035$), which is why that result is treated as descriptive, while the new-product-seeking robustness outcome does not reject ($p=0.114$).
+
+Figure~\ref{fig:appendix_novelty_ddd_event_study} shows the novelty high-minus-low coefficient path. The omitted reference period is $-1$, and period 0 is the closure window and is excluded from estimation. Each displayed 95\% confidence interval includes zero. The post-reopening point estimates are negative, but individually imprecise; the figure is therefore evidence about the timing and uncertainty of the response, not a claim that every post-period coefficient differs from zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\textwidth]{figures/novelty_ddd_event_study.png}
+\caption{Event-study path of the novelty-seeking DDD}
+\label{fig:appendix_novelty_ddd_event_study}
+\fnote{Notes: Points are the event-study coefficients on Treated $\times$ High predicted incidence relative to period $-1$. Vertical bars use the confidence limits reported by the closure-event-clustered estimator (18 clusters). Period 0 is the closure window and is omitted. Novelty-seeking is conditional on a purchase in the window.}
+\end{figure}
+
+\subsection{Common-Support Sensitivity}
+\label{app:common_support}
+
+The identifying comparison can be strained when high- and low-predicted-incidence episodes have different pre-period demand. We therefore construct a deterministic common-support sample separately within treated and control episodes. Coarsened cells use mean and most recent pre-period purchase frequency and purchase recency; the novelty match additionally uses pre-period purchase incidence because novelty is defined only in purchasing windows. Within each cell, we retain equal numbers of high- and low-predicted-incidence episodes.
+
+\begin{table}[H]
+\centering
+\caption{Common-support sensitivity of the DDD estimates}
+\label{tab:appendix_common_support}
+\small
+\begin{tabularx}{\textwidth}{Xcccc}
+\toprule
+ & \multicolumn{2}{c}{Full sample} & \multicolumn{2}{c}{Matched common support} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Outcome & DDD & Observations & DDD & Observations \\
+\midrule
+Purchase frequency & \textbf{0.0058*} & 321,184 & \textbf{-0.0041} & 101,072 \\
+ & (0.0032) & & (0.0027) & \\
+Novelty-seeking & \textbf{-0.0415**} & 99,644 & \textbf{-0.0211} & 43,655 \\
+ & (0.0184) & & (0.0195) & \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: The table reports the high-minus-low DDD, with all DDD coefficients shown in boldface. The matched sample imposes common support between high- and low-predicted-incidence episodes separately within treated and control groups using the coarsened cells described in the text. Standard errors are clustered by closure event (18 clusters). The matched estimates are sensitivity diagnostics rather than preferred estimates. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\end{table}
+
+The support restriction retains 12,634 of 40,148 episodes for purchase frequency and 10,956 episodes for novelty-seeking before the product-choice singleton restriction. The purchase-frequency DDD changes sign and is imprecise ($p=0.156$); its matched-sample DDD pretrend also does not reject at 5\% but is borderline ($p=0.069$). The novelty DDD is about half the full-sample magnitude and is imprecise ($p=0.295$), while its matched pretrend does not reject ($p=0.871$). The common-support exercise therefore does not provide affirmative robustness: it shows that the headline estimates, especially purchase frequency, are sensitive to restricting the comparison to closely aligned pre-period demand cells.
+
+\subsection{Dynamics of Baseline-Novelty Heterogeneity}
+\label{app:baseline_novelty_dynamics}
+
+The collapsed heterogeneity estimate in Table~\ref{tab:baseline_novelty_heterogeneity} compares all four post-reopening periods with all four pre-closure periods. Figure~\ref{fig:appendix_baseline_novelty_event_study} replaces the collapsed post indicator with relative-period interactions, retaining the same fixed effects, baseline-order adjustment and closure-event clustering. The omitted reference period is $-1$.
+
+The three lead coefficients are small relative to their confidence intervals, and their joint test does not reject equality to zero ($p=0.561$). The post-period gradients are positive in periods 1, 3 and 4 and near zero in period 2. The largest estimate occurs immediately after reopening, but every period-specific 95\% confidence interval includes zero. The figure therefore supports the absence of a pronounced differential pretrend while also showing that the timing of the mechanism result is imprecisely estimated.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\textwidth]{figures/baseline_novelty_event_study.png}
+\caption{Event-study path of the baseline-novelty gradient}
+\label{fig:appendix_baseline_novelty_event_study}
+\fnote{Notes: Points are coefficients on Relative period $\times$ Treated $\times$ High predicted incidence $\times$ standardized baseline novelty-seeking. Vertical bars are 95\% confidence intervals from CRV1 standard errors clustered by closure event (18 clusters). Relative period $-1$ is the omitted reference period; period 0 is the closure window and is excluded. The specification includes the full lower-order interaction hierarchy for baseline novelty and the parallel hierarchy for standardized log baseline orders, as in equation~\eqref{eq:baseline_novelty_heterogeneity}.}
+\end{figure}
+
+\subsection{Sensitivity to Omitting the Baseline-Order Adjustment}
+\label{app:no_baseline_order_adjustment}
+
+The preferred heterogeneity specification allows the DDD to vary separately with baseline novelty and baseline order history. To show the role of the latter adjustment, we reestimate the model after deleting the entire line involving $Q_{ie}$ from equation~\eqref{eq:baseline_novelty_heterogeneity}. The sensitivity specification is therefore
+\begin{align}
+Y^N_{iet}
+={}& \delta^B(\text{Post}\times\text{Treated})
++\beta(\text{Post}\times\text{High})
++\delta^D(\text{Post}\times\text{Treated}\times\text{High}) \notag\\
+&+\eta_0(\text{Post}\times N_{ie})
++\eta_T(\text{Post}\times\text{Treated}\times N_{ie}) \notag\\
+&+\eta_H(\text{Post}\times\text{High}\times N_{ie})
++\theta^D(\text{Post}\times\text{Treated}\times\text{High}\times N_{ie}) \notag\\
+&+\phi_{ie}+\omega_t+\gamma_m+\varepsilon_{iet}.
+\label{eq:baseline_novelty_without_order_adjustment}
+\end{align}
+This regression retains the same 18-closure sample, outcome, baseline-novelty construction, minimum-five-order screen, fixed effects and CRV1 closure-event clustering as the preferred specification.
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity to omitting the baseline-order adjustment}
+\label{tab:appendix_baseline_novelty_without_order_adjustment}
+\small
+\begin{tabularx}{\textwidth}{Xcc}
+\toprule
+ & With $Q_{ie}$ adjustment & Without $Q_{ie}$ adjustment \\
+ & (1) & (2) \\
+\midrule
+DDD intercept ($\delta^D$) & $-1.30$ & $-3.05$ \\
+ & (2.00) & (2.01) \\
+Change in DDD per SD of baseline novelty ($\theta^D$) & \textbf{2.94} & \textbf{2.29} \\
+ & (1.47) & (1.43) \\
+One-sided $p$-value for $\theta^D>0$ & 0.031 & 0.064 \\
+\addlinespace
+Joint pretrend $p$-value for $\theta^D$ & 0.561 & 0.409 \\
+Observations & 79,578 & 79,578 \\
+Closure-event clusters & 18 & 18 \\
+$R^2$ & 0.411 & 0.410 \\
+Within $R^2$ & 0.039 & 0.038 \\
+Member-closure, relative-period and calendar-month fixed effects & Yes & Yes \\
+Post-by-baseline-order interaction hierarchy & Yes & No \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: Estimates and standard errors are in percentage points. Column (1) reproduces the preferred specification in equation~\eqref{eq:baseline_novelty_heterogeneity}; column (2) reports equation~\eqref{eq:baseline_novelty_without_order_adjustment}. In column (1), $\delta^D$ is evaluated at mean baseline novelty and mean baseline order history; in column (2), it is evaluated at mean baseline novelty. Boldface marks the focal heterogeneity coefficient. The directional p-value tests the model-predicted alternative $\theta^D>0$. Standard errors use CRV1 clustering by the 18 closure events.}
+\end{table}
+
+The estimated novelty gradient remains positive after removing the complete baseline-order hierarchy, but it falls from 2.94 to 2.29 percentage points and its one-sided $p$-value rises from 0.031 to 0.064. The no-adjustment event study also does not reject a differential pretrend ($p=0.409$). Thus, the direction and approximate magnitude survive, but the no-adjustment estimate does not meet the 5\% one-sided threshold. We prefer the adjusted specification because the raw association documented in Section~\ref{section:5.1.1} shows that observed baseline novelty varies sharply with the number of orders used to construct it.
 
 \clearpage
 
@@ -1006,12 +1194,12 @@ The pretrend diagnostics support the product-choice interpretation more strongly
  & Purchase frequency & Novelty-seeking \\
  & (1) & (2) \\
 \midrule
-Post $\times$ Treated ($\delta^B$) & 0.0009 & 0.0313*** \\
- & (0.0007) & (0.0120) \\
+Post $\times$ Treated ($\delta^B$) & 0.0009 & 0.0313* \\
+ & (0.0024) & (0.0178) \\
 Post $\times$ High predicted incidence ($\beta$) & -0.0344*** & 0.0381*** \\
- & (0.0011) & (0.0064) \\
-Post $\times$ Treated $\times$ High predicted incidence ($\delta^D$) & 0.0058** & -0.0415*** \\
- & (0.0025) & (0.0145) \\
+ & (0.0030) & (0.0081) \\
+Post $\times$ Treated $\times$ High predicted incidence ($\delta^D$) & \textbf{0.0058*} & \textbf{-0.0415**} \\
+ & (0.0032) & (0.0184) \\
 \addlinespace
 Pre-period outcome mean & 0.0493 & 0.4978 \\
 Observations & 321,184 & 99,644 \\
@@ -1023,7 +1211,7 @@ Calendar-month fixed effects & Yes & Yes \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: This table reports every coefficient from equation~\eqref{eq:main_ddd}. Post $\times$ Treated is the low-predicted-incidence treated-control post contrast. Post $\times$ High captures the high-minus-low post shift common to treated and control episodes and is not a treatment effect. The triple interaction is the high-minus-low DDD. The closure window is omitted. Novelty-seeking is conditional on a purchase in the window. Standard errors, clustered at the member level, are in parentheses. Table~\ref{tab:main_results_decomposition} reports the directly estimated high-group effects and gives detailed outcome definitions. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\fnote{Notes: This table reports every coefficient from equation~\eqref{eq:main_ddd}. Post $\times$ Treated is the low-predicted-incidence treated-control post contrast. Post $\times$ High captures the high-minus-low post shift common to treated and control episodes and is not a treatment effect. The triple interaction is the high-minus-low DDD and is shown in boldface. The closure window is omitted. Novelty-seeking is conditional on a purchase in the window. Standard errors, clustered by closure event (18 clusters), are in parentheses. Table~\ref{tab:main_results_decomposition} reports the directly estimated high-group effects and gives detailed outcome definitions. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
 \end{table}
 
 The common post shift, $\beta$, is large for both outcomes. High-predicted-incidence episodes have lower post-period purchase frequency and higher post-period novelty-seeking than low-predicted-incidence episodes even after pooling treated and control observations. These coefficients reflect the relation between predicted purchase timing and post-period behavior; they are not closure effects. The DDD removes this common high-minus-low movement and isolates the additional treated high-group response under the identifying assumptions. The algebraically equivalent group-effect parameterization in Table~\ref{tab:main_results_decomposition} then combines $\delta^B$ and $\delta^D$ with covariance-aware standard errors.
@@ -1050,31 +1238,31 @@ Because the score is centered, $\delta_0^B$ is the treated-control post contrast
  & Purchase frequency & Novelty-seeking \\
  & (1) & (2) \\
 \midrule
-Post $\times$ Treated & 0.0023*** & 0.0190* \\
- & (0.0008) & (0.0102) \\
+Post $\times$ Treated & 0.0023 & 0.0190 \\
+ & (0.0028) & (0.0151) \\
 Post $\times$ Centered predicted-incidence score & -0.0568*** & 0.0533*** \\
- & (0.0017) & (0.0098) \\
-Post $\times$ Treated $\times$ Centered predicted-incidence score & 0.0076** & -0.0452** \\
- & (0.0037) & (0.0221) \\
+ & (0.0046) & (0.0149) \\
+Post $\times$ Treated $\times$ Centered predicted-incidence score & \textbf{0.0076} & \textbf{-0.0452} \\
+ & (0.0051) & (0.0276) \\
 \addlinespace
 Observations & 321,184 & 99,644 \\
 $R^2$ & 0.565 & 0.416 \\
-Within $R^2$ & 0.0182 & 0.0004 \\
+Within $R^2$ & 0.018 & 0.000 \\
 Member-closure fixed effects & Yes & Yes \\
 Relative-period fixed effects & Yes & Yes \\
 Calendar-month fixed effects & Yes & Yes \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: The predicted-incidence score is centered at its estimation-sample mean. Post $\times$ Treated therefore gives the treated-control post contrast at the mean score. The score coefficient is the post-period score gradient common to treated and control episodes. The triple interaction shows how the treated-control post contrast changes with the predicted-incidence score. All remaining conventions and outcome definitions follow Table~\ref{tab:appendix_binary_main_results}. Standard errors, clustered at the member level, are in parentheses. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\fnote{Notes: The predicted-incidence score is centered at its estimation-sample mean. Post $\times$ Treated therefore gives the treated-control post contrast at the mean score. The score coefficient is the post-period score gradient common to treated and control episodes. The triple interaction, shown in boldface, is the focal coefficient and shows how the treated-control post contrast changes with the predicted-incidence score. All remaining conventions and outcome definitions follow Table~\ref{tab:appendix_binary_main_results}. Standard errors, clustered by closure event (18 clusters), are in parentheses. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
 \end{table}
 
-The continuous estimates preserve the binary results' sign pattern. Higher predicted purchase incidence is associated with a larger treated-control recovery in purchase frequency and a smaller treated-control post response in novelty-seeking. For a 10-percentage-point increase in the predicted-incidence score, the fitted DDD changes by $+0.08$ percentage points per day for purchase frequency and $-0.45$ points for novelty-seeking. The purchase-frequency pretrend caveat remains, while the novelty-seeking score-pretrend test does not reject equality.
+The continuous estimates preserve the binary results' sign pattern. Higher predicted purchase incidence is associated with a larger treated-control recovery in purchase frequency and a smaller treated-control post response in novelty-seeking. For a 10-percentage-point increase in the predicted-incidence score, the fitted DDD changes by $+0.08$ percentage points per day for purchase frequency and $-0.45$ points for novelty-seeking. Neither slope interaction is statistically distinguishable from zero at the 5\% level under closure-clustered inference. The purchase-frequency pretrend caveat remains, while the novelty-seeking score-pretrend test does not reject equality.
 
 \subsection{Alternative Outcome Definition: New-Product-Seeking}
 \label{app:new_product_seeking}
 
-\noindent The main novelty-seeking outcome defines exploration relative to the consumer's own purchase history. As a robustness check, we instead ask whether consumers select products that have appeared recently in the transaction data. Let $F_j$ be product $j$'s first observed sale date and let $\mathcal{W}_{et}$ and $\mathcal{W}_{e,t-1}$ be the current and immediately previous event windows. We define new-product-seeking as
+\noindent The main novelty-seeking outcome defines exploration relative to the customer's own purchase history. As a robustness check, we instead ask whether customers select products that have appeared recently in the transaction data. Let $F_j$ be product $j$'s first observed sale date and let $\mathcal{W}_{et}$ and $\mathcal{W}_{e,t-1}$ be the current and immediately previous event windows. We define new-product-seeking as
 \begin{equation}
 	\text{Y}^{NP}_{iet}
 	= \frac{\left|\left\{j\in\mathcal{J}_{iet}:F_j\in
@@ -1095,19 +1283,19 @@ This measure is the share of distinct products purchased in the current window w
 \midrule
 \multicolumn{3}{l}{\textit{Panel A. Group effects and incremental interruption contrast}} \\
 Low predicted purchase incidence & 0.0080 & -- \\
- & (0.0092) & \\
-High predicted purchase incidence & -0.0337*** & -- \\
- & (0.0069) & \\
-High minus low DDD & -0.0417*** & -- \\
- & (0.0115) & \\
+ & (0.0113) & \\
+High predicted purchase incidence & -0.0337** & -- \\
+ & (0.0145) & \\
+High minus low DDD & \textbf{-0.0417***} & -- \\
+ & (0.0089) & \\
 \addlinespace
 \multicolumn{3}{l}{\textit{Panel B. Complete regression coefficients}} \\
 Post $\times$ Treated & 0.0080 & -0.0033 \\
- & (0.0092) & (0.0078) \\
+ & (0.0113) & (0.0120) \\
 Post $\times$ Predicted incidence & 0.0300*** & 0.0468*** \\
- & (0.0050) & (0.0077) \\
-Post $\times$ Treated $\times$ Predicted incidence & -0.0417*** & -0.0486*** \\
- & (0.0115) & (0.0175) \\
+ & (0.0045) & (0.0099) \\
+Post $\times$ Treated $\times$ Predicted incidence & \textbf{-0.0417***} & \textbf{-0.0486***} \\
+ & (0.0089) & (0.0156) \\
 \addlinespace
 Pre-period outcome mean & 0.1456 & 0.1456 \\
 Observations & 99,644 & 99,644 \\
@@ -1119,10 +1307,9 @@ Calendar-month fixed effects & Yes & Yes \\
 \bottomrule
 \end{tabularx}
 \vspace{1mm}
-\fnote{Notes: Column (1) uses the binary high-predicted-incidence indicator; column (2) uses the mean-centered predicted-incidence score. In Panel A, the low- and high-incidence rows are directly estimated treated-control post contrasts, and the high-minus-low row is their DDD. These discrete group effects are not defined for column (2). In Panel B, Post $\times$ Predicted incidence is the common post shift across treated and control episodes; it is not a treatment effect. In column (2), a one-unit change corresponds to moving across the full predicted-incidence scale. Standard errors, clustered at the member level, are in parentheses. All regressions omit the closure window. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
+\fnote{Notes: Column (1) uses the binary high-predicted-incidence indicator; column (2) uses the mean-centered predicted-incidence score. In Panel A, the low- and high-incidence rows are directly estimated treated-control post contrasts, and the high-minus-low row is their DDD. These discrete group effects are not defined for column (2). In Panel B, Post $\times$ Predicted incidence is the common post shift across treated and control episodes; it is not a treatment effect. Boldface marks the focal DDD coefficients. In column (2), a one-unit change corresponds to moving across the full predicted-incidence scale. Standard errors, clustered by closure event (18 clusters), are in parentheses. All regressions omit the closure window. *** $p<0.01$, ** $p<0.05$, * $p<0.1$.}
 \end{table}
 
-The binary specification yields a 0.80-point low-incidence effect and a 3.37-point decline for high-predicted-incidence episodes. Their difference is $-4.17$ percentage points (SE 1.15; $p<0.001$), or 28.6\% of the pre-period mean. The continuous-score specification leads to the same conclusion: a 10-percentage-point increase in predicted purchase incidence lowers the treated-control post contrast by 0.49 percentage points. The high-minus-low pretrend tests do not reject for either specification ($p=0.515$ for the binary measure and $p=0.721$ for the continuous score). The robustness check therefore supports the main novelty-seeking result using a definition tied to recently appearing products rather than the consumer's own history.
-
+The binary specification yields a 0.80-point low-incidence effect and a 3.37-point decline for high-predicted-incidence episodes. Their difference is $-4.17$ percentage points (SE 0.89; $p<0.001$), or 28.6\% of the pre-period mean. The continuous-score specification leads to the same conclusion: a 10-percentage-point increase in predicted purchase incidence lowers the treated-control post contrast by 0.49 percentage points ($p=0.006$). The high-minus-low pretrend tests do not reject for either specification ($p=0.114$ for the binary measure and $p=0.377$ for the continuous score). The robustness check therefore supports the main novelty-seeking result using a definition tied to recently appearing products rather than the customer's own history.
 
 \end{document}

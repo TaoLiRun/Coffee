@@ -42,7 +42,7 @@ Specification map (matches identification_rewrite.md section 2.3)
 ------------------------------------------------------------------
   Collapsed (post-dummy) specs  ->  fit_collapsed_specs()
       binary_collapsed           : Spec B collapsed   (delta^B, delta^D, beta)
-      binary_collapsed_pre_novelty_split : Spec B plus pre-novelty-high interactions (6 terms)
+      binary_collapsed_pre_novelty_split : fully saturated Spec B by pre-novelty type (7 terms)
       score_collapsed            : Spec C collapsed   (delta^B, delta^S, beta^S)
 
   Event-study specs             ->  fit_event_study_specs()
@@ -244,9 +244,10 @@ def fit_collapsed_specs(
 
     When ``variety_pre_novelty_heterogeneity`` is True (DDD only), ``df`` must
     include ``novelty_pre_high`` (0/1 within member-closure). An additional
-    collapsed spec ``binary_collapsed_pre_novelty_split`` adds interactions
-    of that indicator with the three post terms; baseline coefficients remain
-    the low pre-novelty subgroup.
+    collapsed spec ``binary_collapsed_pre_novelty_split`` adds the complete
+    set of post interactions with that indicator. Baseline coefficients remain
+    the low pre-novelty subgroup. The lower-order ``post × novelty_pre_high``
+    term is required for saturation.
 
     Spec B collapsed
     ----------------
@@ -368,6 +369,7 @@ def fit_collapsed_specs(
 
     if variety_pre_novelty_heterogeneity:
         _assert_columns(df, ["novelty_pre_high"])
+        df["post_X_novelty_pre_high"] = df["post"] * df["novelty_pre_high"]
         df["post_X_treated_X_novelty_pre_high"] = (
             df["post"] * df["treated"] * df["novelty_pre_high"]
         )
@@ -381,6 +383,7 @@ def fit_collapsed_specs(
         formula = (
             f"{outcome} ~ "
             "post_X_treated + post_X_disp + post_X_treated_X_disp + "
+            "post_X_novelty_pre_high + "
             "post_X_treated_X_novelty_pre_high + post_X_disp_X_novelty_pre_high + "
             "post_X_treated_X_disp_X_novelty_pre_high"
             f" | {fe_str}"
@@ -391,11 +394,137 @@ def fit_collapsed_specs(
             "post_X_treated",
             "post_X_disp",
             "post_X_treated_X_disp",
+            "post_X_novelty_pre_high",
             "post_X_treated_X_novelty_pre_high",
             "post_X_disp_X_novelty_pre_high",
             "post_X_treated_X_disp_X_novelty_pre_high",
         ):
             rows.append(_tidy_row(fit, term, spec))
+
+        # Algebraically equivalent saturated parameterization that estimates
+        # each pre-novelty subgroup's low-predicted-incidence effect and DDD
+        # directly. This provides covariance-aware inference for both subgroup
+        # DDDs without manually adding coefficients.
+        pre_low = 1 - df["novelty_pre_high"]
+        pred_low = 1 - df["disp_binary"]
+        df["post_X_disp_X_novelty_pre_low"] = (
+            df["post"] * df["disp_binary"] * pre_low
+        )
+        df["post_X_treated_X_novelty_pre_low"] = (
+            df["post"] * df["treated"] * pre_low
+        )
+        df["post_X_treated_X_disp_X_novelty_pre_low"] = (
+            df["post"] * df["treated"] * df["disp_binary"] * pre_low
+        )
+        direct_spec = "binary_collapsed_pre_novelty_split_direct"
+        direct_formula = (
+            f"{outcome} ~ post_X_novelty_pre_high + "
+            "post_X_disp_X_novelty_pre_low + post_X_disp_X_novelty_pre_high + "
+            "post_X_treated_X_novelty_pre_low + "
+            "post_X_treated_X_disp_X_novelty_pre_low + "
+            "post_X_treated_X_novelty_pre_high + "
+            f"post_X_treated_X_disp_X_novelty_pre_high | {fe_str}"
+        )
+        direct_fit = pf.feols(direct_formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(direct_fit, direct_spec, direct_formula))
+        for term, estimand in (
+            (
+                "post_X_treated_X_novelty_pre_low",
+                "low_pre_novelty_low_predicted_incidence_effect",
+            ),
+            (
+                "post_X_treated_X_disp_X_novelty_pre_low",
+                "low_pre_novelty_ddd",
+            ),
+            (
+                "post_X_treated_X_novelty_pre_high",
+                "high_pre_novelty_low_predicted_incidence_effect",
+            ),
+            (
+                "post_X_treated_X_disp_X_novelty_pre_high",
+                "high_pre_novelty_ddd",
+            ),
+        ):
+            rows.append(_tidy_row(direct_fit, term, direct_spec, estimand))
+
+        # A second equivalent parameterization estimates all four
+        # treated-control post effects directly. Together with the subgroup
+        # DDD parameterization above, it verifies the coefficient algebra and
+        # supplies valid standard errors for every displayed group effect.
+        df["post_X_treated_X_pred_low_X_novelty_pre_low"] = (
+            df["post"] * df["treated"] * pred_low * pre_low
+        )
+        df["post_X_treated_X_pred_high_X_novelty_pre_low"] = (
+            df["post"] * df["treated"] * df["disp_binary"] * pre_low
+        )
+        df["post_X_treated_X_pred_low_X_novelty_pre_high"] = (
+            df["post"] * df["treated"] * pred_low * df["novelty_pre_high"]
+        )
+        df["post_X_treated_X_pred_high_X_novelty_pre_high"] = (
+            df["post"]
+            * df["treated"]
+            * df["disp_binary"]
+            * df["novelty_pre_high"]
+        )
+        group_spec = "binary_collapsed_pre_novelty_split_group_effects"
+        group_formula = (
+            f"{outcome} ~ post_X_novelty_pre_high + "
+            "post_X_disp_X_novelty_pre_low + post_X_disp_X_novelty_pre_high + "
+            "post_X_treated_X_pred_low_X_novelty_pre_low + "
+            "post_X_treated_X_pred_high_X_novelty_pre_low + "
+            "post_X_treated_X_pred_low_X_novelty_pre_high + "
+            f"post_X_treated_X_pred_high_X_novelty_pre_high | {fe_str}"
+        )
+        heterogeneity_group_fit = pf.feols(group_formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(heterogeneity_group_fit, group_spec, group_formula))
+        for term, estimand in (
+            (
+                "post_X_treated_X_pred_low_X_novelty_pre_low",
+                "low_pre_novelty_low_predicted_incidence_effect_direct",
+            ),
+            (
+                "post_X_treated_X_pred_high_X_novelty_pre_low",
+                "low_pre_novelty_high_predicted_incidence_effect",
+            ),
+            (
+                "post_X_treated_X_pred_low_X_novelty_pre_high",
+                "high_pre_novelty_low_predicted_incidence_effect_direct",
+            ),
+            (
+                "post_X_treated_X_pred_high_X_novelty_pre_high",
+                "high_pre_novelty_high_predicted_incidence_effect",
+            ),
+        ):
+            rows.append(
+                _tidy_row(heterogeneity_group_fit, term, group_spec, estimand)
+            )
+
+        direct_tidy = direct_fit.tidy()
+        group_tidy = heterogeneity_group_fit.tidy()
+        assert direct_fit._N == heterogeneity_group_fit._N == fit._N
+        assert np.isclose(direct_fit._r2, heterogeneity_group_fit._r2)
+        assert np.isclose(
+            group_tidy.loc[
+                "post_X_treated_X_pred_high_X_novelty_pre_low", "Estimate"
+            ],
+            direct_tidy.loc[
+                "post_X_treated_X_novelty_pre_low", "Estimate"
+            ]
+            + direct_tidy.loc[
+                "post_X_treated_X_disp_X_novelty_pre_low", "Estimate"
+            ],
+        )
+        assert np.isclose(
+            group_tidy.loc[
+                "post_X_treated_X_pred_high_X_novelty_pre_high", "Estimate"
+            ],
+            direct_tidy.loc[
+                "post_X_treated_X_novelty_pre_high", "Estimate"
+            ]
+            + direct_tidy.loc[
+                "post_X_treated_X_disp_X_novelty_pre_high", "Estimate"
+            ],
+        )
 
     # ------------------------------------------------------------------
     # Spec C collapsed
@@ -529,10 +658,16 @@ def fit_event_study_specs(
         df["treated_X_score"] = df["treated"]  * df["displacement_prob_centered"]
         if variety_pre_novelty_heterogeneity:
             _assert_columns(df, ["novelty_pre_high"])
+            novelty_pre_low = 1 - df["novelty_pre_high"]
             df["treated_X_novelty_pre_high"] = df["treated"] * df["novelty_pre_high"]
             df["disp_X_novelty_pre_high"] = df["disp_binary"] * df["novelty_pre_high"]
             df["treated_X_disp_X_novelty_pre_high"] = (
                 df["treated"] * df["disp_binary"] * df["novelty_pre_high"]
+            )
+            df["treated_X_novelty_pre_low"] = df["treated"] * novelty_pre_low
+            df["disp_X_novelty_pre_low"] = df["disp_binary"] * novelty_pre_low
+            df["treated_X_disp_X_novelty_pre_low"] = (
+                df["treated"] * df["disp_binary"] * novelty_pre_low
             )
 
     rel_t_values = sorted(int(t) for t in df["rel_t"].unique())
@@ -643,6 +778,7 @@ def fit_event_study_specs(
             f"i(rel_t, treated, ref={ref_period}) + "
             f"i(rel_t, treated_X_disp, ref={ref_period}) + "
             f"i(rel_t, disp_binary, ref={ref_period}) + "
+            f"i(rel_t, novelty_pre_high, ref={ref_period}) + "
             f"i(rel_t, treated_X_novelty_pre_high, ref={ref_period}) + "
             f"i(rel_t, disp_X_novelty_pre_high, ref={ref_period}) + "
             f"i(rel_t, treated_X_disp_X_novelty_pre_high, ref={ref_period}) "
@@ -653,6 +789,7 @@ def fit_event_study_specs(
         rows.extend(_tidy_rows_suffix(fit, ":treated", spec))
         rows.extend(_tidy_rows_suffix(fit, ":treated_X_disp", spec))
         rows.extend(_tidy_rows_suffix(fit, ":disp_binary", spec))
+        rows.extend(_tidy_rows_suffix(fit, ":novelty_pre_high", spec))
         rows.extend(_tidy_rows_suffix(fit, ":treated_X_novelty_pre_high", spec))
         rows.extend(_tidy_rows_suffix(fit, ":disp_X_novelty_pre_high", spec))
         rows.extend(_tidy_rows_suffix(fit, ":treated_X_disp_X_novelty_pre_high", spec))
@@ -667,6 +804,55 @@ def fit_event_study_specs(
             terms     = _pre_period_terms(fit.tidy().index, pre_periods, ":treated_X_disp_X_novelty_pre_high"),
             spec      = spec,
             test_name = "pretrend_displacement_high_increment_joint_zero",
+        ))
+
+        # Equivalent saturated event-study parameterization that estimates
+        # the DDD path separately for low- and high-pre-novelty episodes. This
+        # makes subgroup confidence intervals and pretrend tests direct rather
+        # than relying on unreported covariance calculations.
+        direct_spec = "event_binary_B_pre_novelty_split_direct"
+        direct_formula = (
+            f"{outcome} ~ "
+            f"i(rel_t, novelty_pre_high, ref={ref_period}) + "
+            f"i(rel_t, treated_X_novelty_pre_low, ref={ref_period}) + "
+            f"i(rel_t, treated_X_disp_X_novelty_pre_low, ref={ref_period}) + "
+            f"i(rel_t, disp_X_novelty_pre_low, ref={ref_period}) + "
+            f"i(rel_t, treated_X_novelty_pre_high, ref={ref_period}) + "
+            f"i(rel_t, treated_X_disp_X_novelty_pre_high, ref={ref_period}) + "
+            f"i(rel_t, disp_X_novelty_pre_high, ref={ref_period}) "
+            f"| {fe_str}"
+        )
+        direct_fit = pf.feols(direct_formula, data=df, vcov=vcov)
+        fit_rows.append(_fit_row(direct_fit, direct_spec, direct_formula))
+        for suffix in (
+            ":novelty_pre_high",
+            ":treated_X_novelty_pre_low",
+            ":treated_X_disp_X_novelty_pre_low",
+            ":disp_X_novelty_pre_low",
+            ":treated_X_novelty_pre_high",
+            ":treated_X_disp_X_novelty_pre_high",
+            ":disp_X_novelty_pre_high",
+        ):
+            rows.extend(_tidy_rows_suffix(direct_fit, suffix, direct_spec))
+        pre_rows.append(_joint_zero_test(
+            fit=direct_fit,
+            terms=_pre_period_terms(
+                direct_fit.tidy().index,
+                pre_periods,
+                ":treated_X_disp_X_novelty_pre_low",
+            ),
+            spec=direct_spec,
+            test_name="pretrend_low_pre_novelty_ddd_joint_zero",
+        ))
+        pre_rows.append(_joint_zero_test(
+            fit=direct_fit,
+            terms=_pre_period_terms(
+                direct_fit.tidy().index,
+                pre_periods,
+                ":treated_X_disp_X_novelty_pre_high",
+            ),
+            spec=direct_spec,
+            test_name="pretrend_high_pre_novelty_ddd_joint_zero",
         ))
 
     if include_length_heterogeneity:

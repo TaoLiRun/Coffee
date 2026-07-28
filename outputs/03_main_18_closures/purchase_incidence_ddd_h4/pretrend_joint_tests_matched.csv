@@ -1,8 +1,8 @@
 spec,test,n_restrictions,statistic,pvalue,n
-event_att,pretrend_att_joint_zero,3,16.97168648142254,0.0007162818054588253,101072
-event_binary_B,pretrend_baseline_joint_zero,3,14.840515459321965,0.001958138117651513,101072
-event_binary_B,pretrend_displacement_joint_zero,3,4.845398553703447,0.18347422913388076,101072
-event_binary_D,pretrend_length_displacement_joint_zero,3,8.364650172814718,0.03904702947967765,101072
-event_binary_D,pretrend_length_baseline_joint_zero,3,7.078397617808727,0.0694405114770698,101072
-event_score_C,pretrend_score_baseline_joint_zero,3,15.498494291156971,0.0014366049118952559,101072
-event_score_C,pretrend_score_slope_joint_zero,3,2.3166645202992373,0.5093359468949656,101072
+event_att,pretrend_att_joint_zero,3,5.080367931918802,0.16600591867106146,101072
+event_binary_B,pretrend_baseline_joint_zero,3,6.220549442183288,0.10135939081203674,101072
+event_binary_B,pretrend_displacement_joint_zero,3,2.4320569227650894,0.48769513471060133,101072
+event_binary_D,pretrend_length_displacement_joint_zero,3,12.159870938315809,0.006855100928346417,101072
+event_binary_D,pretrend_length_baseline_joint_zero,3,8.116310520028176,0.04366809341754749,101072
+event_score_C,pretrend_score_baseline_joint_zero,3,6.247535435039903,0.10016888812116292,101072
+event_score_C,pretrend_score_slope_joint_zero,3,1.3240843256004466,0.7234221149952187,101072

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Empirical Paper Writing"
+  short_description: "Write credible, reader-first empirical papers"
+  default_prompt: "Use $empirical-paper-writing to audit and revise this empirical paper for a publication-ready main text and appendix."

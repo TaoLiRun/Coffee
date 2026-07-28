@@ -1,18 +1,21 @@
 {
-  "generated_at_utc": "2026-07-23T04:18:54.405416+00:00",
+  "generated_at_utc": "2026-07-26T06:50:11.560853+00:00",
   "source_registry_path": "outputs/customer-store/closure_pair_registry.csv",
   "registry_snapshot_path": "outputs/03_main_18_closures/metadata/closure_pair_registry.csv",
   "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv",
   "purchase_result_path": "outputs/03_main_18_closures/purchase_frequency_ddd_h4",
   "purchase_binary_result_path": "outputs/03_main_18_closures/purchase_incidence_ddd_h4",
   "novelty_result_path": "outputs/03_main_18_closures/novelty_member_first_ddd_h4",
+  "new_product_result_path": "outputs/03_main_18_closures/novelty_market_new_ddd_h4",
+  "cluster_col": "closure_event_id",
   "expected_main_closure_count": 18,
   "excluded_closure_count": 4,
   "executed_commands": [
-    "conda run -n JAX-py python src/displacement_effect_estimation/run.py --output-dir outputs/03_main_18_closures/purchase_frequency_ddd_h4 --log-file outputs/03_main_18_closures/purchase_frequency_ddd_h4/logs/run.log",
-    "conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --output-dir outputs/03_main_18_closures/purchase_incidence_ddd_h4 --log-file outputs/03_main_18_closures/purchase_incidence_ddd_h4/logs/run.log",
-    "conda run -n JAX-py python src/displacement_effect_estimation/run.py --outcome variety_seeking --output-dir outputs/03_main_18_closures/novelty_member_first_ddd_h4 --log-file outputs/03_main_18_closures/novelty_member_first_ddd_h4/logs/run.log"
+    "/home/litao/anaconda3/envs/JAX-py/bin/python src/displacement_effect_estimation/run.py --cluster-col closure_event_id --output-dir outputs/03_main_18_closures/purchase_frequency_ddd_h4 --log-file outputs/03_main_18_closures/purchase_frequency_ddd_h4/logs/run.log",
+    "/home/litao/anaconda3/envs/JAX-py/bin/python src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --cluster-col closure_event_id --output-dir outputs/03_main_18_closures/purchase_incidence_ddd_h4 --log-file outputs/03_main_18_closures/purchase_incidence_ddd_h4/logs/run.log",
+    "/home/litao/anaconda3/envs/JAX-py/bin/python src/displacement_effect_estimation/run.py --outcome variety_seeking --cluster-col closure_event_id --output-dir outputs/03_main_18_closures/novelty_member_first_ddd_h4 --log-file outputs/03_main_18_closures/novelty_member_first_ddd_h4/logs/run.log",
+    "/home/litao/anaconda3/envs/JAX-py/bin/python src/displacement_effect_estimation/run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new --cluster-col closure_event_id --output-dir outputs/03_main_18_closures/novelty_market_new_ddd_h4 --log-file outputs/03_main_18_closures/novelty_market_new_ddd_h4/logs/run.log"
   ],
   "git_branch": "issue-4/further-selection",
-  "git_commit": "4bbac42734c021ada7b9e4bcb040b5f4371a549c"
+  "git_commit": "8cba55ac8cd7ea80ae50b15a3527407e92aa4dd1"
 }

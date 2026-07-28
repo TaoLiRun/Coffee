@@ -1,8 +1,8 @@
 spec,test,n_restrictions,statistic,pvalue,n
-event_att,pretrend_att_joint_zero,3,0.7195697974073516,0.8685915661778124,43655
-event_binary_B,pretrend_baseline_joint_zero,3,1.6370717491315927,0.6510135651033246,43655
-event_binary_B,pretrend_displacement_joint_zero,3,1.5878062936689112,0.6621578105892547,43655
-event_binary_D,pretrend_length_displacement_joint_zero,3,12.90656896772111,0.004843074191314237,43655
-event_binary_D,pretrend_length_baseline_joint_zero,3,6.790182870637276,0.07889471210454825,43655
-event_score_C,pretrend_score_baseline_joint_zero,3,1.2985382229522642,0.7294802189795884,43655
-event_score_C,pretrend_score_slope_joint_zero,3,0.7553987047521682,0.8601025626815787,43655
+event_att,pretrend_att_joint_zero,3,0.4556146690682662,0.9285286795158179,43655
+event_binary_B,pretrend_baseline_joint_zero,3,1.1497602974148144,0.7650773236504034,43655
+event_binary_B,pretrend_displacement_joint_zero,3,0.7114550510236337,0.8705063552534618,43655
+event_binary_D,pretrend_length_displacement_joint_zero,3,18.66769476455435,0.0003202417885735351,43655
+event_binary_D,pretrend_length_baseline_joint_zero,3,12.60838566807579,0.005564782042008641,43655
+event_score_C,pretrend_score_baseline_joint_zero,3,1.3417280080128886,0.7192489967345894,43655
+event_score_C,pretrend_score_slope_joint_zero,3,2.855749723198449,0.41440455464103,43655

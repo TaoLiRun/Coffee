@@ -63,9 +63,9 @@ python run.py --outcome variety_seeking --balanced-panel --keep-period0-purchase
 python run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new \
   --output-dir outputs/03_main_18_closures/novelty_market_new_ddd_h4
 
-# Variety-seeking heterogeneity: compare bottom vs top quartile of pre-period novelty
+# Variety-seeking heterogeneity: fully saturated split at median pre-period novelty
 python run.py --outcome variety_seeking --variety-pre-novelty-heterogeneity \
-  --customer-median-split false
+  --output-dir outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median
 
 # Assumption-gap diagnostic bundle for purchase frequency
 python run.py --outcome n_purchases \
@@ -82,6 +82,7 @@ Behavior is controlled by `config.json`:
 - `paths.feature_t0_cache_dir` points to the directory containing `features_t0_<hash>.parquet`.
 - `paths.feature_cache_key` selects which cached `features_t0_<hash>.parquet` to load.
 - `spec.closure_duration_days = false` keeps all closure durations.
+- `spec.cluster_col = "closure_event_id"` clusters the production inference at the level of the common closure shock. The 18-event main specification therefore reports 18 clusters.
 - `spec.closure_duration_days = 10` restricts the estimation sample to 10-day closures.
 - `spec.separate_effect = false` keeps the current aggregate estimation across all closures.
 - `spec.separate_effect = true` runs one estimation per closure/event and skips the closure-length heterogeneity event-study spec, which is not identified within a single event.

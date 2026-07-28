@@ -5,6 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 UV_ENV_PYTHON="$PROJECT_ROOT/JAX-py/bin/python"
+SERVER_ENV_PYTHON="/home/litao/anaconda3/envs/JAX-py/bin/python"
 
 REGISTRY_REL="outputs/customer-store/closure_pair_registry.csv"
 FULL_REGISTRY_REL="outputs/customer-store/closure_pair_registry_full.csv"
@@ -15,9 +16,11 @@ OUTPUT_ROOT="$PROJECT_ROOT/outputs/03_main_18_closures"
 PURCHASE_OUTPUT_REL="outputs/03_main_18_closures/purchase_frequency_ddd_h4"
 PURCHASE_BINARY_OUTPUT_REL="outputs/03_main_18_closures/purchase_incidence_ddd_h4"
 VARIETY_OUTPUT_REL="outputs/03_main_18_closures/novelty_member_first_ddd_h4"
+MARKET_NEW_OUTPUT_REL="outputs/03_main_18_closures/novelty_market_new_ddd_h4"
 PURCHASE_OUTPUT_DIR="$PROJECT_ROOT/$PURCHASE_OUTPUT_REL"
 PURCHASE_BINARY_OUTPUT_DIR="$PROJECT_ROOT/$PURCHASE_BINARY_OUTPUT_REL"
 VARIETY_OUTPUT_DIR="$PROJECT_ROOT/$VARIETY_OUTPUT_REL"
+MARKET_NEW_OUTPUT_DIR="$PROJECT_ROOT/$MARKET_NEW_OUTPUT_REL"
 METADATA_DIR="$OUTPUT_ROOT/metadata"
 SNAPSHOT_REL="outputs/03_main_18_closures/metadata/closure_pair_registry.csv"
 SNAPSHOT_PATH="$PROJECT_ROOT/$SNAPSHOT_REL"
@@ -26,6 +29,7 @@ REPORT_BODY_PATH="$PROJECT_ROOT/reports/main_results_body.md"
 
 EXPECTED_MAIN_CLOSURES=18
 EXPECTED_EXCLUDED_CLOSURES=4
+CLUSTER_COL="closure_event_id"
 
 if command -v conda >/dev/null 2>&1; then
   PYTHON_CMD=(conda run -n JAX-py python)
@@ -33,13 +37,18 @@ if command -v conda >/dev/null 2>&1; then
 elif [ -x "$UV_ENV_PYTHON" ]; then
   PYTHON_CMD=("$UV_ENV_PYTHON")
   PYTHON_DESC="$UV_ENV_PYTHON"
+elif [ -x "$SERVER_ENV_PYTHON" ]; then
+  PYTHON_CMD=("$SERVER_ENV_PYTHON")
+  PYTHON_DESC="$SERVER_ENV_PYTHON"
 else
-  echo "Error: neither \`conda\` nor $UV_ENV_PYTHON is available." >&2
+  echo "Error: no JAX-py Python environment is available." >&2
   exit 1
 fi
 
 if [ -x "$UV_ENV_PYTHON" ]; then
   PYTHON_EVAL_CMD=("$UV_ENV_PYTHON")
+elif [ -x "$SERVER_ENV_PYTHON" ]; then
+  PYTHON_EVAL_CMD=("$SERVER_ENV_PYTHON")
 elif command -v python3 >/dev/null 2>&1; then
   PYTHON_EVAL_CMD=("python3")
 else
@@ -206,7 +215,7 @@ for estimand, row in {
 PY
 }
 
-mkdir -p "$PURCHASE_OUTPUT_DIR/logs" "$PURCHASE_BINARY_OUTPUT_DIR/logs" "$VARIETY_OUTPUT_DIR/logs" "$METADATA_DIR"
+mkdir -p "$PURCHASE_OUTPUT_DIR/logs" "$PURCHASE_BINARY_OUTPUT_DIR/logs" "$VARIETY_OUTPUT_DIR/logs" "$MARKET_NEW_OUTPUT_DIR/logs" "$METADATA_DIR"
 
 validate_registry_scope
 cp "$REGISTRY_PATH" "$SNAPSHOT_PATH"
@@ -214,14 +223,16 @@ cp "$REGISTRY_PATH" "$SNAPSHOT_PATH"
 BRANCH="$(git -C "$PROJECT_ROOT" rev-parse --abbrev-ref HEAD 2>/dev/null || true)"
 COMMIT="$(git -C "$PROJECT_ROOT" rev-parse HEAD 2>/dev/null || true)"
 
-PURCHASE_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --output-dir $PURCHASE_OUTPUT_REL --log-file $PURCHASE_OUTPUT_REL/logs/run.log"
-PURCHASE_BINARY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --output-dir $PURCHASE_BINARY_OUTPUT_REL --log-file $PURCHASE_BINARY_OUTPUT_REL/logs/run.log"
-VARIETY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome variety_seeking --output-dir $VARIETY_OUTPUT_REL --log-file $VARIETY_OUTPUT_REL/logs/run.log"
+PURCHASE_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --cluster-col $CLUSTER_COL --output-dir $PURCHASE_OUTPUT_REL --log-file $PURCHASE_OUTPUT_REL/logs/run.log"
+PURCHASE_BINARY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome purchase_incidence_binary --cluster-col $CLUSTER_COL --output-dir $PURCHASE_BINARY_OUTPUT_REL --log-file $PURCHASE_BINARY_OUTPUT_REL/logs/run.log"
+VARIETY_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome variety_seeking --cluster-col $CLUSTER_COL --output-dir $VARIETY_OUTPUT_REL --log-file $VARIETY_OUTPUT_REL/logs/run.log"
+MARKET_NEW_COMMAND="$PYTHON_DESC src/displacement_effect_estimation/run.py --outcome variety_seeking --variety-seeking-mode distinct-only-new --cluster-col $CLUSTER_COL --output-dir $MARKET_NEW_OUTPUT_REL --log-file $MARKET_NEW_OUTPUT_REL/logs/run.log"
 
 echo "Running main-sample purchase-frequency result..."
 (
   cd "$PROJECT_ROOT"
   "${PYTHON_CMD[@]}" src/displacement_effect_estimation/run.py \
+    --cluster-col "$CLUSTER_COL" \
     --output-dir "$PURCHASE_OUTPUT_REL" \
     --log-file "$PURCHASE_OUTPUT_REL/logs/run.log"
 )
@@ -232,6 +243,7 @@ echo "Running main-sample purchase-incidence result..."
   cd "$PROJECT_ROOT"
   "${PYTHON_CMD[@]}" src/displacement_effect_estimation/run.py \
     --outcome purchase_incidence_binary \
+    --cluster-col "$CLUSTER_COL" \
     --output-dir "$PURCHASE_BINARY_OUTPUT_REL" \
     --log-file "$PURCHASE_BINARY_OUTPUT_REL/logs/run.log"
 )
@@ -242,13 +254,26 @@ echo "Running main-sample novelty-seeking result..."
   cd "$PROJECT_ROOT"
   "${PYTHON_CMD[@]}" src/displacement_effect_estimation/run.py \
     --outcome variety_seeking \
+    --cluster-col "$CLUSTER_COL" \
     --output-dir "$VARIETY_OUTPUT_REL" \
     --log-file "$VARIETY_OUTPUT_REL/logs/run.log"
 )
 validate_estimation_bundle "$VARIETY_OUTPUT_DIR"
 
-"${PYTHON_CMD[@]}" -c 'from datetime import datetime, timezone; import json, sys; from pathlib import Path; manifest_path = Path(sys.argv[1]); branch = sys.argv[4].strip() or None; commit = sys.argv[5].strip() or None; expected_main = int(sys.argv[9]); expected_excluded = int(sys.argv[10]); manifest = {"generated_at_utc": datetime.now(timezone.utc).isoformat(), "source_registry_path": sys.argv[2], "registry_snapshot_path": sys.argv[3], "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv", "purchase_result_path": "outputs/03_main_18_closures/purchase_frequency_ddd_h4", "purchase_binary_result_path": "outputs/03_main_18_closures/purchase_incidence_ddd_h4", "novelty_result_path": "outputs/03_main_18_closures/novelty_member_first_ddd_h4", "expected_main_closure_count": expected_main, "excluded_closure_count": expected_excluded, "executed_commands": [sys.argv[6], sys.argv[7], sys.argv[8]], "git_branch": branch, "git_commit": commit}; manifest_path.write_text(json.dumps(manifest, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")' \
-  "$MANIFEST_PATH" "$REGISTRY_REL" "$SNAPSHOT_REL" "$BRANCH" "$COMMIT" "$PURCHASE_COMMAND" "$PURCHASE_BINARY_COMMAND" "$VARIETY_COMMAND" "$EXPECTED_MAIN_CLOSURES" "$EXPECTED_EXCLUDED_CLOSURES"
+echo "Running main-sample new-product-seeking result..."
+(
+  cd "$PROJECT_ROOT"
+  "${PYTHON_CMD[@]}" src/displacement_effect_estimation/run.py \
+    --outcome variety_seeking \
+    --variety-seeking-mode distinct-only-new \
+    --cluster-col "$CLUSTER_COL" \
+    --output-dir "$MARKET_NEW_OUTPUT_REL" \
+    --log-file "$MARKET_NEW_OUTPUT_REL/logs/run.log"
+)
+validate_estimation_bundle "$MARKET_NEW_OUTPUT_DIR"
+
+"${PYTHON_CMD[@]}" -c 'from datetime import datetime, timezone; import json, sys; from pathlib import Path; manifest_path = Path(sys.argv[1]); branch = sys.argv[4].strip() or None; commit = sys.argv[5].strip() or None; expected_main = int(sys.argv[11]); expected_excluded = int(sys.argv[12]); manifest = {"generated_at_utc": datetime.now(timezone.utc).isoformat(), "source_registry_path": sys.argv[2], "registry_snapshot_path": sys.argv[3], "full_registry_path": "outputs/customer-store/closure_pair_registry_full.csv", "purchase_result_path": "outputs/03_main_18_closures/purchase_frequency_ddd_h4", "purchase_binary_result_path": "outputs/03_main_18_closures/purchase_incidence_ddd_h4", "novelty_result_path": "outputs/03_main_18_closures/novelty_member_first_ddd_h4", "new_product_result_path": "outputs/03_main_18_closures/novelty_market_new_ddd_h4", "cluster_col": sys.argv[10], "expected_main_closure_count": expected_main, "excluded_closure_count": expected_excluded, "executed_commands": [sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9]], "git_branch": branch, "git_commit": commit}; manifest_path.write_text(json.dumps(manifest, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")' \
+  "$MANIFEST_PATH" "$REGISTRY_REL" "$SNAPSHOT_REL" "$BRANCH" "$COMMIT" "$PURCHASE_COMMAND" "$PURCHASE_BINARY_COMMAND" "$VARIETY_COMMAND" "$MARKET_NEW_COMMAND" "$CLUSTER_COL" "$EXPECTED_MAIN_CLOSURES" "$EXPECTED_EXCLUDED_CLOSURES"
 
 python_eval "$PROJECT_ROOT" "$REPORT_BODY_PATH" <<'PY'
 from pathlib import Path

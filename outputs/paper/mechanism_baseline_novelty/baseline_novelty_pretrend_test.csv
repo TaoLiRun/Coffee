@@ -1,0 +1,2 @@
+null_hypothesis,terms,restrictions,wald_statistic,pvalue,cluster,n_clusters
+theta_-4 = theta_-3 = theta_-2 = 0,"rel_m4_X_treated_X_incidence_X_baseline_novelty,rel_m3_X_treated_X_incidence_X_baseline_novelty,rel_m2_X_treated_X_incidence_X_baseline_novelty",3,2.054751401837512,0.5611209584949928,closure_event_id,18

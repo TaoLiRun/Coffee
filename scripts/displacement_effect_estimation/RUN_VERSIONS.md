@@ -114,7 +114,8 @@ This is an **optional extension** for headline novelty-seeking (`--outcome varie
   - For each **member–closure** episode, compute the **pre-period** mean of the distinct novelty outcome (all `rel_t < 0` rows with non-missing outcome in that episode).
   - Form a binary indicator **high pre-novelty** vs **low** by comparing that episode mean to a cross-sectional threshold computed **across episodes** in the built estimation sample. The default threshold is the **sample median** of those episode means; set `spec.variety_pre_novelty_split_method` to **`"mode"`** in `config.json` to use instead the **statistical mode** of the episode means (after rounding to 10 decimal places so the mode is well defined for near-continuous values). **High** means strictly **above** the threshold; **at or below** counts as low.
   - The indicator is merged to all rows of the episode (constant within member–closure over `rel_t`).
-  - **Collapsed pooled DDD** is augmented with interactions of that indicator with the existing post-based treatment and displacement terms: `post × treated × high`, `post × blocked × high`, and `post × treated × blocked × high`. The original three coefficients continue to summarize the **low** pre-novelty subgroup; the three new terms are the **additional** components for the **high** subgroup. The continuous-score collapsed spec is unchanged. The event-study output now also includes the lower-group displacement path and a saved lower-group plot for the selected split.
+  - **Collapsed pooled DDD** is fully saturated by pre-novelty type. It adds `post × high pre-novelty` as well as that term's interactions with treatment and predicted incidence. The first three coefficients summarize the **low** pre-novelty subgroup; the four type-interaction terms capture the high type's general post shift and incremental components. Algebraically equivalent output specifications estimate both subgroup DDDs and all four treated-control effects directly, with covariance-aware standard errors. Omitting `post × high pre-novelty` is invalid because type-specific general post changes would load onto the treatment interactions.
+  - The event-study analog is saturated in the same way and includes a direct parameterization of the low- and high-pre-novelty DDD paths and their joint pretrend tests. The separate script `scripts/writeup/validate_pre_novelty_heterogeneity.py` adds a continuous interaction, leave-one-closure-out estimates and multiple-testing diagnostics for the final 18-event sample.
   - **Not supported together with** `--balanced-panel`, `--separate-effect`, or `--variety-seeking-mode` other than `distinct`.
 
 Suggested output directory label: `variety_seeking_distinct_pre_novelty_heterogeneity`.
@@ -320,7 +321,8 @@ Use `spec.variety_pre_novelty_split_method` in `config.json` (`"median"` default
 - `--log-level DEBUG|INFO|WARNING|ERROR`
   Changes logging verbosity.
 - `--cluster-col <column>`
-  Changes the clustering column used in the regressions.
+  Changes the clustering column used in the regressions. Production runs use
+  `closure_event_id`, matching inference to the level of the closure shock.
 - `--t-horizon N`
   Changes the number of pre and post bins included.
 

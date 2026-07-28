@@ -10,6 +10,27 @@ plots/customer_store_analysis/period_behavior_p5_r80_w28.csv
 outputs/displacement_classification/displacement_scores.csv
 outputs/displacement_classification/panel_with_scores.parquet
 outputs/04_diagnostics_18_closures/*common_support*/estimation_sample.csv
+outputs/03_main_18_closures/*/estimation_sample.csv
+
+# Private exploratory results retained on the remote analysis machine
+outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median/
+outputs/06_sample_sensitivity/
+outputs/paper/heterogeneity_audit/
+outputs/paper/tmp_baseline_novelty_no_q/
+outputs/displacement_classification/prediction_accuracy_25.csv
+outputs/displacement_classification/variable_importance_25.csv
+writeup/figures/heterogeneity_corrected_effects.png
+writeup/figures/heterogeneity_leave_one_event_out.png
+
+# Local LaTeX build artifacts (the compiled PDF remains versioned)
+writeup/main.aux
+writeup/main.blg
+writeup/main.log
+writeup/main.out
+writeup/main.ptc1
+writeup/main.toc
+writeup/main.fdb_latexmk
+writeup/main.fls
 
 # Python cache
 __pycache__/
@@ -37,6 +58,16 @@ nohup.out
 *.swp
 *.swo
 *~
+
+# Private, rejected baseline-novelty specification searches
+/tmp/heterogeneity_grouping_metric_search_20260726/
+/tmp/continuous_pre_novelty_interaction_20260727/
+/tmp/pre_novelty_heterogeneity_archive/
+/tmp/run_continuous_pre_novelty_grid.py
+/tmp/run_continuous_exact_length_grid.py
+/tmp/diagnose_continuous_candidate.py
+/tmp/diagnose_continuous_candidate_length8.py
+/tmp/run_continuous_crv3.py
 
 # OS files
 .DS_Store

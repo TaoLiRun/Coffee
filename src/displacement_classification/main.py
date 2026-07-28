@@ -353,7 +353,12 @@ def main(
             if not t0_sub.empty:
                 dt0 = xgb.DMatrix(t0_sub[feature_cols], feature_names=feature_cols)
                 t0_sub["displacement_prob_t0_ex_ante"] = model.predict(dt0)
-                threshold = cfg_model.get("classification_threshold", 0.5)
+                threshold = float(cfg_model["decision_threshold"])
+                if not 0 < threshold < 1:
+                    raise ValueError(
+                        "model.decision_threshold must be strictly between 0 and 1; "
+                        f"found {threshold}."
+                    )
                 t0_sub["predicted_displaced_t0_ex_ante"] = (
                     t0_sub["displacement_prob_t0_ex_ante"] >= threshold
                 ).astype(int)

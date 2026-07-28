@@ -242,7 +242,9 @@ def compute_push_features_for_batch(
     ``df_push_sorted`` / ``dt_np`` are sorted by ``dt``; use rows ``0:push_end_idx``.
     """
     he = pd.Timestamp(history_end).normalize()
-    he_ord = int(np.int64(he.to_datetime64()))
+    # Timestamp.to_datetime64() defaults to microseconds under pandas 3,
+    # while purchase_ordinals_index is explicitly stored in nanoseconds.
+    he_ord = int(he.value)
 
     sub = df_push_sorted.iloc[:push_end_idx]
     unique_mids = np.unique(member_batch["member_id"].values)
@@ -406,5 +408,6 @@ def sort_push_and_dt_array(df_push: pd.DataFrame) -> Tuple[pd.DataFrame, np.ndar
 
 def push_end_index_for_history_end(dt_np: np.ndarray, history_end: pd.Timestamp) -> int:
     """Row count with dt <= history_end (dt sorted ascending)."""
-    he = np.int64(pd.Timestamp(history_end).normalize().to_datetime64())
+    # Timestamp.value is always nanoseconds and therefore matches dt_np.
+    he = np.int64(pd.Timestamp(history_end).normalize().value)
     return int(np.searchsorted(dt_np, he, side="right"))
