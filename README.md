@@ -28,6 +28,8 @@ model-free/
 │   ├── 03_main_18_closures/             # Paper-facing 18-closure DDD/event-study outputs
 │   ├── 04_diagnostics_18_closures/      # Common-support and identification diagnostics
 │   ├── 05_robustness/                   # Robustness, mechanism checks, and older 22-closure runs
+│   │   ├── reopening_assortment_constraints/  # Realized reopening-menu tests
+│   │   └── new_product_notification_exposure/ # New-product push exposure tests
 │   └── README.md                        # Output folder guide
 ├── reports/
 │   └── main_results.qmd                 # Current 18-closure result report
@@ -35,7 +37,8 @@ model-free/
 │   ├── customer-store/
 │   ├── displacement_classification/
 │   ├── displacement_effect_estimation/
-│   └── push_targeting_after_reopening/
+│   ├── push_targeting_after_reopening/
+│   └── writeup/                         # Paper-facing robustness and alternative-explanation scripts
 ├── src/
 │   ├── customer-store/
 │   ├── displacement_classification/
@@ -52,7 +55,7 @@ The current output organization is:
 
 - `outputs/03_main_18_closures/`: paper-facing purchase-frequency, purchase-incidence, member-first novelty, and market-new novelty results.
 - `outputs/04_diagnostics_18_closures/`: matched/common-support diagnostics, blocked-gap event studies, pre-novelty heterogeneity checks, and technical backup.
-- `outputs/05_robustness/`: 22-closure full-registry history, horizon robustness, cross-store exclusion, missing-new-product checks, push-targeting checks, and legacy runs.
+- `outputs/05_robustness/`: 22-closure full-registry history, horizon robustness, cross-store exclusion, missing-new-product checks, reopening-assortment tests, new-product-notification exposure tests, push-targeting checks, and legacy runs.
 
 The headline implementation sequence is:
 
@@ -60,6 +63,6 @@ The headline implementation sequence is:
 2. Build treated/control member-closure registries.
 3. Train the blocked-buyer classifier and export ex-ante scores.
 4. Estimate DDD and event-study models for purchase and novelty outcomes.
-5. Run robustness and mechanism checks, including matched/common-support diagnostics, missing-new-product exposure, cross-store substitution, and push targeting.
+5. Run robustness and mechanism checks, including matched/common-support diagnostics, missing-new-product exposure, reopening assortment, cross-store substitution, and new-product-notification targeting.
 
 For exact commands, code paths, output files, and result interpretations, use `docs/technical_report.md`.

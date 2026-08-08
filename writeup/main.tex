@@ -844,6 +844,137 @@ If missed exposure were the dominant driver of the decline in novelty-seeking, c
 The evidence indicates that missed exposure is unlikely to be the main mechanism behind the observed decline in novelty-seeking. Instead, the results are more consistent with the goal-based mechanism, whereby the interruption of an active purchase leads to more focused behavior upon return. This interpretation is supported both by the lack of correlation between introduction intensity and novelty effects and by the persistence of the main results across alternative specifications.
 \fi
 
+\section{Behavioral Mechanisms and Alternative Explanations}
+\label{section:7A}
+
+\noindent The novelty-seeking DDD is consistent with familiar-choice salience, but it does not by itself identify a psychological mechanism. We therefore assess alternative explanations by asking whether each requires an observable intermediate response that is present in the data. The first test considers a supply-side explanation: stores may reopen with fewer products or an assortment tilted toward familiar items.
+
+\subsection{Reopening Assortment Constraints}
+\label{section:alternative_assortment}
+
+A narrower menu after reopening could reduce product exploration without changing consumer preferences. For this explanation to account for the DDD, two links must hold. First, treated stores must reopen with a smaller or less stable assortment than matched control stores. Second, high-predicted-incidence customers must be more exposed or more responsive to that contraction than low-predicted-incidence customers. A store-level contraction common to all treated customers cannot by itself generate the high-minus-low treatment differential. We test the necessary first link directly.
+
+We construct a store-week panel for the 18 closures and their 90 matched control stores, using four seven-day periods before closure and four after reopening. Because transaction volume changes around closures, a raw product count could mistake fewer purchases for a smaller menu. We therefore use three complementary measures of realized assortment: the share of core pre-closure products that continue to appear, the number of distinct products in a standardized sample of 50 customer-day baskets and the overlap between each week's products and the store's pre-closure product set. Appendix~\ref{app:reopening_assortment} describes the measures and matched-store specification.
+
+We find no evidence of a relative contraction at reopening. Core-product coverage falls by 1.29 percentage points more at treated stores than at controls (95\% CI: $-8.47$ to $5.90$ percentage points). Standardized product breadth instead rises by 0.31 products per 50 baskets (95\% CI: $-0.79$ to $1.40$), while overlap with the pre-closure menu rises by 1.46 percentage points (95\% CI: $-3.81$ to $6.74$ percentage points). The breadth interval rules out a relative loss larger than 0.79 products per 50 baskets, or 2.8\% of the control pre-period mean. All three immediate-reopening estimates are positive, and none of the joint pretrend tests rejects equality of the pre-period coefficients. The estimates are also similar when we require a complete eight-period store panel.
+
+We obtain the same conclusion from cross-closure variation. If assortment constraints drive the novelty result, closures with larger early declines in treated-store assortment should exhibit more negative novelty DDDs. The estimated relationships are close to zero across all three measures; permutation $p$-values range from 0.62 to 0.96. These results do not show that the formal catalogs were identical---we observe products sold, not the menu displayed to every customer. Within that measurement limit, however, we do not detect the store-level first stage required by the assortment-constraint explanation.
+
+\subsection{New-Product Notifications}
+\label{section:alternative_new_product_notifications}
+
+Inactivity-triggered marketing provides a second alternative explanation. Low-predicted-incidence customers are more likely to remain inactive long enough to receive new-product notifications. If the closure or reopening increases this exposure disproportionately for treated low-incidence customers, the notifications could raise their exploration and make the high-minus-low novelty DDD negative even without a narrowing of choice among treated high-incidence customers. This explanation therefore requires a negative DDD in new-product-notification exposure: the treated high-minus-low exposure gap must fall during the closure or after reopening relative to its pre-closure and control-group counterparts.
+
+We identify new-product notifications from the platform's campaign classification and count each member-policy-date combination once. The primary outcome is the number of such campaigns per consumer-day. Absolute exposure is higher for treated low-incidence customers, consistent with the inactivity trigger. Their mean rate is 0.0247 per day before closure, 0.0307 during closure and 0.0250 after reopening. The corresponding rates for treated high-incidence customers are 0.0058, 0.0115 and 0.0113. These level differences cannot explain the novelty DDD because they largely predate the closure. We therefore estimate the same treated-versus-control, high-versus-low differential for notification exposure. Appendix~\ref{app:new_product_notifications} describes the construction, supporting outcomes and inference.
+
+The differential exposure moves in the opposite direction from the alternative explanation. During closure, the high-minus-low treated-control change is $+0.0041$ new-product campaigns per consumer-day (95\% CI: $0.0019$ to $0.0064$; restricted wild-cluster $p=0.003$). After reopening, it remains positive at $+0.0017$ per day (95\% CI: $0.0001$ to $0.0032$; restricted wild-cluster $p=0.047$). The event-study leads do not reject a common pretrend ($p=0.500$). Extensive-margin estimates yield the same pattern: the relative probability of receiving any new-product notification rises by 4.22 percentage points during closure and 1.44 points after reopening. The share of all campaigns devoted to new products does not change differentially, so the exposure result reflects campaign volume rather than a shift in content composition.
+
+Under the natural assumption that new-product notifications weakly increase product awareness or experimentation, this exposure pattern would work against the negative novelty DDD rather than generate it. The evidence therefore does not support differential recorded new-product notifications as the explanation for the product-choice result. This test is narrower than a complete audit of the recommendation system: campaign records identify targeting rather than verified impressions, and they do not observe personalized rankings or other in-app recommendations.
+
+\iffalse
+\textcolor{red}{At this stage, I think the paper is missing the most important part of the mechanism section. We estimate a convincing DDD and then explain the results with a behavioral hypothesis, i.e. goal persistence with counterfactual thinking. However, this is ultimately a narrative unless we can show that competing explanations are inconsistent with the data.
+
+The goal of this section should therefore not be to propose our mechanism, but rather to discriminate among competing explanations. In other words, we should ask the following question: \textit{Suppose our mechanism of goal persistence with counterfactual thinking is wrong. What other theories could plausibly generate exactly the same empirical pattern of purchase frequency recovers and novelty-seeking declines?}
+
+For each competing explanation, we should derive one or more unique empirical predictions that differ from those implied by our theory. We then use the data to evaluate these predictions. If a competing explanation predicts a pattern that is not observed, we can rule it out. The remaining explanation is therefore the one most consistent with the evidence.
+
+The table summarizes the candidate explanations we should consider. For each one, we identify:
+\begin{itemize}
+    \item the underlying economic intuition
+    \item the empirical pattern it predicts
+    \item a test that can distinguish it from the goal-persistence hypothesis
+    \item whether the test has already been implemented or still needs to be done.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Behavioral Mechanisms and Alternative Explanations}
+\label{tab:alternative_mechanisms}
+\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{3pt}
+
+\begin{tabularx}{\textwidth}{p{2.7cm}XXXX}
+\toprule
+
+\textbf{Explanation} &
+\textbf{Economic intuition} &
+\textbf{Main prediction} &
+\textbf{Testable implication} &
+\textbf{Evidence needed} \\
+
+\midrule
+
+\textbf{Goal persistence + Counterfactual thinking (Our hypothesis)}
+&
+An interrupted purchase remains cognitively active. Consumers return to complete the original purchase goal, making previously chosen products more salient.
+&
+Purchase frequency recovers (or rebounds), while novelty-seeking declines because consumers return to familiar products. The decline should be stronger for consumers with stronger pre-existing routines.
+&
+The novelty decline should be larger for consumers with historically lower novelty-seeking (stronger routines). The effect should remain even after ruling out substitution across stores.
+&
+Already implemented. Heterogeneity by baseline novelty-seeking and robustness excluding same-chain substitution.
+\\
+
+\addlinespace
+
+\textbf{Reduced product awareness (Missed exposure)}
+&
+During the closure, consumers do not observe newly introduced products and therefore return with less information about the updated assortment.
+&
+The decline in novelty-seeking should increase with the number of products introduced during the closure.
+&
+Closures with more product introductions should exhibit a more negative novelty effect.
+&
+Already implemented. Cross-closure comparison using product introduction intensity. No systematic relationship found.
+\\
+
+\addlinespace
+
+\textbf{Habit disruption / Shopping momentum}
+&
+The interruption breaks consumers' habitual purchasing routine or shopping momentum. Changes in exploration are a consequence of weakened purchase habits rather than interrupted goals.
+&
+Consumers with stronger purchasing habits should exhibit the largest behavioral response. If habits are weakened, purchase frequency should also decline after reopening.
+&
+The effect should be strongest among consumers with the highest pre-closure purchase regularity or purchasing frequency. Moreover, novelty effects should be accompanied by a reduction in purchase frequency.
+&
+Potential test. Interact treatment with measures of purchase regularity (interpurchase-time variance, purchase frequency, preferred-store loyalty). If novelty falls while purchase frequency fully recovers, this explanation becomes less convincing.
+\\
+
+\addlinespace
+
+\textbf{Memory decay / Forgetting}
+&
+Consumers simply forget products or purchase plans during the interruption. The longer the interruption, the greater the forgetting.
+&
+Longer closures should produce larger declines in novelty-seeking (and possibly weaker purchase recovery).
+&
+The treatment effect should increase monotonically with closure duration.
+&
+Potential test. Interact the treatment effect with closure length (10--29 days). If duration has little explanatory power, forgetting is unlikely to explain the results.
+\\
+
+\addlinespace
+
+\textbf{Choice uncertainty / Risk avoidance}
+&
+After an interruption, consumers become more uncertain and therefore choose safer, familiar products.
+&
+Consumers facing greater choice uncertainty should display larger novelty reductions.
+&
+The effect should be stronger in stores or periods with larger assortments or more complex menus.
+&
+Possible if data exist. Requires a measure of assortment size or menu complexity. Otherwise difficult to test convincingly.
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+My view is that the paper becomes much more convincing if we can systematically reject alternative explanations rather than simply argue that our preferred mechanism is plausible. The contribution is no longer about our behavioral story, but to show that among several plausible explanations, only one is consistent with the observed evidence.
+\fi
+
 \section{Conclusion}
 \label{section:7}
 
@@ -1168,6 +1299,161 @@ The three lead coefficients are small relative to their confidence intervals, an
 
 \section{Additional Results}
 \label{app:additional_results}
+
+\subsection{Reopening Assortment Constraints}
+\label{app:reopening_assortment}
+
+This section reports the construction and estimates behind the assortment test in Section~\ref{section:alternative_assortment}. The analysis begins with the 18 treated stores and their five matched control stores. For each closure, we form four fixed seven-day periods ending immediately before closure and four fixed seven-day periods beginning immediately after reopening. Fixed weeks keep the assortment window comparable across events even though the closures last 10 to 29 days.
+
+We construct three measures from product-level transactions. \textit{Core-product coverage} first defines a store's core set as products sold in at least three of the four pre-closure weeks, then measures the share of that set sold in each week. \textit{Products per 50 baskets} draws 50 customer-day baskets without replacement, counts their distinct products and averages this count over 100 draws. This rarefaction holds observed basket volume fixed; store-weeks with fewer than 50 baskets are missing. \textit{Pre-menu overlap} is the Jaccard similarity between the products sold in a store-week and the union of products sold in that store's four pre-closure weeks.
+
+For assortment outcome $A_{est}$ at store $s$, event $e$ and relative week $t$, we estimate
+\begin{equation}
+	A_{est}=\beta\big(\text{TreatedStore}_{es}\times\text{Post}_{et}\big)
+	+\alpha_{es}+\lambda_{et}+\varepsilon_{est},
+	\label{eq:assortment_did}
+\end{equation}
+where $\alpha_{es}$ denotes event-store fixed effects and $\lambda_{et}$ denotes event-by-relative-week fixed effects. The latter compare the treated store with its matched controls within the same event and week. Standard errors are clustered by closure event. We also replace Post with relative-week indicators, omitting week $-1$, to estimate the immediate reopening contrast and test the three pre-period coefficients jointly.
+
+Table~\ref{tab:appendix_reopening_assortment} reports the results. Panel A uses every event-store week in which the outcome is observed. The pooled post coefficient is $-0.0129$ for core coverage, $0.306$ for standardized product breadth and $0.0146$ for pre-menu overlap. None differs statistically from zero. The immediate reopening contrasts are positive for all three outcomes. The joint pretrend tests also do not reject, although the core-coverage test is less precise ($p=0.110$). Panel B requires each event-store pair to have all eight periods. Core coverage and pre-menu overlap already satisfy this restriction in their estimation samples. For standardized breadth, the balanced estimate rises from $0.306$ to $0.547$ products and remains imprecise.
+
+\begin{table}[H]
+\centering
+\caption{Realized assortment at reopening stores and matched controls}
+\label{tab:appendix_reopening_assortment}
+\scriptsize
+\begin{tabularx}{\textwidth}{Xccc}
+\toprule
+ & Core-product coverage & Products per 50 baskets & Pre-menu overlap \\
+ & (1) & (2) & (3) \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A. Available event-store weeks}} \\
+Post $\times$ Treated store & $-0.0129$ & $0.3063$ & $0.0146$ \\
+ & $(0.0341)$ & $(0.5178)$ & $(0.0250)$ \\
+ & $[0.7097]$ & $[0.5619]$ & $[0.5665]$ \\
+Immediate reopening, relative to week $-1$ & $0.0205$ & $0.1935$ & $0.0495$ \\
+ & $(0.0365)$ & $(0.8753)$ & $(0.0293)$ \\
+ & $[0.5806]$ & $[0.8277]$ & $[0.1097]$ \\
+Joint pretrend $p$-value & $0.1103$ & $0.4123$ & $0.5218$ \\
+Control pre-period mean & $0.9240$ & $28.2045$ & $0.7513$ \\
+Observations & 736 & 723 & 736 \\
+Event-store pairs & 92 & 92 & 92 \\
+Within $R^2$ & $0.0010$ & $0.0019$ & $0.0019$ \\
+\addlinespace
+\multicolumn{4}{l}{\textit{Panel B. Complete eight-period event-store pairs}} \\
+Post $\times$ Treated store & $-0.0129$ & $0.5470$ & $0.0146$ \\
+ & $(0.0341)$ & $(0.4932)$ & $(0.0250)$ \\
+ & $[0.7097]$ & $[0.2829]$ & $[0.5665]$ \\
+Observations & 736 & 696 & 736 \\
+Event-store pairs & 92 & 87 & 92 \\
+Within $R^2$ & $0.0010$ & $0.0064$ & $0.0019$ \\
+Closure-event clusters & 18 & 18 & 18 \\
+\addlinespace
+\multicolumn{4}{l}{\textit{Panel C. Closure-level relation with the novelty DDD}} \\
+Novelty-DDD slope per SD of early assortment gap & $-0.0011$ & $0.0106$ & $-0.0011$ \\
+Permutation $p$-value & $0.9638$ & $0.6211$ & $0.9620$ \\
+Closures & 18 & 17 & 18 \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: Core-product coverage is the share of products in a store's core pre-closure set that sell in the current week. Products per 50 baskets averages the number of distinct products across 100 samples of 50 customer-day baskets drawn without replacement. Pre-menu overlap is the Jaccard similarity between products sold in the current week and the store's pre-closure product set. Panel A estimates equation~\eqref{eq:assortment_did}; the immediate-reopening row comes from an event study that omits relative week $-1$. Standard errors clustered by the 18 closure events are in parentheses, and two-sided $p$-values are in brackets. Panel B retains only event-store pairs observed in all eight weeks. Panel C regresses the closure-specific novelty DDD on the standardized early assortment DiD, weighting by the inverse variance of the novelty estimate; two-sided $p$-values permute assortment gaps across closures 5,000 times. Product sales measure realized assortment and need not equal the menu displayed to consumers.}
+\end{table}
+
+Figure~\ref{fig:appendix_reopening_assortment_event_study} displays the dynamic estimates. The treated-store differences do not show a common post-reopening decline. Relative to the final pre-closure week, point estimates for core coverage and pre-menu overlap are positive in the first two reopening weeks, while standardized product breadth remains near its pre-closure level. The wide closure-clustered intervals counsel against interpreting individual weeks, but the paths provide no evidence of the sharp relative contraction required by the alternative explanation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/reopening_assortment_event_study.png}
+\caption{Matched-store event studies of realized assortment}
+\label{fig:appendix_reopening_assortment_event_study}
+\fnote{Notes: Points are coefficients on relative week $\times$ Treated store from matched-store event studies with event-store and event-by-relative-week fixed effects. Relative week $-1$ is the omitted reference; the dashed line marks the closure period between the pre-closure and reopening weeks. Vertical bars are 95\% confidence intervals from CRV1 standard errors clustered by closure event (18 clusters). Core coverage and pre-menu overlap are shown in percentage points; standardized breadth is shown in products per 50 customer-day baskets.}
+\end{figure}
+
+The closure-level exercise asks whether the small differences that remain can account for heterogeneity in the novelty result. For each event, we measure the treated-control change from week $-1$ to week $1$ and relate it to that event's novelty DDD. The slope estimates in Panel C are near zero, and permutation tests do not reject independence. With only 18 closures, this exercise has limited power to detect moderate relationships. Combined with the store-level estimates, it nevertheless provides no affirmative evidence that a relative assortment contraction drives the novelty DDD.
+
+\subsection{New-Product Notification Exposure}
+\label{app:new_product_notifications}
+
+This section reports the construction and estimates behind Section~\ref{section:alternative_new_product_notifications}. The raw files contain 56,724,521 push records. We retain the 40,148 consumers in the 18-closure analysis and map notifications into the four event-length periods before closure, the closure window and the four event-length periods after reopening. This produces a balanced panel of 361,332 member-event-period observations. Of the 912,911 push records mapped into these windows, 125,918 have \texttt{trigger\_tag}=3, the platform classification for a new-product notification.
+
+The primary measure counts unique member-policy-date notification campaigns and divides by the number of calendar days in the event window. All 125,918 new-product records are unique at this grain, so the campaign and raw-record measures coincide. Supporting outcomes indicate whether a member receives any new-product notification, count distinct notification days and measure the share of all campaigns classified as new-product notifications. The source files record targeting entries; they do not verify delivery, impression, opening or reading.
+
+For exposure outcome $N_{iet}$, we estimate
+\begin{equation}
+	N_{iet}=\beta_1(\text{After}_{et}\times\text{Treated}_{i})
+	+\beta_2(\text{After}_{et}\times\text{High}_{i})
+	+\beta_3(\text{After}_{et}\times\text{Treated}_{i}\times\text{High}_{i})
+	+\phi_{ie}+\omega_t+\gamma_m+\varepsilon_{iet},
+	\label{eq:new_product_notification_ddd}
+\end{equation}
+where $\text{After}_{et}$ denotes either the closure window or the post-reopening periods. The closure specification compares period 0 with all four pre-periods; a sensitivity check compares it only with period $-1$. The post specification omits period 0 and compares the four post-periods with the four pre-periods, as in the main outcome regression. Standard errors are clustered by closure event. Because there are 18 clusters, Table~\ref{tab:appendix_new_product_notifications} also reports restricted wild-cluster $p$-values for $\beta_3$.
+
+\begin{table}[H]
+\centering
+\caption{Differential exposure to new-product notifications}
+\label{tab:appendix_new_product_notifications}
+\scriptsize
+\begin{tabularx}{\textwidth}{Xccc}
+\toprule
+ & During versus all pre-periods & During versus period $-1$ & Post versus pre-periods \\
+ & (1) & (2) & (3) \\
+\midrule
+New-product campaigns per day & $0.0041$ & $0.0043$ & $0.0017$ \\
+ & $(0.0011)$ & $(0.0013)$ & $(0.0007)$ \\
+Restricted wild-cluster $p$-value & $[0.0032]$ & $[0.0111]$ & $[0.0469]$ \\
+\addlinespace
+Any new-product notification & $0.0422$ & $0.0362$ & $0.0144$ \\
+ & $(0.0100)$ & $(0.0110)$ & $(0.0061)$ \\
+Restricted wild-cluster $p$-value & $[0.0010]$ & $[0.0057]$ & $[0.0399]$ \\
+\addlinespace
+New-product notification days per day & $0.0041$ & $0.0043$ & $0.0017$ \\
+ & $(0.0011)$ & $(0.0013)$ & $(0.0007)$ \\
+Restricted wild-cluster $p$-value & $[0.0031]$ & $[0.0111]$ & $[0.0471]$ \\
+\addlinespace
+All campaigns per day & $0.0230$ & $0.0143$ & $0.0113$ \\
+ & $(0.0087)$ & $(0.0078)$ & $(0.0058)$ \\
+Restricted wild-cluster $p$-value & $[0.0823]$ & $[0.1648]$ & $[0.1104]$ \\
+\addlinespace
+New-product share of campaigns & $0.0020$ & $-0.0014$ & $-0.0005$ \\
+ & $(0.0095)$ & $(0.0057)$ & $(0.0058)$ \\
+Restricted wild-cluster $p$-value & $[0.8505]$ & $[0.8080]$ & $[0.9406]$ \\
+\addlinespace
+Observations, primary outcome & 200,740 & 80,296 & 321,184 \\
+Closure-event clusters & 18 & 18 & 18 \\
+\bottomrule
+\end{tabularx}
+\vspace{1mm}
+\fnote{Notes: Entries are coefficients on $\text{After}\times\text{Treated}\times\text{High}$ from equation~\eqref{eq:new_product_notification_ddd}. A negative coefficient is required for the proposed notification explanation. Standard errors clustered by closure event are in parentheses; restricted wild-cluster $p$-values are in brackets. All specifications include member-closure, relative-period and calendar-month fixed effects. The campaign-share regressions are conditional on receiving at least one campaign and use 107,606, 39,628 and 183,480 observations in columns (1)--(3), respectively.}
+\end{table}
+
+Table~\ref{tab:appendix_new_product_notification_dynamics} reports the dynamic specification, which replaces $\text{After}$ with relative-period indicators and omits period $-1$. The three lead estimates are individually small, and their joint test does not reject equality to zero ($p=0.500$). The coefficient is largest during closure, remains positive in the first reopening period and then declines. This timing is consistent with high-incidence treated consumers becoming newly eligible for inactivity-triggered campaigns when a likely purchase is interrupted. It is inconsistent with the negative differential exposure needed to explain the novelty DDD.
+
+\begin{table}[H]
+\centering
+\caption{Event-study path of new-product notification exposure}
+\label{tab:appendix_new_product_notification_dynamics}
+\small
+\begin{tabular}{lccc}
+\toprule
+Relative period & Coefficient & Standard error & $p$-value \\
+\midrule
+$-4$ & $0.0007$ & $(0.0010)$ & $[0.466]$ \\
+$-3$ & $-0.0002$ & $(0.0012)$ & $[0.878]$ \\
+$-2$ & $0.0002$ & $(0.0009)$ & $[0.800]$ \\
+$0$ & $0.0043$ & $(0.0013)$ & $[0.004]$ \\
+$1$ & $0.0031$ & $(0.0013)$ & $[0.036]$ \\
+$2$ & $0.0015$ & $(0.0011)$ & $[0.185]$ \\
+$3$ & $0.0022$ & $(0.0011)$ & $[0.064]$ \\
+$4$ & $0.0003$ & $(0.0008)$ & $[0.712]$ \\
+\addlinespace
+Joint pretrend $p$-value & \multicolumn{3}{c}{$0.500$} \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}
+\fnote{Notes: The outcome is unique new-product notification campaigns per consumer-day. Coefficients are relative-period $\times$ Treated $\times$ High interactions relative to period $-1$. Standard errors use CRV1 clustering by the 18 closure events. Period 0 is the closure window.}
+\end{table}
+
+The inactivity pattern in the records also clarifies why absolute high-low levels are not informative. Among treated consumers, the median new-product notification occurs 121 days after the last purchase for low-incidence episodes before closure and 129 days during closure. The corresponding medians for high-incidence episodes are 56 and 40 days. Low-incidence consumers therefore receive more notifications in levels because they are ordinarily more dormant. The DDD removes this persistent gap and shows that the relative exposure increase occurs among treated high-incidence consumers instead.
 
 \subsection{Complete Main Specifications}
 \label{app:complete_main_results}

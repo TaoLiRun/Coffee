@@ -1,0 +1,37 @@
+{
+  "project_root": "/home/litao/Coffee/model-free",
+  "output_dir": "/home/litao/Coffee/model-free/outputs/05_robustness/reopening_assortment_constraints",
+  "figure_path": "/home/litao/Coffee/model-free/writeup/figures/reopening_assortment_event_study.png",
+  "seed": 20260807,
+  "relative_weeks": [
+    -4,
+    -3,
+    -2,
+    -1,
+    1,
+    2,
+    3,
+    4
+  ],
+  "rarefaction": {
+    "basket_target": 50,
+    "draws": 100
+  },
+  "store_orders": {
+    "rows_scanned": 9598254,
+    "rows_retained": 1315374,
+    "members": 251545,
+    "stores_with_transactions": 94,
+    "date_min": "2021-04-29",
+    "date_max": "2021-10-06"
+  },
+  "store_panel": {
+    "closures": 18,
+    "event_store_pairs": 108,
+    "rows": 864,
+    "treated_event_store_pairs": 18,
+    "control_event_store_pairs": 90,
+    "share_rarefied_observed": 0.8368055555555556,
+    "median_baskets": 397.5
+  }
+}

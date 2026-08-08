@@ -1,0 +1,7 @@
+outcome,sample,rows,event_store_pairs,treated_pairs,control_pairs,closures
+core_coverage,available_unbalanced,736,92,18,74,18
+core_coverage,complete_8_period_pairs,736,92,18,74,18
+rarefied_products_50,available_unbalanced,723,92,18,74,18
+rarefied_products_50,complete_8_period_pairs,696,87,15,72,18
+menu_jaccard_pre,available_unbalanced,736,92,18,74,18
+menu_jaccard_pre,complete_8_period_pairs,736,92,18,74,18

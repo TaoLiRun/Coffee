@@ -1,0 +1,41 @@
+{
+  "analysis_date": "2026-08-08",
+  "new_product_definition": "trigger_tag == 3",
+  "record_interpretation": "recorded targeting entry, not verified delivery/impression",
+  "panel_rows": 361332,
+  "members": 40148,
+  "closure_events": 18,
+  "raw_push": {
+    "push_files": 10,
+    "rows_scanned": 56724521,
+    "sample_date_filtered_rows": 1535586,
+    "rows_mapped_to_analysis_periods": 912911,
+    "exact_duplicate_rows_before_period_mapping": 43076,
+    "unique_campaign_day_rows": 907292,
+    "new_product_raw_rows": 125918,
+    "new_product_unique_campaign_day_rows": 125918,
+    "missing_policy_share": 0.0,
+    "trigger_tag_counts": {
+      "1": 370446,
+      "2": 329341,
+      "3": 125918,
+      "4": 86655,
+      "5": 551
+    }
+  },
+  "purchase_timing": {
+    "purchasing_member_periods": 115245,
+    "main_panel_purchasing_rows": 105854,
+    "purchase_window_match_share": 0.9740100516976078,
+    "raw_unique_vs_combined_exact_period_count_share": 0.9897882068431295,
+    "raw_unique_vs_combined_total_difference": -5619,
+    "raw_unique_vs_combined_max_abs_period_difference": 6
+  },
+  "primary_pretrend": {
+    "outcome": "new_campaigns_per_day",
+    "f_statistic": 0.8209237634600003,
+    "df_num": 3,
+    "df_denom": 17,
+    "pvalue": 0.5001443491096539
+  }
+}

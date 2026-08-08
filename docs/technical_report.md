@@ -13,7 +13,7 @@ The pipeline is implemented under:
 - source code: `model-free/src`
 - main report: `model-free/reports/main_results.qmd`
 
-The current codebase already implements the full main pipeline: closure identification, treatment/control construction, blocked-buyer prediction, pooled and separate-effect estimation, pretrend tests, novelty variants, robustness scripts, and post-reopening push-targeting checks. This file records that full state.
+The current codebase already implements the full main pipeline: closure identification, treatment/control construction, blocked-buyer prediction, pooled and separate-effect estimation, pretrend tests, novelty variants, robustness scripts, and notification-targeting checks. This file records that full state.
 
 ---
 
@@ -66,6 +66,9 @@ The most important top-level runners are:
 - displacement-effect-estimation wrapper: [scripts/displacement_effect_estimation/run_with_logging.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_with_logging.sh:1)
 - main-results bundle runner: [scripts/displacement_effect_estimation/run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
 - push-targeting-after-reopening runner: [scripts/push_targeting_after_reopening/run_push_targeting_analysis.py](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:1)
+- reopening-assortment test: [scripts/writeup/estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1)
+- new-product-notification exposure test: [scripts/writeup/estimate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1)
+- notification-output validator: [scripts/writeup/validate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/validate_new_product_notification_exposure.py:1)
 
 ### 2.2 Main source modules
 
@@ -1185,6 +1188,20 @@ These modules write CSVs summarizing:
 - products introduced and removed
 - control-store introduction counts during closure
 
+### 12.4 Reopening-assortment constraints
+
+The paper-facing supply-side test asks whether treated stores reopen with a smaller or less stable realized assortment than their five matched control stores. The runner [estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1) constructs four fixed seven-day periods before closure and four after reopening for the 18 treated stores and their controls.
+
+The analysis uses three outcomes designed to reduce sensitivity to transaction volume:
+
+- coverage of the store's core pre-closure products;
+- distinct products in repeated samples of 50 customer-day baskets; and
+- Jaccard overlap with the store's pre-closure product set.
+
+The pooled treated-store post coefficients are `-0.0129` for core coverage, `+0.3063` products per 50 baskets and `+0.0146` for pre-menu overlap; none differs statistically from zero. The immediate reopening coefficients are positive for all three measures, and the joint pretrend tests do not reject. Closure-level relations between early assortment gaps and the novelty DDD are also close to zero, with permutation `p`-values from `0.621` to `0.964`. Within the limitation that sales measure realized rather than displayed assortment, the data do not show the relative contraction required by this explanation.
+
+Outputs are under `outputs/05_robustness/reopening_assortment_constraints/`; the event-study figure is saved as `writeup/figures/reopening_assortment_event_study.png`.
+
 ---
 
 ## 13. Post-Reopening Push-Targeting Check
@@ -1247,6 +1264,32 @@ The script reports:
 
 The push results should be read as a diagnostic rather than as proof that push targeting is irrelevant. Predicted blocked buyers receive fewer pushes in both treated and control groups, and several treatment-control gap differences are small but statistically nonzero. The check is therefore useful for documenting possible targeting differences after reopening, but it should be framed as a caveat alongside the headline DDD results.
 
+### 13.6 New-product-notification exposure test
+
+The broader post-reopening push analysis does not distinguish messages about new products. The paper-facing alternative-explanation test uses `trigger_tag = 3`, the platform classification for a new-product notification, and asks whether treated low-incidence consumers receive a relative increase in these messages. Such an increase could raise the low group's exploration and mechanically make the novelty DDD negative.
+
+The runner [estimate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1):
+
+- scans the ten raw `sleep_push_result_*.csv` files in chunks;
+- retains the 40,148 consumers in the headline 18-closure panel;
+- adds the closure window to the four pre- and four post-periods;
+- counts unique member-policy-date new-product campaigns;
+- estimates during/pre and post/pre high-minus-low treatment-control differences with member-closure, relative-period and calendar-month fixed effects;
+- reports CRV1 closure-clustered intervals and restricted wild-cluster p-values; and
+- writes timing, dormancy, event-study and source-reconciliation diagnostics.
+
+The raw scan covers 56,724,521 records, of which 912,911 map into the nine analysis windows. There are 125,918 new-product records, all unique at the member-policy-date grain. The balanced exposure panel contains 361,332 rows.
+
+### 13.7 Results and interpretation
+
+Low-incidence treated consumers receive more new-product notifications in absolute terms, as expected from inactivity targeting. Their rates before, during and after closure are 0.0247, 0.0307 and 0.0250 campaigns per day; the corresponding high-incidence rates are 0.0058, 0.0115 and 0.0113. The level gap therefore predates the event.
+
+The adjusted first stage has the opposite sign from the alternative explanation. The high-minus-low treated-control coefficient is `+0.0041` campaigns per day during closure (95% CI `[0.0019, 0.0064]`; restricted wild-cluster `p = 0.0032`) and `+0.0017` after reopening (95% CI `[0.0001, 0.0032]`; restricted wild-cluster `p = 0.0469`). The joint differential-pretrend test does not reject (`p = 0.500`). Extensive-margin estimates are also positive: `+0.0422` during closure and `+0.0144` after reopening. The new-product share of all campaigns shows no differential change.
+
+Under the assumption that new-product notifications weakly increase awareness or experimentation, the observed exposure pattern would attenuate rather than generate the negative novelty DDD. The test therefore weighs against recorded new-product notifications as the explanation. It does not establish delivery or impressions and does not cover personalized rankings, familiar-product messages or other unobserved in-app recommendations.
+
+Outputs are under `outputs/05_robustness/new_product_notification_exposure/`. The validator reproduces the saved directional decomposition and checks panel grain, period balance, raw-record totals, new-product counts, policy identifiers, coefficient signs and pretrends.
+
 ---
 
 ## 14. Reproducibility Sequence
@@ -1267,6 +1310,9 @@ For a new user who wants the main pipeline in order, the logical sequence is:
    - [run_push_targeting_analysis.py](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:1)
    - [run_excluding_cross_store_treated.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:1)
    - [run_missing_new_products.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_missing_new_products.py:1)
+   - [estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1)
+   - [estimate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1)
+   - [validate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/validate_new_product_notification_exposure.py:1)
 
 ---
 
@@ -1455,7 +1501,7 @@ The output folders are now organized by role rather than by run history:
 | `outputs/displacement_classification/` | Blocked-buyer classifier | Ex-ante scores, duration-specific models, accuracy audits, and feature importance. |
 | `outputs/03_main_18_closures/` | Paper-facing main estimates | Purchase-frequency, purchase-incidence, member-first novelty, and market-new novelty DDD/event-study bundles. |
 | `outputs/04_diagnostics_18_closures/` | Identification diagnostics | Common-support/matched diagnostics, pre-novelty heterogeneity, blocked-gap event studies, and legacy separate-effect diagnostics. |
-| `outputs/05_robustness/` | Robustness and mechanisms | Full 22-closure registry, horizon robustness, cross-store exclusion, missing-new-product checks, push-targeting checks, and legacy outputs. |
+| `outputs/05_robustness/` | Robustness and mechanisms | Full 22-closure registry, horizon robustness, cross-store exclusion, missing-new-product checks, reopening-assortment tests, new-product-notification exposure tests, push-targeting checks, and legacy outputs. |
 
 Each of these folders now has a local `README.md` explaining the folder contents and current paper role.
 
@@ -1512,7 +1558,9 @@ Interpretation: the classifier mainly uses recent purchase intensity, total pre-
 | Pre-novelty heterogeneity, quartile tails | Same estimator with `--customer-median-split false` | `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails/` and `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_quartile_tails/` | Low-group triple about `-0.410`; high-group increment about `+0.738`, implying a high-group triple around `+0.329`. Baseline mean pre-period purchase frequency is `0.0948`; high group `0.0290`. | Appendix-style heterogeneity only. Strong imbalance makes causal interpretation weak. |
 | Cross-store treated exclusion | `scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py` | `outputs/05_robustness/excluding_cross_store_treated/` | Excludes 519 treated member-events, a 7.02% treated exclusion rate. Purchase triple remains positive (`+0.0052`, `p = 0.043`); novelty remains negative (`-0.0323`, `p = 0.036`). | Mechanism/robustness check showing results are not only driven by treated customers who bought at other Luckin stores during closure. |
 | Missing new products / menu exposure | `scripts/displacement_effect_estimation/run_missing_new_products.py`, `menu_features.py`, `control_menu_features.py` | `outputs/05_robustness/missing_new_products/` | Control stores introduced on average 9.34 products during closures. Closure-level intro correlations with effects are weak: purchase `0.088`, novelty `0.050`; within-bin novelty correlation `-0.049`. Formal novelty 4-way test is near zero (`p = 0.962`). | Mechanism/caveat. Missed menu exposure alone does not explain the novelty DDD pattern, but this is not proof that exposure is irrelevant. |
+| Reopening assortment constraints | `scripts/writeup/estimate_reopening_assortment_constraints.py` | `outputs/05_robustness/reopening_assortment_constraints/` | No relative contraction across core coverage (`-0.0129`), standardized product breadth (`+0.3063`) or pre-menu overlap (`+0.0146`). Immediate reopening estimates are positive; cross-closure permutation `p`-values range from `0.621` to `0.964`. | Paper-facing alternative-explanation test. Realized assortment does not display the first stage required by a reopening-menu explanation. |
 | Push targeting after reopening | `scripts/push_targeting_after_reopening/run_push_targeting_analysis.py` | `outputs/05_robustness/push_targeting_after_reopening/` | 40,148 member-events, 446,602 filtered push records. Predicted blocked buyers receive fewer pushes in both treated and control groups. Treatment-control gap differences are insignificant for `n_push` (`p = 0.464`) and coupon counts (`p = 0.735`), but significant for some intensity/composition measures. | Diagnostic caveat. Do not claim push targeting is fully ruled out; say observed targeting differences do not line up cleanly with the main novelty DDD. |
+| New-product notification exposure | `scripts/writeup/estimate_new_product_notification_exposure.py`, `validate_new_product_notification_exposure.py` | `outputs/05_robustness/new_product_notification_exposure/` | 40,148 consumers and 125,918 new-product records. The exposure DDD is positive during closure (`+0.0041` per day; wild `p = 0.0032`) and after reopening (`+0.0017`; wild `p = 0.0469`), opposite the negative first stage required by the alternative explanation. Pretrend `p = 0.500`. | Paper-facing alternative-explanation test. Recorded new-product notifications do not generate the exposure pattern required to explain the negative novelty DDD. |
 | Full 22-closure registry | Same estimator with archived/full registry configuration | `outputs/05_robustness/full_registry_22/` | Purchase triple `+0.0049` (`p = 0.043`). Member-first novelty triple `-0.0386` (`p = 0.0048`). | Robustness/back history. Shows the broad results predate the 18-closure refinement. |
 | Horizon robustness | Same estimator with `--t-horizon 1` and `--t-horizon 2` | `outputs/05_robustness/horizon_h1_full_registry_22/`, `outputs/05_robustness/horizon_h2_full_registry_22/` | 22-closure purchase triple is `+0.0059` at horizon 1 (`p = 0.056`) and `+0.0046` at horizon 2 (`p = 0.086`). | Technical backup. Useful for understanding horizon sensitivity. |
 | Separate closure effects | Same estimator with `--separate-effect` | `outputs/05_robustness/full_registry_22/separate_effect/` and related folders; 18-closure legacy diagnostic in `outputs/04_diagnostics_18_closures/separate_effect_duration10_recency10/` | Per-closure estimates are heterogeneous; old reports noted only a small subset of closures have individually significant purchase effects. | Appendix/back-up only. The paper should avoid over-reading individual closure estimates. |

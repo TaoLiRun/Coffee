@@ -1,0 +1,10 @@
+check,passed,detail
+panel grain,True,"361,332 unique member-event-period rows"
+balanced nine-period panel,True,"40,148 members x 9 periods = 361,332 rows"
+raw push count reconciliation,True,"panel=912,911; audit=912,911"
+new-product count reconciliation,True,"panel=125,918; audit=125,918"
+new-product records are unique campaign-days,True,raw and deduplicated new-product counts are identical
+no missing policy ids,True,missing share=0.0
+all primary estimates oppose the proposed mechanism,True,"post_vs_pre=0.001673, during_vs_all_pre=0.004112, during_vs_last_pre=0.004328"
+campaign and raw-record estimates coincide,True,new-product notification records contain no duplicate member-policy-date exposures
+primary pretrend does not reject,True,joint p=0.5001
