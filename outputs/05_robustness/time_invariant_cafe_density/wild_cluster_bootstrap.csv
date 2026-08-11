@@ -1,0 +1,15 @@
+spec,estimand,raw_count,pvalue_wild_restricted,repetitions,seed,weight_distribution,bootstrap_type,cluster,closure_clusters
+paper_facing_baseline,high_minus_low_ddd,,0.0449,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_500m_interaction,ddd_at_member_event_mean,,0.0902,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+log_500m_interaction,ddd_at_member_event_mean,,0.0648,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_1500m_interaction,ddd_at_member_event_mean,,0.0384,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+log_1500m_interaction,ddd_at_member_event_mean,,0.029,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+market_new_baseline,high_minus_low_ddd,,0.0004,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+market_new_raw_500m_interaction,ddd_at_member_event_mean,,0.0016,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+low_density_le3_descriptive,high_minus_low_ddd,,0.178,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,16
+preferred_store_event_post_fe,high_minus_low_ddd,,0.0157,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_500m_interaction,density_gradient_per_sd,,0.4904,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_500m_interaction,fitted_ddd,0.0,0.1932,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_500m_interaction,fitted_ddd,2.0,0.1607,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_500m_interaction,fitted_ddd,5.0,0.1093,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18
+raw_500m_interaction,fitted_ddd,13.0,0.213,9999,20260811,Rademacher,restricted cluster bootstrap-t,closure_event_id,18

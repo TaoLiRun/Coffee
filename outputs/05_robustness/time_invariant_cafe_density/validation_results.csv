@@ -1,0 +1,161 @@
+category,check,passed,observed,expected
+artifact,run_metadata.json exists and is nonempty,True,6433,> 0 bytes
+artifact,validation_checks.csv exists and is nonempty,True,4955,> 0 bytes
+artifact,summary.md exists and is nonempty,True,4666,> 0 bytes
+artifact,main_table.csv exists and is nonempty,True,1502,> 0 bytes
+artifact,main_table.md exists and is nonempty,True,1796,> 0 bytes
+artifact,member_event_preferred_store_density.csv exists and is nonempty,True,3805851,> 0 bytes
+artifact,member_first_regression_episode_density.csv exists and is nonempty,True,3435810,> 0 bytes
+artifact,market_new_regression_episode_density.csv exists and is nonempty,True,2054788,> 0 bytes
+artifact,design_store_density.csv exists and is nonempty,True,12354,> 0 bytes
+artifact,store_density_balance.csv exists and is nonempty,True,1364,> 0 bytes
+artifact,density_common_support.csv exists and is nonempty,True,288,> 0 bytes
+artifact,matched_set_density.csv exists and is nonempty,True,6408,> 0 bytes
+artifact,model_estimands.csv exists and is nonempty,True,10993,> 0 bytes
+artifact,model_coefficients.csv exists and is nonempty,True,18679,> 0 bytes
+artifact,model_covariance_long.csv exists and is nonempty,True,306463,> 0 bytes
+artifact,model_specifications.csv exists and is nonempty,True,4468,> 0 bytes
+artifact,wild_cluster_bootstrap.csv exists and is nonempty,True,1902,> 0 bytes
+artifact,leave_one_closure_out.csv exists and is nonempty,True,13530,> 0 bytes
+artifact,density_interacted_event_study_500m.csv exists and is nonempty,True,2462,> 0 bytes
+artifact,preferred_store_event_period_fe_event_study.csv exists and is nonempty,True,1055,> 0 bytes
+artifact,event_study_joint_tests.csv exists and is nonempty,True,678,> 0 bytes
+artifact,store_event_period_cell_support.csv exists and is nonempty,True,40626,> 0 bytes
+artifact,store_event_period_support_summary.csv exists and is nonempty,True,503,> 0 bytes
+artifact,low_density_incidence_support.csv exists and is nonempty,True,214,> 0 bytes
+artifact,low_density_support.json exists and is nonempty,True,525,> 0 bytes
+artifact,stability_benchmark.csv exists and is nonempty,True,535,> 0 bytes
+artifact,market_new_outcome_sensitivity.csv exists and is nonempty,True,2569,> 0 bytes
+artifact,fitted_ddd_curve_500m.csv exists and is nonempty,True,48734,> 0 bytes
+artifact,fitted_ddd_curve_1500m.csv exists and is nonempty,True,50279,> 0 bytes
+artifact,store_density_ecdf_500m.png exists and is nonempty,True,146305,> 0 bytes
+artifact,fitted_ddd_500m.png exists and is nonempty,True,220359,> 0 bytes
+artifact,fitted_ddd_1500m.png exists and is nonempty,True,224732,> 0 bytes
+artifact,density_interacted_event_study_500m.png exists and is nonempty,True,201962,> 0 bytes
+upstream,all estimator assertions passed,True,50,50
+source,density SHA-256,True,361267209af83070d247aaa4b28d0d97e24654165089332566835673715419de,361267209af83070d247aaa4b28d0d97e24654165089332566835673715419de
+source,order SHA-256,True,01eb80ae13cd8e1bb68e6ab3496ee32492795d84b13e0b374bd31c5209dbd74b,01eb80ae13cd8e1bb68e6ab3496ee32492795d84b13e0b374bd31c5209dbd74b
+source,member-first sample SHA-256,True,2fd0449e995618580a5da0645e68dbc52fedda4471fd9e4aae386083c39580e3,2fd0449e995618580a5da0645e68dbc52fedda4471fd9e4aae386083c39580e3
+source,market-new sample SHA-256,True,ce84c6d6a508e9e538d4f84a8cfcd159ac510cd4c08f4d5770226d0ccd3f1ac4,ce84c6d6a508e9e538d4f84a8cfcd159ac510cd4c08f4d5770226d0ccd3f1ac4
+source,raw source has 260 unique stores,True,"(260, 260)","(260, 260)"
+source,raw counts complete,True,0,0
+source,raw counts ordered by radius,True,0,0
+source,UTF-8 mirror matches raw counts,True,True,True
+join,design has 108 distinct stores,True,"(108, 108)","(108, 108)"
+join,design roles are 18 treated and 90 control,True,"{'control': 90, 'treated': 18}","{'treated': 18, 'control': 90}"
+join,design counts match authoritative raw source,True,True,True
+join,normalized design-store addresses match registry,True,[],[]
+preference,"one row per 40,148 member-event",True,"(40148, 40148)","(40148, 40148)"
+preference,one event per member,True,40148,40148
+preference,five-day eligibility,True,5,5
+preference,80-percent eligibility,True,0.8,0.8
+preference,treated preferences equal closure store,True,0,0
+preference,control preferences belong to matched control sets,True,0,0
+preference,control panel dept_id is not used as preferred store,True,32758,> 0 differing control episodes
+preference,episode counts match raw source through preferred_store,True,True,True
+join,preference merge preserves primary row count,True,321184,321184
+join,preference merge preserves primary outcome missingness,True,215330,215330
+join,all primary panel rows receive counts,True,0,0
+population,"primary regression population has 23,363 member-events",True,"(23363, 23363)","(23363, 23363)"
+population,primary population has 18 clusters,True,18,18
+transform,raw_500m_interaction mean metadata,True,10.054273851816976,10.054273851816976
+transform,raw_500m_interaction SD metadata,True,14.193770929235944,14.193770929235944
+transform,raw_500m_interaction standardized values,True,2.220446049250313e-16,<= 1e-12
+transform,log_500m_interaction mean metadata,True,1.8234401209237106,1.8234401209237106
+transform,log_500m_interaction SD metadata,True,1.0710257224676534,1.0710257224676534
+transform,log_500m_interaction standardized values,True,2.220446049250313e-16,<= 1e-12
+transform,raw_1500m_interaction mean metadata,True,60.580918546419554,60.580918546419554
+transform,raw_1500m_interaction SD metadata,True,79.30966373244125,79.30966373244125
+transform,raw_1500m_interaction standardized values,True,4.440892098500626e-16,<= 1e-12
+transform,log_1500m_interaction mean metadata,True,3.259660999966399,3.259660999966399
+transform,log_1500m_interaction SD metadata,True,1.4083773313591434,1.4083773313591434
+transform,log_1500m_interaction standardized values,True,2.220446049250313e-16,<= 1e-12
+specification,all regressions are unweighted,True,['none'],['none']
+specification,primary interaction hierarchy is complete,True,"['post_X_density', 'post_X_disp', 'post_X_disp_X_density', 'post_X_treated', 'post_X_treated_X_density', 'post_X_treated_X_disp', 'post_X_treated_X_disp_X_density']","['post_X_density', 'post_X_disp', 'post_X_disp_X_density', 'post_X_treated', 'post_X_treated_X_density', 'post_X_treated_X_disp', 'post_X_treated_X_disp_X_density']"
+specification,primary fixed effects preserved,True,event_fe_id + rel_t + calendar_month,event_fe_id + rel_t + calendar_month
+specification,primary clusters by closure event,True,closure_event_id,closure_event_id
+specification,collapsed local-shock FE included,True,event_fe_id + rel_t + calendar_month + preferred_store_event_post_fe,contains preferred_store_event_post_fe
+specification,treated-post omitted when absorbed,True,post_X_disp + post_X_treated_X_disp,post_X_treated omitted
+reproduction,primary baseline coefficient,True,-0.041488578929683,-0.0414885789297174
+reproduction,primary baseline SE,True,0.0184378677378505,0.0184393464985958
+reproduction,market-new baseline coefficient,True,-0.0417173839818355,-0.0417173839818038
+reproduction,market-new baseline SE,True,0.0089492703025481,0.0089499855572958
+covariance,raw_500m_interaction covariance symmetric,True,9.486769009248164e-20,<= 1e-12
+covariance,raw_500m_interaction covariance diagonal nonnegative,True,2.7827022924796325e-05,>= 0
+marginal,raw_500m_interaction fitted estimate at 0,True,-0.0544796755179029,-0.05447967551790287
+marginal,raw_500m_interaction covariance SE at 0,True,0.0365276016400953,0.03652760164009321
+marginal,raw_500m_interaction fitted estimate at 2,True,-0.05025758274074,-0.05025758274074004
+marginal,raw_500m_interaction covariance SE at 2,True,0.0314702670487331,0.031470267048730995
+marginal,raw_500m_interaction fitted estimate at 5,True,-0.0439244435749958,-0.0439244435749958
+marginal,raw_500m_interaction covariance SE at 5,True,0.0241986844839828,0.024198684483980503
+marginal,raw_500m_interaction fitted estimate at 13,True,-0.0270360724663445,-0.027036072466344485
+marginal,raw_500m_interaction covariance SE at 13,True,0.0125493191194148,0.01254931911941198
+covariance,log_500m_interaction covariance symmetric,True,6.776263578034403e-20,<= 1e-12
+covariance,log_500m_interaction covariance diagonal nonnegative,True,5.938276630055889e-05,>= 0
+marginal,log_500m_interaction fitted estimate at 0,True,-0.0526136400806573,-0.0526136400806572
+marginal,log_500m_interaction covariance SE at 0,True,0.0576139377577785,0.057613937757777185
+marginal,log_500m_interaction fitted estimate at 2,True,-0.0445256807016158,-0.044525680701615784
+marginal,log_500m_interaction covariance SE at 2,True,0.0324073365446916,0.032407336544690066
+marginal,log_500m_interaction fitted estimate at 5,True,-0.0394227464837013,-0.039422746483701226
+marginal,log_500m_interaction covariance SE at 5,True,0.0181895540526265,0.018189554052624225
+marginal,log_500m_interaction fitted estimate at 13,True,-0.0331849583691441,-0.03318495836914404
+marginal,log_500m_interaction covariance SE at 13,True,0.0141445897015216,0.014144589701518866
+covariance,raw_1500m_interaction covariance symmetric,True,6.776263578034403e-20,<= 1e-12
+covariance,raw_1500m_interaction covariance diagonal nonnegative,True,3.035820694372458e-05,>= 0
+marginal,raw_1500m_interaction fitted estimate at 0,True,-0.0310960388118368,-0.031096038811836813
+marginal,raw_1500m_interaction covariance SE at 0,True,0.0267314976356799,0.02673149763567725
+marginal,raw_1500m_interaction fitted estimate at 10,True,-0.0326310672080697,-0.032631067208069686
+marginal,raw_1500m_interaction covariance SE at 10,True,0.0249110185978665,0.02491101859786408
+marginal,raw_1500m_interaction fitted estimate at 23.5,True,-0.0347033555429841,-0.03470335554298407
+marginal,raw_1500m_interaction covariance SE at 23.5,True,0.0225080611596581,0.0225080611596562
+marginal,raw_1500m_interaction fitted estimate at 65.5,True,-0.0411504748071622,-0.04115047480716215
+marginal,raw_1500m_interaction covariance SE at 65.5,True,0.0157300228296856,0.015730022829686056
+covariance,log_1500m_interaction covariance symmetric,True,5.421010862427522e-20,<= 1e-12
+covariance,log_1500m_interaction covariance diagonal nonnegative,True,5.605015964369717e-05,>= 0
+marginal,log_1500m_interaction fitted estimate at 0,True,-0.015377953400523,-0.01537795340052308
+marginal,log_1500m_interaction covariance SE at 0,True,0.0627985880373975,0.06279858803739219
+marginal,log_1500m_interaction fitted estimate at 10,True,-0.0342841263478602,-0.034284126347860225
+marginal,log_1500m_interaction covariance SE at 10,True,0.0269036066652174,0.026903606665215234
+marginal,log_1500m_interaction fitted estimate at 23.5,True,-0.0405978484678488,-0.040597848467848786
+marginal,log_1500m_interaction covariance SE at 23.5,True,0.0165454747176691,0.01654547471766886
+marginal,log_1500m_interaction fitted estimate at 65.5,True,-0.0484707355656043,-0.04847073556560428
+marginal,log_1500m_interaction covariance SE at 65.5,True,0.0122927002287633,0.012292700228766404
+covariance,market_new_raw_500m_interaction covariance symmetric,True,5.624298769768554e-19,<= 1e-12
+covariance,market_new_raw_500m_interaction covariance diagonal nonnegative,True,1.6776249781088787e-05,>= 0
+marginal,market_new_raw_500m_interaction fitted estimate at 0,True,-0.0290985185256375,-0.029098518525637544
+marginal,market_new_raw_500m_interaction covariance SE at 0,True,0.0119163274952722,0.011916327495272987
+marginal,market_new_raw_500m_interaction fitted estimate at 2,True,-0.0309651967788486,-0.03096519677884864
+marginal,market_new_raw_500m_interaction covariance SE at 2,True,0.0092029494968023,0.0092029494968034
+marginal,market_new_raw_500m_interaction fitted estimate at 5,True,-0.0337652141586653,-0.033765214158665284
+marginal,market_new_raw_500m_interaction covariance SE at 5,True,0.0062452793290448,0.00624527932904619
+marginal,market_new_raw_500m_interaction fitted estimate at 13,True,-0.0412319271715097,-0.04123192717150967
+marginal,market_new_raw_500m_interaction covariance SE at 13,True,0.012385043349268,0.012385043349267408
+inference,"wild bootstrap uses 9,999 repetitions",True,[np.int64(9999)],[9999]
+inference,wild bootstrap seed locked,True,[np.int64(20260811)],[20260811]
+inference,wild p-values valid,True,"(np.float64(0.0004), np.float64(0.4904))","within [0,1]"
+inference,full-sample wild rows use 18 clusters,True,[np.int64(18)],[18]
+leverage,18 closures omitted exactly once per estimand,True,"(18, {'ddd_at_full_sample_mean': 18, 'density_gradient_per_sd': 18, 'fitted_ddd_count_13': 18, 'fitted_ddd_count_2': 18})",18 omissions for each of 4 estimands
+leverage,LOO models have 17 clusters,True,[np.int64(17)],[17]
+dynamic,event study has two counts and eight periods,True,"([np.float64(2.0), np.float64(13.0)], [np.int64(-4), np.int64(-3), np.int64(-2), np.int64(-1), np.int64(1), np.int64(2), np.int64(3), np.int64(4)])","([2, 13], [-4, -3, -2, -1, 1, 2, 3, 4])"
+dynamic,event-study reference period normalized to zero,True,"[{'estimate': 0.0, 'ci_low': 0.0, 'ci_high': 0.0}, {'estimate': 0.0, 'ci_low': 0.0, 'ci_high': 0.0}]",all zero
+dynamic,two prespecified joint pretests reported,True,"(2, [3, 3])","(2, [3, 3])"
+restricted sample,low-density cutoff locked at 3,True,3,3
+restricted sample,low-density design support matches audit,True,"(42, 9, 33)","(42, 9, 33)"
+restricted sample,eight matched sets have both store roles,True,8,8
+restricted sample,low-density estimate labelled descriptive,True,preferred-store cafe_count_500m <= 3; descriptive,contains descriptive
+support,balance reports 18 treated and 90 controls,True,"{'treated': 18, 'control': 90}","{'treated': 18, 'control': 90}"
+support,"counts 2,5,13 lie in 500m common support",True,"(np.float64(0.0), np.float64(19.0))","contains 2,5,13"
+benchmark,three locked locations evaluated,True,"['member_event_mean', 'raw_count_13', 'raw_count_2']","['member_event_mean', 'raw_count_2', 'raw_count_13']"
+figure,store_density_ecdf_500m.png readable and sufficiently large,True,"(2430, 1519)","width>=1000, height>=800"
+figure,fitted_ddd_500m.png readable and sufficiently large,True,"(2430, 1519)","width>=1000, height>=800"
+figure,fitted_ddd_1500m.png readable and sufficiently large,True,"(2430, 1519)","width>=1000, height>=800"
+figure,density_interacted_event_study_500m.png readable and sufficiently large,True,"(2490, 1579)","width>=1000, height>=800"
+narrative,summary contains: Evidence classification: Challenging,True,True,True
+narrative,summary contains: systematic pre-period warning,True,True,True
+narrative,summary contains: do not directly measure other-brand competition,True,True,True
+narrative,summary contains: not a measurement date,True,True,True
+narrative,summary contains: descriptive,True,True,True
+narrative,summary contains: market-new novelty,True,True,True
+narrative,summary contains: preferred store,True,True,True
+isolation,baseline output bundles were not modified,True,,
+isolation,robustness outputs use separate directory,True,/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/outputs/05_robustness/time_invariant_cafe_density,contains outputs/05_robustness/time_invariant_cafe_density

@@ -1,0 +1,152 @@
+{
+  "run_timestamp": "2026-08-11T14:29:11.761711+08:00",
+  "git_commit": "f7f73e4282443c3be2e598eba7d5cc8caccc5c57",
+  "project_root": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee",
+  "goal_file": "README/2026_08_11_time_invariant_competition_robustness_goal.md",
+  "evidence_classification": "Challenging",
+  "source": {
+    "authoritative_server_working_directory": "/home/litao/Coffee/model-free",
+    "authoritative_raw_path": "/home/litao/Coffee/data/data1031/dapt_id_address.csv",
+    "authoritative_source_archive": "/home/litao/Coffee/data/data1031.zip",
+    "authoritative_csv_file_mtime": "2022-11-07 11:19:18 +0800",
+    "execution_copy_path": "/private/tmp/coffee_cafe_density_dapt_id_address.csv",
+    "encoding": "GB18030 (GBK-compatible)",
+    "sha256": "361267209af83070d247aaa4b28d0d97e24654165089332566835673715419de",
+    "rows": 260,
+    "unique_dept_id": 260,
+    "raw_field_500m": "半径500m内店铺数(咖啡厅)",
+    "raw_field_1500m": "半径1500m内店铺数(咖啡厅)",
+    "execution_copy_file_mtime": "2026-08-11T13:49:13.307324+08:00",
+    "file_timestamp_interpretation": "The authoritative CSV mtime and execution-copy mtime are file metadata only; neither is the POI measurement or pre-treatment date.",
+    "utf8_mirror_match": true,
+    "measurement_limitations": [
+      "The labels identify cafes, not brands or other-brand competitors.",
+      "The source does not document operating status, provider, counting procedure, or POI snapshot date.",
+      "The fixed value is an observed store-level density proxy and is not evidence that market structure was constant over time."
+    ]
+  },
+  "orders": {
+    "authoritative_raw_path": "/home/litao/Coffee/data/data1031/order_result.csv",
+    "execution_copy_path": "/private/tmp/coffee_cafe_density_order_result.csv",
+    "sha256": "01eb80ae13cd8e1bb68e6ab3496ee32492795d84b13e0b374bd31c5209dbd74b",
+    "raw_order_rows_scanned": 7312840,
+    "selected_order_rows_before_visit_deduplication": 1097947,
+    "unique_member_date_store_visits": 1013428
+  },
+  "paper_facing_sample": {
+    "path": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/outputs/03_main_18_closures/novelty_member_first_ddd_h4/estimation_sample.csv",
+    "sha256": "2fd0449e995618580a5da0645e68dbc52fedda4471fd9e4aae386083c39580e3",
+    "panel_rows": 321184,
+    "outcome_nonmissing_rows": 105854,
+    "fe_singleton_rows_removed": 6210,
+    "regression_rows": 99644,
+    "member_events": 23363,
+    "closure_clusters": 18
+  },
+  "market_new_outcome_sensitivity_sample": {
+    "path": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/outputs/03_main_18_closures/novelty_market_new_ddd_h4/estimation_sample.csv",
+    "sha256": "ce84c6d6a508e9e538d4f84a8cfcd159ac510cd4c08f4d5770226d0ccd3f1ac4",
+    "panel_rows": 321184,
+    "outcome_nonmissing_rows": 105854,
+    "fe_singleton_rows_removed": 6210,
+    "regression_rows": 99644,
+    "member_events": 23363,
+    "closure_clusters": 18,
+    "published_baseline_coefficient": -0.0417173839818038,
+    "published_baseline_se": 0.0089499855572958,
+    "baseline_coefficient_difference": -3.169686735304822e-14,
+    "baseline_se_difference": -7.152547476171889e-07
+  },
+  "published_baseline": {
+    "coefficient": -0.0414885789297174,
+    "se": 0.0184393464985958,
+    "n": 99644,
+    "source": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/outputs/03_main_18_closures/novelty_member_first_ddd_h4/ddd_binary_results.csv"
+  },
+  "independent_estimator": {
+    "method": "Frisch-Waugh-Lovell alternating fixed-effect absorption and OLS",
+    "crv1_correction": "G/(G-1) * (N-1)/(N-K_slope)",
+    "reference_df": "G-1",
+    "baseline_coefficient_difference": 3.437528039995641e-14,
+    "baseline_se_difference": -1.478760745205615e-06,
+    "reason": "mktserver filesystem was 100% full and local Python lacked pyfixest; acceptance is conditional on baseline reproduction."
+  },
+  "density_standardization": {
+    "raw_500m_interaction": {
+      "mean": 10.054273851816976,
+      "sd_population_ddof0": 14.193770929235944,
+      "member_events": 23363,
+      "raw_column": "cafe_count_500m",
+      "transformation": "raw"
+    },
+    "log_500m_interaction": {
+      "mean": 1.8234401209237106,
+      "sd_population_ddof0": 1.0710257224676534,
+      "member_events": 23363,
+      "raw_column": "cafe_count_500m",
+      "transformation": "log1p"
+    },
+    "raw_1500m_interaction": {
+      "mean": 60.580918546419554,
+      "sd_population_ddof0": 79.30966373244125,
+      "member_events": 23363,
+      "raw_column": "cafe_count_1500m",
+      "transformation": "raw"
+    },
+    "log_1500m_interaction": {
+      "mean": 3.259660999966399,
+      "sd_population_ddof0": 1.4083773313591434,
+      "member_events": 23363,
+      "raw_column": "cafe_count_1500m",
+      "transformation": "log1p"
+    },
+    "market_new_raw_500m_interaction": {
+      "mean": 10.054273851816976,
+      "sd_population_ddof0": 14.193770929235944,
+      "member_events": 23363,
+      "raw_column": "cafe_count_500m",
+      "transformation": "raw"
+    }
+  },
+  "standardization_population": "One unweighted row per member-event in the exact nonmissing, post-singleton-removal baseline outcome population; population SD (ddof=0).",
+  "primary_raw_counts": [
+    0.0,
+    2.0,
+    5.0,
+    13.0
+  ],
+  "alternative_1500m_design_store_quantiles": {
+    "q25": 10.0,
+    "median": 23.5,
+    "q75": 65.5
+  },
+  "low_density_cutoff": 3,
+  "wild_cluster_bootstrap": {
+    "repetitions": 9999,
+    "seed": 20260811,
+    "weights": "Rademacher",
+    "method": "restricted cluster bootstrap-t"
+  },
+  "stability_benchmark": {
+    "definition": "Absolute difference from baseline <=25% of absolute baseline magnitude",
+    "threshold": 0.010372144732420756
+  },
+  "classification_diagnostics": {
+    "reversal_in_common_support": false,
+    "primary_counts_same_baseline_sign": true,
+    "measurement_sensitivities_same_baseline_sign": true,
+    "market_new_counts_same_baseline_sign": true,
+    "all_primary_count_intervals_exclude_zero": false,
+    "systematic_pre_period_density_gradient": true,
+    "pre_period_density_gradient_estimates": [
+      0.1308675341261747,
+      0.09063232316488361,
+      0.06950432262674436
+    ],
+    "pre_period_joint_f_pvalue": 0.0023219113208994874
+  },
+  "no_rematching": true,
+  "no_reweighting": true,
+  "no_trimming_or_winsorization": true,
+  "regression_weights": "none"
+}

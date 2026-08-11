@@ -1,0 +1,51 @@
+check,passed,observed,expected
+authoritative density SHA-256,True,361267209af83070d247aaa4b28d0d97e24654165089332566835673715419de,361267209af83070d247aaa4b28d0d97e24654165089332566835673715419de
+density source required fields,True,"['address', 'dept_id', '半径1500m内店铺数(咖啡厅)', '半径500m内店铺数(咖啡厅)']","['address', 'dept_id', '半径1500m内店铺数(咖啡厅)', '半径500m内店铺数(咖啡厅)']"
+density source rows,True,260,260
+density source unique stores,True,260,260
+density source complete key/address/counts,True,0,0
+dept_id integer-valued,True,True,True
+cafe_count_500m integer-valued,True,True,True
+cafe_count_1500m integer-valued,True,True,True
+density counts nonnegative,True,"{'cafe_count_500m': 0, 'cafe_count_1500m': 0}",both >= 0
+500m count does not exceed 1500m count,True,0,0
+UTF-8 mirror exactly matches raw counts,True,True,True
+kept closure events,True,18,18
+design store-event rows,True,108,108
+design stores are distinct,True,108,108
+all design stores match density source,True,0,0
+member-first novelty estimation sample SHA-256,True,2fd0449e995618580a5da0645e68dbc52fedda4471fd9e4aae386083c39580e3,2fd0449e995618580a5da0645e68dbc52fedda4471fd9e4aae386083c39580e3
+member-first novelty sample fields,True,"['calendar_month', 'closure_duration_days', 'closure_end', 'closure_event_id', 'closure_length_std', 'closure_start', 'days_since_last_purchase', 'dept_id', 'disp_binary', 'displacement_prob', 'displacement_prob_centered', 'event_fe_id', 'group', 'member_id', 'period_start', 'post', 'purchase_frequency', 'rel_t', 'treated', 'variety_seeking']","['calendar_month', 'closure_event_id', 'closure_start', 'dept_id', 'disp_binary', 'event_fe_id', 'member_id', 'period_start', 'post', 'rel_t', 'treated', 'variety_seeking']"
+member-first novelty member-event-period uniqueness,True,0,0
+member-first novelty expected event window,True,"[np.int64(-4), np.int64(-3), np.int64(-2), np.int64(-1), np.int64(1), np.int64(2), np.int64(3), np.int64(4)]","[-4, -3, -2, -1, 1, 2, 3, 4]"
+member-first novelty closure clusters,True,18,18
+market-new novelty estimation sample SHA-256,True,ce84c6d6a508e9e538d4f84a8cfcd159ac510cd4c08f4d5770226d0ccd3f1ac4,ce84c6d6a508e9e538d4f84a8cfcd159ac510cd4c08f4d5770226d0ccd3f1ac4
+market-new novelty sample fields,True,"['calendar_month', 'closure_duration_days', 'closure_end', 'closure_event_id', 'closure_length_std', 'closure_start', 'days_since_last_purchase', 'dept_id', 'disp_binary', 'displacement_prob', 'displacement_prob_centered', 'event_fe_id', 'group', 'member_id', 'period_start', 'post', 'purchase_frequency', 'rel_t', 'treated', 'variety_seeking']","['calendar_month', 'closure_event_id', 'closure_start', 'dept_id', 'disp_binary', 'event_fe_id', 'member_id', 'period_start', 'post', 'rel_t', 'treated', 'variety_seeking']"
+market-new novelty member-event-period uniqueness,True,0,0
+market-new novelty expected event window,True,"[np.int64(-4), np.int64(-3), np.int64(-2), np.int64(-1), np.int64(1), np.int64(2), np.int64(3), np.int64(4)]","[-4, -3, -2, -1, 1, 2, 3, 4]"
+market-new novelty closure clusters,True,18,18
+order source SHA-256,True,01eb80ae13cd8e1bb68e6ab3496ee32492795d84b13e0b374bd31c5209dbd74b,01eb80ae13cd8e1bb68e6ab3496ee32492795d84b13e0b374bd31c5209dbd74b
+one row per event_fe_id before preference merge,True,0,0
+members belong to one closure event,True,0,0
+all member-events recover a preferred store,True,0,0
+all reconstructed episodes meet five-day rule,True,5.0,>= 5
+all reconstructed episodes meet 80-percent rule,True,0.8,>= 0.8
+treated preferred store equals closing store,True,0,0
+control preferred store belongs to event control set,True,0,0
+all member-events match both density measures,True,0,0
+counts constant within preferred store,True,0,0
+market-new and member-first episode keys agree,True,0,0
+member-first novelty density merge preserves panel rows,True,321184,321184
+member-first novelty density merge preserves outcome missingness,True,215330,215330
+member-first novelty density merge covers all panel rows,True,0,0
+member-first novelty store and counts constant within member-event,True,0,0
+market-new novelty density merge preserves panel rows,True,321184,321184
+market-new novelty density merge preserves outcome missingness,True,215330,215330
+market-new novelty density merge covers all panel rows,True,0,0
+market-new novelty store and counts constant within member-event,True,0,0
+baseline estimation observations reproduce,True,99644,99644
+baseline coefficient reproduces fit_collapsed_specs,True,-0.04148857892968302,-0.0414885789297174
+baseline CRV1 SE reproduces fit_collapsed_specs,True,0.018437867737850593,0.0184393464985958
+market-new baseline estimation observations reproduce,True,99644,99644
+market-new baseline coefficient reproduces fit_collapsed_specs,True,-0.0417173839818355,-0.0417173839818038
+market-new baseline CRV1 SE reproduces fit_collapsed_specs,True,0.008949270302548183,0.0089499855572958

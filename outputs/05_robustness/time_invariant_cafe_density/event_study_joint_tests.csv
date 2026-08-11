@@ -1,0 +1,3 @@
+test,terms,restrictions,wald_chi2,f_statistic,pvalue_f_cluster_df,pvalue_chi2_asymptotic,reference_df,closure_clusters,observations
+"density-gradient event-study coefficients jointly zero in periods -4,-3,-2",rel_m4_X_treated_X_disp_X_density|rel_m3_X_treated_X_disp_X_density|rel_m2_X_treated_X_disp_X_density,3,21.966502827961307,7.322167609320435,0.0023219113208994874,6.628639881724994e-05,17,18,99644
+"preferred-store-event-period-FE DDD coefficients jointly zero in periods -4,-3,-2",rel_m4_X_treated_X_disp_store_fe|rel_m3_X_treated_X_disp_store_fe|rel_m2_X_treated_X_disp_store_fe,3,0.6654372755166651,0.2218124251722217,0.879903871262957,0.8813017374152297,17,18,99644

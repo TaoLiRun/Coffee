@@ -1,0 +1,14 @@
+{
+  "cutoff": 3,
+  "cutoff_basis": "Observed 33rd percentile among 108 design stores; fixed before outcome estimation.",
+  "design_stores": 42,
+  "design_treated_stores": 9,
+  "design_control_stores": 33,
+  "matched_sets_with_low_density_on_both_treatment_sides": 8,
+  "member_events": 9835,
+  "outcome_observations": 41175,
+  "closure_clusters": 16,
+  "treated_closure_events_retained": 9,
+  "events_with_member_support_on_both_treatment_sides": 7,
+  "events_with_high_and_low_incidence_support_on_both_treatment_sides": 7
+}
