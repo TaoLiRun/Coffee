@@ -1,0 +1,31 @@
+{
+  "generated_at_utc": "2026-08-11T04:12:24.423762+00:00",
+  "project_root": "/home/litao/Coffee/model-free",
+  "output_dir": "/data/temp/litao/noncoffee_novelty_75LF0y/results",
+  "headline_sample": "/home/litao/Coffee/model-free/outputs/03_main_18_closures/novelty_member_first_ddd_h4/estimation_sample.csv",
+  "raw_commodity_source": "/home/litao/Coffee/data/data1031/order_commodity_result.csv",
+  "python": "3.12.12 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 20:16:04) [GCC 11.2.0]",
+  "pyfixest": "0.40.1",
+  "bootstrap_reps": 9999,
+  "seed": 20260811,
+  "scopes": {
+    "all_noncoffee": [
+      "food",
+      "noncoffee_drink",
+      "other_noncoffee"
+    ],
+    "noncoffee_consumables": [
+      "food",
+      "noncoffee_drink"
+    ],
+    "noncoffee_drinks": [
+      "noncoffee_drink"
+    ]
+  },
+  "fixed_effects": [
+    "event_fe_id",
+    "rel_t",
+    "calendar_month"
+  ],
+  "cluster": "closure_event_id"
+}

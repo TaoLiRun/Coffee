@@ -28,6 +28,7 @@ model-free/
 │   ├── 03_main_18_closures/             # Paper-facing 18-closure DDD/event-study outputs
 │   ├── 04_diagnostics_18_closures/      # Common-support and identification diagnostics
 │   ├── 05_robustness/                   # Robustness, mechanism checks, and older 22-closure runs
+│   │   ├── noncoffee_novelty/           # Non-coffee novelty DDD and validation outputs
 │   │   ├── reopening_assortment_constraints/  # Realized reopening-menu tests
 │   │   └── new_product_notification_exposure/ # New-product push exposure tests
 │   └── README.md                        # Output folder guide
@@ -55,7 +56,7 @@ The current output organization is:
 
 - `outputs/03_main_18_closures/`: paper-facing purchase-frequency, purchase-incidence, member-first novelty, and market-new novelty results.
 - `outputs/04_diagnostics_18_closures/`: matched/common-support diagnostics, blocked-gap event studies, pre-novelty heterogeneity checks, and technical backup.
-- `outputs/05_robustness/`: 22-closure full-registry history, horizon robustness, cross-store exclusion, missing-new-product checks, reopening-assortment tests, new-product-notification exposure tests, push-targeting checks, and legacy runs.
+- `outputs/05_robustness/`: 22-closure full-registry history, horizon robustness, cross-store exclusion, non-coffee novelty, missing-new-product checks, reopening-assortment tests, new-product-notification exposure tests, push-targeting checks, and legacy runs.
 
 The headline implementation sequence is:
 
@@ -63,6 +64,24 @@ The headline implementation sequence is:
 2. Build treated/control member-closure registries.
 3. Train the blocked-buyer classifier and export ex-ante scores.
 4. Estimate DDD and event-study models for purchase and novelty outcomes.
-5. Run robustness and mechanism checks, including matched/common-support diagnostics, missing-new-product exposure, reopening assortment, cross-store substitution, and new-product-notification targeting.
+5. Run robustness and mechanism checks, including matched/common-support diagnostics, non-coffee novelty, missing-new-product exposure, reopening assortment, cross-store substitution, and new-product-notification targeting.
 
 For exact commands, code paths, output files, and result interpretations, use `docs/technical_report.md`.
+
+### Non-Coffee Novelty Robustness
+
+Run the non-coffee novelty analysis from the project root on the remote analysis machine:
+
+```bash
+python scripts/writeup/estimate_noncoffee_novelty_ddd.py \
+  --project-root . \
+  --output-dir outputs/05_robustness/noncoffee_novelty
+python scripts/writeup/estimate_noncoffee_entry_dynamics.py \
+  --estimator scripts/writeup/estimate_noncoffee_novelty_ddd.py \
+  --output-dir outputs/05_robustness/noncoffee_novelty
+python scripts/writeup/validate_noncoffee_novelty_ddd.py \
+  --project-root . \
+  --output-dir outputs/05_robustness/noncoffee_novelty
+```
+
+The output folder retains the aggregate estimates, product-classification audit, support diagnostics and validation report. Reproducible member-level Parquet intermediates are ignored by git.
