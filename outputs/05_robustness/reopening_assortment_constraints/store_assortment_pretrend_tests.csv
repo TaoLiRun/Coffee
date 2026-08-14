@@ -1,7 +1,0 @@
-outcome,sample,f_statistic,df_num,df_denom,pvalue
-core_coverage,available_unbalanced,2.3339024998819755,3,17,0.11030831355925626
-core_coverage,complete_8_period_pairs,2.3339024998819755,3,17,0.11030831355925626
-rarefied_products_50,available_unbalanced,1.010656788664197,3,17,0.412273307935734
-rarefied_products_50,complete_8_period_pairs,0.7871010104112384,3,17,0.5175486867172457
-menu_jaccard_pre,available_unbalanced,0.7789629475846613,3,17,0.521817685644454
-menu_jaccard_pre,complete_8_period_pairs,0.7789629475846613,3,17,0.521817685644454

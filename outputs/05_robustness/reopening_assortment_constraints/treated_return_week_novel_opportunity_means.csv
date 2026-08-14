@@ -1,0 +1,9 @@
+outcome,disp_binary,mean,observations
+novel_opportunity_share_leave_one_out,0,0.9267659642607756,1102
+novel_opportunity_share_leave_one_out,1,0.8770136468652014,1223
+timing_deviation_novel_opportunity_share_leave_one_out,0,-0.0005151250151221609,1102
+timing_deviation_novel_opportunity_share_leave_one_out,1,-0.0015608174636771357,1223
+novel_products_leave_one_out,0,67.79012345679013,1134
+novel_products_leave_one_out,1,66.94794952681389,1268
+timing_deviation_novel_products_leave_one_out,0,1.5780423280423281,1134
+timing_deviation_novel_products_leave_one_out,1,1.0561908517350158,1268

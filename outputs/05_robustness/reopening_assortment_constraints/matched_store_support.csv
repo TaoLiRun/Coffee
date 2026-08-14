@@ -1,0 +1,7 @@
+outcome,sample,rows_before_singleton_pruning,event_store_pairs_before_singleton_pruning,closures
+core_coverage,available_unbalanced,736,92,18
+core_coverage,complete_8_period_pairs,736,92,18
+rarefied_products_50,available_unbalanced,723,92,18
+rarefied_products_50,complete_8_period_pairs,696,87,18
+menu_jaccard_pre,available_unbalanced,736,92,18
+menu_jaccard_pre,complete_8_period_pairs,736,92,18

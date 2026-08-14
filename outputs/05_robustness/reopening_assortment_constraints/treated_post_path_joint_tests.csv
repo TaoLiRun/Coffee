@@ -1,0 +1,7 @@
+f_statistic,df_num,df_denom,pvalue,outcome,sample,n,n_clusters,pvalue_wild_restricted,bootstrap_reps
+1.1864071074158673,3,17,0.34446540552658805,core_coverage,complete_4_post_weeks,72,18,0.3821,9999
+1.1864071074158673,3,17,0.34446540552658805,core_coverage,available_post_weeks,72,18,0.3786,9999
+6.514927887485867,3,15,0.0048799065028521755,rarefied_products_50,complete_4_post_weeks,64,16,0.0106,9999
+6.531448279801572,3,16,0.004309289231339608,rarefied_products_50,available_post_weeks,66,17,0.0092,9999
+4.493427128300372,3,17,0.01696677020738377,menu_jaccard_pre,complete_4_post_weeks,72,18,0.0175,9999
+4.493427128300372,3,17,0.01696677020738377,menu_jaccard_pre,available_post_weeks,72,18,0.0161,9999

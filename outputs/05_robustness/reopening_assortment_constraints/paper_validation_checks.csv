@@ -1,0 +1,51 @@
+check,passed,observed,expected
+manuscript includes core_coverage week 2 coefficient,True,0.0059,exact four-decimal manuscript cell
+manuscript includes core_coverage week 3 coefficient,True,-0.0648,exact four-decimal manuscript cell
+manuscript includes core_coverage week 4 coefficient,True,-0.0840,exact four-decimal manuscript cell
+manuscript includes core_coverage wild-cluster joint p-value,True,0.3821,exact four-decimal manuscript cell
+manuscript includes rarefied_products_50 week 2 coefficient,True,0.3019,exact four-decimal manuscript cell
+manuscript includes rarefied_products_50 week 3 coefficient,True,-0.7031,exact four-decimal manuscript cell
+manuscript includes rarefied_products_50 week 4 coefficient,True,-1.6600,exact four-decimal manuscript cell
+manuscript includes rarefied_products_50 wild-cluster joint p-value,True,0.0106,exact four-decimal manuscript cell
+manuscript includes menu_jaccard_pre week 2 coefficient,True,-0.0100,exact four-decimal manuscript cell
+manuscript includes menu_jaccard_pre week 3 coefficient,True,-0.0763,exact four-decimal manuscript cell
+manuscript includes menu_jaccard_pre week 4 coefficient,True,-0.1111,exact four-decimal manuscript cell
+manuscript includes menu_jaccard_pre wild-cluster joint p-value,True,0.0175,exact four-decimal manuscript cell
+core_coverage week-one mean,True,0.7687030102208128,0.7687
+core_coverage observation count,True,72.0,72.0
+core_coverage treated-store count,True,18.0,18.0
+rarefied_products_50 week-one mean,True,29.258125,29.2581
+rarefied_products_50 observation count,True,64.0,64.0
+rarefied_products_50 treated-store count,True,16.0,16.0
+menu_jaccard_pre week-one mean,True,0.6119538374986868,0.612
+menu_jaccard_pre observation count,True,72.0,72.0
+menu_jaccard_pre treated-store count,True,18.0,18.0
+days-to-return coefficient,True,-2.872354202793443,-2.8724
+days-to-return standard error,True,0.2936006063509556,0.2936
+timing_deviation_novel_opportunity_share_leave_one_out coef,True,-0.00100092125601,-0.001
+timing_deviation_novel_opportunity_share_leave_one_out se_crv1,True,0.0005602441923038,0.0006
+timing_deviation_novel_opportunity_share_leave_one_out pvalue_crv1,True,0.0929655836665121,0.093
+timing_deviation_novel_opportunity_share_leave_one_out n,True,2325.0,2325.0
+timing_deviation_novel_opportunity_share_leave_one_out n_clusters,True,17.0,17.0
+timing_deviation_novel_opportunity_share_leave_one_out ci_low,True,-0.0021885858881328,-0.0021886
+timing_deviation_novel_opportunity_share_leave_one_out ci_high,True,0.0001867433761127,0.0001867
+timing_deviation_novel_products_leave_one_out coef,True,-0.2755650823315864,-0.2756
+timing_deviation_novel_products_leave_one_out se_crv1,True,0.3847964859531353,0.3848
+timing_deviation_novel_products_leave_one_out pvalue_crv1,True,0.4836319643576598,0.4836
+timing_deviation_novel_products_leave_one_out n,True,2402.0,2402.0
+timing_deviation_novel_products_leave_one_out n_clusters,True,18.0,18.0
+timing_deviation_novel_products_leave_one_out ci_low,True,-1.087414702690978,-1.0874
+timing_deviation_novel_products_leave_one_out ci_high,True,0.5362845380278052,0.5363
+return distribution group 0: eligible_members,True,5349.0,5349.0
+return distribution group 0: returned_within_28_days,True,1134.0,1134.0
+return distribution group 0: share_returned_within_28_days,True,0.2120022434099831,0.212
+return distribution group 0: mean_days_after_reopening,True,12.156966490299824,12.157
+return distribution group 0: median_days_after_reopening,True,11.0,11.0
+return distribution group 0: share_returning_week_1,True,0.3694885361552028,0.3695
+return distribution group 1: eligible_members,True,2041.0,2041.0
+return distribution group 1: returned_within_28_days,True,1268.0,1268.0
+return distribution group 1: share_returned_within_28_days,True,0.621264086232239,0.6213
+return distribution group 1: mean_days_after_reopening,True,9.033123028391168,9.0331
+return distribution group 1: median_days_after_reopening,True,7.0,7.0
+return distribution group 1: share_returning_week_1,True,0.5362776025236593,0.5363
+all runner-internal validation checks pass,True,19,19

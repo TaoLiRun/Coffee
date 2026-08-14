@@ -67,6 +67,7 @@ The most important top-level runners are:
 - main-results bundle runner: [scripts/displacement_effect_estimation/run_main_results.sh](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1)
 - push-targeting-after-reopening runner: [scripts/push_targeting_after_reopening/run_push_targeting_analysis.py](/home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:1)
 - reopening-assortment test: [scripts/writeup/estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1)
+- reopening-assortment validator: [scripts/writeup/validate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/validate_reopening_assortment_constraints.py:1)
 - new-product-notification exposure test: [scripts/writeup/estimate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1)
 - notification-output validator: [scripts/writeup/validate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/validate_new_product_notification_exposure.py:1)
 
@@ -1190,7 +1191,7 @@ These modules write CSVs summarizing:
 
 ### 12.4 Reopening-assortment constraints
 
-The paper-facing supply-side test asks whether treated stores reopen with a smaller or less stable realized assortment than their five matched control stores. The runner [estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1) constructs four fixed seven-day periods before closure and four after reopening for the 18 treated stores and their controls.
+The paper-facing supply-side test asks whether different return dates expose high- and low-intention customers to different product sets after reopening. The runner [estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1) first constructs four fixed seven-day periods after reopening for the 18 treated stores. It then combines those paths with each treated customer's first focal-store return within 28 days and retains the matched-store design as a supplement.
 
 The analysis uses three outcomes designed to reduce sensitivity to transaction volume:
 
@@ -1198,9 +1199,31 @@ The analysis uses three outcomes designed to reduce sensitivity to transaction v
 - distinct products in repeated samples of 50 customer-day baskets; and
 - Jaccard overlap with the store's pre-closure product set.
 
-The pooled treated-store post coefficients are `-0.0129` for core coverage, `+0.3063` products per 50 baskets and `+0.0146` for pre-menu overlap; none differs statistically from zero. The immediate reopening coefficients are positive for all three measures, and the joint pretrend tests do not reject. Closure-level relations between early assortment gaps and the novelty DDD are also close to zero, with permutation `p`-values from `0.621` to `0.964`. Within the limitation that sales measure realized rather than displayed assortment, the data do not show the relative contraction required by this explanation.
+The treated-store path rejects a constant four-week path for product breadth (restricted wild-cluster `p = 0.0106`) and pre-menu overlap (`p = 0.0175`), although not for core coverage (`p = 0.3821`). Store-level stability alone therefore does not rule out the alternative. The direct customer-specific diagnostic measures each returner's personally novel product opportunity in the actual return week relative to the same customer's equal-weighted four-week mean. High-intention customers return 2.87 days earlier, but the high-minus-low timing deviation is only `-0.0010` for the novel-product share (`SE = 0.0006`, 95% CI `[-0.0022, 0.0002]`, `p = 0.093`) and `-0.276` products for the count (`SE = 0.385`, 95% CI `[-1.087, 0.536]`, `p = 0.484`). The share difference is about one-fortieth of the main novelty DDD. The matched-store supplement still shows no unusual pooled contraction at treated stores.
 
-Outputs are under `outputs/05_robustness/reopening_assortment_constraints/`; the event-study figure is saved as `writeup/figures/reopening_assortment_event_study.png`.
+For each customer-week, the realized product set is leave-one-customer-out: a product purchased only by the focal customer is removed, while products also purchased by someone else remain. Personally novel products are those the customer had not purchased anywhere in the chain through the closure end date. Subtracting the same customer's four-week mean removes persistent differences in purchase history and focuses the comparison on the assortment timing induced by the actual return week. Share regressions require a nonempty leave-one-out set in all four weeks.
+
+Run the analysis and validator from the project root:
+
+```bash
+python scripts/writeup/estimate_reopening_assortment_constraints.py \
+  --project-root . \
+  --output-dir outputs/05_robustness/reopening_assortment_constraints
+python scripts/writeup/validate_reopening_assortment_constraints.py \
+  --project-root .
+```
+
+Outputs are under `outputs/05_robustness/reopening_assortment_constraints/`:
+
+- `treated_post_path_*` records the treated-store weekly paths, support, and restricted wild-cluster joint tests;
+- `treated_first_return_exposure*` and `treated_return_timing_distribution.csv` record the first-return sample and timing estimates;
+- `treated_return_week_novel_opportunity*` records the four potential-week opportunities, actual-week deviations, estimates, and means;
+- `matched_store_*` records the supplementary matched-store comparison;
+- `validation_checks.csv` records estimator-side structural checks;
+- `paper_validation_checks.csv` and `paper_validation_summary.json` record the independent 50-check manuscript-value audit; and
+- `run_metadata.json` records inputs, sample rules, seed, and inference choices.
+
+The two customer-level audit files, `treated_first_return_exposure.csv` and `treated_return_week_novel_opportunity.csv`, are reproducible on the analysis machines and ignored by git; all aggregate paper-facing results and validation files are committed. The obsolete closure-level moderation outputs and event-study figure were removed because they did not test the manuscript's return-timing channel. The evidence should be stated as weighing against differential return timing as a quantitatively important explanation in the observed transaction environment, not as a categorical rejection. The timing-share estimate has the sign predicted by the alternative and is marginally significant at 10%. Moreover, transactions proxy realized rather than displayed availability, the return analysis conditions on customers returning within 28 days, and no structural model maps the opportunity-share estimate into the purchase-novelty DDD.
 
 ---
 
@@ -1311,6 +1334,7 @@ For a new user who wants the main pipeline in order, the logical sequence is:
    - [run_excluding_cross_store_treated.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:1)
    - [run_missing_new_products.py](/home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_missing_new_products.py:1)
    - [estimate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1)
+   - [validate_reopening_assortment_constraints.py](/home/litao/Coffee/model-free/scripts/writeup/validate_reopening_assortment_constraints.py:1)
    - [estimate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1)
    - [validate_new_product_notification_exposure.py](/home/litao/Coffee/model-free/scripts/writeup/validate_new_product_notification_exposure.py:1)
 
@@ -1337,6 +1361,7 @@ At the current state of the codebase, the project can produce:
 - pre-period novelty heterogeneity splits;
 - cross-store-treated exclusion robustness;
 - control-menu-introduction / missing-new-products mechanism outputs;
+- treated-store reopening-assortment paths, return-timing exposure estimates, and paper-value validation;
 - post-reopening push-targeting diagnostics.
 
 So the project is no longer in an early “descriptive only” stage. The current codebase already implements the full blocked-buyer causal pipeline described in the main report.
@@ -1558,7 +1583,7 @@ Interpretation: the classifier mainly uses recent purchase intensity, total pre-
 | Pre-novelty heterogeneity, quartile tails | Same estimator with `--customer-median-split false` | `outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_quartile_tails/` and `outputs/04_diagnostics_18_closures/novelty_common_support_heterogeneity_quartile_tails/` | Low-group triple about `-0.410`; high-group increment about `+0.738`, implying a high-group triple around `+0.329`. Baseline mean pre-period purchase frequency is `0.0948`; high group `0.0290`. | Appendix-style heterogeneity only. Strong imbalance makes causal interpretation weak. |
 | Cross-store treated exclusion | `scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py` | `outputs/05_robustness/excluding_cross_store_treated/` | Excludes 519 treated member-events, a 7.02% treated exclusion rate. Purchase triple remains positive (`+0.0052`, `p = 0.043`); novelty remains negative (`-0.0323`, `p = 0.036`). | Mechanism/robustness check showing results are not only driven by treated customers who bought at other Luckin stores during closure. |
 | Missing new products / menu exposure | `scripts/displacement_effect_estimation/run_missing_new_products.py`, `menu_features.py`, `control_menu_features.py` | `outputs/05_robustness/missing_new_products/` | Control stores introduced on average 9.34 products during closures. Closure-level intro correlations with effects are weak: purchase `0.088`, novelty `0.050`; within-bin novelty correlation `-0.049`. Formal novelty 4-way test is near zero (`p = 0.962`). | Mechanism/caveat. Missed menu exposure alone does not explain the novelty DDD pattern, but this is not proof that exposure is irrelevant. |
-| Reopening assortment constraints | `scripts/writeup/estimate_reopening_assortment_constraints.py` | `outputs/05_robustness/reopening_assortment_constraints/` | No relative contraction across core coverage (`-0.0129`), standardized product breadth (`+0.3063`) or pre-menu overlap (`+0.0146`). Immediate reopening estimates are positive; cross-closure permutation `p`-values range from `0.621` to `0.964`. | Paper-facing alternative-explanation test. Realized assortment does not display the first stage required by a reopening-menu explanation. |
+| Reopening assortment constraints | `scripts/writeup/estimate_reopening_assortment_constraints.py`, `scripts/writeup/validate_reopening_assortment_constraints.py` | `outputs/05_robustness/reopening_assortment_constraints/` | Realized assortment changes over the four post-reopening weeks, but the high-minus-low return-timing deviation is only `-0.0010` for personally novel product share (`p = 0.093`) and `-0.276` for personally novel product count (`p = 0.484`); 50/50 independent validation checks pass. | Paper-facing alternative-explanation diagnostic. It weighs against differential return timing as a quantitatively important explanation, but the sign, observed-sales proxy, selected returner sample and lack of a structural outcome mapping preclude a categorical rejection. |
 | Push targeting after reopening | `scripts/push_targeting_after_reopening/run_push_targeting_analysis.py` | `outputs/05_robustness/push_targeting_after_reopening/` | 40,148 member-events, 446,602 filtered push records. Predicted blocked buyers receive fewer pushes in both treated and control groups. Treatment-control gap differences are insignificant for `n_push` (`p = 0.464`) and coupon counts (`p = 0.735`), but significant for some intensity/composition measures. | Diagnostic caveat. Do not claim push targeting is fully ruled out; say observed targeting differences do not line up cleanly with the main novelty DDD. |
 | New-product notification exposure | `scripts/writeup/estimate_new_product_notification_exposure.py`, `validate_new_product_notification_exposure.py` | `outputs/05_robustness/new_product_notification_exposure/` | 40,148 consumers and 125,918 new-product records. The exposure DDD is positive during closure (`+0.0041` per day; wild `p = 0.0032`) and after reopening (`+0.0017`; wild `p = 0.0469`), opposite the negative first stage required by the alternative explanation. Pretrend `p = 0.500`. | Paper-facing alternative-explanation test. Recorded new-product notifications do not generate the exposure pattern required to explain the negative novelty DDD. |
 | Full 22-closure registry | Same estimator with archived/full registry configuration | `outputs/05_robustness/full_registry_22/` | Purchase triple `+0.0049` (`p = 0.043`). Member-first novelty triple `-0.0386` (`p = 0.0048`). | Robustness/back history. Shows the broad results predate the 18-closure refinement. |

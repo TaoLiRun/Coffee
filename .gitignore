@@ -14,6 +14,8 @@ outputs/03_main_18_closures/*/estimation_sample.csv
 outputs/05_robustness/time_invariant_cafe_density/member_event_preferred_store_density.csv
 outputs/05_robustness/time_invariant_cafe_density/member_first_regression_episode_density.csv
 outputs/05_robustness/time_invariant_cafe_density/market_new_regression_episode_density.csv
+outputs/05_robustness/reopening_assortment_constraints/treated_first_return_exposure.csv
+outputs/05_robustness/reopening_assortment_constraints/treated_return_week_novel_opportunity.csv
 
 # Private exploratory results retained on the remote analysis machine
 outputs/04_diagnostics_18_closures/novelty_pre_heterogeneity_median/
@@ -34,6 +36,7 @@ writeup/main.ptc1
 writeup/main.toc
 writeup/main.fdb_latexmk
 writeup/main.fls
+writeup/*.synctex*
 
 # Python cache
 __pycache__/

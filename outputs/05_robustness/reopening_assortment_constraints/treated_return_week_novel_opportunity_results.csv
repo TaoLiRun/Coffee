@@ -1,0 +1,5 @@
+term,coef,se_crv1,pvalue_crv1,ci_low,ci_high,n,n_clusters,event_store_pairs,within_r2,outcome,estimand
+disp_binary,-0.0543169975727666,0.004034829671450383,3.8247669291238873e-10,-0.06287045437472844,-0.04576354077080476,2325,17,17,0.1593590390631262,novel_opportunity_share_leave_one_out,high_minus_low_among_treated_first_returners
+disp_binary,-0.0010009212560100455,0.0005602441923038892,0.09296558366651211,-0.0021885858881328553,0.00018674337611276448,2325,17,17,0.001745225188088395,timing_deviation_novel_opportunity_share_leave_one_out,high_minus_low_among_treated_first_returners
+disp_binary,-4.076735904066201,0.5819123634875569,2.115836391108154e-06,-5.304463673485973,-2.849008134646429,2402,18,18,0.08649542351835726,novel_products_leave_one_out,high_minus_low_among_treated_first_returners
+disp_binary,-0.27556508233158644,0.3847964859531353,0.48363196435765987,-1.087414702690978,0.5362845380278052,2402,18,18,0.0008129523142742512,timing_deviation_novel_products_leave_one_out,high_minus_low_among_treated_first_returners

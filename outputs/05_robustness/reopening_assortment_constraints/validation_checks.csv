@@ -1,0 +1,20 @@
+check,passed,observed,expected
+registry contains 18 retained closures,True,18.0,18
+panel contains one treated store per closure,True,18.0,18
+panel grain is unique,True,0.0,0
+first-return panel is unique at member-event grain,True,0.0,0
+first-return panel covers 18 closure events,True,18.0,18
+novel-opportunity panel has four weeks per returner,True,9608.0,9608
+novel-opportunity share lies in the unit interval,True,1.0,maximum no greater than 1
+leave-one-out novel-opportunity share is observed,True,0.9839716902581183,reported; missing means no leave-one-customer-out sale
+timing deviations average to zero within returner,True,8.326672684688674e-17,0
+high-intention returners return earlier within closure,True,-2.872354202793443,negative high-minus-low coefficient
+core_coverage: week 2 coefficient equals mean within-event change,True,0.005878625002912904,0.0058786250029129
+core_coverage: week 3 coefficient equals mean within-event change,True,-0.06478472513710187,-0.0647847251371019
+core_coverage: week 4 coefficient equals mean within-event change,True,-0.08399266825190232,-0.08399266825190232
+rarefied_products_50: week 2 coefficient equals mean within-event change,True,0.30187499999999945,0.3018750000000001
+rarefied_products_50: week 3 coefficient equals mean within-event change,True,-0.703125,-0.7031249999999996
+rarefied_products_50: week 4 coefficient equals mean within-event change,True,-1.6600000000000006,-1.6599999999999997
+menu_jaccard_pre: week 2 coefficient equals mean within-event change,True,-0.009989916568602717,-0.009989916568602727
+menu_jaccard_pre: week 3 coefficient equals mean within-event change,True,-0.07632516473968513,-0.07632516473968515
+menu_jaccard_pre: week 4 coefficient equals mean within-event change,True,-0.1111435261688984,-0.11114352616889842

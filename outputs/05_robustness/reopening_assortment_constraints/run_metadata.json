@@ -1,7 +1,6 @@
 {
-  "project_root": "/home/litao/Coffee/model-free",
-  "output_dir": "/home/litao/Coffee/model-free/outputs/05_robustness/reopening_assortment_constraints",
-  "figure_path": "/home/litao/Coffee/model-free/writeup/figures/reopening_assortment_event_study.png",
+  "project_root": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee",
+  "output_dir": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/outputs/05_robustness/reopening_assortment_constraints",
   "seed": 20260807,
   "relative_weeks": [
     -4,
@@ -13,13 +12,23 @@
     3,
     4
   ],
+  "primary_post_weeks": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "primary_sample_rule": "complete four-week treated-store panel within outcome",
+  "inference": "CRV1 clustered by closure event; t/F reference distributions use G-1 degrees of freedom; treated-store joint tests also use a restricted Rademacher wild-cluster bootstrap",
+  "bootstrap_reps": 9999,
   "rarefaction": {
     "basket_target": 50,
     "draws": 100
   },
   "store_orders": {
+    "source": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/data/processed/order_commodity_result_processed.csv",
     "rows_scanned": 9598254,
-    "rows_retained": 1315374,
+    "deduplicated_product_rows_retained": 1315374,
     "members": 251545,
     "stores_with_transactions": 94,
     "date_min": "2021-04-29",
@@ -33,5 +42,15 @@
     "control_event_store_pairs": 90,
     "share_rarefied_observed": 0.8368055555555556,
     "median_baskets": 397.5
-  }
+  },
+  "treated_member_product_history": {
+    "source": "/Users/taoli/Dropbox/Reaserch@HKUST/Luckin/Coffee_code/Coffee/data/processed/order_commodity_result_processed.csv",
+    "rows_scanned": 9598254,
+    "members": 7390,
+    "members_with_empty_product_history": 1,
+    "distinct_member_product_pairs": 69516,
+    "history_cutoff": "member-specific closure_end (inclusive)"
+  },
+  "treated_members": 7390,
+  "treated_first_returns_within_28_days": 2402
 }

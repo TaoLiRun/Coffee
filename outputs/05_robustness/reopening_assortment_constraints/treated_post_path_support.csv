@@ -1,0 +1,7 @@
+outcome,sample,observations,treated_stores,week_1_mean
+core_coverage,complete_4_post_weeks,72,18,0.7687030102208128
+core_coverage,available_post_weeks,72,18,0.7687030102208128
+rarefied_products_50,complete_4_post_weeks,64,16,29.258125
+rarefied_products_50,available_post_weeks,66,17,29.363529411764702
+menu_jaccard_pre,complete_4_post_weeks,72,18,0.6119538374986868
+menu_jaccard_pre,available_post_weeks,72,18,0.6119538374986868

@@ -31,7 +31,7 @@ model-free/
 │   ├── 04_diagnostics_18_closures/      # Common-support and identification diagnostics
 │   ├── 05_robustness/                   # Robustness, mechanism checks, and older 22-closure runs
 │   │   ├── noncoffee_novelty/           # Non-coffee novelty DDD and validation outputs
-│   │   ├── reopening_assortment_constraints/  # Realized reopening-menu tests
+│   │   ├── reopening_assortment_constraints/  # Return-timing × realized-assortment tests
 │   │   ├── time_invariant_cafe_density/ # Local café-density estimates, diagnostics, and validation
 │   │   └── new_product_notification_exposure/ # New-product push exposure tests
 │   └── README.md                        # Output folder guide
@@ -70,6 +70,22 @@ The headline implementation sequence is:
 5. Run robustness and mechanism checks, including matched/common-support diagnostics, non-coffee novelty, local café density, missing-new-product exposure, reopening assortment, cross-store substitution, and new-product-notification targeting.
 
 For exact commands, code paths, output files, and result interpretations, use `docs/technical_report.md`.
+
+### Reopening-Assortment Alternative Explanation
+
+Run the reopening-assortment analysis and its independent paper-value validator from the project root on the remote analysis machine:
+
+```bash
+python scripts/writeup/estimate_reopening_assortment_constraints.py \
+  --project-root . \
+  --output-dir outputs/05_robustness/reopening_assortment_constraints
+python scripts/writeup/validate_reopening_assortment_constraints.py \
+  --project-root .
+```
+
+The estimator builds four treated-store post-reopening assortment paths, measures first-return timing within 28 days, constructs leave-one-customer-out personally novel product opportunities for every possible return week, and retains matched-store estimates as a supplement. The validator checks the saved manuscript numbers, confidence intervals, support counts, inference fields, and internal identities; its current report passes 50 of 50 checks. Reproducible customer-level audit CSVs remain on the analysis machines and are ignored by git; the committed bundle contains the aggregate estimates, support, metadata, and validation reports.
+
+The results do not support a claim that reopening assortments are constant: product breadth and pre-menu overlap change across the four weeks. The direct timing diagnostic is nevertheless small relative to the main novelty DDD. It therefore weighs against differential return timing as a quantitatively important explanation, but does not establish that the channel is impossible because recorded sales only proxy product availability and the exposure and purchase outcomes are not linked by a structural model.
 
 ### Non-Coffee Novelty Robustness
 

@@ -1,0 +1,9 @@
+outcome,disp_binary,mean,observations
+days_after_reopening,0,12.156966490299824,1134
+days_after_reopening,1,9.033123028391167,1268
+core_coverage,0,0.7953656588395814,1134
+core_coverage,1,0.8261023550709192,1268
+rarefied_products_50,0,28.864391111111114,1125
+rarefied_products_50,1,29.64671146245059,1265
+menu_jaccard_pre,0,0.6352171563112672,1134
+menu_jaccard_pre,1,0.6605673478502229,1268

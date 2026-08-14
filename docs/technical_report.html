@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -2393,6 +2428,7 @@ vertical-align: -.125em;
 <li>main-results bundle runner: <a href="./home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_main_results.sh:1">scripts/displacement_effect_estimation/run_main_results.sh</a></li>
 <li>push-targeting-after-reopening runner: <a href="./home/litao/Coffee/model-free/scripts/push_targeting_after_reopening/run_push_targeting_analysis.py:1">scripts/push_targeting_after_reopening/run_push_targeting_analysis.py</a></li>
 <li>reopening-assortment test: <a href="./home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1">scripts/writeup/estimate_reopening_assortment_constraints.py</a></li>
+<li>reopening-assortment validator: <a href="./home/litao/Coffee/model-free/scripts/writeup/validate_reopening_assortment_constraints.py:1">scripts/writeup/validate_reopening_assortment_constraints.py</a></li>
 <li>new-product-notification exposure test: <a href="./home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1">scripts/writeup/estimate_new_product_notification_exposure.py</a></li>
 <li>notification-output validator: <a href="./home/litao/Coffee/model-free/scripts/writeup/validate_new_product_notification_exposure.py:1">scripts/writeup/validate_new_product_notification_exposure.py</a></li>
 </ul>
@@ -3577,15 +3613,32 @@ vertical-align: -.125em;
 </section>
 <section id="reopening-assortment-constraints" class="level3" data-number="1.12.4">
 <h3 data-number="1.12.4" class="anchored" data-anchor-id="reopening-assortment-constraints"><span class="header-section-number">1.12.4</span> 12.4 Reopening-assortment constraints</h3>
-<p>The paper-facing supply-side test asks whether treated stores reopen with a smaller or less stable realized assortment than their five matched control stores. The runner <a href="./home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1">estimate_reopening_assortment_constraints.py</a> constructs four fixed seven-day periods before closure and four after reopening for the 18 treated stores and their controls.</p>
+<p>The paper-facing supply-side test asks whether different return dates expose high- and low-intention customers to different product sets after reopening. The runner <a href="./home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1">estimate_reopening_assortment_constraints.py</a> first constructs four fixed seven-day periods after reopening for the 18 treated stores. It then combines those paths with each treated customer’s first focal-store return within 28 days and retains the matched-store design as a supplement.</p>
 <p>The analysis uses three outcomes designed to reduce sensitivity to transaction volume:</p>
 <ul>
 <li>coverage of the store’s core pre-closure products;</li>
 <li>distinct products in repeated samples of 50 customer-day baskets; and</li>
 <li>Jaccard overlap with the store’s pre-closure product set.</li>
 </ul>
-<p>The pooled treated-store post coefficients are <code>-0.0129</code> for core coverage, <code>+0.3063</code> products per 50 baskets and <code>+0.0146</code> for pre-menu overlap; none differs statistically from zero. The immediate reopening coefficients are positive for all three measures, and the joint pretrend tests do not reject. Closure-level relations between early assortment gaps and the novelty DDD are also close to zero, with permutation <code>p</code>-values from <code>0.621</code> to <code>0.964</code>. Within the limitation that sales measure realized rather than displayed assortment, the data do not show the relative contraction required by this explanation.</p>
-<p>Outputs are under <code>outputs/05_robustness/reopening_assortment_constraints/</code>; the event-study figure is saved as <code>writeup/figures/reopening_assortment_event_study.png</code>.</p>
+<p>The treated-store path rejects a constant four-week path for product breadth (restricted wild-cluster <code>p = 0.0106</code>) and pre-menu overlap (<code>p = 0.0175</code>), although not for core coverage (<code>p = 0.3821</code>). Store-level stability alone therefore does not rule out the alternative. The direct customer-specific diagnostic measures each returner’s personally novel product opportunity in the actual return week relative to the same customer’s equal-weighted four-week mean. High-intention customers return 2.87 days earlier, but the high-minus-low timing deviation is only <code>-0.0010</code> for the novel-product share (<code>SE = 0.0006</code>, 95% CI <code>[-0.0022, 0.0002]</code>, <code>p = 0.093</code>) and <code>-0.276</code> products for the count (<code>SE = 0.385</code>, 95% CI <code>[-1.087, 0.536]</code>, <code>p = 0.484</code>). The share difference is about one-fortieth of the main novelty DDD. The matched-store supplement still shows no unusual pooled contraction at treated stores.</p>
+<p>For each customer-week, the realized product set is leave-one-customer-out: a product purchased only by the focal customer is removed, while products also purchased by someone else remain. Personally novel products are those the customer had not purchased anywhere in the chain through the closure end date. Subtracting the same customer’s four-week mean removes persistent differences in purchase history and focuses the comparison on the assortment timing induced by the actual return week. Share regressions require a nonempty leave-one-out set in all four weeks.</p>
+<p>Run the analysis and validator from the project root:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/writeup/estimate_reopening_assortment_constraints.py <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--project-root</span> . <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output-dir</span> outputs/05_robustness/reopening_assortment_constraints</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/writeup/validate_reopening_assortment_constraints.py <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--project-root</span> .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Outputs are under <code>outputs/05_robustness/reopening_assortment_constraints/</code>:</p>
+<ul>
+<li><code>treated_post_path_*</code> records the treated-store weekly paths, support, and restricted wild-cluster joint tests;</li>
+<li><code>treated_first_return_exposure*</code> and <code>treated_return_timing_distribution.csv</code> record the first-return sample and timing estimates;</li>
+<li><code>treated_return_week_novel_opportunity*</code> records the four potential-week opportunities, actual-week deviations, estimates, and means;</li>
+<li><code>matched_store_*</code> records the supplementary matched-store comparison;</li>
+<li><code>validation_checks.csv</code> records estimator-side structural checks;</li>
+<li><code>paper_validation_checks.csv</code> and <code>paper_validation_summary.json</code> record the independent 50-check manuscript-value audit; and</li>
+<li><code>run_metadata.json</code> records inputs, sample rules, seed, and inference choices.</li>
+</ul>
+<p>The two customer-level audit files, <code>treated_first_return_exposure.csv</code> and <code>treated_return_week_novel_opportunity.csv</code>, are reproducible on the analysis machines and ignored by git; all aggregate paper-facing results and validation files are committed. The obsolete closure-level moderation outputs and event-study figure were removed because they did not test the manuscript’s return-timing channel. The evidence should be stated as weighing against differential return timing as a quantitatively important explanation in the observed transaction environment, not as a categorical rejection. The timing-share estimate has the sign predicted by the alternative and is marginally significant at 10%. Moreover, transactions proxy realized rather than displayed availability, the return analysis conditions on customers returning within 28 days, and no structural model maps the opportunity-share estimate into the purchase-novelty DDD.</p>
 <hr>
 </section>
 </section>
@@ -3706,6 +3759,7 @@ vertical-align: -.125em;
 <li><a href="./home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_excluding_cross_store_treated.py:1">run_excluding_cross_store_treated.py</a></li>
 <li><a href="./home/litao/Coffee/model-free/scripts/displacement_effect_estimation/run_missing_new_products.py:1">run_missing_new_products.py</a></li>
 <li><a href="./home/litao/Coffee/model-free/scripts/writeup/estimate_reopening_assortment_constraints.py:1">estimate_reopening_assortment_constraints.py</a></li>
+<li><a href="./home/litao/Coffee/model-free/scripts/writeup/validate_reopening_assortment_constraints.py:1">validate_reopening_assortment_constraints.py</a></li>
 <li><a href="./home/litao/Coffee/model-free/scripts/writeup/estimate_new_product_notification_exposure.py:1">estimate_new_product_notification_exposure.py</a></li>
 <li><a href="./home/litao/Coffee/model-free/scripts/writeup/validate_new_product_notification_exposure.py:1">validate_new_product_notification_exposure.py</a></li>
 </ul></li>
@@ -3737,6 +3791,7 @@ vertical-align: -.125em;
 <li>pre-period novelty heterogeneity splits;</li>
 <li>cross-store-treated exclusion robustness;</li>
 <li>control-menu-introduction / missing-new-products mechanism outputs;</li>
+<li>treated-store reopening-assortment paths, return-timing exposure estimates, and paper-value validation;</li>
 <li>post-reopening push-targeting diagnostics.</li>
 </ul>
 <p>So the project is no longer in an early “descriptive only” stage. The current codebase already implements the full blocked-buyer causal pipeline described in the main report.</p>
@@ -4183,10 +4238,10 @@ vertical-align: -.125em;
 </tr>
 <tr class="odd">
 <td>Reopening assortment constraints</td>
-<td><code>scripts/writeup/estimate_reopening_assortment_constraints.py</code></td>
+<td><code>scripts/writeup/estimate_reopening_assortment_constraints.py</code>, <code>scripts/writeup/validate_reopening_assortment_constraints.py</code></td>
 <td><code>outputs/05_robustness/reopening_assortment_constraints/</code></td>
-<td>No relative contraction across core coverage (<code>-0.0129</code>), standardized product breadth (<code>+0.3063</code>) or pre-menu overlap (<code>+0.0146</code>). Immediate reopening estimates are positive; cross-closure permutation <code>p</code>-values range from <code>0.621</code> to <code>0.964</code>.</td>
-<td>Paper-facing alternative-explanation test. Realized assortment does not display the first stage required by a reopening-menu explanation.</td>
+<td>Realized assortment changes over the four post-reopening weeks, but the high-minus-low return-timing deviation is only <code>-0.0010</code> for personally novel product share (<code>p = 0.093</code>) and <code>-0.276</code> for personally novel product count (<code>p = 0.484</code>); 50/50 independent validation checks pass.</td>
+<td>Paper-facing alternative-explanation diagnostic. It weighs against differential return timing as a quantitatively important explanation, but the sign, observed-sales proxy, selected returner sample and lack of a structural outcome mapping preclude a categorical rejection.</td>
 </tr>
 <tr class="even">
 <td>Push targeting after reopening</td>

@@ -1,347 +1,175 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem [\protect \citeauthoryear {%
-Bordalo%
-, Gennaioli%
-, Lanzani%
-\BCBL {}\ \BBA {} Shleifer%
-}{%
-Bordalo%
-\ \protect \BOthers {.}}{%
-{\protect \APACyear {2026}}%
-}]{%
-bordalo2026cognitive}
-\APACinsertmetastar {%
-bordalo2026cognitive}%
-\begin{APACrefauthors}%
-Bordalo, P.%
-, Gennaioli, N.%
-, Lanzani, G.%
-\BCBL {}\ \BBA {} Shleifer, A.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2026}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {A cognitive theory of reasoning and choice} {A cognitive
-  theory of reasoning and choice}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{The Quarterly Journal of Economics}{}{}{qjag023}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Anderson et~al.(2006)Anderson, Fitzsimons, and
+  Simester]{anderson2006stockouts}
+Eric~T. Anderson, Gavan~J. Fitzsimons, and Duncan Simester.
+\newblock Measuring and mitigating the costs of stockouts.
+\newblock \emph{Management Science}, 52\penalty0 (11):\penalty0 1751--1763,
+  2006.
 
-\bibitem [\protect \citeauthoryear {%
-Brehm%
-}{%
-Brehm%
-}{%
-{\protect \APACyear {1966}}%
-}]{%
-Brehm1966}
-\APACinsertmetastar {%
-Brehm1966}%
-\begin{APACrefauthors}%
-Brehm, J\BPBI W.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYear{1966}.
-\newblock
-\APACrefbtitle {A Theory of Psychological Reactance} {A theory of psychological
-  reactance}.
-\newblock
-\APACaddressPublisher{New York}{Academic Press}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Boatwright and Nunes(2001)]{boatwright2001assortment}
+Peter Boatwright and Joseph~C. Nunes.
+\newblock Reducing assortment: An attribute-based approach.
+\newblock \emph{Journal of Marketing}, 65\penalty0 (3):\penalty0 50--63, 2001.
 
-\bibitem [\protect \citeauthoryear {%
-Clee%
-\ \BBA {} Wicklund%
-}{%
-Clee%
-\ \BBA {} Wicklund%
-}{%
-{\protect \APACyear {1980}}%
-}]{%
-Clee1980}
-\APACinsertmetastar {%
-Clee1980}%
-\begin{APACrefauthors}%
-Clee, M\BPBI A.%
-\BCBT {}\ \BBA {} Wicklund, R\BPBI A.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{1980}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Consumer Behavior and Psychological Reactance} {Consumer
-  behavior and psychological reactance}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Journal of Consumer Research}{6}{4}{389--405}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Borle et~al.(2005)Borle, Boatwright, Kadane, Nunes, and
+  Shmueli]{borle2005assortment}
+Sharad Borle, Peter Boatwright, Joseph~B. Kadane, Joseph~C. Nunes, and Galit
+  Shmueli.
+\newblock The effect of product assortment changes on customer retention.
+\newblock \emph{Marketing Science}, 24\penalty0 (4):\penalty0 616--622, 2005.
 
-\bibitem [\protect \citeauthoryear {%
-Dhar%
-, Huber%
-\BCBL {}\ \BBA {} Khan%
-}{%
-Dhar%
-\ \protect \BOthers {.}}{%
-{\protect \APACyear {2007}}%
-}]{%
-dhar2007shopping}
-\APACinsertmetastar {%
-dhar2007shopping}%
-\begin{APACrefauthors}%
-Dhar, R.%
-, Huber, J.%
-\BCBL {}\ \BBA {} Khan, U.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2007}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {The Shopping Momentum Effect} {The shopping momentum
-  effect}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Journal of Marketing Research}{44}{3}{370--378}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Briesch et~al.(2009)Briesch, Chintagunta, and
+  Fox]{briesch2009assortment}
+Richard~A. Briesch, Pradeep~K. Chintagunta, and Edward~J. Fox.
+\newblock How does assortment affect grocery store choice?
+\newblock \emph{Journal of Marketing Research}, 46\penalty0 (2):\penalty0
+  176--189, 2009.
 
-\bibitem [\protect \citeauthoryear {%
-Epstude%
-\ \BBA {} Roese%
-}{%
-Epstude%
-\ \BBA {} Roese%
-}{%
-{\protect \APACyear {2008}}%
-}]{%
-epstude2008functional}
-\APACinsertmetastar {%
-epstude2008functional}%
-\begin{APACrefauthors}%
-Epstude, K.%
-\BCBT {}\ \BBA {} Roese, N\BPBI J.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2008}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {The Functional Theory of Counterfactual Thinking} {The
-  functional theory of counterfactual thinking}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Personality and Social Psychology
-  Review}{12}{2}{168--192}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Broniarczyk et~al.(1998)Broniarczyk, Hoyer, and
+  McAlister]{broniarczyk1998assortment}
+Susan~M. Broniarczyk, Wayne~D. Hoyer, and Leigh McAlister.
+\newblock Consumers' perceptions of the assortment offered in a grocery
+  category: The impact of item reduction.
+\newblock \emph{Journal of Marketing Research}, 35\penalty0 (2):\penalty0
+  166--176, 1998.
 
-\bibitem [\protect \citeauthoryear {%
-Fitzsimons%
-}{%
-Fitzsimons%
-}{%
-{\protect \APACyear {2000}}%
-}]{%
-fitzsimons2000consumer}
-\APACinsertmetastar {%
-fitzsimons2000consumer}%
-\begin{APACrefauthors}%
-Fitzsimons, G\BPBI J.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2000}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Consumer Response to Stockouts} {Consumer response to
-  stockouts}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Journal of Consumer Research}{27}{2}{249--266}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Bronnenberg et~al.(2024)Bronnenberg, Klein, and
+  Xu]{bronnenberg2024time}
+Bart~J. Bronnenberg, Tobias~J. Klein, and Yan Xu.
+\newblock Consumer time budgets and grocery shopping behavior.
+\newblock \emph{Management Science}, 70\penalty0 (3):\penalty0 1596--1612,
+  2024.
 
-\bibitem [\protect \citeauthoryear {%
-Gehring%
-\ \BBA {} Schaudt%
-}{%
-Gehring%
-\ \BBA {} Schaudt%
-}{%
-{\protect \APACyear {2026}}%
-}]{%
-gehring2026insuring}
-\APACinsertmetastar {%
-gehring2026insuring}%
-\begin{APACrefauthors}%
-Gehring, K.%
-\BCBT {}\ \BBA {} Schaudt, P.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2026}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Insuring peace: Index-based livestock insurance,
-  droughts, and conflict} {Insuring peace: Index-based livestock insurance,
-  droughts, and conflict}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{The Quarterly Journal of Economics}{}{}{qjag005}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Che et~al.(2012)Che, Chen, and Chen]{che2012outofstock}
+Hai Che, Xinlei~(Jack) Chen, and Yuxin Chen.
+\newblock Investigating effects of out-of-stock on consumer stockkeeping unit
+  choice.
+\newblock \emph{Journal of Marketing Research}, 49\penalty0 (4):\penalty0
+  502--513, 2012.
 
-\bibitem [\protect \citeauthoryear {%
-Gollwitzer%
-}{%
-Gollwitzer%
-}{%
-{\protect \APACyear {1990}}%
-}]{%
-gollwitzer1990action}
-\APACinsertmetastar {%
-gollwitzer1990action}%
-\begin{APACrefauthors}%
-Gollwitzer, P\BPBI M.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{1990}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Action Phases and Mind-Sets} {Action phases and
-  mind-sets}.{\BBCQ}
-\newblock
-\BIn{} E\BPBI T.~Higgins\ \BBA {} R\BPBI M.~Sorrentino\ (\BEDS), \APACrefbtitle
-  {Handbook of Motivation and Cognition: Foundations of Social Behavior}
-  {Handbook of motivation and cognition: Foundations of social behavior}\
-  (\BVOL~2, \BPGS\ 53--92).
-\newblock
-\APACaddressPublisher{New York}{Guilford Press}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Chintagunta(1999)]{chintagunta1999variety}
+Pradeep~K. Chintagunta.
+\newblock Variety seeking, purchase timing, and the ``lightning bolt'' brand
+  choice model.
+\newblock \emph{Management Science}, 45\penalty0 (4):\penalty0 486--498, 1999.
 
-\bibitem [\protect \citeauthoryear {%
-Gruber%
-}{%
-Gruber%
-}{%
-{\protect \APACyear {1994}}%
-}]{%
-Gruber1994}
-\APACinsertmetastar {%
-Gruber1994}%
-\begin{APACrefauthors}%
-Gruber, J.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{1994}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {The Incidence of Mandated Maternity Benefits} {The
-  incidence of mandated maternity benefits}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{American Economic Review}{84}{3}{622--641}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Chintala et~al.(2024)Chintala, Liaukonyt{\.e}, and
+  Yang]{chintala2024browsing}
+Sai~Chand Chintala, J{\=u}ra Liaukonyt{\.e}, and Nathan Yang.
+\newblock Browsing the aisles or browsing the app? how online grocery shopping
+  is changing what we buy.
+\newblock \emph{Marketing Science}, 43\penalty0 (3):\penalty0 506--522, 2024.
 
-\bibitem [\protect \citeauthoryear {%
-Kappes%
-\ \BBA {} Oettingen%
-}{%
-Kappes%
-\ \BBA {} Oettingen%
-}{%
-{\protect \APACyear {2016}}%
-}]{%
-Kappes2016}
-\APACinsertmetastar {%
-Kappes2016}%
-\begin{APACrefauthors}%
-Kappes, H\BPBI B.%
-\BCBT {}\ \BBA {} Oettingen, G.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2016}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Mental Contrasting of Future and Reality to Master
-  Negative Feedback} {Mental contrasting of future and reality to master
-  negative feedback}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Motivation Science}{2}{3}{169--181}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Dhar et~al.(2007)Dhar, Huber, and Khan]{dhar2007shopping}
+Ravi Dhar, Joel Huber, and Uzma Khan.
+\newblock The shopping momentum effect.
+\newblock \emph{Journal of Marketing Research}, 44\penalty0 (3):\penalty0
+  370--378, 2007.
 
-\bibitem [\protect \citeauthoryear {%
-Kruglanski%
-\ \protect \BOthers {.}}{%
-Kruglanski%
-\ \protect \BOthers {.}}{%
-{\protect \APACyear {2002}}%
-}]{%
-kruglanski2002theory}
-\APACinsertmetastar {%
-kruglanski2002theory}%
-\begin{APACrefauthors}%
-Kruglanski, A\BPBI W.%
-, Shah, J\BPBI Y.%
-, Fishbach, A.%
-, Friedman, R.%
-, Chun, W\BPBI Y.%
-\BCBL {}\ \BBA {} Sleeth-Keppler, D.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2002}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {A Theory of Goal Systems} {A theory of goal
-  systems}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Advances in Experimental Social
-  Psychology}{34}{}{331--378}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Epstude and Roese(2008)]{epstude2008functional}
+Kai Epstude and Neal~J. Roese.
+\newblock The functional theory of counterfactual thinking.
+\newblock \emph{Personality and Social Psychology Review}, 12\penalty0
+  (2):\penalty0 168--192, 2008.
 
-\bibitem [\protect \citeauthoryear {%
-Levine%
-\ \BBA {} Hristakeva%
-}{%
-Levine%
-\ \BBA {} Hristakeva%
-}{%
-{\protect \APACyear {2025}}%
-}]{%
-Levine2025}
-\APACinsertmetastar {%
-Levine2025}%
-\begin{APACrefauthors}%
-Levine, J.%
-\BCBT {}\ \BBA {} Hristakeva, S.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2025}{}{}.
-\newblock
-\APACrefbtitle {Stopping Shopping at Stop \& Shop: The Effects of a Labor
-  Strike on Consumer Demand.} {Stopping shopping at stop \& shop: The effects
-  of a labor strike on consumer demand.}
-\newblock
-\APACrefnote{Working paper}
-\PrintBackRefs{\CurrentBib}
+\bibitem[Fitzsimons(2000)]{fitzsimons2000consumer}
+Gavan~J. Fitzsimons.
+\newblock Consumer response to stockouts.
+\newblock \emph{Journal of Consumer Research}, 27\penalty0 (2):\penalty0
+  249--266, 2000.
 
-\bibitem [\protect \citeauthoryear {%
-Masicampo%
-\ \BBA {} Baumeister%
-}{%
-Masicampo%
-\ \BBA {} Baumeister%
-}{%
-{\protect \APACyear {2011}}%
-}]{%
-masicampo2011consider}
-\APACinsertmetastar {%
-masicampo2011consider}%
-\begin{APACrefauthors}%
-Masicampo, E\BPBI J.%
-\BCBT {}\ \BBA {} Baumeister, R\BPBI F.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2011}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Consider It Done! Plan Making Can Eliminate the
-  Cognitive Effects of Unfulfilled Goals} {Consider it done! plan making can
-  eliminate the cognitive effects of unfulfilled goals}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Journal of Personality and Social
-  Psychology}{101}{4}{667--683}.
-\PrintBackRefs{\CurrentBib}
+\bibitem[Gehring and Schaudt(2026)]{gehring2026insuring}
+Kai Gehring and Paul Schaudt.
+\newblock Insuring peace: Index-based livestock insurance, droughts, and
+  conflict.
+\newblock \emph{The Quarterly Journal of Economics}, page qjag005, 2026.
+
+\bibitem[Gollwitzer(1990)]{gollwitzer1990action}
+Peter~M. Gollwitzer.
+\newblock Action phases and mind-sets.
+\newblock In E.~Tory Higgins and Richard~M. Sorrentino, editors, \emph{Handbook
+  of Motivation and Cognition: Foundations of Social Behavior}, volume~2, pages
+  53--92. Guilford Press, New York, 1990.
+
+\bibitem[Gruber(1994)]{Gruber1994}
+Jonathan Gruber.
+\newblock The incidence of mandated maternity benefits.
+\newblock \emph{American Economic Review}, 84\penalty0 (3):\penalty0 622--641,
+  1994.
+
+\bibitem[Haans and Gijsbrechts(2010)]{haans2010closing}
+Hans Haans and Els Gijsbrechts.
+\newblock Sales drops from closing shops: Assessing the impact of store outlet
+  closures on retail chain revenue.
+\newblock \emph{Journal of Marketing Research}, 47\penalty0 (6):\penalty0
+  1025--1040, 2010.
+
+\bibitem[Jing and Lewis(2011)]{jing2011stockouts}
+Xiaoqing Jing and Michael Lewis.
+\newblock Stockouts in online retailing.
+\newblock \emph{Journal of Marketing Research}, 48\penalty0 (2):\penalty0
+  342--354, 2011.
+
+\bibitem[Kruglanski et~al.(2002)Kruglanski, Shah, Fishbach, Friedman, Chun, and
+  Sleeth-Keppler]{kruglanski2002theory}
+Arie~W. Kruglanski, James~Y. Shah, Ayelet Fishbach, Ron Friedman, Woo~Young
+  Chun, and David Sleeth-Keppler.
+\newblock A theory of goal systems.
+\newblock \emph{Advances in Experimental Social Psychology}, 34:\penalty0
+  331--378, 2002.
+
+\bibitem[Lattin(1987)]{lattin1987balanced}
+James~M. Lattin.
+\newblock A model of balanced choice behavior.
+\newblock \emph{Marketing Science}, 6\penalty0 (1):\penalty0 48--65, 1987.
+
+\bibitem[Levine and Hristakeva(2025)]{Levine2025}
+Julia Levine and Sylvia Hristakeva.
+\newblock Stopping shopping at stop \& shop: The effects of a labor strike on
+  consumer demand.
+\newblock Working paper, 2025.
+
+\bibitem[Levine and Seiler(2023)]{levine2023state}
+Julia Levine and Stephan Seiler.
+\newblock Identifying state dependence in brand choice: Evidence from
+  hurricanes.
+\newblock \emph{Marketing Science}, 42\penalty0 (5):\penalty0 934--957, 2023.
+
+\bibitem[Masicampo and Baumeister(2011)]{masicampo2011consider}
+E.~J. Masicampo and Roy~F. Baumeister.
+\newblock Consider it done! plan making can eliminate the cognitive effects of
+  unfulfilled goals.
+\newblock \emph{Journal of Personality and Social Psychology}, 101\penalty0
+  (4):\penalty0 667--683, 2011.
+
+\bibitem[Seenivasan et~al.(2016)Seenivasan, Sudhir, and
+  Talukdar]{seenivasan2016store}
+Satheesh Seenivasan, K.~Sudhir, and Debabrata Talukdar.
+\newblock Do store brands aid store loyalty?
+\newblock \emph{Management Science}, 62\penalty0 (3):\penalty0 802--816, 2016.
+
+\bibitem[Simonson(1990)]{simonson1990variety}
+Itamar Simonson.
+\newblock The effect of purchase quantity and timing on variety-seeking
+  behavior.
+\newblock \emph{Journal of Marketing Research}, 27\penalty0 (2):\penalty0
+  150--162, 1990.
+
+\bibitem[von Wangenheim and Bay{\'o}n(2007)]{wangenheim2007overbooking}
+Florian von Wangenheim and Tom{\'a}s Bay{\'o}n.
+\newblock Behavioral consequences of overbooking service capacity.
+\newblock \emph{Journal of Marketing}, 71\penalty0 (4):\penalty0 36--47, 2007.
+
+\bibitem[Ye and Shankar(2025)]{ye2025close}
+Taotao Ye and Venkatesh Shankar.
+\newblock Close a store to open a pandora's box? the effects of store closure
+  on sales, omnichannel shopping, and mobile app usage.
+\newblock \emph{Marketing Science}, 44\penalty0 (4):\penalty0 820--837, 2025.
 
 \end{thebibliography}
