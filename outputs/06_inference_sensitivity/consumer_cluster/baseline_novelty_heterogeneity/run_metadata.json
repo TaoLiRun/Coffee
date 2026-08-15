@@ -1,0 +1,16 @@
+{
+  "generated_at_utc": "2026-08-14T15:03:47.577276+00:00",
+  "family": "baseline_heterogeneity",
+  "variance_estimator": "CRV1",
+  "cluster": "member_id",
+  "inference_role": "sensitivity; closure_event_id remains primary",
+  "inputs": [
+    "outputs/03_main_18_closures/novelty_member_first_ddd_h4/estimation_sample.csv",
+    "outputs/paper/mechanism_baseline_novelty/inputs/episode_window_novelty_components.csv",
+    "outputs/paper/mechanism_baseline_novelty/inputs/episode_window_order_counts.csv"
+  ],
+  "python": "3.11.8",
+  "pyfixest": "0.50.1",
+  "eligible_traits": 18525,
+  "regression_rows_before_estimator_singleton_handling": 80985
+}

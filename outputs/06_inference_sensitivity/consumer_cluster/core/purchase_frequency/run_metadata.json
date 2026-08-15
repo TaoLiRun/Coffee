@@ -1,0 +1,16 @@
+{
+  "generated_at_utc": "2026-08-14T15:02:28.784032+00:00",
+  "family": "core",
+  "variance_estimator": "CRV1",
+  "cluster": "member_id",
+  "inference_role": "sensitivity; closure_event_id remains primary",
+  "inputs": [
+    "outputs/03_main_18_closures/purchase_frequency_ddd_h4/estimation_sample.csv"
+  ],
+  "python": "3.11.8",
+  "pyfixest": "0.50.1",
+  "label": "purchase_frequency",
+  "outcome": "n_purchases",
+  "observations": 321184,
+  "consumer_clusters_before_estimator_singleton_handling": 40148
+}

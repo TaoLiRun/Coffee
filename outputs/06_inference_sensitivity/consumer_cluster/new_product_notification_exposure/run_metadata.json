@@ -1,0 +1,14 @@
+{
+  "generated_at_utc": "2026-08-14T15:13:49.846376+00:00",
+  "family": "notifications",
+  "variance_estimator": "CRV1",
+  "cluster": "member_id",
+  "inference_role": "sensitivity; closure_event_id remains primary",
+  "inputs": [
+    "outputs/05_robustness/new_product_notification_exposure/new_product_push_panel.parquet"
+  ],
+  "python": "3.11.8",
+  "pyfixest": "0.50.1",
+  "panel_rows": 361332,
+  "members": 40148
+}

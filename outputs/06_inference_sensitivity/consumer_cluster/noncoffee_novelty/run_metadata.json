@@ -1,0 +1,79 @@
+{
+  "generated_at_utc": "2026-08-14T15:48:05.510656+00:00",
+  "family": "noncoffee",
+  "variance_estimator": "CRV1",
+  "cluster": "member_id",
+  "inference_role": "sensitivity; closure_event_id remains primary",
+  "inputs": [
+    "outputs/03_main_18_closures/novelty_member_first_ddd_h4/estimation_sample.csv",
+    "/home/litao/Coffee/data/data1031/order_commodity_result.csv"
+  ],
+  "python": "3.11.8",
+  "pyfixest": "0.50.1",
+  "raw_audit": {
+    "raw_source": "/home/litao/Coffee/data/data1031/order_commodity_result.csv",
+    "raw_rows": 10631943,
+    "global_category_rows": {
+      "coffee": 7651380,
+      "food": 1010912,
+      "noncoffee_drink": 1947508,
+      "other_noncoffee": 22143
+    },
+    "global_distinct_names": {
+      "coffee": 97,
+      "food": 103,
+      "noncoffee_drink": 168,
+      "other_noncoffee": 81
+    },
+    "nonempty_category_fields_per_row": {
+      "1": 10631943
+    },
+    "sample_member_count": 40148,
+    "sample_noncoffee_rows_before_date_validation": {
+      "food": 143178,
+      "noncoffee_drink": 263784,
+      "other_noncoffee": 3224
+    },
+    "sample_invalid_timestamp_rows": {
+      "food": 18,
+      "noncoffee_drink": 9,
+      "other_noncoffee": 0
+    },
+    "sample_noncoffee_rows_retained": 410159,
+    "sample_noncoffee_members": 35511,
+    "sample_noncoffee_product_keys": 328,
+    "exact_name_overlaps_across_noncoffee_categories": [
+      {
+        "left": "food",
+        "right": "noncoffee_drink",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "left": "food",
+        "right": "other_noncoffee",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "left": "noncoffee_drink",
+        "right": "other_noncoffee",
+        "count": 1,
+        "examples": [
+          "\u6930\u5b50\u6c34\u996e\u6599"
+        ]
+      }
+    ]
+  },
+  "panel_rows": 321184,
+  "members": 40148,
+  "contributing_consumer_clusters_by_outcome": {
+    "variety_seeking": 23363,
+    "novelty_all_noncoffee": 9824,
+    "any_purchase_all_noncoffee": 40148,
+    "novelty_noncoffee_consumables": 9818,
+    "any_purchase_noncoffee_consumables": 40148,
+    "novelty_noncoffee_drinks": 7308,
+    "any_purchase_noncoffee_drinks": 40148
+  }
+}

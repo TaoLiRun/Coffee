@@ -1,0 +1,2 @@
+outcome,wald_chi2,pvalue_chi2,f_statistic,df_num,df_denom,pvalue_f_cluster_df,cluster,clusters
+new_campaigns_per_day,1.5767061203823869,0.6646830077297765,0.5255687067941289,3,40147,0.6646855865602186,member_id,40148

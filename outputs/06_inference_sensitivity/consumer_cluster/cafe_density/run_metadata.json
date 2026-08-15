@@ -1,0 +1,21 @@
+{
+  "generated_at_utc": "2026-08-14T15:29:08.730024+00:00",
+  "family": "cafe_density",
+  "variance_estimator": "CRV1",
+  "cluster": "member_id",
+  "inference_role": "sensitivity; closure_event_id remains primary",
+  "inputs": [
+    "outputs/03_main_18_closures/novelty_member_first_ddd_h4/estimation_sample.csv",
+    "outputs/03_main_18_closures/novelty_market_new_ddd_h4/estimation_sample.csv",
+    "outputs/05_robustness/time_invariant_cafe_density/member_first_regression_episode_density.csv",
+    "outputs/05_robustness/time_invariant_cafe_density/market_new_regression_episode_density.csv"
+  ],
+  "python": "3.11.8",
+  "pyfixest": "0.50.1",
+  "member_first_rows": 99644,
+  "market_new_rows": 99644,
+  "initial_singleton_drops": 0,
+  "market_singleton_drops": 0,
+  "wild_cluster_pvalues": "not computed for consumer clusters",
+  "unused_primary_model_consumer_clusters": 23363
+}

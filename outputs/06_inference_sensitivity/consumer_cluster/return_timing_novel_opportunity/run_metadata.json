@@ -1,0 +1,15 @@
+{
+  "generated_at_utc": "2026-08-14T15:19:41.904949+00:00",
+  "family": "return_timing",
+  "variance_estimator": "CRV1",
+  "cluster": "member_id",
+  "inference_role": "sensitivity; closure_event_id remains primary",
+  "inputs": [
+    "/tmp/treated_first_return_exposure.csv",
+    "/tmp/treated_return_week_novel_opportunity.csv"
+  ],
+  "python": "3.11.8",
+  "pyfixest": "0.50.1",
+  "first_return_rows": 2402,
+  "actual_opportunity_rows": 2402
+}

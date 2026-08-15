@@ -1,0 +1,4 @@
+spec,formula,n,r2,r2_within
+binary_collapsed,n_purchases ~ post_X_treated + post_X_disp + post_X_treated_X_disp | event_fe_id + rel_t + calendar_month,321184,0.5622840197658391,0.01302437864148398
+binary_collapsed_group_effects,n_purchases ~ post_X_treated_X_low + post_X_disp + post_X_treated_X_high | event_fe_id + rel_t + calendar_month,321184,0.5622840197625216,0.01302437863400363
+score_collapsed,n_purchases ~ post_X_treated + post_X_score + post_X_treated_X_score | event_fe_id + rel_t + calendar_month,321184,0.5645966939198838,0.01823906833356914

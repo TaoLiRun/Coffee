@@ -1,0 +1,3 @@
+specification,term,estimate,se,pvalue_two_sided,pvalue_one_sided_positive,pretrend_pvalue,n,n_clusters
+with_order_adjustment,post_X_treated_X_incidence_X_baseline_novelty,0.02939350986366988,0.016009795113738852,0.06638006436047572,0.03319003218023786,0.7193179394735326,79578,16459
+without_order_adjustment,post_X_treated_X_incidence_X_baseline_novelty,0.022926936029348616,0.015213551149755797,0.13182792213174443,0.06591396106587222,0.6628233681314208,79578,16459
