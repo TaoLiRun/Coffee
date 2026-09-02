@@ -1,4 +1,4 @@
-\begin{thebibliography}{14}
+\begin{thebibliography}{36}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -12,6 +12,12 @@ Eric~T. Anderson, Gavan~J. Fitzsimons, and Duncan Simester.
 \newblock \emph{Management Science}, 52\penalty0 (11):\penalty0 1751--1763,
   2006.
 
+\bibitem[Carlson et~al.(2013)Carlson, Meloy, and Miller]{carlson2013goal}
+Kurt~A. Carlson, Margaret~G. Meloy, and Elizabeth~G. Miller.
+\newblock Goal reversion in consumer choice.
+\newblock \emph{Journal of Consumer Research}, 39\penalty0 (5):\penalty0
+  918--930, 2013.
+
 \bibitem[Che et~al.(2012)Che, Chen, and Chen]{che2012outofstock}
 Hai Che, Xinlei~(Jack) Chen, and Yuxin Chen.
 \newblock Investigating effects of out-of-stock on consumer stockkeeping unit
@@ -19,11 +25,31 @@ Hai Che, Xinlei~(Jack) Chen, and Yuxin Chen.
 \newblock \emph{Journal of Marketing Research}, 49\penalty0 (4):\penalty0
   502--513, 2012.
 
+\bibitem[Emont(2025)]{emont2025coffeewar}
+Jon Emont.
+\newblock Roasted duck, plums and cheese: The bizarre brews fueling china's
+  coffee war.
+\newblock \emph{The Wall Street Journal}, 2025.
+\newblock URL
+  \url{https://www.wsj.com/arts-culture/food-cooking/china-coffee-starbucks-luckin-bffe226d}.
+
 \bibitem[Epstude and Roese(2008)]{epstude2008functional}
 Kai Epstude and Neal~J. Roese.
 \newblock The functional theory of counterfactual thinking.
 \newblock \emph{Personality and Social Psychology Review}, 12\penalty0
   (2):\penalty0 168--192, 2008.
+
+\bibitem[Erdem and Keane(1996)]{erdem1996uncertainty}
+T{\"u}lin Erdem and Michael~P. Keane.
+\newblock Decision-making under uncertainty: Capturing dynamic brand choice
+  processes in turbulent consumer goods markets.
+\newblock \emph{Marketing Science}, 15\penalty0 (1):\penalty0 1--20, 1996.
+
+\bibitem[Fisher and Price(1992)]{fisher1992investigation}
+Robert~J Fisher and Linda~L Price.
+\newblock An investigation into the social context of early adoption behavior.
+\newblock \emph{Journal of Consumer Research}, 19\penalty0 (3):\penalty0
+  477--486, 1992.
 
 \bibitem[Fitzsimons(2000)]{fitzsimons2000consumer}
 Gavan~J. Fitzsimons.
@@ -31,11 +57,24 @@ Gavan~J. Fitzsimons.
 \newblock \emph{Journal of Consumer Research}, 27\penalty0 (2):\penalty0
   249--266, 2000.
 
+\bibitem[Friedman et~al.(2025)Friedman, Voichek, and Dhar]{friedman2025road}
+Elizabeth M.~S. Friedman, Guy Voichek, and Ravi Dhar.
+\newblock The (better) road not taken: Setting a goal reduces switching to more
+  effective alternatives.
+\newblock \emph{Journal of Consumer Research}, 2025.
+
 \bibitem[Gruber(1994)]{Gruber1994}
 Jonathan Gruber.
 \newblock The incidence of mandated maternity benefits.
 \newblock \emph{American Economic Review}, 84\penalty0 (3):\penalty0 622--641,
   1994.
+
+\bibitem[Gullo et~al.(2019)Gullo, Berger, Etkin, and
+  Bollinger]{gullo2019timeofday}
+Kelley Gullo, Jonah Berger, Jordan Etkin, and Bryan Bollinger.
+\newblock Does time of day affect variety-seeking?
+\newblock \emph{Journal of Consumer Research}, 46\penalty0 (1):\penalty0
+  20--35, 2019.
 
 \bibitem[Haans and Gijsbrechts(2010)]{haans2010closing}
 Hans Haans and Els Gijsbrechts.
@@ -44,11 +83,43 @@ Hans Haans and Els Gijsbrechts.
 \newblock \emph{Journal of Marketing Research}, 47\penalty0 (6):\penalty0
   1025--1040, 2010.
 
+\bibitem[Haddon(2025)]{haddon2025tacobell}
+Heather Haddon.
+\newblock Taco bell knows exactly what you want to eat at 2 a.m.
+\newblock \emph{The Wall Street Journal}, 2025.
+\newblock URL
+  \url{https://www.wsj.com/business/retail/taco-bell-limited-time-offer-38d75df8}.
+
+\bibitem[Hirschman(1980)]{hirschman1980innovativeness}
+Elizabeth~C Hirschman.
+\newblock Innovativeness, novelty seeking, and consumer creativity.
+\newblock \emph{Journal of consumer research}, 7\penalty0 (3):\penalty0
+  283--295, 1980.
+
+\bibitem[Jhang and Lynch(2015)]{jhang2015interruption}
+Ji~Hoon Jhang and Jr. Lynch, John~G.
+\newblock Pardon the interruption: Goal proximity, perceived spare time, and
+  impatience.
+\newblock \emph{Journal of Consumer Research}, 41\penalty0 (5):\penalty0
+  1267--1283, 2015.
+
 \bibitem[Jing and Lewis(2011)]{jing2011stockouts}
 Xiaoqing Jing and Michael Lewis.
 \newblock Stockouts in online retailing.
 \newblock \emph{Journal of Marketing Research}, 48\penalty0 (2):\penalty0
   342--354, 2011.
+
+\bibitem[Levav and Zhu(2009)]{levav2009freedom}
+Jonathan Levav and Rui Zhu.
+\newblock Seeking freedom through variety.
+\newblock \emph{Journal of Consumer Research}, 36\penalty0 (4):\penalty0
+  600--610, 2009.
+
+\bibitem[Levine and Hristakeva(2026)]{Levine2026}
+Julia Levine and Sylvia Hristakeva.
+\newblock Stopping shopping at stop \& shop: The effects of a labor strike on
+  consumer demand.
+\newblock Working paper, 2026.
 
 \bibitem[Levine and Seiler(2023)]{levine2023state}
 Julia Levine and Stephan Seiler.
@@ -70,6 +141,44 @@ E.~J. Masicampo and Roy~F. Baumeister.
 \newblock \emph{Journal of Personality and Social Psychology}, 101\penalty0
   (4):\penalty0 667--683, 2011.
 
+\bibitem[Menon and Kahn(1995)]{menon1995context}
+Satya Menon and Barbara~E. Kahn.
+\newblock The impact of context on variety seeking in product choices.
+\newblock \emph{Journal of Consumer Research}, 22\penalty0 (3):\penalty0
+  285--295, 1995.
+
+\bibitem[O'Donnell et~al.(2023)O'Donnell, Critcher, and
+  Nelson]{odonnell2023bundle}
+Michael O'Donnell, Clayton~R. Critcher, and Leif~D. Nelson.
+\newblock Bundle selection and variety seeking: The importance of
+  combinatorics.
+\newblock \emph{Journal of Consumer Research}, 49\penalty0 (5):\penalty0
+  861--881, 2023.
+
+\bibitem[Ostlund(1974)]{ostlund1974perceived}
+Lyman~E Ostlund.
+\newblock Perceived innovation attributes as predictors of innovativeness.
+\newblock \emph{Journal of consumer research}, pages 23--29, 1974.
+
+\bibitem[Rafieian et~al.(2024)Rafieian, Huang, and Kahn]{rafieian2024goals}
+Hoori Rafieian, Yanliu Huang, and Barbara~E. Kahn.
+\newblock The effect of pursuing self-regulatory goals on variety seeking.
+\newblock \emph{Journal of Consumer Research}, 50\penalty0 (6):\penalty0
+  1157--1171, 2024.
+
+\bibitem[Raju(1980)]{raju1980optimum}
+Puthankurissi~S Raju.
+\newblock Optimum stimulation level: Its relationship to personality,
+  demographics, and exploratory behavior.
+\newblock \emph{Journal of consumer research}, 7\penalty0 (3):\penalty0
+  272--282, 1980.
+
+\bibitem[Roese(1994)]{roese1994functional}
+Neal~J. Roese.
+\newblock The functional basis of counterfactual thinking.
+\newblock \emph{Journal of Personality and Social Psychology}, 66\penalty0
+  (5):\penalty0 805--818, 1994.
+
 \bibitem[Seenivasan et~al.(2016)Seenivasan, Sudhir, and
   Talukdar]{seenivasan2016store}
 Satheesh Seenivasan, K.~Sudhir, and Debabrata Talukdar.
@@ -83,10 +192,46 @@ Itamar Simonson.
 \newblock \emph{Journal of Marketing Research}, 27\penalty0 (2):\penalty0
   150--162, 1990.
 
+\bibitem[Steenkamp and Gielens(2003)]{steenkamp2003trial}
+Jan-Benedict E.~M. Steenkamp and Katrijn Gielens.
+\newblock Consumer and market drivers of the trial probability of new consumer
+  packaged goods.
+\newblock \emph{Journal of Consumer Research}, 30\penalty0 (3):\penalty0
+  368--384, 2003.
+
+\bibitem[Steenkamp and Baumgartner(1992)]{steenkamp1992role}
+Jan-Benedict~EM Steenkamp and Hans Baumgartner.
+\newblock The role of optimum stimulation level in exploratory consumer
+  behavior.
+\newblock \emph{Journal of consumer research}, 19\penalty0 (3):\penalty0
+  434--448, 1992.
+
+\bibitem[Talay et~al.(2024)Talay, Pauwels, and Seggie]{talay2024recession}
+M.~Berk Talay, Koen Pauwels, and Steven~H. Seggie.
+\newblock Why and when to launch new products during a recession: An empirical
+  investigation of the {U.K.} {FMCG} industry and the {U.S.} automobile
+  industry.
+\newblock \emph{Journal of the Academy of Marketing Science}, 52:\penalty0
+  576--598, 2024.
+
 \bibitem[von Wangenheim and Bay{\'o}n(2007)]{wangenheim2007overbooking}
 Florian von Wangenheim and Tom{\'a}s Bay{\'o}n.
 \newblock Behavioral consequences of overbooking service capacity.
 \newblock \emph{Journal of Marketing}, 71\penalty0 (4):\penalty0 36--47, 2007.
+
+\bibitem[Wang(2024)]{chinadaily2026starbucks}
+Zhuoqiong Wang.
+\newblock Starbucks china records high performance in county-level stores.
+\newblock \emph{China Daily}, 2024.
+\newblock URL
+  \url{https://www.chinadaily.com.cn/a/202410/31/WS67231b00a310f1265a1caab8.html}.
+
+\bibitem[Ward(2025)]{ward2025recession}
+Lisa Ward.
+\newblock Yes or no: It's smart to launch a new product in a recession.
+\newblock \emph{The Wall Street Journal}, 2025.
+\newblock URL
+  \url{https://www.wsj.com/business/entrepreneurship/recession-new-product-launch-49163662}.
 
 \bibitem[Ye and Shankar(2025)]{ye2025close}
 Taotao Ye and Venkatesh Shankar.
