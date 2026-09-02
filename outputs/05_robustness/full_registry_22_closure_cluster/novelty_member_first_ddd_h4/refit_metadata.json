@@ -1,0 +1,9 @@
+{
+  "source_sample": "outputs\\05_robustness\\full_registry_22\\variety_seeking_unbalanced\\estimation_sample.csv",
+  "closure_registry": "outputs\\customer-store\\closure_pair_registry_full.csv",
+  "cluster_col": "closure_event_id",
+  "outcome": "variety_seeking",
+  "event_study_reference_period": -1,
+  "closure_events": 22,
+  "sample_rows_before_outcome_na_drop": 358864
+}
