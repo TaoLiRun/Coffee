@@ -1,4 +1,4 @@
-\begin{thebibliography}{26}
+\begin{thebibliography}{14}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -12,65 +12,12 @@ Eric~T. Anderson, Gavan~J. Fitzsimons, and Duncan Simester.
 \newblock \emph{Management Science}, 52\penalty0 (11):\penalty0 1751--1763,
   2006.
 
-\bibitem[Boatwright and Nunes(2001)]{boatwright2001assortment}
-Peter Boatwright and Joseph~C. Nunes.
-\newblock Reducing assortment: An attribute-based approach.
-\newblock \emph{Journal of Marketing}, 65\penalty0 (3):\penalty0 50--63, 2001.
-
-\bibitem[Borle et~al.(2005)Borle, Boatwright, Kadane, Nunes, and
-  Shmueli]{borle2005assortment}
-Sharad Borle, Peter Boatwright, Joseph~B. Kadane, Joseph~C. Nunes, and Galit
-  Shmueli.
-\newblock The effect of product assortment changes on customer retention.
-\newblock \emph{Marketing Science}, 24\penalty0 (4):\penalty0 616--622, 2005.
-
-\bibitem[Briesch et~al.(2009)Briesch, Chintagunta, and
-  Fox]{briesch2009assortment}
-Richard~A. Briesch, Pradeep~K. Chintagunta, and Edward~J. Fox.
-\newblock How does assortment affect grocery store choice?
-\newblock \emph{Journal of Marketing Research}, 46\penalty0 (2):\penalty0
-  176--189, 2009.
-
-\bibitem[Broniarczyk et~al.(1998)Broniarczyk, Hoyer, and
-  McAlister]{broniarczyk1998assortment}
-Susan~M. Broniarczyk, Wayne~D. Hoyer, and Leigh McAlister.
-\newblock Consumers' perceptions of the assortment offered in a grocery
-  category: The impact of item reduction.
-\newblock \emph{Journal of Marketing Research}, 35\penalty0 (2):\penalty0
-  166--176, 1998.
-
-\bibitem[Bronnenberg et~al.(2024)Bronnenberg, Klein, and
-  Xu]{bronnenberg2024time}
-Bart~J. Bronnenberg, Tobias~J. Klein, and Yan Xu.
-\newblock Consumer time budgets and grocery shopping behavior.
-\newblock \emph{Management Science}, 70\penalty0 (3):\penalty0 1596--1612,
-  2024.
-
 \bibitem[Che et~al.(2012)Che, Chen, and Chen]{che2012outofstock}
 Hai Che, Xinlei~(Jack) Chen, and Yuxin Chen.
 \newblock Investigating effects of out-of-stock on consumer stockkeeping unit
   choice.
 \newblock \emph{Journal of Marketing Research}, 49\penalty0 (4):\penalty0
   502--513, 2012.
-
-\bibitem[Chintagunta(1999)]{chintagunta1999variety}
-Pradeep~K. Chintagunta.
-\newblock Variety seeking, purchase timing, and the ``lightning bolt'' brand
-  choice model.
-\newblock \emph{Management Science}, 45\penalty0 (4):\penalty0 486--498, 1999.
-
-\bibitem[Chintala et~al.(2024)Chintala, Liaukonyt{\.e}, and
-  Yang]{chintala2024browsing}
-Sai~Chand Chintala, J{\=u}ra Liaukonyt{\.e}, and Nathan Yang.
-\newblock Browsing the aisles or browsing the app? how online grocery shopping
-  is changing what we buy.
-\newblock \emph{Marketing Science}, 43\penalty0 (3):\penalty0 506--522, 2024.
-
-\bibitem[Dhar et~al.(2007)Dhar, Huber, and Khan]{dhar2007shopping}
-Ravi Dhar, Joel Huber, and Uzma Khan.
-\newblock The shopping momentum effect.
-\newblock \emph{Journal of Marketing Research}, 44\penalty0 (3):\penalty0
-  370--378, 2007.
 
 \bibitem[Epstude and Roese(2008)]{epstude2008functional}
 Kai Epstude and Neal~J. Roese.
@@ -83,19 +30,6 @@ Gavan~J. Fitzsimons.
 \newblock Consumer response to stockouts.
 \newblock \emph{Journal of Consumer Research}, 27\penalty0 (2):\penalty0
   249--266, 2000.
-
-\bibitem[Gehring and Schaudt(2026)]{gehring2026insuring}
-Kai Gehring and Paul Schaudt.
-\newblock Insuring peace: Index-based livestock insurance, droughts, and
-  conflict.
-\newblock \emph{The Quarterly Journal of Economics}, page qjag005, 2026.
-
-\bibitem[Gollwitzer(1990)]{gollwitzer1990action}
-Peter~M. Gollwitzer.
-\newblock Action phases and mind-sets.
-\newblock In E.~Tory Higgins and Richard~M. Sorrentino, editors, \emph{Handbook
-  of Motivation and Cognition: Foundations of Social Behavior}, volume~2, pages
-  53--92. Guilford Press, New York, 1990.
 
 \bibitem[Gruber(1994)]{Gruber1994}
 Jonathan Gruber.
@@ -116,30 +50,18 @@ Xiaoqing Jing and Michael Lewis.
 \newblock \emph{Journal of Marketing Research}, 48\penalty0 (2):\penalty0
   342--354, 2011.
 
-\bibitem[Kruglanski et~al.(2002)Kruglanski, Shah, Fishbach, Friedman, Chun, and
-  Sleeth-Keppler]{kruglanski2002theory}
-Arie~W. Kruglanski, James~Y. Shah, Ayelet Fishbach, Ron Friedman, Woo~Young
-  Chun, and David Sleeth-Keppler.
-\newblock A theory of goal systems.
-\newblock \emph{Advances in Experimental Social Psychology}, 34:\penalty0
-  331--378, 2002.
-
-\bibitem[Lattin(1987)]{lattin1987balanced}
-James~M. Lattin.
-\newblock A model of balanced choice behavior.
-\newblock \emph{Marketing Science}, 6\penalty0 (1):\penalty0 48--65, 1987.
-
-\bibitem[Levine and Hristakeva(2025)]{Levine2025}
-Julia Levine and Sylvia Hristakeva.
-\newblock Stopping shopping at stop \& shop: The effects of a labor strike on
-  consumer demand.
-\newblock Working paper, 2025.
-
 \bibitem[Levine and Seiler(2023)]{levine2023state}
 Julia Levine and Stephan Seiler.
 \newblock Identifying state dependence in brand choice: Evidence from
   hurricanes.
 \newblock \emph{Marketing Science}, 42\penalty0 (5):\penalty0 934--957, 2023.
+
+\bibitem[Liu(2008)]{liu2008focusing}
+Wendy Liu.
+\newblock Focusing on desirability: The effect of decision interruption and
+  suspension on preferences.
+\newblock \emph{Journal of Consumer Research}, 35\penalty0 (4):\penalty0
+  640--652, 2008.
 
 \bibitem[Masicampo and Baumeister(2011)]{masicampo2011consider}
 E.~J. Masicampo and Roy~F. Baumeister.
